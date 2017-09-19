@@ -26,6 +26,8 @@ import java.util.Set;
 import org.apache.http.util.ByteArrayBuffer;
 
 import com.dspread.demoui.R;
+import com.dspread.xpos.EmvAppTag;
+import com.dspread.xpos.EmvCapkTag;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.QPOSService.CardTradeMode;
 import com.dspread.xpos.QPOSService.CommunicationMode;
@@ -641,13 +643,17 @@ public class MainActivity extends Activity {
 			pos.setQuickEmvStatus(true);
 		}
 		else if(item.getItemId() == R.id.updateEMVAPP){
-			pos.updateEmvAPP(EMVDataOperation.update,"9F0607A0000000031010DF2006000020000000DF010100DF14039F3704DF170100DF180101DF1205DC4004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105DC4000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000");
-//			setMasterKey("9B3A7B883A100F739B3A7B883A100F73", "82E13665B4624DF5");
+			ArrayList<String> list=new ArrayList<String>();
+			list.add(EmvAppTag.Contactless_reader_trading_limit+"06000000100000");
+//			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
+			pos.updateEmvAPP(EMVDataOperation.update,list);
 		}
 		else if(item.getItemId() == R.id.updateEMVCAPK){
-			pos.updateEmvCAPK(EMVDataOperation.Add, "9F0605A000000333DF0314A075306EAB0045BAF72CDD33B3B678779DE1F527DF0281B0EB374DFC5A96B71D2863875EDA2EAFB96B1B439D3ECE0B1826A2672EEEFA7990286776F8BD989A15141A75C384DFC14FEF9243AAB32707659BE9E4797A247C2F0B6D99372F384AF62FE23BC54BCDC57A9ACD1D5585C303F201EF4E8B806AFB809DB1A3DB1CD112AC884F164A67B99C7D6E5A8A6DF1D3CAE6D7ED3D5BE725B2DE4ADE23FA679BF4EB15A93D8A6E29C7FFA1A70DE2E54F593D908A3BF9EBBD760BBFDC8DB8B54497E6C5BE0E4A4DAC29E5DF0504203012319F220109DF040103DF070101DF060101");
+			ArrayList<String> list=new ArrayList<String>();
+			list.add(EmvCapkTag.RID+"05A000000333");
+			list.add(EmvCapkTag.Public_Key_Index+"0109");
+			pos.updateEmvCAPK(EMVDataOperation.getEmv, list);
 //			pos.setMasterKey("180AB22F0CDBFB6B180AB22F0CDBFB6B", "82E13665B4624DF5", 0, 5);
-//			setMasterKey("9B3A7B883A100F739B3A7B883A100F73", "82E13665B4624DF5");
 		}
 		else if (item.getItemId() == R.id.audio_test) {
 			if (pos == null) {
@@ -674,7 +680,6 @@ public class MainActivity extends Activity {
 			pos.doSetBuzzerOperation(3);//显示设置蜂鸣器响3次
 //			pos.cbc_mac(24, 0, 0, "08401002017011815513368cuongdaoviet@gmail.com87CE01E91D9B0EB1A4E29A10BB916DB612345678000001100100179BxcZQRa1i0WZXyd8Q0000001302700334916022300065", 10);
 		}
-
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
 			pos.getQposInfo();
@@ -686,16 +691,15 @@ public class MainActivity extends Activity {
 			pos.getPin("201402121655");
 //			String str="68010000afa26d91df51a4b6191f4d66e996244b992188d1d28a59c80954fd3cb29f76e68940153c94706d0d24b8bad82902869b27f6043c8c5fe90684ffc8abd979be91250b52022d28ff23ca2bb3614b30dbbfeb6991899228801a87dc81d36f43e71d5f20c0905796e316af601413985f3ee08bad75cc71d294fd9cc4a0d01c69bc90c7ab08e2f6e10103005e38dbdcb0edbf00579ebe60209105fd0852180637b13fbe6179fcf198eb40104bdefe38706ec2a46e139caa6a42470e51965234c51e3a3f73ff73837706c93245e96091b3fbb170c6b7d43b6b7ed89888c93aa4551d28290f8bf5a2695217285000fff8c3e4c5b2f1bb8e9722e5308605950331bedb61e30bd94ee47a522df94e9ba3bffbce170e779ab05105405af539b46b87c5ea4854cd3647d87c15c5683c7915b8224e26872617cbaaae602caf671794eb843033a898825de7ac2c68a22a6453c20b521cece81ddde4e1e7ba4719a23058e17fc803d1b84805aa5afeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 //		    pos.udpateWorkKey(str);
-			
 		} else if (item.getItemId() == R.id.menu_icc) {
-//			if (pos != null && pos.getBluetoothState()) {
+			if (pos != null && pos.getBluetoothState()) {//判断蓝牙是否连接
 				Intent intent = new Intent(this, IccActivity.class);
 				intent.putExtra("adress", blueTootchAddress);
 				startActivity(intent);
-//				 finish();
-//			} else {
-//				Toast.makeText(getApplicationContext(), "设备未连接", Toast.LENGTH_LONG).show();
-//			}
+				 finish();
+			} else {
+				Toast.makeText(getApplicationContext(), "设备未连接", Toast.LENGTH_LONG).show();
+			}
 		} else if (item.getItemId() == R.id.other) {
 			final String[] nItems = new String[] { getResources().getString(R.string.mcr_single_mac), getResources().getString(R.string.mcr_double_mac), getResources().getString(R.string.ic_single_mac), getResources().getString(R.string.ic_double_mac) };
 			AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.list)).setItems(nItems, null).setNegativeButton(getResources().getString(R.string.cancel), null);
@@ -2276,13 +2280,11 @@ public class MainActivity extends Activity {
 			else if (v == btnBT) {
 				isOTG = false;
 				if(pos==null){
-					open(CommunicationMode.BLUETOOTH_2Mode);
+					open(CommunicationMode.BLUETOOTH);
 				}
 				animScan.start();
 				imvAnimScan.setVisibility(View.VISIBLE);
-				if(lstDevScanned!=null){
-					lstDevScanned.clear();
-				}
+				pos.clearBluetoothBuffer();
 				if(isNormalBlu){//普通蓝牙的扫描
 //					pos.stopQPos2Mode();//每次开始扫描，需要先停止再开始
 					pos.scanQPos2Mode(MainActivity.this,15);//等到扫描结束后再进行下次点击扫描
