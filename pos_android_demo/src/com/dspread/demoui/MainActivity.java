@@ -128,6 +128,7 @@ public class MainActivity extends Activity {
 	private boolean isOTG = false;
 	private boolean isQuickEmv=false;
 	private boolean isDotrade=false;
+	private int type;
 	private UsbDevice usbDevice;
 	private InnerListview m_ListView;
 	private MyListViewAdapter m_Adapter = null;
@@ -373,7 +374,7 @@ public class MainActivity extends Activity {
 		btnQuickEMVtrade   = (Button) findViewById(R.id.btnQuickEMVtrade);
 		
 		Intent intent=getIntent();
-		int type=intent.getIntExtra("connect_type", 0);
+		type=intent.getIntExtra("connect_type", 0);
 		switch (type) {
 		case 1:
 			btnBT.setVisibility(View.GONE);
@@ -399,14 +400,14 @@ public class MainActivity extends Activity {
 			});
 			break;
 		case 3://普通蓝牙
-			open(CommunicationMode.BLUETOOTH);
-			posType=POS_TYPE.BLUETOOTH;
+//			open(CommunicationMode.BLUETOOTH);
+//			posType=POS_TYPE.BLUETOOTH;
 			btnBT.setVisibility(View.VISIBLE);
 			isNormalBlu=true;
 			break;
 		case 4://其他蓝牙
-			open(CommunicationMode.BLUETOOTH_BLE);
-			posType=POS_TYPE.BLUETOOTH_BLE;
+//			open(CommunicationMode.BLUETOOTH_BLE);
+//			posType=POS_TYPE.BLUETOOTH_BLE;
 			btnBT.setVisibility(View.VISIBLE);
 			isNormalBlu=false;
 			break;
@@ -1526,6 +1527,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onRequestQposConnected() {
 			TRACE.w("onRequestQposConnected");
+			Toast.makeText(MainActivity.this, "onRequestQposConnected", Toast.LENGTH_LONG).show();
 			dismissDialog();
 			long use_time = new Date().getTime() - start_time;
 			// statusEditText.setText(getString(R.string.device_plugged));
@@ -2206,7 +2208,7 @@ public class MainActivity extends Activity {
 				 statusEditText.setText(R.string.wait);
 				return;
 			}
-			if (v == doTradeButton) {//开始按钮
+			else if (v == doTradeButton) {//开始按钮
 //				myHandler.post(r);
 				if (pos == null) {
 					statusEditText.setText(R.string.scan_bt_pos_error);
@@ -2241,7 +2243,6 @@ public class MainActivity extends Activity {
 					pos.doTrade(30);//刷卡输入pin
 				}
 			}else if(v == btnUSB){
-//				open(CommunicationMode.USB_OTG_CDC_ACM);
 				USBClass usb = new USBClass();
 			    ArrayList<String> deviceList = usb.GetUSBDevices(getBaseContext());
 			    if (deviceList == null) {
@@ -2256,16 +2257,14 @@ public class MainActivity extends Activity {
 			        public void onClick(DialogInterface dialog, int item) {
 			            String selectedDevice = (String) items[item];
 			            dialog.dismiss();
-			            
+
 //			            TextView DeivceName = (TextView)findViewById(R.id.textView1);
 //			            DeivceName.setText(selectedDevice);
 			            usbDevice = USBClass.getMdevices().get(selectedDevice);
 			            isOTG = true;
-			            
 			            open(CommunicationMode.USB_OTG_CDC_ACM);
 						posType = POS_TYPE.OTG;
 						pos.openUsb(usbDevice);
-//			            statusEditText.setText(selectedDevice);
 			        }
 			    });
 			    AlertDialog alert = builder.create();
@@ -2274,7 +2273,13 @@ public class MainActivity extends Activity {
 			else if (v == btnBT) {
 				isOTG = false;
 				if(pos==null){
-					open(CommunicationMode.BLUETOOTH);
+					if(type==3){
+						open(CommunicationMode.BLUETOOTH);
+						posType=POS_TYPE.BLUETOOTH;
+					}else if(type==4){
+						open(CommunicationMode.BLUETOOTH_BLE);
+						posType=POS_TYPE.BLUETOOTH_BLE;
+					}
 				}
 				animScan.start();
 				imvAnimScan.setVisibility(View.VISIBLE);

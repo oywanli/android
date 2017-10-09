@@ -1,11 +1,9 @@
 package com.dspread.demoui;
 
 import java.util.ArrayList;
-
 import java.util.Arrays;
 import java.util.HashMap;
 
-import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,7 +25,6 @@ public class USBClass {
 
 	private static PendingIntent mPermissionIntent;
 	private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
-	//对打开的设备进行监听
 	private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 
 		public void onReceive(Context context, Intent intent) {
@@ -50,13 +47,7 @@ public class USBClass {
 			}
 		}
 	};
-	
-	/**
-	 * 获取usb设备列表
-	 * @param context
-	 * @return
-	 */
-	@SuppressLint("NewApi")
+
 	public ArrayList<String> GetUSBDevices(Context context) {
 		mManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
 		
@@ -69,7 +60,6 @@ public class USBClass {
 		context.registerReceiver(mUsbReceiver, filter);
 
 		// check for existing devices
-		//循环添加设备
 		for (UsbDevice device : mManager.getDeviceList().values()) {
 			// 判断是否有权限
 	        if(!mManager.hasPermission(device)) {
@@ -79,8 +69,9 @@ public class USBClass {
 	        }
 			String deviceName = null;
 			UsbDeviceConnection connection = null;
-			Toast.makeText(context, "VID: "+device.getVendorId(), Toast.LENGTH_SHORT).show();
-			if (device.getVendorId() == 2965 || device.getVendorId() == 0x03EB ) {//0x6133
+			if (device.getVendorId() == 2965 || device.getVendorId() == 0x03EB )
+			{
+				
 				mManager.requestPermission(device, mPermissionIntent);
 				connection = mManager.openDevice(device);
 				byte rawBuf[] = new byte[255];
