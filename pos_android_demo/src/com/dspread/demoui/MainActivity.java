@@ -392,7 +392,7 @@ public class MainActivity extends Activity {
 					open(CommunicationMode.UART);
 					TRACE.d("+++++++UART");
 					posType = POS_TYPE.UART;
-					blueTootchAddress = "/dev/ttyS3";//同方那边是s1，天波是s3
+					blueTootchAddress = "/dev/ttys1";//同方那边是s1，天波是s3
 					pos.setDeviceAddress(blueTootchAddress);
 					pos.openUart();
 				}
@@ -617,11 +617,9 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
-//			calcMacSingle("12345678901234567890123456789012");
 		}
 		else if(item.getItemId() == R.id.set_sleepmode_time){//设置设备睡眠时间
 			pos.setSleepModeTime(10);//the time is in 10s and 10000s
-//			pos.setPosSleepTime(120);
 			/*boolean a=pos.getBluetoothState();
 			statusEditText.setText("a+++++"+a);*/
 		}
@@ -630,9 +628,9 @@ public class MainActivity extends Activity {
 		}
 		//更新ipek
 		else if(item.getItemId()==R.id.updateIPEK){
-			pos.doUpdateIPEKOperation("00","FFFF039A480006E00000","55C410EC757F274FA2AD31836DF7776D","500F7725DF54C0CF"
-					,"FFFF039A480006E00000","55C410EC757F274FA2AD31836DF7776D","500F7725DF54C0CF","FFFF039A480006E00000"
-					,"55C410EC757F274FA2AD31836DF7776D","500F7725DF54C0CF");
+			pos.doUpdateIPEKOperation("00","01517080800006E00003","B24669775276DDF25F334C44A645E175","3FCEBD0000000000"
+					,"01517080800006E00003","B24669775276DDF25F334C44A645E175","3FCEBD0000000000","01517080800006E00005"
+					,"B24669775276DDF25F334C44A645E175","3FCEBD0000000000");
 		}else if(item.getItemId()==R.id.updateIPEK){
 			
 		}
@@ -644,14 +642,14 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId() == R.id.updateEMVAPP){
 			ArrayList<String> list=new ArrayList<String>();
-			list.add(EmvAppTag.Contactless_reader_trading_limit+"06000000100000");
+			list.add(EmvAppTag.Contactless_reader_trading_limit+"000000100000");
 //			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
 			pos.updateEmvAPP(EMVDataOperation.update,list);
 		}
 		else if(item.getItemId() == R.id.updateEMVCAPK){
 			ArrayList<String> list=new ArrayList<String>();
-			list.add(EmvCapkTag.RID+"05A000000333");
-			list.add(EmvCapkTag.Public_Key_Index+"0109");
+			list.add(EmvCapkTag.RID+"A000000333");
+			list.add(EmvCapkTag.Public_Key_Index+"09");
 			pos.updateEmvCAPK(EMVDataOperation.getEmv, list);
 //			pos.setMasterKey("180AB22F0CDBFB6B180AB22F0CDBFB6B", "82E13665B4624DF5", 0, 5);
 		}
@@ -683,14 +681,13 @@ public class MainActivity extends Activity {
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
 			pos.getQposInfo();
+//			pos.setMasterKey("782FD1A6DA5EDC1D3478BA718E329F4E", "914E0311BA16919D");
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
 			pos.getQposId();
 		} else if (item.getItemId() == R.id.menu_get_pin) {
 			statusEditText.setText(R.string.input_pin);
 			pos.getPin("201402121655");
-//			String str="68010000afa26d91df51a4b6191f4d66e996244b992188d1d28a59c80954fd3cb29f76e68940153c94706d0d24b8bad82902869b27f6043c8c5fe90684ffc8abd979be91250b52022d28ff23ca2bb3614b30dbbfeb6991899228801a87dc81d36f43e71d5f20c0905796e316af601413985f3ee08bad75cc71d294fd9cc4a0d01c69bc90c7ab08e2f6e10103005e38dbdcb0edbf00579ebe60209105fd0852180637b13fbe6179fcf198eb40104bdefe38706ec2a46e139caa6a42470e51965234c51e3a3f73ff73837706c93245e96091b3fbb170c6b7d43b6b7ed89888c93aa4551d28290f8bf5a2695217285000fff8c3e4c5b2f1bb8e9722e5308605950331bedb61e30bd94ee47a522df94e9ba3bffbce170e779ab05105405af539b46b87c5ea4854cd3647d87c15c5683c7915b8224e26872617cbaaae602caf671794eb843033a898825de7ac2c68a22a6453c20b521cece81ddde4e1e7ba4719a23058e17fc803d1b84805aa5afeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
-//		    pos.udpateWorkKey(str);
 		} else if (item.getItemId() == R.id.menu_icc) {
 			if (pos != null && pos.getBluetoothState()) {//判断蓝牙是否连接
 				Intent intent = new Intent(this, IccActivity.class);
@@ -842,7 +839,6 @@ public class MainActivity extends Activity {
 					messageTextView.setText("please remove card"+"\n"+"insert again");
 					dialog.show();
 					pos.isCardExist(30);
-					
 				}else{
 					pos.setCardTradeMode(CardTradeMode.ONLY_SWIPE_CARD);
 					statusEditText.setText("please swipe card(only swipe card)");
@@ -1223,18 +1219,13 @@ public class MainActivity extends Activity {
 			TRACE.w("onQposIdResult: "+posIdTable);
 			String posId = posIdTable.get("posId") == null ? "" : posIdTable.get("posId");
 			String csn = posIdTable.get("csn") == null ? "" : posIdTable.get("csn");
-			String pinKsn=posIdTable.get("pinKsn") == null ? "" : posIdTable
-					.get("pinKsn");
-			String trackKsn=posIdTable.get("trackKsn") == null ? "" : posIdTable
-					.get("trackKsn");
-			String emvKsn=posIdTable.get("emvKsn") == null ? "" : posIdTable
-					.get("emvKsn");
+			String psamId=posIdTable.get("psamId") == null ? "" : posIdTable
+					.get("psamId");
 			String content = "";
 			content += getString(R.string.posId) + posId + "\n";
 			content += "csn: " + csn + "\n";
-			content += "pinKsn: " + pinKsn + "\n";
-			content += "trackKsn: " + trackKsn + "\n";
-			content += "emvKsn: " + emvKsn + "\n";
+			content += "conn: " + pos.getBluetoothState() + "\n";
+			content += "psamId: " + psamId + "\n";
 			statusEditText.setText(content);
 			if (isTest) {
 				sendMsg(1003);
@@ -1682,7 +1673,7 @@ public class MainActivity extends Activity {
 				reString = "Success";
 			}
 			statusEditText.setText("result: " + reString + "\ndata: " + result);
-			pos.getEncryptData("70533".getBytes(), "0", "0", 15);
+//			pos.getEncryptData("70533".getBytes(), "0", "0", 15);
 		}
 
 		@Override
@@ -2081,7 +2072,7 @@ public class MainActivity extends Activity {
 			String pinKsn=arg0.get("pinKsn");
 			String trackKsn=arg0.get("trackKsn");
 			String emvKsn=arg0.get("emvKsn");
-			TRACE.d("get the ksn result is :"+"pinKsn"+pinKsn+"trackKsn"+trackKsn+"emvKsn"+emvKsn);
+			TRACE.d("get the ksn result is :"+"pinKsn"+pinKsn+"\ntrackKsn"+trackKsn+"\nemvKsn"+emvKsn);
 		
 		}
 
@@ -2243,8 +2234,11 @@ public class MainActivity extends Activity {
 //					}else{
 //						pos.doTrade(30);//刷卡输入pin
 //					}
-//					pos.setCardTradeMode(CardTradeMode.UNALLOWED_LOW_TRADE);
-					pos.doCheckCard();//刷卡输入pin
+					/*pos.setCardTradeMode(CardTradeMode.SWIPE_INSERT_CARD);
+
+					pos.setJudgeDebitOrCreditFlag(true);*/
+					
+					pos.doTrade(30);//刷卡输入pin
 				}
 			}else if(v == btnUSB){
 //				open(CommunicationMode.USB_OTG_CDC_ACM);
@@ -2446,7 +2440,6 @@ public class MainActivity extends Activity {
 				sendMsg(1002);
 				break;
 			case 1002:
-				// pos.connectBluetoothDevice(20, blueTootchAddress);
 //				pos.stopQPos2Mode();
 				if(isNormalBlu){
 					pos.connectBluetoothDevice(true, 25, blueTootchAddress);
@@ -2454,7 +2447,6 @@ public class MainActivity extends Activity {
 					pos.connectBLE(blueTootchAddress);
 				}
 				btnBT.setEnabled(true);
-				// doTradeButton.setEnabled(true);
 				selectBTFlag = false;
 				break;
 			case 1003:
@@ -2484,8 +2476,8 @@ public class MainActivity extends Activity {
 	};
 	
 	public void updateEmvConfig(){
-		String emvAppCfg = QPOSUtil.byteArray2Hex(readLine("kernel_app_us.bin"));
-		String emvCapkCfg = QPOSUtil.byteArray2Hex(readLine("capk_us.bin"));
+		String emvAppCfg = QPOSUtil.byteArray2Hex(readLine("quickemvcfg_app.bin"));
+		String emvCapkCfg = QPOSUtil.byteArray2Hex(readLine("quickemvcfg_capk.bin"));
 		TRACE.d("emvAppCfg: "+emvAppCfg);
 		TRACE.d("emvCapkCfg: "+emvCapkCfg);
 		pos.updateEmvConfig(emvAppCfg,emvCapkCfg);

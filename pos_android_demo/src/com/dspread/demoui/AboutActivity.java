@@ -14,6 +14,6 @@ public class AboutActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 		TextView content = (TextView) findViewById(R.id.content);
-		content.setText("当前版本号："+QPOSService.getSdkVersion()+"\n日期："+QPOSService.getSdkDate()+"\n主要解决问题：增加USB OTG通信方式\n");
+//		content.setText("当前版本号："+QPOSService.getSdkVersion()+"\n日期："+QPOSService.getSdkDate()+"\n主要解决问题：增加USB OTG通信方式\n");
 	}
 }
