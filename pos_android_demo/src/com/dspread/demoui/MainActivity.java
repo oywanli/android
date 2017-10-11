@@ -2221,6 +2221,7 @@ public class MainActivity extends Activity {
 				
 				terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());	
 //				pos.setCardTradeMode(CardTradeMode.ONLY_TAP_CARD);
+				
 				if (posType == POS_TYPE.UART) {//通用异步收发报机
 					pos.doTrade(terminalTime, 0, 30);
 				}else {
