@@ -1400,7 +1400,7 @@ public class MainActivity extends Activity {
 				dialog.setTitle(R.string.request_data_to_server);
 				TRACE.d("tlv:" + tlv);
 				Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-				TRACE.i("onlineProcess: " + decodeData);
+				TRACE.i("onlineProcess: " + decodeData.get(""));
 				if (isPinCanceled) {
 					((TextView) dialog.findViewById(R.id.messageTextView))
 							.setText(R.string.replied_failed);
@@ -1447,7 +1447,7 @@ public class MainActivity extends Activity {
 
 			String msg = "";
 			if (displayMsg == Display.CLEAR_DISPLAY_MSG) {
-				msg = "";
+				msg = "" ;
 			} else if(displayMsg == Display.MSR_DATA_READY){
 				AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
 				builder.setTitle("音频");
