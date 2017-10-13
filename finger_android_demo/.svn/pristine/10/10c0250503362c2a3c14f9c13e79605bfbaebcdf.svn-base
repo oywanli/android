@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">fingerPrint_android_demo</string>
+    <string name="hello_world">Hello world!</string>
+	 <string name="audio">Audio</string>
+	 <string name="get_info">getDeviceInfo</string>
+	 <string name="lcd_customer_sreen">lcd_customer_display</string>
+</resources>

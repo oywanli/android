@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">fingerPrint_android_demo</string>
+    <string name="hello_world">Hello world!</string>
+	 <string name="audio">Audio</string>
+	 <string name="get_info">getQposDeviceInfo</string>
+	 <string name="get_serial_number">getSerialNumber</string>
+	 <string name="get_module_number">getModuleNumber</string>
+	 <string name="get_finger_info">getFingerDeviceInfo</string>
+	 <string name="lcd_customer_sreen">lcd_customer_display</string>
+	 <string name="device_reset">pos reset</string>
+	<string name="bootloader_version">Bootloader Version: </string>
+	<string name="firmware_version">Firmware Version: </string>
+    <string name="usb">USB: </string>
+    <string name="charge">Charge: </string>
+    <string name="battery_level">Battery Level: </string>
+    <string name="hardware_version">Hardware Version: </string>
+    <string name="supported_track">Supported Track: </string>
+    <string name="track_1_supported">Track 1 Supported: </string>
+    <string name="track_2_supported">Track 2 Supported: </string>
+    <string name="track_3_supported">Track 3 Supported: </string>
+    <string name="battery_percentage">battery percentage: </string>
+    <string name="device_no_response">Pos no response</string>
+     <string name="no_device_detected">No pos detected.</string>
+    <string name="device_plugged">Pos connected.</string>
+    <string name="device_unplugged">Pos disconnected.</string>
+    <string name="command_not_available">Command not available</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="device_busy">Pos Busy</string>
+    <string name="out_of_range">Input out of range.</string>
+    <string name="invalid_format">Input invalid format.</string>
+    <string name="zero_values">Input are zero values.</string>
+    <string name="input_invalid">Input invalid.</string>
+    <string name="cashback_not_supported">Cashback not supported.</string>
+    <string name="crc_error">CRC Error.</string>
+</resources>
