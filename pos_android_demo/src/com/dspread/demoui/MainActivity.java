@@ -635,8 +635,8 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId() == R.id.updateEMVAPP){
 			ArrayList<String> list=new ArrayList<String>();
-			list.add(EmvAppTag.AID+"00000000000000000000000000000000");
-			list.add(EmvAppTag.Terminal_performance+"e0f8c8");
+			list.add(EmvAppTag.Application_Identifier_AID_terminal+"00000000000000000000000000000000");
+			list.add(EmvAppTag.Terminal_Capabilities+"e0f8c8");
 //			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
 			pos.updateEmvAPP(EMVDataOperation.update,list);
 		}
