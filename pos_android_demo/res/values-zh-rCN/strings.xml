@@ -4,6 +4,11 @@
     <string name="scan_usb_device">扫描USB设备</string>
     <string name="audio_open">音效控制:开</string>
     <string name="audio_close">音效控制:关</string>
+     <string name="poll_card">寻mafire卡</string>
+    <string name="verify_card">验证卡片</string>
+    <string name="read_card">读卡</string>
+    <string name="write_card">写卡</string>
+    <string name="finish_card">完成卡通讯</string>
     <string name="audio_unknow">音效控制:未知</string>
     <string name="get_pin">get pin</string>
     <string name="set_sleepMode_time">set sleep mode time</string>

@@ -119,9 +119,9 @@
 	    <LinearLayout android:id="@+id/li" android:layout_width="match_parent"
 	    android:layout_height="wrap_content" android:orientation="horizontal">
 	    <Button android:id="@+id/search_card" android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" android:text="开始寻卡"/>
+	        android:layout_height="wrap_content" android:text="@string/poll_card"/>
 	    <Button android:id="@+id/verify_card" android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" android:text="验证卡片"/>
+	        android:layout_height="wrap_content" android:text="@string/verify_card"/>
 	    <Spinner android:id="@+id/verift_spinner" android:layout_width="match_parent"
 	        android:layout_height="wrap_content"/>
 		</LinearLayout>
@@ -129,11 +129,11 @@
 	    android:layout_height="wrap_content" android:orientation="horizontal"
 	    android:layout_below="@id/li">
 	    <Button android:id="@+id/read_card" android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" android:text="读卡"/>
+	        android:layout_height="wrap_content" android:text="@string/read_card"/>
 	    <Button android:id="@+id/write_card" android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" android:text="写卡"/>
+	        android:layout_height="wrap_content" android:text="@string/write_card"/>
 	     <Button android:id="@+id/finish_card" android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" android:text="完成通讯"/>
+	        android:layout_height="wrap_content" android:text="@string/finish_card"/>
 	</LinearLayout>
     <EditText android:id="@+id/status" android:layout_below="@id/li2"
         android:layout_width="match_parent" android:hint="please input key value"
