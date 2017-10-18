@@ -54,6 +54,7 @@ import android.os.Message;
 import android.os.Trace;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -377,7 +378,7 @@ public class MainActivity extends Activity {
 		pollBtn=(Button) findViewById(R.id.search_card);
 		veriftBtn=(Button) findViewById(R.id.verify_card);
 		readBtn=(Button) findViewById(R.id.read_card);
-		writeBtn=(Button) findViewById(R.id.read_card);
+		writeBtn=(Button) findViewById(R.id.write_card);
 		finishBtn=(Button) findViewById(R.id.finish_card);
 		
 		Intent intent=getIntent();
@@ -2384,7 +2385,11 @@ public class MainActivity extends Activity {
 				pos.doMifareCard("03");
 			}else if(v == writeBtn){
 				String blockaddr=blockAdd.getText().toString();
+				String cardData=status.getText().toString();
+//				SpannableString s = new SpannableString("please input card data"); 
+//		        status.setHint(s);  
 				pos.setBlockaddr(blockaddr);
+				pos.setKeyValue(cardData);
 				pos.doMifareCard("04");
 			}
 		}
