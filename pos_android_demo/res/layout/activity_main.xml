@@ -74,7 +74,7 @@
     <Button android:id="@+id/getPosInfo" android:layout_width="match_parent"
         android:layout_height="wrap_content" android:text="set_shutdowm_time"
         />
-    <LinearLayout
+    <LinearLayout android:id="@+id/ll"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -113,6 +113,34 @@
             android:layout_marginRight="5dip"
             android:editable="false" />
     </LinearLayout>
+  <LinearLayout android:id="@+id/mifareid" android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:orientation="vertical"
+           android:visibility="gone">
+	    <LinearLayout android:id="@+id/li" android:layout_width="match_parent"
+	    android:layout_height="wrap_content" android:orientation="horizontal">
+	    <Button android:id="@+id/search_card" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="开始寻卡"/>
+	    <Button android:id="@+id/verify_card" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="验证卡片"/>
+	    <Spinner android:id="@+id/verift_spinner" android:layout_width="match_parent"
+	        android:layout_height="wrap_content"/>
+		</LinearLayout>
+	<LinearLayout android:id="@+id/li2" android:layout_width="match_parent"
+	    android:layout_height="wrap_content" android:orientation="horizontal"
+	    android:layout_below="@id/li">
+	    <Button android:id="@+id/read_card" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="读卡"/>
+	    <Button android:id="@+id/write_card" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="写卡"/>
+	     <Button android:id="@+id/finish_card" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="完成通讯"/>
+	</LinearLayout>
+    <EditText android:id="@+id/status" android:layout_below="@id/li2"
+        android:layout_width="match_parent" android:hint="please input key value"
+        android:layout_height="wrap_content"/>
+    <EditText android:id="@+id/block_address" android:layout_width="match_parent"
+	        android:layout_height="wrap_content" android:hint="please input block addr"/>
+	</LinearLayout>
 
 </LinearLayout>
 </ScrollView>

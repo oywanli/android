@@ -1,8 +1,6 @@
 package com.dspread.demoui;
 
 import com.dspread.demoui.R;
-import com.dspread.xpos.QPOSService;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;

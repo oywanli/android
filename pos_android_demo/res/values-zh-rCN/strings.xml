@@ -31,6 +31,7 @@
     <string name="card_is_exist">有卡</string>
     <string name="card_is_not_exist">无卡</string>
     <string name="get_pos_id">Get PosID</string>
+    <string name="operate_mafire">操作mafire卡</string>
     <string name="getting_pos_id">Getting POS ID…</string>
     <string name="scan_bt_device">扫描设备</string>
     <string name="please_select_bt_name">选择设备</string>

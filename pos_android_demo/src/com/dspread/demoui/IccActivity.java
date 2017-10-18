@@ -906,6 +906,24 @@ public class IccActivity extends Activity {
 			
 		}
 
+		@Override
+		public void onFinishMifareCardResult(boolean arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onReadWriteMifareCardResult(boolean arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onVerifyMifareCardResult(boolean arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 	
 		
 

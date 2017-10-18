@@ -33,6 +33,7 @@
     <string name="pinBlock">pinBlock:</string>
     <string name="posId">posId:</string>
     <string name="get_pos_id">Get PosID</string>
+    <string name="operate_mafire">operate_mafire</string>
     <string name="getting_pos_id">Getting POS ID…</string>
     <string name="isCardExist">check card in slot</string>
     <string name="card_is_exist">card is exist</string>

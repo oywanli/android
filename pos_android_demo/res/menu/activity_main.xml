@@ -40,6 +40,10 @@
         android:id="@+id/menu_get_pos_id"
         android:orderInCategory="100"
         android:title="@string/get_pos_id"/>
+     <item
+        android:id="@+id/menu_operate_mafire"
+        android:orderInCategory="100"
+        android:title="@string/operate_mafire"/>
     <item
         android:id="@+id/menu_get_pin"
         android:orderInCategory="100"

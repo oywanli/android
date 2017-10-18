@@ -71,6 +71,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -101,10 +102,13 @@ public class MainActivity extends Activity {
 
 	private Button doTradeButton,serialBtn;
 	private EditText amountEditText;
-	private EditText statusEditText;
+	private EditText statusEditText,blockAdd,status;
 	private ListView appListView;
+	private LinearLayout mafireLi;
 	private Dialog dialog;
 	private String nfcLog="";
+	private Spinner mafireSpinner;
+	private Button pollBtn,veriftBtn,readBtn,writeBtn,finishBtn;
 
 	private Button btnUSB,btnGetId,btnGetInfo;
 	private Button btnQuickEMV;
@@ -353,7 +357,13 @@ public class MainActivity extends Activity {
 		animScan = (AnimationDrawable) getResources().getDrawable(
 				R.anim.progressanmi);
 		imvAnimScan.setBackgroundDrawable(animScan);
-		
+		mafireLi=(LinearLayout) findViewById(R.id.mifareid);
+		status=(EditText) findViewById(R.id.status);
+		mafireSpinner=(Spinner) findViewById(R.id.verift_spinner);
+		blockAdd=(EditText) findViewById(R.id.block_address);
+		String[] keyClass = new String[] { "Key A", "Key B" };
+		ArrayAdapter<String> spinneradapter=new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, keyClass);
+		mafireSpinner.setAdapter(spinneradapter);
 		doTradeButton = (Button) findViewById(R.id.doTradeButton);//开始交易
 		serialBtn=(Button) findViewById(R.id.serialPort);
 		amountEditText = (EditText) findViewById(R.id.amountEditText);
@@ -364,6 +374,11 @@ public class MainActivity extends Activity {
 		btnGetInfo=(Button) findViewById(R.id.getPosInfo);
 		btnQuickEMV   = (Button) findViewById(R.id.btnQuickEMV);//隐藏按钮
 		btnQuickEMVtrade   = (Button) findViewById(R.id.btnQuickEMVtrade);
+		pollBtn=(Button) findViewById(R.id.search_card);
+		veriftBtn=(Button) findViewById(R.id.verify_card);
+		readBtn=(Button) findViewById(R.id.read_card);
+		writeBtn=(Button) findViewById(R.id.read_card);
+		finishBtn=(Button) findViewById(R.id.finish_card);
 		
 		Intent intent=getIntent();
 		type=intent.getIntExtra("connect_type", 0);
@@ -431,7 +446,11 @@ public class MainActivity extends Activity {
 		
 		btnQuickEMV.setOnClickListener(myOnClickListener);
 		btnQuickEMVtrade.setOnClickListener(myOnClickListener);
-		
+		pollBtn.setOnClickListener(myOnClickListener);
+		finishBtn.setOnClickListener(myOnClickListener);
+		readBtn.setOnClickListener(myOnClickListener);
+		writeBtn.setOnClickListener(myOnClickListener);
+		veriftBtn.setOnClickListener(myOnClickListener);
 	}
    
 	private POS_TYPE posType = POS_TYPE.BLUETOOTH;
@@ -604,13 +623,14 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
 //			DukptKeys.setFilePath("keys/rsa_private_pkcs8.pem");
-			pos.udpateWorkKey("68010000275792E11C20325CF3DC228C96EEC7580014C6D509E8C6FFC06F1E46AF344CB34851D6DE780872A4AC7088927BB238328874EC093251238EE550BD14D4C6788E1B757CA90B19D4A9386191189CEE676AA601E2BE6E8168B6D0E7D2ACADB64E6D65E9D8FFB8971F0B9A08A433B0331E6FF6859742152B1C9ECD31ADC9C1E4B30D10CED8DE5D44DCD3DE90845B7BD4AC8D35D1189489AE154B539BCDB02CE70BD18E0F77BDD520F467F055D2F97CF6970C01C949A8C612CADC6AD221A5E50E46597AADAB43C117BF8B294DA7894E2D99C54BDC8D5FDB2E8BC27266B8E606F69FDF2C87E4C7FFCCD2FC371D71EDFD0068452FB8367501F5E2E9493310112A44641C04B9CBC6CED63936693D3FDF23BF44BC8CA4E8CCE86AB8FDD957F13F6E507BBF75FEE77C56BA06D10EC3247F1B8FF4B61A8983CAD207D08E321B3CFA7531B8184B420EDB37FB5E966384198CC1A6B0874F5DD56575468EAE16FB95288076A7E157A39466B3F2FDADFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+//			pos.udpateWorkKey("5001000025741051b8e14a5f488d0d652c81f2a725d39f9b7932586497eb97d519d100c6982bc94adff34b5ac6dfababd8451e19cd7085d1b772136b0688998177162d4e134c2993dd04606e16a7cb47c922f8480128969cd56064c342ae75e8478f61102a5f7c47e92562e54cdc9f2864e18f92c4d1a09cdacdc28354e0fb61ab9e6fa322bb227fd55397438f90e61768d1e83a9752bb6e40c5168bfe937f9f9b920bf6bc9bb1ffda00efec514295436323d54b7c8c47a5f0295f30585a627320fea5d141b51e8d5a2d12e4f42977769f5f47d72631591fe75c0cc2971ae0ac035a5729073f7f95f820ab663a5279ec00192c2a6befa992cb1aa3132134043925410956cd85585bfa7e5422e12849dd850521baab03ec4356390e974665a4c386c3bfdb2c472f37edfc5174612ef76d956370a2b135a433b93bb72f8286bd35e05e28e2cf00ceff174e544e66ded77f323f798effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 //			DukptKeys.setRSA_public_key("A7AF29ABBB967E81021E2748EFEA06FA5CF5C9B9D9BD1410D3312626EB33212E9BF2760FD409246826A017A399991A2E7795EE97E52DE313BBBB09176884A4B5F1476E072F225B4CEC78F821A140E08950DDF14D3BC307279CAB1C7A0896EE3DFFD682A67541972ED2B71457D555297A275FE23E8323715F4C5BD36D3BC39329");
-//			pos.doUpdateIPEKOperation("00", "01517080800001", "D0FF43079985492C86C4AF2D4B904B54", "4CBC6A0000000000", "01517080800001", "D0FF43079985492C86C4AF2D4B904B54", "4CBC6A0000000000", "01517080800001", "D0FF43079985492C86C4AF2D4B904B54", "4CBC6A0000000000");
+			pos.doUpdateIPEKOperation("00", "FFFF9876543210E00007", "169755716DCEBE8100A2230A1C647F9D", "AF8C074A692A3666", "FFFF9876543210E00007", "169755716DCEBE8100A2230A1C647F9D", "AF8C074A692A3666", "FFFF9876543210E00007", "169755716DCEBE8100A2230A1C647F9D", "AF8C074A692A3666");
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
 		}
+
 		else if(item.getItemId() == R.id.set_sleepmode_time){//设置设备睡眠时间
 			pos.setSleepModeTime(10);//the time is in 10s and 10000s
 			/*boolean a=pos.getBluetoothState();
@@ -713,6 +733,8 @@ public class MainActivity extends Activity {
 			builder.show();
 		}else if (item.getItemId() == R.id.isCardExist) {
 			pos.isCardExist(30);
+		}else if(item.getItemId() == R.id.menu_operate_mafire){
+			mafireLi.setVisibility(View.VISIBLE);
 		}
 		return true;
 	}
@@ -1894,13 +1916,13 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onSearchMifareCardResult(Hashtable<String, String> arg0) {
-			// TODO Auto-generated method stub
-			
+			String statuString=arg0.get("status");
+			String cardTypeString=arg0.get("cardType");
+			statusEditText.setText("statuString:"+statuString+"\n"+"cardTypeString:"+cardTypeString);
 		}
 
 		@Override
 		public void onSetBuzzerResult(boolean arg0) {
-			// TODO Auto-generated method stub
 			if(arg0){
 				statusEditText.setText("蜂鸣器设置成功");
 			}else{
@@ -1910,7 +1932,6 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onSetManagementKey(boolean arg0) {
-			// TODO Auto-generated method stub
 			if(arg0){
 				statusEditText.setText("设置主密钥成功");
 			}else{
@@ -1920,7 +1941,6 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onReturnUpdateIPEKResult(boolean arg0) {
-			// TODO Auto-generated method stub
 			if(arg0){
 				statusEditText.setText("更新IPEK成功");
 			}else{
@@ -1930,7 +1950,6 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onReturnUpdateEMVRIDResult(boolean arg0) {
-			// TODO Auto-generated method stub
 			if(arg0){
 				statusEditText.setText("更新RID的EMV成功");
 			}else{
@@ -2077,6 +2096,35 @@ public class MainActivity extends Activity {
 			statusEditText.setText("orderId:"+arg1+"\ntrade log:"+arg0);
 		}
 
+		@Override
+		public void onFinishMifareCardResult(boolean arg0) {
+			// TODO Auto-generated method stub
+			if(arg0){
+				statusEditText.setText("finish success");
+			}else{
+				statusEditText.setText("finish fail");
+			}
+		}
+
+		@Override
+		public void onReadWriteMifareCardResult(boolean arg0) {
+			// TODO Auto-generated method stub
+			if(arg0){
+				statusEditText.setText("onReadWriteMifareCardResult success");
+			}else{
+				statusEditText.setText("onReadWriteMifareCardResult fail");
+			}
+		}
+
+		@Override
+		public void onVerifyMifareCardResult(boolean arg0) {
+			// TODO Auto-generated method stub
+			if(arg0){
+				statusEditText.setText(" onVerifyMifareCardResult success");
+			}else{
+				statusEditText.setText("onVerifyMifareCardResult fail");
+			}
+		}
 	}
 
 	private void clearDisplay() {
@@ -2231,7 +2279,6 @@ public class MainActivity extends Activity {
 //						pos.doTrade(30);//刷卡输入pin
 //					}
 					/*pos.setCardTradeMode(CardTradeMode.SWIPE_INSERT_CARD);
-
 					pos.setJudgeDebitOrCreditFlag(true);*/
 					
 					pos.doTrade(30);//刷卡输入pin
@@ -2318,8 +2365,27 @@ public class MainActivity extends Activity {
 			}else if(v == btnGetInfo){
 				if(pos!=null){
 //					pos.getQposInfo();
-					pos.setPosSleepTime(300);
+//					pos.setPosSleepTime(300);
 				}
+			}else if(v == pollBtn){
+				pos.doMifareCard("01");
+			}else if(v==finishBtn){
+				pos.doMifareCard("0E");
+			}else if(v==veriftBtn){
+				String keyValue=status.getText().toString();
+				String blockaddr=blockAdd.getText().toString();
+				String keyclass=(String) mafireSpinner.getSelectedItem();
+				pos.setBlockaddr(blockaddr);
+				pos.setKeyValue(keyValue);
+				pos.doMifareCard("02"+keyclass);
+			}else if(v == readBtn){
+				String blockaddr=blockAdd.getText().toString();
+				pos.setBlockaddr(blockaddr);
+				pos.doMifareCard("03");
+			}else if(v == writeBtn){
+				String blockaddr=blockAdd.getText().toString();
+				pos.setBlockaddr(blockaddr);
+				pos.doMifareCard("04");
 			}
 		}
 	}
