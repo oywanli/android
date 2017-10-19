@@ -626,7 +626,8 @@ public class MainActivity extends Activity {
 //			DukptKeys.setFilePath("keys/rsa_private_pkcs8.pem");
 //			pos.udpateWorkKey("5001000025741051b8e14a5f488d0d652c81f2a725d39f9b7932586497eb97d519d100c6982bc94adff34b5ac6dfababd8451e19cd7085d1b772136b0688998177162d4e134c2993dd04606e16a7cb47c922f8480128969cd56064c342ae75e8478f61102a5f7c47e92562e54cdc9f2864e18f92c4d1a09cdacdc28354e0fb61ab9e6fa322bb227fd55397438f90e61768d1e83a9752bb6e40c5168bfe937f9f9b920bf6bc9bb1ffda00efec514295436323d54b7c8c47a5f0295f30585a627320fea5d141b51e8d5a2d12e4f42977769f5f47d72631591fe75c0cc2971ae0ac035a5729073f7f95f820ab663a5279ec00192c2a6befa992cb1aa3132134043925410956cd85585bfa7e5422e12849dd850521baab03ec4356390e974665a4c386c3bfdb2c472f37edfc5174612ef76d956370a2b135a433b93bb72f8286bd35e05e28e2cf00ceff174e544e66ded77f323f798effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 //			DukptKeys.setRSA_public_key("A7AF29ABBB967E81021E2748EFEA06FA5CF5C9B9D9BD1410D3312626EB33212E9BF2760FD409246826A017A399991A2E7795EE97E52DE313BBBB09176884A4B5F1476E072F225B4CEC78F821A140E08950DDF14D3BC307279CAB1C7A0896EE3DFFD682A67541972ED2B71457D555297A275FE23E8323715F4C5BD36D3BC39329");
-			pos.doUpdateIPEKOperation("00", "FFFF9876543210E00007", "169755716DCEBE8100A2230A1C647F9D", "AF8C074A692A3666", "FFFF9876543210E00007", "169755716DCEBE8100A2230A1C647F9D", "AF8C074A692A3666", "FFFF9876543210E00007", "169755716DCEBE8100A2230A1C647F9D", "AF8C074A692A3666");
+			pos.doUpdateIPEKOperation("00", "09117091100141E00001", "194819F6873BE8C6C97F32EA136A6168", "91B80D0000000000", "09117091100141E00001", "194819F6873BE8C6C97F32EA136A6168", "91B80D0000000000", "09117091100141E00001", "194819F6873BE8C6C97F32EA136A6168", "91B80D0000000000");
+//			pos.udpateWorkKey("952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", 4);
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -1917,9 +1918,13 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onSearchMifareCardResult(Hashtable<String, String> arg0) {
-			String statuString=arg0.get("status");
-			String cardTypeString=arg0.get("cardType");
-			statusEditText.setText("statuString:"+statuString+"\n"+"cardTypeString:"+cardTypeString);
+			if(arg0==null){
+				statusEditText.setText("poll card failed");
+			}else{
+				String statuString=arg0.get("status");
+				String cardTypeString=arg0.get("cardType");
+				statusEditText.setText("status:"+statuString+"\n"+"cardType:"+cardTypeString);
+			}
 		}
 
 		@Override
