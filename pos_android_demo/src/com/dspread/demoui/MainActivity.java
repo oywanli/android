@@ -2374,20 +2374,21 @@ public class MainActivity extends Activity {
 //					pos.setPosSleepTime(300);
 				}
 			}else if(v == pollBtn){
-				pos.doMifareCard("01");
+				statusEditText.setText("begin to poll card!");
+				sendMsg(3000);
 			}else if(v==finishBtn){
-				pos.doMifareCard("0E");
+				pos.doMifareCard("0E",20);
 			}else if(v==veriftBtn){
 				String keyValue=status.getText().toString();
 				String blockaddr=blockAdd.getText().toString();
 				String keyclass=(String) mafireSpinner.getSelectedItem();
 				pos.setBlockaddr(blockaddr);
 				pos.setKeyValue(keyValue);
-				pos.doMifareCard("02"+keyclass);
+				pos.doMifareCard("02"+keyclass,20);
 			}else if(v == readBtn){
 				String blockaddr=blockAdd.getText().toString();
 				pos.setBlockaddr(blockaddr);
-				pos.doMifareCard("03");
+				pos.doMifareCard("03",20);
 			}else if(v == writeBtn){
 				String blockaddr=blockAdd.getText().toString();
 				String cardData=status.getText().toString();
@@ -2395,7 +2396,7 @@ public class MainActivity extends Activity {
 //		        status.setHint(s);  
 				pos.setBlockaddr(blockaddr);
 				pos.setKeyValue(cardData);
-				pos.doMifareCard("04");
+				pos.doMifareCard("04",20);
 			}
 		}
 	}
@@ -2544,6 +2545,9 @@ public class MainActivity extends Activity {
 				}
 				statusEditText.setText(content);
 				break;	
+			case 3000:
+				pos.doMifareCard("01",20);
+				break;
 			default:
 				break;
 			}
