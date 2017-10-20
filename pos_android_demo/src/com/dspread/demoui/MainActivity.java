@@ -345,7 +345,6 @@ public class MainActivity extends Activity {
 		if (!isUart) {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		}
-		
 		setContentView(R.layout.activity_main);
 		// 打开蓝牙设备
 		BluetoothAdapter adapter=BluetoothAdapter.getDefaultAdapter();
@@ -1923,7 +1922,14 @@ public class MainActivity extends Activity {
 			}else{
 				String statuString=arg0.get("status");
 				String cardTypeString=arg0.get("cardType");
-				statusEditText.setText("status:"+statuString+"\n"+"cardType:"+cardTypeString);
+				String cardUidLen=arg0.get("cardUidLen");
+				String cardUid=arg0.get("cardUid");
+				String cardAtsLen=arg0.get("cardAtsLen");
+				if(!cardAtsLen.equals("0")){
+					String cardAts=arg0.get("cardAts");
+				}
+				statusEditText.setText("statuString:"+statuString+"\n"+"cardTypeString:"+cardTypeString+"\ncardUidLen:"+cardUidLen
+						+"\ncardUid:"+cardUid+"\ncardAtsLen:"+cardAtsLen);
 			}
 		}
 
@@ -2400,7 +2406,6 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		isOTG = false;
