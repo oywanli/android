@@ -1925,11 +1925,12 @@ public class MainActivity extends Activity {
 				String cardUidLen=arg0.get("cardUidLen");
 				String cardUid=arg0.get("cardUid");
 				String cardAtsLen=arg0.get("cardAtsLen");
-				if(!cardAtsLen.equals("0")){
+				String cardAts=arg0.get("cardAts");
+				/*if(!cardAtsLen.equals("0")){
 					String cardAts=arg0.get("cardAts");
-				}
+				}*/
 				statusEditText.setText("statuString:"+statuString+"\n"+"cardTypeString:"+cardTypeString+"\ncardUidLen:"+cardUidLen
-						+"\ncardUid:"+cardUid+"\ncardAtsLen:"+cardAtsLen);
+						+"\ncardUid:"+cardUid+"\ncardAtsLen:"+cardAtsLen+"\ncardAts:"+cardAts);
 			}
 		}
 
@@ -2144,7 +2145,11 @@ public class MainActivity extends Activity {
 		@Override
 		public void onWriteMifareCardResult(boolean arg0) {
 			// TODO Auto-generated method stub
-			
+			if(arg0){
+				statusEditText.setText("write data success!");
+			}else{
+				statusEditText.setText("write data fail!");
+			}
 		}
 	}
 
