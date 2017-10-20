@@ -1080,7 +1080,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onQposInfoResult(Hashtable<String, String> posInfoData) {
-			TRACE.d("onQposInfoResult");
+			TRACE.d("onQposInfoResult"+posInfoData);
 			String isSupportedTrack1 = posInfoData.get("isSupportedTrack1") == null ? "" : posInfoData.get("isSupportedTrack1");
 			String isSupportedTrack2 = posInfoData.get("isSupportedTrack2") == null ? "" : posInfoData.get("isSupportedTrack2");
 			String isSupportedTrack3 = posInfoData.get("isSupportedTrack3") == null ? "" : posInfoData.get("isSupportedTrack3");
@@ -1423,7 +1423,7 @@ public class MainActivity extends Activity {
 				dialog.setTitle(R.string.request_data_to_server);
 				TRACE.d("tlv:" + tlv);
 				Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-				TRACE.i("onlineProcess: " + decodeData.get(""));
+				TRACE.i("onlineProcess: "+decodeData);
 				if (isPinCanceled) {
 					((TextView) dialog.findViewById(R.id.messageTextView))
 							.setText(R.string.replied_failed);
@@ -2119,16 +2119,6 @@ public class MainActivity extends Activity {
 		}
 
 		@Override
-		public void onReadWriteMifareCardResult(boolean arg0) {
-			// TODO Auto-generated method stub
-			if(arg0){
-				statusEditText.setText("onReadWriteMifareCardResult success");
-			}else{
-				statusEditText.setText("onReadWriteMifareCardResult fail");
-			}
-		}
-
-		@Override
 		public void onVerifyMifareCardResult(boolean arg0) {
 			// TODO Auto-generated method stub
 			if(arg0){
@@ -2136,6 +2126,25 @@ public class MainActivity extends Activity {
 			}else{
 				statusEditText.setText("onVerifyMifareCardResult fail");
 			}
+		}
+
+		@Override
+		public void onReadMifareCardResult(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			if(arg0!=null){
+				String addr=arg0.get("addr");
+				String cardDataLen=arg0.get("cardDataLen");
+				String cardData=arg0.get("cardData");
+				statusEditText.setText("addr:"+addr+"\ncardDataLen:"+cardDataLen+"\ncardData:"+cardData);
+			}else{
+				statusEditText.setText("onReadWriteMifareCardResult fail");
+			}
+		}
+
+		@Override
+		public void onWriteMifareCardResult(boolean arg0) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 
