@@ -102,6 +102,8 @@ import android.hardware.usb.UsbDevice;
 public class MainActivity extends Activity {
 
 	private Button doTradeButton,serialBtn;
+	private Button operateCardBtn;
+	private Spinner cmdSp;
 	private EditText amountEditText;
 	private EditText statusEditText,blockAdd,status;
 	private ListView appListView;
@@ -359,6 +361,11 @@ public class MainActivity extends Activity {
 		imvAnimScan.setBackgroundDrawable(animScan);
 		mafireLi=(LinearLayout) findViewById(R.id.mifareid);
 		status=(EditText) findViewById(R.id.status);
+		operateCardBtn=(Button) findViewById(R.id.operate_card);
+		cmdSp=(Spinner) findViewById(R.id.cmd_spinner);
+		String[] cmdList=new String[]{"add","reduce","restore"};
+		ArrayAdapter<String> cmdAdapter=new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, cmdList);
+		cmdSp.setAdapter(cmdAdapter);
 		mafireSpinner=(Spinner) findViewById(R.id.verift_spinner);
 		blockAdd=(EditText) findViewById(R.id.block_address);
 		String[] keyClass = new String[] { "Key A", "Key B" };
@@ -451,6 +458,7 @@ public class MainActivity extends Activity {
 		readBtn.setOnClickListener(myOnClickListener);
 		writeBtn.setOnClickListener(myOnClickListener);
 		veriftBtn.setOnClickListener(myOnClickListener);
+		operateCardBtn.setOnClickListener(myOnClickListener);
 	}
    
 	private POS_TYPE posType = POS_TYPE.BLUETOOTH;
@@ -2151,6 +2159,18 @@ public class MainActivity extends Activity {
 				statusEditText.setText("write data fail!");
 			}
 		}
+
+		@Override
+		public void onOperateMifareCardResult(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			if(arg0!=null){
+				String cmd=arg0.get("Cmd");
+				String blockAddr=arg0.get("blockAddr");
+				statusEditText.setText("Cmd:"+cmd+"\nBlock Addr:"+blockAddr);
+			}else{
+				statusEditText.setText("operate failed");
+			}
+		}
 	}
 
 	private void clearDisplay() {
@@ -2417,6 +2437,13 @@ public class MainActivity extends Activity {
 				pos.setBlockaddr(blockaddr);
 				pos.setKeyValue(cardData);
 				pos.doMifareCard("04",20);
+			}else if(v == operateCardBtn){
+				String blockaddr=blockAdd.getText().toString();
+				String cardData=status.getText().toString();
+				String cmd=(String) cmdSp.getSelectedItem();
+				pos.setBlockaddr(blockaddr);
+				pos.setKeyValue(cardData);
+				pos.doMifareCard("05"+cmd, 20);
 			}
 		}
 	}

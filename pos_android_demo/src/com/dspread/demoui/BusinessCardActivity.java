@@ -886,6 +886,12 @@ public class BusinessCardActivity extends Activity {
 			
 		}
 
+		@Override
+		public void onOperateMifareCardResult(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 
 		
 

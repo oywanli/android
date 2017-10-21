@@ -125,9 +125,17 @@
 	    <Spinner android:id="@+id/verift_spinner" android:layout_width="match_parent"
 	        android:layout_height="wrap_content"/>
 		</LinearLayout>
-	<LinearLayout android:id="@+id/li2" android:layout_width="match_parent"
+		<LinearLayout android:id="@+id/li3" android:layout_width="match_parent"
 	    android:layout_height="wrap_content" android:orientation="horizontal"
 	    android:layout_below="@id/li">
+	    <Button android:id="@+id/operate_card" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="@string/operate_card"/>
+	     <Spinner android:id="@+id/cmd_spinner" android:layout_width="match_parent"
+	        android:layout_height="wrap_content"/>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/li2" android:layout_width="match_parent"
+	    android:layout_height="wrap_content" android:orientation="horizontal"
+	    android:layout_below="@id/li3">
 	    <Button android:id="@+id/read_card" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="@string/read_card"/>
 	    <Button android:id="@+id/write_card" android:layout_width="wrap_content"

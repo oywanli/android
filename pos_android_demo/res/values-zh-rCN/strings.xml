@@ -7,6 +7,7 @@
      <string name="poll_card">寻mafire卡</string>
     <string name="verify_card">验证卡片</string>
     <string name="read_card">读卡</string>
+    <string name="operate_card">操作卡片（增值/减值/存储）</string>
     <string name="write_card">写卡</string>
     <string name="finish_card">完成卡通讯</string>
     <string name="audio_unknow">音效控制:未知</string>

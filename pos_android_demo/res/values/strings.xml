@@ -46,6 +46,7 @@
     <string name="poll_card">poll card</string>
     <string name="verify_card">verify card</string>
     <string name="read_card">read card</string>
+    <string name="operate_card">operate card</string>
     <string name="write_card">write card</string>
     <string name="finish_card">finish mafire card</string>
     <string name="please_select_bt_name">select device</string>
