@@ -892,6 +892,30 @@ public class BusinessCardActivity extends Activity {
 			
 		}
 
+		@Override
+		public void getMifareCardVersion(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void getMifareFastReadData(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void getMifareReadData(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void writeMifareULData(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 
 		
 

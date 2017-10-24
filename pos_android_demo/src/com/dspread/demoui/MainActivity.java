@@ -34,6 +34,7 @@ import com.dspread.xpos.QPOSService.CommunicationMode;
 import com.dspread.xpos.QPOSService.DoTradeResult;
 import com.dspread.xpos.QPOSService.DoTransactionType;
 import com.dspread.xpos.QPOSService.Display;
+import com.dspread.xpos.QPOSService.DoTradeMode;
 import com.dspread.xpos.QPOSService.EMVDataOperation;
 import com.dspread.xpos.QPOSService.EmvOption;
 import com.dspread.xpos.QPOSService.Error;
@@ -111,7 +112,7 @@ public class MainActivity extends Activity {
 	private Dialog dialog;
 	private String nfcLog="";
 	private Spinner mafireSpinner;
-	private Button pollBtn,veriftBtn,readBtn,writeBtn,finishBtn;
+	private Button pollBtn,veriftBtn,readBtn,writeBtn,finishBtn,getULBtn,readULBtn,fastReadUL,writeULBtn;
 
 	private Button btnUSB,btnGetId,btnGetInfo;
 	private Button btnQuickEMV;
@@ -386,6 +387,10 @@ public class MainActivity extends Activity {
 		readBtn=(Button) findViewById(R.id.read_card);
 		writeBtn=(Button) findViewById(R.id.write_card);
 		finishBtn=(Button) findViewById(R.id.finish_card);
+		getULBtn=(Button) findViewById(R.id.get_ul);
+		readULBtn=(Button) findViewById(R.id.read_ulcard);
+		fastReadUL=(Button) findViewById(R.id.fast_read_ul);
+		writeULBtn=(Button) findViewById(R.id.write_ul);
 		
 		Intent intent=getIntent();
 		type=intent.getIntExtra("connect_type", 0);
@@ -459,6 +464,10 @@ public class MainActivity extends Activity {
 		writeBtn.setOnClickListener(myOnClickListener);
 		veriftBtn.setOnClickListener(myOnClickListener);
 		operateCardBtn.setOnClickListener(myOnClickListener);
+		getULBtn.setOnClickListener(myOnClickListener);
+		readULBtn.setOnClickListener(myOnClickListener);
+		fastReadUL.setOnClickListener(myOnClickListener);
+		writeULBtn.setOnClickListener(myOnClickListener);
 	}
    
 	private POS_TYPE posType = POS_TYPE.BLUETOOTH;
@@ -631,9 +640,9 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
 //			DukptKeys.setFilePath("keys/rsa_private_pkcs8.pem");
-//			pos.udpateWorkKey("5001000025741051b8e14a5f488d0d652c81f2a725d39f9b7932586497eb97d519d100c6982bc94adff34b5ac6dfababd8451e19cd7085d1b772136b0688998177162d4e134c2993dd04606e16a7cb47c922f8480128969cd56064c342ae75e8478f61102a5f7c47e92562e54cdc9f2864e18f92c4d1a09cdacdc28354e0fb61ab9e6fa322bb227fd55397438f90e61768d1e83a9752bb6e40c5168bfe937f9f9b920bf6bc9bb1ffda00efec514295436323d54b7c8c47a5f0295f30585a627320fea5d141b51e8d5a2d12e4f42977769f5f47d72631591fe75c0cc2971ae0ac035a5729073f7f95f820ab663a5279ec00192c2a6befa992cb1aa3132134043925410956cd85585bfa7e5422e12849dd850521baab03ec4356390e974665a4c386c3bfdb2c472f37edfc5174612ef76d956370a2b135a433b93bb72f8286bd35e05e28e2cf00ceff174e544e66ded77f323f798effffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+			pos.udpateWorkKey("68010000901EFC91F367BD80F77900D90A4FB2249F8B16B4EDDF85C36734787433D891ABEEC8176573194FB5758DD39C674ECDE8E50A580F602DFF0ECC4C1CB86D4B98B2EA0DD332F68C67EBBAD5217DF71EC64BCA923C075966B1664752A648540BBAFD118051D22996999EDC874C4C9FB83314148D678C212B1F0E25023F072DC0C74510CED8DE5D44DCD3DE90845B7BD4AC8D81CC7B6B157C84BD8D1112A95BB71824EA6AD904093DC614C4651D67632C5C6DF8CEBE451BBF308F380F70B63E702928EA9CE8E5B2C01A352AEEC653B25890D61B24A1C0FA4006394B9EFC93A00CFDBCF32DCCCA527F14BD1ACCA154E42AF7F7106C5DB8E9292A774AAFADF833528E52032A1C2419D2711B0B3D4FACA9FC8389719168BD3D77923F171E697A25B60B54851A9CBB8F9041D9A887A1E9DAC389905C672B1C7B826CFD81F01BF75B0CCA04A69AF327BC5F514C93B59BF9FE6A497A96D9B6B73AE17C377AB1E9F735F255FEF0FDDCFD77F235F3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 //			DukptKeys.setRSA_public_key("A7AF29ABBB967E81021E2748EFEA06FA5CF5C9B9D9BD1410D3312626EB33212E9BF2760FD409246826A017A399991A2E7795EE97E52DE313BBBB09176884A4B5F1476E072F225B4CEC78F821A140E08950DDF14D3BC307279CAB1C7A0896EE3DFFD682A67541972ED2B71457D555297A275FE23E8323715F4C5BD36D3BC39329");
-			pos.doUpdateIPEKOperation("00", "09117091100141E00001", "194819F6873BE8C6C97F32EA136A6168", "91B80D0000000000", "09117091100141E00001", "194819F6873BE8C6C97F32EA136A6168", "91B80D0000000000", "09117091100141E00001", "194819F6873BE8C6C97F32EA136A6168", "91B80D0000000000");
+//			pos.doUpdateIPEKOperation("00", "09117091100141E00001", "194819F6873BE8C6C97F32EA136A6168", "91B80D0000000000", "09117091100141E00001", "194819F6873BE8C6C97F32EA136A6168", "91B80D0000000000", "09117091100141E00001", "194819F6873BE8C6C97F32EA136A6168", "91B80D0000000000");
 //			pos.udpateWorkKey("952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", 4);
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
@@ -1934,11 +1943,14 @@ public class MainActivity extends Activity {
 				String cardUid=arg0.get("cardUid");
 				String cardAtsLen=arg0.get("cardAtsLen");
 				String cardAts=arg0.get("cardAts");
+				String ATQA=arg0.get("ATQA");
+				String SAK=arg0.get("SAK");
 				/*if(!cardAtsLen.equals("0")){
 					String cardAts=arg0.get("cardAts");
 				}*/
 				statusEditText.setText("statuString:"+statuString+"\n"+"cardTypeString:"+cardTypeString+"\ncardUidLen:"+cardUidLen
-						+"\ncardUid:"+cardUid+"\ncardAtsLen:"+cardAtsLen+"\ncardAts:"+cardAts);
+						+"\ncardUid:"+cardUid+"\ncardAtsLen:"+cardAtsLen+"\ncardAts:"+cardAts
+						+"\nATQA:"+ATQA+"\nSAK:"+SAK);
 			}
 		}
 
@@ -2171,6 +2183,54 @@ public class MainActivity extends Activity {
 				statusEditText.setText("operate failed");
 			}
 		}
+
+		@Override
+		public void getMifareCardVersion(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			if(arg0!=null){
+				String verLen=arg0.get("versionLen");
+				String ver=arg0.get("cardVersion");
+				statusEditText.setText("versionLen:"+verLen+"\nverison:"+ver);
+			}else{
+				statusEditText.setText("get mafire UL version failed");
+			}
+		}
+
+		@Override
+		public void getMifareFastReadData(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			if(arg0!=null){
+				String startAddr=arg0.get("startAddr");
+				String endAddr=arg0.get("endAddr");
+				String dataLen=arg0.get("dataLen");
+				String cardData=arg0.get("cardData");
+				statusEditText.setText("startAddr:"+startAddr+"\nendAddr:"+endAddr+"\ndataLen:"+dataLen
+						+"\ncardData:"+cardData);
+			}else{
+				statusEditText.setText("read fast UL failed");
+			}
+		}
+
+		@Override
+		public void getMifareReadData(Hashtable<String, String> arg0) {
+			if(arg0!=null){
+				String blockAddr=arg0.get("blockAddr");
+				String dataLen=arg0.get("dataLen");
+				String cardData=arg0.get("cardData");
+				statusEditText.setText("blockAddr:"+blockAddr+"\ndataLen:"+dataLen+"\ncardData:"+cardData);
+			}else{
+				statusEditText.setText("read mafire UL failed");
+			}
+		}
+
+		@Override
+		public void writeMifareULData(String arg0) {
+			if(arg0!=null){
+				statusEditText.setText("addr:"+arg0);
+			}else{
+				statusEditText.setText("write UL failed");
+			}
+		}
 	}
 
 	private void clearDisplay() {
@@ -2326,7 +2386,7 @@ public class MainActivity extends Activity {
 //					}
 					/*pos.setCardTradeMode(CardTradeMode.SWIPE_INSERT_CARD);
 					pos.setJudgeDebitOrCreditFlag(true);*/
-					
+//					pos.setDoTradeMode(DoTradeMode.CHECK_CARD_NO_IPNUT_PIN);
 					pos.doTrade(30);//刷卡输入pin
 				}
 			}else if(v == btnUSB){
@@ -2444,6 +2504,24 @@ public class MainActivity extends Activity {
 				pos.setBlockaddr(blockaddr);
 				pos.setKeyValue(cardData);
 				pos.doMifareCard("05"+cmd, 20);
+			}else if(v == getULBtn){
+				pos.doMifareCard("06", 20);
+			}else if(v == readULBtn){
+				String blockaddr=blockAdd.getText().toString();
+				pos.setBlockaddr(blockaddr);
+				pos.doMifareCard("07", 20);
+			}else if(v == fastReadUL){
+				String endAddr=blockAdd.getText().toString();
+				String startAddr=status.getText().toString();
+				pos.setKeyValue(startAddr);
+				pos.setBlockaddr(endAddr);
+				pos.doMifareCard("08", 20);
+			}else if(v == writeULBtn){
+				String addr=blockAdd.getText().toString();
+				String data=status.getText().toString();
+				pos.setKeyValue(data);
+				pos.setBlockaddr(addr);
+				pos.doMifareCard("0B", 20);
 			}
 		}
 	}

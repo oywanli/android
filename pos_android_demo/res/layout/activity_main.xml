@@ -143,6 +143,18 @@
 	     <Button android:id="@+id/finish_card" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="@string/finish_card"/>
 	</LinearLayout>
+	<LinearLayout android:id="@+id/li4" android:layout_width="match_parent"
+	    android:layout_height="wrap_content" android:orientation="horizontal"
+	    android:layout_below="@id/li2">
+	    <Button android:id="@+id/get_ul" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="UL获取信息"/>
+	      <Button android:id="@+id/write_ul" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="写UL"/>
+	    <Button android:id="@+id/read_ulcard" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="UL读卡"/>
+	     <Button android:id="@+id/fast_read_ul" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="UL快读"/>
+	</LinearLayout>
 	<RelativeLayout  android:id="@+id/ra" android:layout_below="@id/li2"
 	     android:layout_width="match_parent"   android:layout_height="wrap_content" >
 	     <TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
