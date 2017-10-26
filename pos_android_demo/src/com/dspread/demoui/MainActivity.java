@@ -133,6 +133,7 @@ public class MainActivity extends Activity {
 	private boolean isUsb = true;
 	private boolean isUart = true;
 	private boolean isPosComm = false;
+	ArrayList<String> list=new ArrayList<String>();
 	private boolean isOTG = false;
 	private boolean isQuickEmv=false;
 	private boolean isDotrade=false;
@@ -672,19 +673,32 @@ public class MainActivity extends Activity {
 			pos.setQuickEmvStatus(true);
 		}
 		else if(item.getItemId() == R.id.updateEMVAPP){
-			ArrayList<String> list=new ArrayList<String>();
 //			list.add(EmvAppTag.Application_Identifier_AID_terminal+"00000000000000000000000000000000");
 //			list.add(EmvAppTag.Terminal_Capabilities+"e0f8c8");
-			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000001000");
+			list.add(EmvAppTag.ICS+"F4F0F0FAAFFE8000");
+			list.add(EmvAppTag.Terminal_type+"22");
+			list.add(EmvAppTag.Terminal_Capabilities+"60B8C8");
+			list.add(EmvAppTag.Additional_Terminal_Capabilities+"F000F0A001");
+			list.add(EmvAppTag.status+"01");
+			list.add(EmvAppTag.Electronic_cash_Terminal_Transaction_Limit+"000000500000");
+			list.add(EmvAppTag.terminal_contactless_offline_floor_limit+"000000000000");
+			list.add(EmvAppTag.terminal_contactless_transaction_limit+"002000000000");
+			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000999999");
+			list.add(EmvAppTag.Terminal_Floor_Limit+"00000000");
+			list.add(EmvAppTag.Identity_of_each_limit_exist+"0F");
+			list.add(EmvAppTag.terminal_status_check+"01");
+			list.add(EmvAppTag.Terminal_Default_Transaction_Qualifiers+"36C04000");
+//			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000001000");
 //			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
-			pos.updateEmvAPP(EMVDataOperation.update,list);
+			statusEditText.setText("updating emvapp...");
+			sendMsg(1701);
+			
 		}
 		else if(item.getItemId() == R.id.updateEMVCAPK){
-			ArrayList<String> list=new ArrayList<String>();
 			list.add(EmvCapkTag.RID+"A000000333");
 			list.add(EmvCapkTag.Public_Key_Index+"09");
-			pos.updateEmvCAPK(EMVDataOperation.getEmv, list);
-//			pos.setMasterKey("180AB22F0CDBFB6B180AB22F0CDBFB6B", "82E13665B4624DF5", 0, 5);
+			statusEditText.setText("updating emvcapk...");
+			sendMsg(1702);
 		}
 		else if (item.getItemId() == R.id.audio_test) {
 			if (pos == null) {
@@ -2673,6 +2687,12 @@ public class MainActivity extends Activity {
 				break;	
 			case 3000:
 				pos.doMifareCard("01",20);
+				break;
+			case 1701:
+				pos.updateEmvAPP(EMVDataOperation.update,list);
+				break;
+			case 1702:
+				pos.updateEmvCAPK(EMVDataOperation.getEmv, list);
 				break;
 			default:
 				break;
