@@ -740,11 +740,11 @@ public class MainActivity extends Activity {
 			statusEditText.setText(R.string.getting_pos_id);
 			pos.getQposId();
 		} else if (item.getItemId() == R.id.menu_get_pin) {
-//			statusEditText.setText(R.string.input_pin);
-//			pos.getPin("201402121655");
-			String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss")
+			statusEditText.setText(R.string.input_pin);
+			pos.getPin("201402121655");
+			/*String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss")
 					.format(Calendar.getInstance().getTime());
-			pos.getIccCardNo(terminalTime);
+			pos.getIccCardNo(terminalTime);*/
 		} else if (item.getItemId() == R.id.menu_icc) {
 			if (pos != null && pos.getBluetoothState()) {//判断蓝牙是否连接
 				Intent intent = new Intent(this, IccActivity.class);
@@ -2454,9 +2454,9 @@ public class MainActivity extends Activity {
 //					}
 //					pos.setJudgeDebitOrCreditFlag(true);
 //					pos.setDoTradeMode(DoTradeMode.CHECK_CARD_NO_IPNUT_PIN);
-					 pos.setDesKey("11111111111111111111111111111111");
-					 pos.doTrade_QF(0x0f, "345", "456");
-//					pos.doTrade(30);//刷卡输入pin
+//					 pos.setDesKey("11111111111111111111111111111111");
+//					 pos.doTrade_QF(0x0f, "345", "456");
+					pos.doTrade(30);//刷卡输入pin
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
