@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
 	private Dialog dialog;
 	private String nfcLog="";
 	private Spinner mafireSpinner;
-	private Button pollBtn,pollULbtn,veriftBtn,readBtn,writeBtn,finishBtn,finishULBtn,getULBtn,readULBtn,fastReadUL,writeULBtn;
+	private Button pollBtn,pollULbtn,veriftBtn,veriftULBtn,readBtn,writeBtn,finishBtn,finishULBtn,getULBtn,readULBtn,fastReadUL,writeULBtn;
 
 	private Button btnUSB,btnGetId,btnGetInfo;
 	private Button btnQuickEMV;
@@ -387,6 +387,7 @@ public class MainActivity extends Activity {
 		pollBtn=(Button) findViewById(R.id.search_card);
 		pollULbtn=(Button) findViewById(R.id.poll_ulcard);
 		veriftBtn=(Button) findViewById(R.id.verify_card);
+		veriftULBtn=(Button) findViewById(R.id.verify_ulcard);
 		readBtn=(Button) findViewById(R.id.read_card);
 		writeBtn=(Button) findViewById(R.id.write_card);
 		finishBtn=(Button) findViewById(R.id.finish_card);
@@ -469,6 +470,7 @@ public class MainActivity extends Activity {
 		readBtn.setOnClickListener(myOnClickListener);
 		writeBtn.setOnClickListener(myOnClickListener);
 		veriftBtn.setOnClickListener(myOnClickListener);
+		veriftULBtn.setOnClickListener(myOnClickListener);
 		operateCardBtn.setOnClickListener(myOnClickListener);
 		getULBtn.setOnClickListener(myOnClickListener);
 		readULBtn.setOnClickListener(myOnClickListener);
@@ -740,7 +742,9 @@ public class MainActivity extends Activity {
 		} else if (item.getItemId() == R.id.menu_get_pin) {
 //			statusEditText.setText(R.string.input_pin);
 //			pos.getPin("201402121655");
-			pos.getCardNo();
+			String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss")
+					.format(Calendar.getInstance().getTime());
+			pos.getIccCardNo(terminalTime);
 		} else if (item.getItemId() == R.id.menu_icc) {
 			if (pos != null && pos.getBluetoothState()) {//判断蓝牙是否连接
 				Intent intent = new Intent(this, IccActivity.class);
@@ -2285,6 +2289,12 @@ public class MainActivity extends Activity {
 				statusEditText.setText("write UL failed");
 			}
 		}
+
+		@Override
+		public void verifyMifareULData(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	private void clearDisplay() {
@@ -2544,6 +2554,10 @@ public class MainActivity extends Activity {
 				pos.setBlockaddr(blockaddr);
 				pos.setKeyValue(keyValue);
 				pos.doMifareCard("02"+keyclass,20);
+			}else if(v==veriftULBtn){
+				String keyValue=status.getText().toString();
+				pos.setKeyValue(keyValue);
+				pos.doMifareCard("0D",20);
 			}else if(v == readBtn){
 				String blockaddr=blockAdd.getText().toString();
 				pos.setBlockaddr(blockaddr);

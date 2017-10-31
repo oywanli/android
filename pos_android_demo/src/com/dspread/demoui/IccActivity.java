@@ -960,6 +960,12 @@ public class IccActivity extends Activity {
 			
 		}
 
+		@Override
+		public void verifyMifareULData(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 	
 		
 

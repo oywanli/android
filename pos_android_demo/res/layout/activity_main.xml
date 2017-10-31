@@ -167,20 +167,25 @@
 	    android:layout_height="wrap_content" android:orientation="horizontal">
 	      <Button android:id="@+id/poll_ulcard" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="@string/poll_card"/>
-	    <Button android:id="@+id/get_ul" android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" android:text="get UL Info"/>
-	      <Button android:id="@+id/write_ul" android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" android:text="write UL"/>
+	       <Button android:id="@+id/verify_ulcard" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="@string/verify_card"/>
 	</LinearLayout>
 	 <LinearLayout android:id="@+id/li5" android:layout_width="match_parent"
 	    android:layout_height="wrap_content" android:orientation="horizontal">
+	     <Button android:id="@+id/get_ul" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="get UL Info"/>
+	      <Button android:id="@+id/write_ul" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="write UL"/>
 	       <Button android:id="@+id/read_ulcard" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="read UL"/>
-	 		<Button android:id="@+id/fast_read_ul" android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" android:text="fase read UL"/>
       </LinearLayout>
-	 <Button android:id="@+id/finish_ulcard" android:layout_width="wrap_content"
+      <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+          	<Button android:id="@+id/fast_read_ul" android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" android:text="fase read UL"/>
+          	<Button android:id="@+id/finish_ulcard" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="@string/finish_card"/>
+      </LinearLayout>
 	<RelativeLayout  android:id="@+id/ra11" android:layout_below="@id/li2"
 	     android:layout_width="match_parent"   android:layout_height="wrap_content" >
 	     <TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
