@@ -2292,8 +2292,13 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void verifyMifareULData(Hashtable<String, String> arg0) {
-			// TODO Auto-generated method stub
-			
+			if(arg0!=null){
+				String dataLen=arg0.get("dataLen");
+				String pack=arg0.get("pack");
+				statusEditText.setText("dataLen:"+dataLen+"\npack:"+pack);
+			}else{
+				statusEditText.setText("verify UL failed");
+			}
 		}
 	}
 
