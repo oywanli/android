@@ -233,7 +233,7 @@
     <string name="ic_double_mac">chip card calculate mac double</string>
     <string name="tap_card">Tap Card: </string>
     <string name="battery_percentage">battery percentage: </string>
-    <string name="updateInjectKeys">updateInjectKeys:</string>
+    <string name="updateInjectKeys">update Keys:</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="hello_world">Hello world!</string>
 

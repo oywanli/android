@@ -108,11 +108,11 @@ public class MainActivity extends Activity {
 	private EditText amountEditText;
 	private EditText statusEditText,blockAdd,status;
 	private ListView appListView;
-	private LinearLayout mafireLi;
+	private LinearLayout mafireLi,mafireUL;
 	private Dialog dialog;
 	private String nfcLog="";
 	private Spinner mafireSpinner;
-	private Button pollBtn,veriftBtn,readBtn,writeBtn,finishBtn,getULBtn,readULBtn,fastReadUL,writeULBtn;
+	private Button pollBtn,pollULbtn,veriftBtn,readBtn,writeBtn,finishBtn,finishULBtn,getULBtn,readULBtn,fastReadUL,writeULBtn;
 
 	private Button btnUSB,btnGetId,btnGetInfo;
 	private Button btnQuickEMV;
@@ -199,7 +199,7 @@ public class MainActivity extends Activity {
 			open(CommunicationMode.UART);
 			TRACE.d("+++++++UART");
 			posType = POS_TYPE.UART;
-			blueTootchAddress = "/dev/ttyS3";//使用串口，同方那边地址为/dev/ttyS1
+			blueTootchAddress = "/dev/ttyMT0";//使用串口，同方那边地址为/dev/ttyS1
 			pos.setDeviceAddress(blueTootchAddress);
 			pos.openUart();
 		} else {
@@ -362,6 +362,7 @@ public class MainActivity extends Activity {
 				R.anim.progressanmi);
 		imvAnimScan.setBackgroundDrawable(animScan);
 		mafireLi=(LinearLayout) findViewById(R.id.mifareid);
+		mafireUL=(LinearLayout) findViewById(R.id.ul_ll);
 		status=(EditText) findViewById(R.id.status);
 		operateCardBtn=(Button) findViewById(R.id.operate_card);
 		cmdSp=(Spinner) findViewById(R.id.cmd_spinner);
@@ -384,10 +385,12 @@ public class MainActivity extends Activity {
 		btnQuickEMV   = (Button) findViewById(R.id.btnQuickEMV);//隐藏按钮
 		btnQuickEMVtrade   = (Button) findViewById(R.id.btnQuickEMVtrade);
 		pollBtn=(Button) findViewById(R.id.search_card);
+		pollULbtn=(Button) findViewById(R.id.poll_ulcard);
 		veriftBtn=(Button) findViewById(R.id.verify_card);
 		readBtn=(Button) findViewById(R.id.read_card);
 		writeBtn=(Button) findViewById(R.id.write_card);
 		finishBtn=(Button) findViewById(R.id.finish_card);
+		finishULBtn=(Button) findViewById(R.id.finish_ulcard);
 		getULBtn=(Button) findViewById(R.id.get_ul);
 		readULBtn=(Button) findViewById(R.id.read_ulcard);
 		fastReadUL=(Button) findViewById(R.id.fast_read_ul);
@@ -413,7 +416,7 @@ public class MainActivity extends Activity {
 					open(CommunicationMode.UART);
 					TRACE.d("+++++++UART");
 					posType = POS_TYPE.UART;
-					blueTootchAddress = "/dev/ttys1";//同方那边是s1，天波是s3
+					blueTootchAddress = "/dev/ttyMT0";//同方那边是s1，天波是s3
 					pos.setDeviceAddress(blueTootchAddress);
 					pos.openUart();
 				}
@@ -460,7 +463,9 @@ public class MainActivity extends Activity {
 		btnQuickEMV.setOnClickListener(myOnClickListener);
 		btnQuickEMVtrade.setOnClickListener(myOnClickListener);
 		pollBtn.setOnClickListener(myOnClickListener);
+		pollULbtn.setOnClickListener(myOnClickListener);
 		finishBtn.setOnClickListener(myOnClickListener);
+		finishULBtn.setOnClickListener(myOnClickListener);
 		readBtn.setOnClickListener(myOnClickListener);
 		writeBtn.setOnClickListener(myOnClickListener);
 		veriftBtn.setOnClickListener(myOnClickListener);
@@ -641,9 +646,9 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
 //			DukptKeys.setFilePath("keys/rsa_private_pkcs8.pem");
-			pos.udpateWorkKey("680100003076F206FD3299980CCE13EF3EFB1F3DAA9075A603F5550EC75F9F0A656FCE8F371F2DA9971E1376992C57866EA1B2ED7CF23B0490D30D571955212F0D84AF93DAD5B74FBFA9E81AA211B29D2DE41CF98F3EF9061D19E7C94D4FE83329A49BED8DDE79B6C89EE7053BCE4F9139CA84ACDB714CF47656E36BBA7A52C7C706F40010CED8DE5D44DCD3DE90845B7BD4AC8D1BC7CB0D0B653D96B947907D6D657B83F1E1DC5FADE5301EAE49DEF5360386B91551D7EA8BCF0906C8952D96B50F143BA69B583B7DAFAE2A47623B5277EAFA80F3B5AD35C366ADAFDDC27BEA6CC8F3C9E53DA42A65D524874021DE1C83BEBF637B07A211FDD6ECAEDC535339B793455A4CA3B057FBCFCA1C1E489C2286CEE575E58395F672860FAD42C40BE76C3CFF247164CAAFC7F2107A054FEF1E001D6A08681FC61D5DB97DC6A4EA35B782DE7898FD27709E5098374FAF6ACCFBBFD5F499E38159FF18F786B7DF93FF1EC2E832BA4A11D5B2E3AF53B9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+			pos.udpateWorkKey("680100006690E3944A086A544A140226EDE7B857CB4891014C51988019045A27E5D6E1AC4DD327F5BEE6FA0E9AA15370E31A70C7CE3CF8BC7E9B1EBDFD6ABA3B94D0609825221BB065E85CA849C984D4CB1488A772EBABDDF872E9970562EBDA861F1CBF8F36C1F8D12046C045BE60ED1296C9A890B6294845E549C6B16CE02D1FE657A910CED8DE5D44DCD3DE90845B7BD4AC8D3E51CF2E9B76D2084D0B3D43336CF0588801FD61B9C100466D0AFAC758D65E81A195C04EFA02A331FB9C5DD2CF13C4C92DA3139CB5DF6F4C8AFEE1690F19D22DA6DDA3EA09E03731F2912F1C8019D946EE66D8592431A726635F771D2D79FAAD0F47515B9F797C9FCEAC994CB9B0B7C0771257A21B54A650565E0382A44A5E8F7E81C6ED976F5E9FF4759EA1ACC27396313B3B7753A0FD878BFE5931DEA55F177409C4AE5C755BF5C42368EE18B3AE0D394D0A65C03D689B848EFE3A227C646C1C35A4E78AE00705EEAB76BFCCFCB2C9AAB9EADC848A52F9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 //			DukptKeys.setRSA_public_key("A7AF29ABBB967E81021E2748EFEA06FA5CF5C9B9D9BD1410D3312626EB33212E9BF2760FD409246826A017A399991A2E7795EE97E52DE313BBBB09176884A4B5F1476E072F225B4CEC78F821A140E08950DDF14D3BC307279CAB1C7A0896EE3DFFD682A67541972ED2B71457D555297A275FE23E8323715F4C5BD36D3BC39329");
-//			pos.doUpdateIPEKOperation("00", "FFFF9876543210E00001", "D6BAB875F279357275DFF0395AA3CBBF", "AF8C074A692A3666", "FFFF9876543210E00001", "D6BAB875F279357275DFF0395AA3CBBF", "AF8C074A692A3666", "FFFF9876543210E00001", "D6BAB875F279357275DFF0395AA3CBBF", "AF8C074A692A3666");
+//			pos.doUpdateIPEKOperation("00", "09217072700508E0000C", "A0490CFE443BFC13DFAFFF9A1504A5E2", "40CB1E4DAD219E0C", "09217072700508E0000C", "A0490CFE443BFC13DFAFFF9A1504A5E2", "40CB1E4DAD219E0C", "09217072700508E0000C", "A0490CFE443BFC13DFAFFF9A1504A5E2", "40CB1E4DAD219E0C");
 //			pos.udpateWorkKey("952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", 4);
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
@@ -733,8 +738,9 @@ public class MainActivity extends Activity {
 			statusEditText.setText(R.string.getting_pos_id);
 			pos.getQposId();
 		} else if (item.getItemId() == R.id.menu_get_pin) {
-			statusEditText.setText(R.string.input_pin);
-			pos.getPin("201402121655");
+//			statusEditText.setText(R.string.input_pin);
+//			pos.getPin("201402121655");
+			pos.getCardNo();
 		} else if (item.getItemId() == R.id.menu_icc) {
 			if (pos != null && pos.getBluetoothState()) {//判断蓝牙是否连接
 				Intent intent = new Intent(this, IccActivity.class);
@@ -767,7 +773,7 @@ public class MainActivity extends Activity {
 		}else if (item.getItemId() == R.id.isCardExist) {
 			pos.isCardExist(30);
 		}else if(item.getItemId() == R.id.menu_operate_mafire){
-			mafireLi.setVisibility(View.VISIBLE);
+			showSingleChoiceDialog();
 		}
 		return true;
 	}
@@ -811,6 +817,39 @@ public class MainActivity extends Activity {
 			
 		}
 //		android.os.Process.killProcess(android.os.Process.myPid());//直接杀死进程，保证在无意退出系统后能重新加载扫描蓝牙
+	}
+	
+	private int yourChoice=0;
+	private void showSingleChoiceDialog(){
+	    final String[] items = { "Mafire classic 1","Mafire UL"};
+//	    yourChoice = -1;
+	    AlertDialog.Builder singleChoiceDialog = 
+	        new AlertDialog.Builder(MainActivity.this);
+	    singleChoiceDialog.setTitle("please select one");
+	    // 第二个参数是默认选项，此处设置为0
+	    singleChoiceDialog.setSingleChoiceItems(items, 0, 
+	        new DialogInterface.OnClickListener() {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	            yourChoice = which;
+	        }
+	    });
+	    singleChoiceDialog.setPositiveButton("OK", 
+	        new DialogInterface.OnClickListener() {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+//	            if (yourChoice != -1) {
+	               if(yourChoice==0){
+	            	   mafireLi.setVisibility(View.VISIBLE);
+	            	   mafireUL.setVisibility(View.GONE);
+	               }else if(yourChoice==1){
+	            	   mafireLi.setVisibility(View.GONE);
+	            	   mafireUL.setVisibility(View.VISIBLE);
+	               }
+	            }
+//	        }
+	    });
+	    singleChoiceDialog.show();
 	}
 
 	public void dismissDialog() {
@@ -2371,7 +2410,6 @@ public class MainActivity extends Activity {
 				return;
 			}
 			else if (v == doTradeButton) {//开始按钮
-//				myHandler.post(r);
 				if (pos == null) {
 					statusEditText.setText(R.string.scan_bt_pos_error);
 					return;
@@ -2399,10 +2437,11 @@ public class MainActivity extends Activity {
 //					}else{
 //						pos.doTrade(30);//刷卡输入pin
 //					}
-					/*pos.setCardTradeMode(CardTradeMode.SWIPE_INSERT_CARD);
-					pos.setJudgeDebitOrCreditFlag(true);*/
+//					pos.setJudgeDebitOrCreditFlag(true);
 //					pos.setDoTradeMode(DoTradeMode.CHECK_CARD_NO_IPNUT_PIN);
-					pos.doTrade(30);//刷卡输入pin
+					 pos.setDesKey("11111111111111111111111111111111");
+					 pos.doTrade_QF(0x0f, "345", "456");
+//					pos.doTrade(30);//刷卡输入pin
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
@@ -2491,7 +2530,12 @@ public class MainActivity extends Activity {
 			}else if(v == pollBtn){
 				statusEditText.setText("begin to poll card!");
 				sendMsg(3000);
+			}else if(v == pollULbtn){
+				statusEditText.setText("begin to poll UL card!");
+				sendMsg(3000);
 			}else if(v==finishBtn){
+				pos.doMifareCard("0E",20);
+			}else if(v==finishULBtn){
 				pos.doMifareCard("0E",20);
 			}else if(v==veriftBtn){
 				String keyValue=status.getText().toString();
