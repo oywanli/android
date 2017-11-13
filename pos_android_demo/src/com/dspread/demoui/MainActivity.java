@@ -37,6 +37,7 @@ import com.dspread.xpos.QPOSService.Display;
 import com.dspread.xpos.QPOSService.DoTradeMode;
 import com.dspread.xpos.QPOSService.EMVDataOperation;
 import com.dspread.xpos.QPOSService.EmvOption;
+import com.dspread.xpos.QPOSService.EncryptType;
 import com.dspread.xpos.QPOSService.Error;
 import com.dspread.xpos.QPOSService.LcdModeAlign;
 import com.dspread.xpos.QPOSService.TransactionResult;
@@ -648,7 +649,7 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
 //			DukptKeys.setFilePath("keys/rsa_private_pkcs8.pem");
-			pos.udpateWorkKey("680100006690E3944A086A544A140226EDE7B857CB4891014C51988019045A27E5D6E1AC4DD327F5BEE6FA0E9AA15370E31A70C7CE3CF8BC7E9B1EBDFD6ABA3B94D0609825221BB065E85CA849C984D4CB1488A772EBABDDF872E9970562EBDA861F1CBF8F36C1F8D12046C045BE60ED1296C9A890B6294845E549C6B16CE02D1FE657A910CED8DE5D44DCD3DE90845B7BD4AC8D3E51CF2E9B76D2084D0B3D43336CF0588801FD61B9C100466D0AFAC758D65E81A195C04EFA02A331FB9C5DD2CF13C4C92DA3139CB5DF6F4C8AFEE1690F19D22DA6DDA3EA09E03731F2912F1C8019D946EE66D8592431A726635F771D2D79FAAD0F47515B9F797C9FCEAC994CB9B0B7C0771257A21B54A650565E0382A44A5E8F7E81C6ED976F5E9FF4759EA1ACC27396313B3B7753A0FD878BFE5931DEA55F177409C4AE5C755BF5C42368EE18B3AE0D394D0A65C03D689B848EFE3A227C646C1C35A4E78AE00705EEAB76BFCCFCB2C9AAB9EADC848A52F9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+			pos.udpateWorkKey("680100007A17CA14B24F039DB8A2490E1AA9BC1959078BFCA38FEADDA0EE06C13F183DAAD6792EFC3448CE4677075D599DFC6E75B9234A0520B85A6877466509B965D177DE54D3895066BED7E06C06CD5127C60F0B14311853670DA278E4F5F563AEC77BC72AEAFE67A3560744E8B2B8D2F9E895B05D8125DD42A510F589987462C98CEE10CED8DE5D44DCD3DE90845B7BD4AC8D81CC7B6B157C84BD8D1112A95BB71824EA6AD904093DC614C4651D67632C5C6DF8CEBE451BBF308F380F70B63E702928EA9CE8E5B2C01A352AEEC653B25890D61B24A1C0FA4006394B9EFC93A00CFDBCF32DCCCA527F14BD89E27CD1ABCE6B07860A401424D12BA226B2CD1F6009CB921E794E633DB56CD6C6714782F0D72ACD09C6922EB07256A07D231B2CFD726889187E94FA2C41823A1675DAF420064F10ED125F5732521DEE56F4F42EBBD94D97332945A7B07224327EC24B57DBABA93744FF09DAD20AD2954B8D0D02038EE4208FDE04DB005EE5F2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 //			DukptKeys.setRSA_public_key("A7AF29ABBB967E81021E2748EFEA06FA5CF5C9B9D9BD1410D3312626EB33212E9BF2760FD409246826A017A399991A2E7795EE97E52DE313BBBB09176884A4B5F1476E072F225B4CEC78F821A140E08950DDF14D3BC307279CAB1C7A0896EE3DFFD682A67541972ED2B71457D555297A275FE23E8323715F4C5BD36D3BC39329");
 //			pos.doUpdateIPEKOperation("00", "09217072700508E0000C", "A0490CFE443BFC13DFAFFF9A1504A5E2", "40CB1E4DAD219E0C", "09217072700508E0000C", "A0490CFE443BFC13DFAFFF9A1504A5E2", "40CB1E4DAD219E0C", "09217072700508E0000C", "A0490CFE443BFC13DFAFFF9A1504A5E2", "40CB1E4DAD219E0C");
 //			pos.udpateWorkKey("952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", 4);
@@ -742,6 +743,9 @@ public class MainActivity extends Activity {
 		} else if (item.getItemId() == R.id.menu_get_pin) {
 			statusEditText.setText(R.string.input_pin);
 			pos.getPin("201402121655");
+//			Hashtable<String, String> decodeData =pos.getICCTag("01",0, 1, "57");
+//			statusEditText.setText("57 tag: " + decodeData.get("tlv"));
+//			pos.getICCTag("01", 0, 1, "57");
 			/*String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss")
 					.format(Calendar.getInstance().getTime());
 			pos.getIccCardNo(terminalTime);*/
@@ -750,7 +754,7 @@ public class MainActivity extends Activity {
 				Intent intent = new Intent(this, IccActivity.class);
 				intent.putExtra("adress", blueTootchAddress);
 				startActivity(intent);
-				 finish();
+//				 finish();
 			} else {
 				Toast.makeText(getApplicationContext(), "设备未连接", Toast.LENGTH_LONG).show();
 			}
@@ -812,13 +816,8 @@ public class MainActivity extends Activity {
 		TRACE.d("onDestroy");
 		close();
 		if (pos != null) {
-			if(isNormalBlu){
-				pos.stopScanQPos2Mode();
-			}else{
-				pos.stopScanQposBLE();
-			}
-//			pos.onDestroy();
-			
+			pos.onDestroy();
+			pos=null;
 		}
 //		android.os.Process.killProcess(android.os.Process.myPid());//直接杀死进程，保证在无意退出系统后能重新加载扫描蓝牙
 	}
@@ -914,6 +913,8 @@ public class MainActivity extends Activity {
 			TRACE.d("onDoTradeResult");
 			dismissDialog();
 			String cardNo="";
+//			boolean a=pos.resetPosStatus();
+//			statusEditText.setText("a:"+a);
 			if (result == DoTradeResult.NONE) {
 				statusEditText.setText(getString(R.string.no_card_detected));
 			} else if (result == DoTradeResult.ICC) {
@@ -1477,7 +1478,6 @@ public class MainActivity extends Activity {
 		@Override
 		public void onRequestOnlineProcess(String tlv) {
 			TRACE.d("onRequestOnlineProcess");
-			//return transaction online data
 			TRACE.i("return transaction online data:"+tlv);
 			/*if(isQuickEmv) {如果是quickemv就直接提示客户拔卡
 				statusEditText.setText("please remove card. and send data to online");
@@ -1498,6 +1498,8 @@ public class MainActivity extends Activity {
 				dialog.setTitle(R.string.request_data_to_server);
 				TRACE.d("onRequestOnlineProcess tlv:" + tlv);
 				Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
+				decodeData =pos.getICCTag(EncryptType.ENCRYPTED,0, 1, "57");
+				TRACE.i("57 tag: " + decodeData.get("tlv"));
 				TRACE.i("onlineProcess: "+decodeData);
 				if (isPinCanceled) {
 					((TextView) dialog.findViewById(R.id.messageTextView))
@@ -2502,7 +2504,7 @@ public class MainActivity extends Activity {
 				pos.clearBluetoothBuffer();
 				if(isNormalBlu){//普通蓝牙的扫描
 //					pos.stopQPos2Mode();//每次开始扫描，需要先停止再开始
-					pos.scanQPos2Mode(MainActivity.this,15);//等到扫描结束后再进行下次点击扫描
+					pos.scanQPos2Mode(MainActivity.this,20);//等到扫描结束后再进行下次点击扫描
 				}else{//其他蓝牙的扫描
 					pos.startScanQposBLE(6);
 				}
