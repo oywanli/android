@@ -126,11 +126,11 @@ public class IccActivity extends Activity {
     @Override
     public void onPause() {
     	super.onPause();
-//    	if (isAudio) {
-//    		pos.closeAudio();
-//		}else {
-//			pos.disconnectBT();
-//		}
+    	if (isAudio) {
+    		pos.closeAudio();
+		}else {
+			pos.disconnectBT();
+		}
     	
     }
     
@@ -150,6 +150,11 @@ public class IccActivity extends Activity {
     	super.onDestroy();
 //    	System.exit(0);
 //    	pos.onDestroy();
+    	if (isAudio) {
+    		pos.closeAudio();
+		}else {
+			pos.disconnectBT();
+		}
     }
     
     public void dismissDialog() {
