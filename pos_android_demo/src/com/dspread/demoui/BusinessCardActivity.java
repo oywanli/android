@@ -922,6 +922,12 @@ public class BusinessCardActivity extends Activity {
 			
 		}
 
+		@Override
+		public void onGetSleepModeTime(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 
 		
 

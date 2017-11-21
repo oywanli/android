@@ -74,7 +74,8 @@ public final class R {
         public static final int finish_ulcard=0x7f09002a;
         public static final int getEncryptData=0x7f090059;
         public static final int getPosInfo=0x7f090009;
-        public static final int getQuickEmvStatus=0x7f09006d;
+        public static final int getQuickEmvStatus=0x7f09006e;
+        public static final int getSleepTime=0x7f09006b;
         public static final int get_ksn=0x7f090058;
         public static final int get_ul=0x7f090026;
         public static final int get_update_key=0x7f09005c;
@@ -91,7 +92,7 @@ public final class R {
         public static final int li5=0x7f090025;
         public static final int ll=0x7f09000a;
         public static final int lv_indicator_BTPOS=0x7f090003;
-        public static final int menu_bluetooth=0x7f090070;
+        public static final int menu_bluetooth=0x7f090071;
         public static final int menu_get_deivce_info=0x7f09005d;
         public static final int menu_get_pin=0x7f090060;
         public static final int menu_get_pos_id=0x7f09005e;
@@ -125,8 +126,8 @@ public final class R {
         public static final int serial_port=0x7f090032;
         public static final int setButton=0x7f090039;
         public static final int setBuzzer=0x7f090069;
-        public static final int setMasterkey=0x7f09006f;
-        public static final int setQuickEmvStatus=0x7f09006e;
+        public static final int setMasterkey=0x7f090070;
+        public static final int setQuickEmvStatus=0x7f09006f;
         public static final int set_shutdowm_time=0x7f090062;
         public static final int set_sleepmode_time=0x7f090061;
         public static final int status=0x7f09001d;
@@ -141,8 +142,8 @@ public final class R {
         public static final int tv12=0x7f09002f;
         public static final int tv2=0x7f09001f;
         public static final int ul_ll=0x7f090021;
-        public static final int updateEMVAPP=0x7f09006b;
-        public static final int updateEMVCAPK=0x7f09006c;
+        public static final int updateEMVAPP=0x7f09006c;
+        public static final int updateEMVCAPK=0x7f09006d;
         public static final int updateIPEK=0x7f09006a;
         public static final int verift_spinner=0x7f090013;
         public static final int verify_card=0x7f090012;

@@ -200,7 +200,7 @@ public class MainActivity extends Activity {
 			open(CommunicationMode.UART);
 			TRACE.d("+++++++UART");
 			posType = POS_TYPE.UART;
-			blueTootchAddress = "/dev/ttyMT0";//使用串口，同方那边地址为/dev/ttyS1
+			blueTootchAddress = "/dev/ttyMT0";//使用串口，同方那边地址为/dev/ttyS1 ttyMT0
 			pos.setDeviceAddress(blueTootchAddress);
 			pos.openUart();
 		} else {
@@ -260,7 +260,7 @@ public class MainActivity extends Activity {
 			m_Adapter = null;
 		}
 		//
-		List<Map<String, ?>> data = generateAdapterData();
+		List<Map<String, ?>> data = generateAdapterData(); 
 		m_Adapter = new MyListViewAdapter(this, data);
 		//
 		m_ListView.setAdapter(m_Adapter);
@@ -659,19 +659,18 @@ public class MainActivity extends Activity {
 
 		else if(item.getItemId() == R.id.set_sleepmode_time){//设置设备睡眠时间
 			pos.setSleepModeTime(10);//the time is in 10s and 10000s
-			/*boolean a=pos.getBluetoothState();
-			statusEditText.setText("a+++++"+a);*/
 		}
 		else if(item.getItemId() == R.id.set_shutdowm_time){
-			pos.setPosSleepTime(120);
+			pos.setShutDownTime(120);
+//			pos.setPosSleepTime(120);
 		}
 		//更新ipek
 		else if(item.getItemId()==R.id.updateIPEK){
 			pos.doUpdateIPEKOperation("00","01517080800006E00003","B24669775276DDF25F334C44A645E175","3FCEBD0000000000"
 					,"01517080800006E00003","B24669775276DDF25F334C44A645E175","3FCEBD0000000000","01517080800006E00005"
 					,"B24669775276DDF25F334C44A645E175","3FCEBD0000000000");
-		}else if(item.getItemId()==R.id.updateIPEK){
-			
+		}else if(item.getItemId()==R.id.getSleepTime){
+			pos.getSleepModeTime();
 		}
 		else if(item.getItemId() == R.id.getQuickEmvStatus){
 			pos.getQuickEMVStatus(EMVDataOperation.getEmv, "9F061000000000000000000000000000000000");
@@ -789,7 +788,6 @@ public class MainActivity extends Activity {
 	public void onPause() {
 		super.onPause();
 		TRACE.d("onPause");
-		close();
 		if (pos != null) {
 			if(isNormalBlu){
 				//停止扫描普通蓝牙
@@ -798,6 +796,7 @@ public class MainActivity extends Activity {
 				//停止扫描ble的蓝牙
 				pos.stopScanQposBLE();
 			}
+			close();
 //			pos.onDestroy();
 			
 		}
@@ -813,9 +812,9 @@ public class MainActivity extends Activity {
 	public void onDestroy() {
 		super.onDestroy();
 		TRACE.d("onDestroy");
-		close();
 		if (pos != null) {
-			pos.onDestroy();
+			close();
+//			pos.onDestroy();
 			pos=null;
 		}
 //		android.os.Process.killProcess(android.os.Process.myPid());//直接杀死进程，保证在无意退出系统后能重新加载扫描蓝牙
@@ -1183,7 +1182,6 @@ public class MainActivity extends Activity {
 			content += getString(R.string.track_1_supported) + isSupportedTrack1 + "\n";
 			content += getString(R.string.track_2_supported) + isSupportedTrack2 + "\n";
 			content += getString(R.string.track_3_supported) + isSupportedTrack3 + "\n";
-
 			statusEditText.setText(content);
 		}
 
@@ -2298,6 +2296,17 @@ public class MainActivity extends Activity {
 				statusEditText.setText("verify UL failed");
 			}
 		}
+
+		@Override
+		public void onGetSleepModeTime(String arg0) {
+			// TODO Auto-generated method stub
+			if(arg0!=null){
+				int time=Integer.parseInt(arg0,16);
+				statusEditText.setText("time is ： "+time+" seconds");
+			}else{
+				statusEditText.setText("get the time is failed");
+			}
+		}
 	}
 
 	private void clearDisplay() {
@@ -2451,9 +2460,10 @@ public class MainActivity extends Activity {
 //						pos.doTrade(30);//刷卡输入pin
 //					}
 //					pos.setJudgeDebitOrCreditFlag(true);
-//					pos.setDoTradeMode(DoTradeMode.CHECK_CARD_NO_IPNUT_PIN);
-//					 pos.setDesKey("11111111111111111111111111111111");
-//					 pos.doTrade_QF(0x0f, "345", "456");
+//					pos.setDoTradeMode(DoTradeMode.CHECK_CARD_NO_IPNUT_PIN);//deskey每次做产线更新时都会变的
+					 //pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");//这个是A27dyc lp新平台上的deskey
+//					 pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");//这个是A09DYC lp上的deskey
+//					pos.doTrade_QF(0x0f, "345", "456");
 					pos.doTrade(30);//刷卡输入pin
 				}
 			}else if(v == btnUSB){
@@ -2472,8 +2482,6 @@ public class MainActivity extends Activity {
 			            String selectedDevice = (String) items[item];
 			            dialog.dismiss();
 
-//			            TextView DeivceName = (TextView)findViewById(R.id.textView1);
-//			            DeivceName.setText(selectedDevice);
 			            usbDevice = USBClass.getMdevices().get(selectedDevice);
 			            isOTG = true;
 			            open(CommunicationMode.USB_OTG_CDC_ACM);
@@ -2808,7 +2816,6 @@ public class MainActivity extends Activity {
 	private static final String FILENAME = "dsp_axdd";
 	/**
 	 * desc:保存对象
-   
 	 * @param context
 	 * @param key 
 	 * @param obj 要保存的对象，只能保存实现了serializable的对象
