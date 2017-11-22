@@ -928,6 +928,12 @@ public class BusinessCardActivity extends Activity {
 			
 		}
 
+		@Override
+		public void onGetShutDownTime(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 
 		
 

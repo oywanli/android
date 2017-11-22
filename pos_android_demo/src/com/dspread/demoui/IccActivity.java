@@ -977,6 +977,12 @@ public class IccActivity extends Activity {
 			
 		}
 
+		@Override
+		public void onGetShutDownTime(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 	
 		
 

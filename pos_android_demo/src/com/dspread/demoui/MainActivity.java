@@ -658,7 +658,7 @@ public class MainActivity extends Activity {
 		}
 
 		else if(item.getItemId() == R.id.set_sleepmode_time){//设置设备睡眠时间
-			pos.setSleepModeTime(10);//the time is in 10s and 10000s
+			pos.setSleepModeTime(200);//the time is in 10s and 10000s
 		}
 		else if(item.getItemId() == R.id.set_shutdowm_time){
 			pos.setShutDownTime(120);
@@ -670,7 +670,8 @@ public class MainActivity extends Activity {
 					,"01517080800006E00003","B24669775276DDF25F334C44A645E175","3FCEBD0000000000","01517080800006E00005"
 					,"B24669775276DDF25F334C44A645E175","3FCEBD0000000000");
 		}else if(item.getItemId()==R.id.getSleepTime){
-			pos.getSleepModeTime();
+//			pos.getSleepModeTime();
+			pos.getShutDownTime();
 		}
 		else if(item.getItemId() == R.id.getQuickEmvStatus){
 			pos.getQuickEMVStatus(EMVDataOperation.getEmv, "9F061000000000000000000000000000000000");
@@ -2305,6 +2306,15 @@ public class MainActivity extends Activity {
 				statusEditText.setText("time is ： "+time+" seconds");
 			}else{
 				statusEditText.setText("get the time is failed");
+			}
+		}
+
+		@Override
+		public void onGetShutDownTime(String arg0) {
+			if(arg0!=null){
+				statusEditText.setText("shut down time is : "+Integer.parseInt(arg0,16)+"s");
+			}else{
+				statusEditText.setText("get the shut down time is fail!");
 			}
 		}
 	}
