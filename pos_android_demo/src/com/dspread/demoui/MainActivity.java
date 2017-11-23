@@ -2472,13 +2472,10 @@ public class MainActivity extends Activity {
 //						pos.doTrade(30);//刷卡输入pin
 //					}
 //					pos.setJudgeDebitOrCreditFlag(true);
-//					pos.setDoTradeMode(DoTradeMode.CHECK_CARD_NO_IPNUT_PIN);//deskey每次做产线更新时都会变的
-					 //pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");//这个是A27dyc lp新平台上的deskey
-//					 pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");//这个是A09DYC lp上的deskey
 //					pos.doTrade_QF(0x0f, "345", "456");
-//					pos.doTrade(30);//刷卡输入pin
-					pos.setQuickEmv(true);
-					pos.doTrade(20, "123");
+					pos.doTrade(30);//刷卡输入pin
+//					pos.setQuickEmv(true);
+//					pos.doTrade(20, "123");
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
