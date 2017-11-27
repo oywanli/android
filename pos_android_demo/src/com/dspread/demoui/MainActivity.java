@@ -2468,6 +2468,7 @@ public class MainActivity extends Activity {
 //					}
 //					pos.setJudgeDebitOrCreditFlag(true);
 //					pos.doTrade_QF(0x0f, "345", "456");
+//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
 					pos.doTrade(30);//刷卡输入pin
 //					pos.setQuickEmv(true);
 //					pos.doTrade(20, "123");
