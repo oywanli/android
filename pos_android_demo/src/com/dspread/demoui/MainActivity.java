@@ -612,20 +612,20 @@ public class MainActivity extends Activity {
 			Toast.makeText(getApplicationContext(), "设备未连接", Toast.LENGTH_LONG).show();
 			return true;
 		}
-		if(item.getItemId()== R.id.reset_qpos){
+		else if(item.getItemId()== R.id.reset_qpos){
 			boolean a=pos.resetPosStatus();
 			if(a){
 				statusEditText.setText("pos reset");
 			}
 			/*pos.setCardTradeMode(CardTradeMode.UNALLOWED_LOW_TRADE);
 			statusEditText.setText("降级设置");*/
-		}if(item.getItemId() == R.id.menu_update){// update the device
+		}else if(item.getItemId() == R.id.menu_update){// update the device
 			byte[] data = readLine("upgrader.asc");
 			pos.updatePosFirmware(data, blueTootchAddress);
 			UpdateThread updateThread = new UpdateThread();
 			updateThread.start();
 		}
-		if(item.getItemId() == R.id.input_pin_or_not){
+		else if(item.getItemId() == R.id.input_pin_or_not){
 			/*flag=!flag;
 			Toast.makeText(MainActivity.this, ""+flag, Toast.LENGTH_LONG).show();*/
 //			pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");
@@ -634,18 +634,18 @@ public class MainActivity extends Activity {
 //			pos.getEncryptData("70563".getBytes(), "0", "0", 10);
 		}
 		
-		if(item.getItemId() == R.id.get_ksn){
+		else if(item.getItemId() == R.id.get_ksn){
 			pos.getKsn();//获取ksn
 //			pos.getPin(1, 0, 6, "enter the num", "970418XXXXXX3358", "20170310", 15);
 		}
-		if(item.getItemId() == R.id.getEncryptData){
+		else if(item.getItemId() == R.id.getEncryptData){
 			//获得加密数据
 			pos.getEncryptData("70563".getBytes(), "1", "0", 10);
 		}
-		if(item.getItemId() ==R.id.addKsn){
+		else if(item.getItemId() ==R.id.addKsn){
 			pos.addKsn("00");
 		}
-		if(item.getItemId() == R.id.doTradeLogOperation){
+		else if(item.getItemId() == R.id.doTradeLogOperation){
 			pos.doTradeLogOperation(DoTransactionType.GetOne, 0);
 		}
 		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
@@ -697,6 +697,8 @@ public class MainActivity extends Activity {
 			list.add(EmvAppTag.Identity_of_each_limit_exist+"0F");
 			list.add(EmvAppTag.terminal_status_check+"01");
 			list.add(EmvAppTag.Terminal_Default_Transaction_Qualifiers+"36C04000");
+			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000002000");
+			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000000000");
 //			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000001000");
 //			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
 			statusEditText.setText("updating emvapp...");
@@ -737,10 +739,11 @@ public class MainActivity extends Activity {
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
 			pos.getQposInfo();
-//			pos.setMasterKey("782FD1A6DA5EDC1D3478BA718E329F4E", "914E0311BA16919D");
+//			pos.doTradeLogOperation(DoTransactionType.ClearOne, 0);
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
 			pos.getQposId();
+//			pos.doTradeLogOperation(DoTransactionType.ClearLast, 0);
 		} else if (item.getItemId() == R.id.menu_get_pin) {
 			statusEditText.setText(R.string.input_pin);
 			pos.getPin("201402121655");
@@ -1375,7 +1378,7 @@ public class MainActivity extends Activity {
 			dialog.setContentView(R.layout.amount_dialog);
 			dialog.setTitle(getString(R.string.set_amount));
 
-			String[] transactionTypes = new String[] { "GOODS", "SERVICES", "CASHBACK", "INQUIRY", "TRANSFER", "PAYMENT","CHANGE_PIN" };
+			String[] transactionTypes = new String[] {"GOODS", "SERVICES", "CASHBACK", "INQUIRY", "TRANSFER", "PAYMENT","CHANGE_PIN" };
 			((Spinner) dialog.findViewById(R.id.transactionTypeSpinner)).setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,
 					transactionTypes));
 
@@ -1406,7 +1409,7 @@ public class MainActivity extends Activity {
 					// pos.setAmountIcon("RMB");
 //					amountEditText.setText("$" + amount(amount));
 					// amount = "00000000";
-					MainActivity.this.amount = amount;
+					MainActivity.this.amount = amount(amount);
 					MainActivity.this.cashbackAmount = cashbackAmount;
 //					if (amount.contains(".")) {
 //			             String tmp_amount = amount.substring(amount.indexOf(".") + 1, amount.length());
@@ -2045,9 +2048,9 @@ public class MainActivity extends Activity {
 		public void onReturnUpdateEMVResult(boolean arg0) {
 			// TODO Auto-generated method stub
 			if(arg0){
-				statusEditText.setText("更新AID的EMV成功");
+				statusEditText.setText("update EMV app success");
 			}else{
-				statusEditText.setText("更新AID的EMV失败");
+				statusEditText.setText("update emv app fail~");
 			}
 		}
 
@@ -2138,9 +2141,9 @@ public class MainActivity extends Activity {
 		public void onQposDoTradeLog(boolean arg0) {
 			// TODO Auto-generated method stub
 			if(arg0){
-				statusEditText.setText("clear all log success!");
+				statusEditText.setText("clear log success!");
 			}else{
-				statusEditText.setText("clear all log fail!");
+				statusEditText.setText("clear log fail!");
 			}
 		}
 
@@ -2466,10 +2469,11 @@ public class MainActivity extends Activity {
 //					}else{
 //						pos.doTrade(30);//刷卡输入pin
 //					}
-//					pos.setJudgeDebitOrCreditFlag(true);
+//					pos.setJudgeDebitOrCreditFlag(true);//做磁条卡判断是借记卡还是信用卡
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-					pos.doTrade(30);//刷卡输入pin
+					pos.setIsSaveLog(false);
+					pos.doTrade(30,"123");//刷卡输入pin
 //					pos.setQuickEmv(true);
 //					pos.doTrade(20, "123");
 				}
