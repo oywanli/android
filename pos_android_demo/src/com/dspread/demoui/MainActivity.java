@@ -620,7 +620,7 @@ public class MainActivity extends Activity {
 			/*pos.setCardTradeMode(CardTradeMode.UNALLOWED_LOW_TRADE);
 			statusEditText.setText("降级设置");*/
 		}else if(item.getItemId() == R.id.menu_update){// update the device
-			byte[] data = readLine("upgrader.asc");
+			byte[] data = readLine("A19IYC_master_dailanya.asc");
 			pos.updatePosFirmware(data, blueTootchAddress);
 			UpdateThread updateThread = new UpdateThread();
 			updateThread.start();
@@ -738,6 +738,7 @@ public class MainActivity extends Activity {
 		}
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
+//			pos.updateRSA("beyond_rsa_public_key.pem");
 			pos.getQposInfo();
 //			pos.doTradeLogOperation(DoTransactionType.ClearOne, 0);
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
@@ -2317,6 +2318,16 @@ public class MainActivity extends Activity {
 				statusEditText.setText("get the shut down time is fail!");
 			}
 		}
+
+		@Override
+		public void onQposGetRSAResult(Hashtable<String, String> arg0) {
+			// TODO Auto-generated method stub
+			if(arg0!=null){
+				String rsaReginString=arg0.get("rsaReginString");
+				String encKeyBlock=arg0.get("enData");
+				statusEditText.setText("rsaReginString:"+rsaReginString+"\nencKeyBlock:"+encKeyBlock);
+			}
+		}
 	}
 
 	private void clearDisplay() {
@@ -2471,8 +2482,7 @@ public class MainActivity extends Activity {
 //					}
 //					pos.setJudgeDebitOrCreditFlag(true);//做磁条卡判断是借记卡还是信用卡
 //					pos.doTrade_QF(0x0f, "345", "456");
-//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-					pos.setIsSaveLog(false);
+					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
 					pos.doTrade(30,"123");//刷卡输入pin
 //					pos.setQuickEmv(true);
 //					pos.doTrade(20, "123");
