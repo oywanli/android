@@ -333,12 +333,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 	protected void onPause() {
 		super.onPause();
 		if(dspPos!=null){
-			if(posType==POS_TYPE.BLUETOOTH){
+			/*if(posType==POS_TYPE.BLUETOOTH){
 				dspPos.disconnectBT();
 			}else if(posType == POS_TYPE.OTG){
 				dspPos.closeUsb();
 			}
-			dspPos=null;
+			dspPos=null;*/
 		}
 	}
 	
