@@ -934,8 +934,15 @@ public class BusinessCardActivity extends Activity {
 			
 		}
 
+
 		@Override
-		public void onQposGetRSAResult(Hashtable<String, String> arg0) {
+		public void onQposDoSetRsaPublicKey(boolean arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onQposGenerateSessionKeysResult(Hashtable<String, String> arg0) {
 			// TODO Auto-generated method stub
 			
 		}

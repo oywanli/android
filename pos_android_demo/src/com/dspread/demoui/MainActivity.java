@@ -743,26 +743,23 @@ public class MainActivity extends Activity {
 //			pos.doTradeLogOperation(DoTransactionType.ClearOne, 0);
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
-			pos.getQposId();
+//			pos.getQposId();
+			pos.generateSessionKeys();
 //			pos.doTradeLogOperation(DoTransactionType.ClearLast, 0);
 		} else if (item.getItemId() == R.id.menu_get_pin) {
 			statusEditText.setText(R.string.input_pin);
 			pos.getPin("201402121655");
 //			Hashtable<String, String> decodeData =pos.getICCTag("01",0, 1, "57");
 //			statusEditText.setText("57 tag: " + decodeData.get("tlv"));
-//			pos.getICCTag("01", 0, 1, "57");
-			/*String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss")
-					.format(Calendar.getInstance().getTime());
-			pos.getIccCardNo(terminalTime);*/
 		} else if (item.getItemId() == R.id.menu_icc) {
-			if (pos != null && pos.getBluetoothState()) {//判断蓝牙是否连接
+//			if (pos != null && pos.getBluetoothState()) {//判断蓝牙是否连接
 				Intent intent = new Intent(this, IccActivity.class);
 				intent.putExtra("adress", blueTootchAddress);
 				startActivity(intent);
 //				 finish();
-			} else {
-				Toast.makeText(getApplicationContext(), "设备未连接", Toast.LENGTH_LONG).show();
-			}
+//			} else {
+//				Toast.makeText(getApplicationContext(), "设备未连接", Toast.LENGTH_LONG).show();
+//			}
 		} else if (item.getItemId() == R.id.other) {
 			final String[] nItems = new String[] { getResources().getString(R.string.mcr_single_mac), getResources().getString(R.string.mcr_double_mac), getResources().getString(R.string.ic_single_mac), getResources().getString(R.string.ic_double_mac) };
 			AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.list)).setItems(nItems, null).setNegativeButton(getResources().getString(R.string.cancel), null);
@@ -2320,12 +2317,27 @@ public class MainActivity extends Activity {
 		}
 
 		@Override
-		public void onQposGetRSAResult(Hashtable<String, String> arg0) {
+		public void onQposDoSetRsaPublicKey(boolean arg0) {
 			// TODO Auto-generated method stub
+			if(arg0){
+				statusEditText.setText("set rsa is successed!");
+			}else{
+				statusEditText.setText("set rsa is failed!");
+			}
+		}
+
+		@Override
+		public void onQposGenerateSessionKeysResult(Hashtable<String, String> arg0) {
 			if(arg0!=null){
-				String rsaReginString=arg0.get("rsaReginString");
-				String encKeyBlock=arg0.get("enData");
-				statusEditText.setText("rsaReginString:"+rsaReginString+"\nencKeyBlock:"+encKeyBlock);
+				String rsaFileName=arg0.get("rsaReginString");
+				String enPinKeyData=arg0.get("enPinKey");
+				String enKcvPinKeyData=arg0.get("enPinKcvKey");
+				String enCardKeyData=arg0.get("enDataCardKey");
+				String enKcvCardKeyData=arg0.get("enKcvDataCardKey");
+				statusEditText.setText("rsaFileName:"+rsaFileName+"\nenPinKeyData:"+enPinKeyData+"\nenKcvPinKeyData:"+
+						enKcvPinKeyData+"\nenCardKeyData:"+enCardKeyData+"\nenKcvCardKeyData:"+enKcvCardKeyData);
+			}else{
+				statusEditText.setText("get key failed,pls try again!");
 			}
 		}
 	}
