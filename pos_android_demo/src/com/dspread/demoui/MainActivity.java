@@ -153,6 +153,7 @@ public class MainActivity extends Activity {
 	private static final int PROGRESS_UP = 1001;
 	private boolean isNormalBlu=false;//判断是否为普通蓝牙的标志
 	private boolean isCardExisted=false;
+	private Button updateFwBtn;
 	private Handler myHandler=new Handler();
 	private Runnable r=new Runnable() {
 		
@@ -367,6 +368,7 @@ public class MainActivity extends Activity {
 		mafireUL=(LinearLayout) findViewById(R.id.ul_ll);
 		status=(EditText) findViewById(R.id.status);
 		operateCardBtn=(Button) findViewById(R.id.operate_card);
+		updateFwBtn=(Button) findViewById(R.id.updateFW);
 		cmdSp=(Spinner) findViewById(R.id.cmd_spinner);
 		String[] cmdList=new String[]{"add","reduce","restore"};
 		ArrayAdapter<String> cmdAdapter=new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, cmdList);
@@ -462,6 +464,7 @@ public class MainActivity extends Activity {
 		btnDisconnect.setOnClickListener(myOnClickListener);
 		btnUSB.setOnClickListener(myOnClickListener);
 		btnGetInfo.setOnClickListener(myOnClickListener);
+		updateFwBtn.setOnClickListener(myOnClickListener);
 		
 		btnQuickEMV.setOnClickListener(myOnClickListener);
 		btnQuickEMVtrade.setOnClickListener(myOnClickListener);
@@ -620,7 +623,7 @@ public class MainActivity extends Activity {
 			/*pos.setCardTradeMode(CardTradeMode.UNALLOWED_LOW_TRADE);
 			statusEditText.setText("降级设置");*/
 		}else if(item.getItemId() == R.id.menu_update){// update the device
-			byte[] data = readLine("A19IYC_master_dailanya.asc");
+			byte[] data = readLine("upgrader.asc");
 			pos.updatePosFirmware(data, blueTootchAddress);
 			UpdateThread updateThread = new UpdateThread();
 			updateThread.start();
@@ -744,6 +747,7 @@ public class MainActivity extends Activity {
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
 			pos.getQposId();
+//			statusEditText.setText("getting rsa key...");
 //			pos.generateSessionKeys();
 //			pos.doTradeLogOperation(DoTransactionType.ClearLast, 0);
 		} else if (item.getItemId() == R.id.menu_get_pin) {
@@ -2641,6 +2645,11 @@ public class MainActivity extends Activity {
 				pos.setKeyValue(data);
 				pos.setBlockaddr(addr);
 				pos.doMifareCard("0B", 20);
+			}else if(v == updateFwBtn){//update firmware
+				byte[] data = readLine("upgrader.asc");
+				pos.updatePosFirmware(data, blueTootchAddress);
+				UpdateThread updateThread = new UpdateThread();
+				updateThread.start();
 			}
 		}
 	}

@@ -74,6 +74,9 @@
     <Button android:id="@+id/getPosInfo" android:layout_width="match_parent"
         android:layout_height="wrap_content" android:text="set_shutdowm_time"
         />
+     <Button android:id="@+id/updateFW" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="update"
+        />
     <LinearLayout android:id="@+id/ll"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
