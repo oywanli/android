@@ -743,8 +743,8 @@ public class MainActivity extends Activity {
 //			pos.doTradeLogOperation(DoTransactionType.ClearOne, 0);
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
-//			pos.getQposId();
-			pos.generateSessionKeys();
+			pos.getQposId();
+//			pos.generateSessionKeys();
 //			pos.doTradeLogOperation(DoTransactionType.ClearLast, 0);
 		} else if (item.getItemId() == R.id.menu_get_pin) {
 			statusEditText.setText(R.string.input_pin);
@@ -2494,8 +2494,9 @@ public class MainActivity extends Activity {
 //					}
 //					pos.setJudgeDebitOrCreditFlag(true);//做磁条卡判断是借记卡还是信用卡
 //					pos.doTrade_QF(0x0f, "345", "456");
-					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-					pos.doTrade(30,"123");//刷卡输入pin
+//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+					pos.setFormatId("0000");
+					pos.doTrade(30);//刷卡输入pin
 //					pos.setQuickEmv(true);
 //					pos.doTrade(20, "123");
 				}
