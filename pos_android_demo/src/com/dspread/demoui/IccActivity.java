@@ -1001,7 +1001,7 @@ public class IccActivity extends Activity {
 		statusEditText.setText("");
 	}
     
-    private boolean isNFC = true;
+    private boolean isNFC = false;
     private int nfcIndex = 0;
     //按钮的监听事件
     class MyOnClickListener implements OnClickListener {
@@ -1030,7 +1030,7 @@ public class IccActivity extends Activity {
 				String apduString = apduEditText.getText().toString().trim();
 				if(!isNFC){
 					nfcIndex = 0;
-					apduString = "00A404000E315041592E5359532E444446303100";//00A404000E315041592E5359532E444446303100
+				// 	apduString = "00A404000E315041592E5359532E444446303100";//00A404000E315041592E5359532E444446303100
 //					apduString = "a0a40000023f00";//a0a40000022fe2//a0b000000a
 					pos.sendApdu(apduString);
 				}else {	
