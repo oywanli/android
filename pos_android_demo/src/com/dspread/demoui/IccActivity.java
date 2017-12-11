@@ -1032,7 +1032,8 @@ public class IccActivity extends Activity {
 					nfcIndex = 0;
 				// 	apduString = "00A404000E315041592E5359532E444446303100";//00A404000E315041592E5359532E444446303100
 //					apduString = "a0a40000023f00";//a0a40000022fe2//a0b000000a
-					pos.sendApdu(apduString);
+					String apduResult=pos.sendApdu(apduString,5);
+					statusEditText.setText("apdu result : "+apduResult);
 				}else {	
 					sendMsg(2200);
 					
