@@ -947,6 +947,12 @@ public class BusinessCardActivity extends Activity {
 			
 		}
 
+		@Override
+		public void transferMifareData(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 
 		
 

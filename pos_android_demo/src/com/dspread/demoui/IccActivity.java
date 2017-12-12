@@ -995,6 +995,12 @@ public class IccActivity extends Activity {
 			
 		}
 
+		@Override
+		public void transferMifareData(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
     }
     
     private void clearDisplay() {
@@ -1030,10 +1036,9 @@ public class IccActivity extends Activity {
 				String apduString = apduEditText.getText().toString().trim();
 				if(!isNFC){
 					nfcIndex = 0;
-				// 	apduString = "00A404000E315041592E5359532E444446303100";//00A404000E315041592E5359532E444446303100
+//					apduString = "00A404000E315041592E5359532E444446303100";//00A404000E315041592E5359532E444446303100
 //					apduString = "a0a40000023f00";//a0a40000022fe2//a0b000000a
-					String apduResult=pos.sendApdu(apduString,5);
-					statusEditText.setText("apdu result : "+apduResult);
+					pos.sendApdu(apduString);
 				}else {	
 					sendMsg(2200);
 					
