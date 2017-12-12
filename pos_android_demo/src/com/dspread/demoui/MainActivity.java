@@ -2350,7 +2350,11 @@ public class MainActivity extends Activity {
 		@Override
 		public void transferMifareData(String arg0) {
 			// TODO Auto-generated method stub
-			
+			if(arg0!=null){
+				statusEditText.setText("response data:"+arg0);
+			}else{
+				statusEditText.setText("transfer data failed!");
+			}
 		}
 	}
 
