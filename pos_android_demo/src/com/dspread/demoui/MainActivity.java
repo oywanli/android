@@ -45,6 +45,7 @@ import com.dspread.xpos.QPOSService.TransactionResult;
 import com.dspread.xpos.QPOSService.TransactionType;
 import com.dspread.xpos.QPOSService.QPOSServiceListener;
 import com.dspread.xpos.QPOSService.UpdateInformationResult;
+import com.dspread.xpos.Tlv;
 
 import envelope.DukptKeys;
 import envelope.Envelope;
@@ -654,11 +655,8 @@ public class MainActivity extends Activity {
 			pos.doTradeLogOperation(DoTransactionType.GetOne, 0);
 		}
 		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
-//			DukptKeys.setFilePath("keys/rsa_private_pkcs8.pem");
 //			pos.udpateWorkKey("68010000748897C4197D4239FF84E05BCC49318C5B21417350A7AA054380DE7C5B6B7AF99B4EB990CE980231018AC8A989B5FCA84C35959546D8D8FD943C0058B44FFBCA3C87855925828C1A479AAD8CE50FC966BCC63BCA79B858C68E04F755FA34A9D54B7F31C40D05575AB1BFBEF4FEF6EDA41002A8006E2BBC8ACBAB4D621C899EA510CED8DE5D44DCD3DE90845B7BD4AC8DABB67BA393BEA51CE6207C398D085A5D73A85A099875463A6C3F77D84D1756AEDD172111F720D4DDBBC25DEB697307236C10C31A8C30D0E39FD01976AEB900F1AFB8E0686CC48BF10A6B5C875C57FF6CBA3D25335E12911FB8844B9669BE380AA1356BC4F99376748F7E6F5C67DEDF827C39A5DD9745D3581EAFCE38EB72770DB85E25D219836F4BD8220A7EBB39B60A94F33A565B87057CBC91A0CB1EE67E5C424DDC6C1CD2A485D174BAE199C19E3967919EE98B460F9DFDE225F37A93914D6E06AA6F5CD7F44A30971044B632F02248EB5504C04DC0B4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
-//			DukptKeys.setRSA_public_key("A7AF29ABBB967E81021E2748EFEA06FA5CF5C9B9D9BD1410D3312626EB33212E9BF2760FD409246826A017A399991A2E7795EE97E52DE313BBBB09176884A4B5F1476E072F225B4CEC78F821A140E08950DDF14D3BC307279CAB1C7A0896EE3DFFD682A67541972ED2B71457D555297A275FE23E8323715F4C5BD36D3BC39329");
-			pos.doUpdateIPEKOperation("00", "09317072700530E00001", "4F6B0B2ABC3B571FE0B08A1B47D403D6", "B3FDBB8D9970F4F9", "09317072700530E00001", "4F6B0B2ABC3B571FE0B08A1B47D403D6", "B3FDBB8D9970F4F9", "09317072700530E00001", "4F6B0B2ABC3B571FE0B08A1B47D403D6", "B3FDBB8D9970F4F9");
-//			pos.setMasterKey("507984DA9470B6267481DF25CDA1D4E2", "0F444EF5E7FFAC66");
+			pos.doUpdateIPEKOperation("00", "36501A02001538E00000", "5876220B8F1CFBFF04BF53834501C863", "3C9A459DC168B3E5", "36501A02001538E00000", "5876220B8F1CFBFF04BF53834501C863", "3C9A459DC168B3E5", "36501A02001538E00000", "5876220B8F1CFBFF04BF53834501C863", "3C9A459DC168B3E5");
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -669,13 +667,10 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId() == R.id.set_shutdowm_time){
 			pos.setShutDownTime(120);
-//			pos.setPosSleepTime(120);
 		}
 		//更新ipek
 		else if(item.getItemId()==R.id.updateIPEK){
-			pos.doUpdateIPEKOperation("00","01517080800006E00003","B24669775276DDF25F334C44A645E175","3FCEBD0000000000"
-					,"01517080800006E00003","B24669775276DDF25F334C44A645E175","3FCEBD0000000000","01517080800006E00005"
-					,"B24669775276DDF25F334C44A645E175","3FCEBD0000000000");
+			pos.doUpdateIPEKOperation("00", "36501A02001097E00000", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A", "36501A02001097E00000", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A", "36501A02001097E00000", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A");
 		}else if(item.getItemId()==R.id.getSleepTime){
 //			pos.getSleepModeTime();
 			pos.getShutDownTime();
@@ -743,20 +738,28 @@ public class MainActivity extends Activity {
 		}
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
-//			pos.updateRSA("beyond_rsa_public_key.pem");
 			pos.getQposInfo();
-//			pos.doTradeLogOperation(DoTransactionType.ClearOne, 0);
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
 			pos.getQposId();
-//			statusEditText.setText("getting rsa key...");
-//			pos.generateSessionKeys();
-//			pos.doTradeLogOperation(DoTransactionType.ClearLast, 0);
+		} else if (item.getItemId() == R.id.one) {
+			HashMap<Integer, Tlv> map=new HashMap<Integer, Tlv>();
+			map=pos.getTag("5F200E2F5A4952414B204D5553485441514F07A00000000310105F24032307319F160F4243544553542031323334353637389F21031826509A031406179F02060000000000019F03060000000000009F34030203009F120A566973612044656269749F0607A00000000310105F300202209F4E0F616263640000000000000000000000C408437452FFFFFF5295C00A00000332100300E00050C2820158A0CED1AF17F76D170B3D985706D6E5CC1058FF86EBE12A9160F20FB4D1EE924CC7433851CC1984914C4D92C56198DA80D9178C6E659157810A3FADA0A547CA2852F71C2C8FF061C2103133637360D2786C6DF42FD2D30F86B00A17EF4AD5654F68BA3990883A51901DC28C447CAF8D9C2275D0264778A9172A08443E0F125926091D0BE88D2B7198010C45704B62058A79F6680185107EBDCF6DE1FF52BE76751144DDEF6F4846F6F13384FCA0AAF1AB6DEE2FFC1C9B5D4874B792DC05276C628767DC25E8BE742050F431DC498FB5B8E2F320321D92DC993D2BCCC2A59DD46C0C797089D57BCBE7252E7094640C75BA955BA0D6CC077424BECC470B2D9B71BD18B704D1A169FF9E0D6B724D7F3A0B00070F8211FF38F226355043CAC634148CEC415AA5339ADB8AF2C95493DE8BFF0AF3A32B0844270C01945C094844ACD49330F749F9015954940949018FF8F66B90EF0CD4B392F38DA4");
+			String tag="";
+			String value="";
+			String content="";
+			for(int i=0;i<map.size();i++){
+				tag=map.get(i).getTag();
+				value=map.get(i).getValue();
+				content+="tag: "+tag+" value: "+value+"\n";
+			}
+			statusEditText.setText("tagValue result:\n"+content);
+		} else if (item.getItemId() == R.id.two) {
+			 String plainData=pos.getPlainData("00000332100300E00050", "A0CED1AF17F76D170B3D985706D6E5CC1058FF86EBE12A9160F20FB4D1EE924CC7433851CC1984914C4D92C56198DA80D9178C6E659157810A3FADA0A547CA2852F71C2C8FF061C2103133637360D2786C6DF42FD2D30F86B00A17EF4AD5654F68BA3990883A51901DC28C447CAF8D9C2275D0264778A9172A08443E0F125926091D0BE88D2B7198010C45704B62058A79F6680185107EBDCF6DE1FF52BE76751144DDEF6F4846F6F13384FCA0AAF1AB6DEE2FFC1C9B5D4874B792DC05276C628767DC25E8BE742050F431DC498FB5B8E2F320321D92DC993D2BCCC2A59DD46C0C797089D57BCBE7252E7094640C75BA955BA0D6CC077424BECC470B2D9B71BD18B704D1A169FF9E0D6B724D7F3A0B00070F8211FF38F226355043CAC634148CEC415AA5339ADB8AF2C95493DE8BFF0AF3A32B0844270C01945C094844ACD49330F749F9015954940949018FF8F66B90EF0CD4B392F38DA4");
+			 statusEditText.setText("result:\n"+plainData);
 		} else if (item.getItemId() == R.id.menu_get_pin) {
 			statusEditText.setText(R.string.input_pin);
 			pos.getPin("201402121655");
-//			Hashtable<String, String> decodeData =pos.getICCTag("01",0, 1, "57");
-//			statusEditText.setText("57 tag: " + decodeData.get("tlv"));
 		} else if (item.getItemId() == R.id.menu_icc) {
 //			if (pos != null && pos.getBluetoothState()) {//判断蓝牙是否连接
 				Intent intent = new Intent(this, IccActivity.class);
@@ -851,8 +854,8 @@ public class MainActivity extends Activity {
 	        public void onClick(DialogInterface dialog, int which) {
 //	            if (yourChoice != -1) {
 	               if(yourChoice==0){
-	            	   mafireLi.setVisibility(View.VISIBLE);
-	            	   mafireUL.setVisibility(View.GONE);
+	            	   mafireLi.setVisibility(View.VISIBLE);//display m1 mafire card
+	            	   mafireUL.setVisibility(View.GONE);//display ul mafire card
 	               }else if(yourChoice==1){
 	            	   mafireLi.setVisibility(View.GONE);
 	            	   mafireUL.setVisibility(View.VISIBLE);
@@ -947,9 +950,6 @@ public class MainActivity extends Activity {
 			} else if (result == DoTradeResult.BAD_SWIPE) {
 				statusEditText.setText(getString(R.string.bad_swipe));
 			} else if (result == DoTradeResult.MCR) {//磁条卡
-//				pos.doCheckCard(10);
-//				pos.setCardTradeMode(CardTradeMode.ONLY_INSERT_CARD);
-//				pos.doTrade(30);
 				TRACE.d("decodeData: " + decodeData);
 				String content = getString(R.string.card_swiped);
 				String formatID = decodeData.get("formatID");
@@ -1153,7 +1153,7 @@ public class MainActivity extends Activity {
 			}else if (result == DoTradeResult.NO_RESPONSE) {
 				statusEditText.setText(getString(R.string.card_no_response));
 			}
-//			pos.buildPinBLock("01B624CE10193FEC01B624CE10193FEC", "82E13665B4624DF5", 1, 1, 6, "622526XXXXXX5453", "please input pin");
+//			pos.buildPinBLock("B710FDBCDFD7D1D4CD7477C899E71A00", "0000000000000000", 1, 0, 6, "622526XXXXXX5453", "please input pin");
 		}
 
 		@Override
@@ -2033,9 +2033,9 @@ public class MainActivity extends Activity {
 		@Override
 		public void onReturnUpdateIPEKResult(boolean arg0) {
 			if(arg0){
-				statusEditText.setText("更新IPEK成功");
+				statusEditText.setText("update IPEK success");
 			}else{
-				statusEditText.setText("更新IPEK失败");
+				statusEditText.setText("update IPEK fail");
 			}
 		}
 
@@ -2503,19 +2503,12 @@ public class MainActivity extends Activity {
 				if (posType == POS_TYPE.UART) {//通用异步收发报机
 					pos.doTrade(terminalTime, 0, 30);
 				}else {
-//					if(flag){
-//						pos.doCheckCard(10);//刷卡不输入pin
-//					}else{
-//						pos.doTrade(30);//刷卡输入pin
-//					}
 //					pos.setJudgeDebitOrCreditFlag(true);//做磁条卡判断是借记卡还是信用卡
+//					pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");
 //					pos.doTrade_QF(0x0f, "345", "456");
-//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-//					pos.setFormatId("0000");
-//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+//					pos.doCheckCard();
+//					pos.setFormatId(FORMATID.MKSK);
 					pos.doTrade(30);//刷卡输入pin
-//					pos.setQuickEmv(true);
-//					pos.doTrade(20, "123");
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
@@ -2663,7 +2656,7 @@ public class MainActivity extends Activity {
 				pos.setKeyValue(data);
 				pos.doMifareCard("0F", 20);
 			}else if(v == updateFwBtn){//update firmware
-				byte[] data = readLine("upgrader.asc");
+				byte[] data = readLine("A27CAYC_S1_master.asc");
 				pos.updatePosFirmware(data, blueTootchAddress);
 				UpdateThread updateThread = new UpdateThread();
 				updateThread.start();

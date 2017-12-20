@@ -135,8 +135,8 @@
 	        android:layout_height="wrap_content" android:text="@string/operate_card"/>
 	     <Spinner android:id="@+id/cmd_spinner" android:layout_width="match_parent"
 	        android:layout_height="wrap_content"/>
-	</LinearLayout>
-	<LinearLayout android:id="@+id/li2" android:layout_width="match_parent"
+		</LinearLayout>
+		<LinearLayout android:id="@+id/li2" android:layout_width="match_parent"
 	    android:layout_height="wrap_content" android:orientation="horizontal"
 	    android:layout_below="@id/li3">
 	    <Button android:id="@+id/read_card" android:layout_width="wrap_content"
@@ -145,25 +145,26 @@
 	        android:layout_height="wrap_content" android:text="@string/write_card"/>
 	    <Button android:id="@+id/transfer_card" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="@string/transfer_card"/>
-	     <Button android:id="@+id/finish_card" android:layout_width="wrap_content"
+	    
+		</LinearLayout>
+		 <Button android:id="@+id/finish_card" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="@string/finish_card"/>
-	</LinearLayout>
-	<RelativeLayout  android:id="@+id/ra" android:layout_below="@id/li2"
+		<RelativeLayout  android:id="@+id/ra" android:layout_below="@id/li2"
 	     android:layout_width="match_parent"   android:layout_height="wrap_content" >
-	     <TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
+	     	<TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
 	         android:text="key value or cardData:" android:id="@+id/tv"/>
-	     <EditText android:id="@+id/status" android:layout_toRightOf="@id/tv"
+	     	<EditText android:id="@+id/status" android:layout_toRightOf="@id/tv"
         android:layout_width="match_parent" android:hint="please input key value or cardData"
         android:layout_height="wrap_content" android:text="ffffffffffff"/>
-	</RelativeLayout >
-	<RelativeLayout  android:id="@+id/ra2" android:layout_below="@id/ra"
+		</RelativeLayout>
+		<RelativeLayout  android:id="@+id/ra2" android:layout_below="@id/ra"
 	     android:layout_width="match_parent"   android:layout_height="wrap_content" >
-	     <TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
+	     	<TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
 	         android:text="block addr:" android:id="@+id/tv2"/>
-	     <EditText android:id="@+id/block_address" android:layout_toRightOf="@id/tv2"
-        android:layout_width="match_parent" android:hint="please input key value or cardData"
+	     	<EditText android:id="@+id/block_address" android:layout_toRightOf="@id/tv2"
+        android:layout_width="match_parent" android:hint="please input block addr"
         android:layout_height="wrap_content" android:text="0A"/>
-	</RelativeLayout >
+		</RelativeLayout >
 	</LinearLayout>
 	<LinearLayout android:id="@+id/ul_ll" android:layout_width="match_parent"
 	    android:layout_height="wrap_content" android:orientation="vertical"
@@ -174,39 +175,39 @@
 	        android:layout_height="wrap_content" android:text="@string/poll_card"/>
 	       <Button android:id="@+id/verify_ulcard" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="@string/verify_card"/>
-	</LinearLayout>
-	 <LinearLayout android:id="@+id/li5" android:layout_width="match_parent"
+		</LinearLayout>
+	 	<LinearLayout android:id="@+id/li5" android:layout_width="match_parent"
 	    android:layout_height="wrap_content" android:orientation="horizontal">
-	     <Button android:id="@+id/get_ul" android:layout_width="wrap_content"
+	     	<Button android:id="@+id/get_ul" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="get UL Info"/>
-	      <Button android:id="@+id/write_ul" android:layout_width="wrap_content"
+	      	<Button android:id="@+id/write_ul" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="write UL"/>
-	       <Button android:id="@+id/read_ulcard" android:layout_width="wrap_content"
+	       	<Button android:id="@+id/read_ulcard" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="read UL"/>
-      </LinearLayout>
-      <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+      	</LinearLayout>
+      	<LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
           android:layout_height="wrap_content">
           	<Button android:id="@+id/fast_read_ul" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="fase read UL"/>
           	<Button android:id="@+id/finish_ulcard" android:layout_width="wrap_content"
 	        android:layout_height="wrap_content" android:text="@string/finish_card"/>
-      </LinearLayout>
-	<RelativeLayout  android:id="@+id/ra11" android:layout_below="@id/li2"
+      	</LinearLayout>
+		<RelativeLayout  android:id="@+id/ra11" android:layout_below="@id/li2"
 	     android:layout_width="match_parent"   android:layout_height="wrap_content" >
-	     <TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
+	     	<TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
 	         android:text="key value or cardData:" android:id="@+id/tv11"/>
-	     <EditText android:id="@+id/status11" android:layout_toRightOf="@id/tv11"
+	     	<EditText android:id="@+id/status11" android:layout_toRightOf="@id/tv11"
         android:layout_width="match_parent" android:hint="please input key value or cardData"
         android:layout_height="wrap_content" android:text="ffffffffffff"/>
-	</RelativeLayout >
-	<RelativeLayout  android:id="@+id/ra12" android:layout_below="@id/ra"
+		</RelativeLayout >
+		<RelativeLayout  android:id="@+id/ra12" android:layout_below="@id/ra"
 	     android:layout_width="match_parent"   android:layout_height="wrap_content" >
-	     <TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
+	     	<TextView  android:layout_width="wrap_content" android:layout_height="wrap_content"
 	         android:text="block addr:" android:id="@+id/tv12"/>
-	     <EditText android:id="@+id/block_address11" android:layout_toRightOf="@id/tv12"
-        android:layout_width="match_parent" android:hint="please input key value or cardData"
+	     	<EditText android:id="@+id/block_address11" android:layout_toRightOf="@id/tv12"
+        android:layout_width="match_parent" android:hint="please input block addr"
         android:layout_height="wrap_content" android:text="0A"/>
-	</RelativeLayout>
+		</RelativeLayout>
 	</LinearLayout> 
 
 </LinearLayout>

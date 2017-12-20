@@ -104,4 +104,16 @@
         android:id="@+id/setMasterkey"
         android:orderInCategory="100"
         android:title="setMasterkey"/>
+ 	 <item
+        android:id="@+id/one"
+        android:orderInCategory="100"
+        android:title="parse data"/>
+ 	 <item
+        android:id="@+id/two"
+        android:orderInCategory="100"
+        android:title="decrypt data"/>
+ 	 <item
+        android:id="@+id/three"
+        android:orderInCategory="100"
+        android:title="clear"/>
 </menu>

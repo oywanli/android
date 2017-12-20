@@ -92,7 +92,7 @@ public final class R {
         public static final int li5=0x7f090027;
         public static final int ll=0x7f09000b;
         public static final int lv_indicator_BTPOS=0x7f090003;
-        public static final int menu_bluetooth=0x7f090073;
+        public static final int menu_bluetooth=0x7f090076;
         public static final int menu_get_deivce_info=0x7f09005f;
         public static final int menu_get_pin=0x7f090062;
         public static final int menu_get_pos_id=0x7f090060;
@@ -103,6 +103,7 @@ public final class R {
         public static final int mifareid=0x7f090010;
         public static final int new_devices=0x7f09004c;
         public static final int normal_bluetooth=0x7f090035;
+        public static final int one=0x7f090073;
         public static final int operate_card=0x7f090016;
         public static final int other=0x7f090068;
         public static final int other_bluetooth=0x7f090036;
@@ -133,6 +134,7 @@ public final class R {
         public static final int status=0x7f09001f;
         public static final int status11=0x7f09002f;
         public static final int statusEditText=0x7f09000f;
+        public static final int three=0x7f090075;
         public static final int title_connected_devices=0x7f090047;
         public static final int title_new_devices=0x7f09004b;
         public static final int title_paired_devices=0x7f090049;
@@ -142,6 +144,7 @@ public final class R {
         public static final int tv11=0x7f09002e;
         public static final int tv12=0x7f090031;
         public static final int tv2=0x7f090021;
+        public static final int two=0x7f090074;
         public static final int ul_ll=0x7f090023;
         public static final int updateEMVAPP=0x7f09006e;
         public static final int updateEMVCAPK=0x7f09006f;

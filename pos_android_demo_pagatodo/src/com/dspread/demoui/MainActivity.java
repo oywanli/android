@@ -12,7 +12,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPublicKey;
@@ -162,6 +164,7 @@ public class MainActivity extends Activity {
 	private KeyPair pair;
 	private String pem;
 	private Handler myHandler=new Handler();
+	private byte[] keyDecDES ;
 	private Runnable r=new Runnable() {
 		
 		@Override
@@ -921,6 +924,7 @@ public class MainActivity extends Activity {
 		/**
 		 * 返回选择的开始，返回交易的结果
 		 */
+		@SuppressLint("NewApi")
 		@Override
 		public void onDoTradeResult(DoTradeResult result, Hashtable<String, String> decodeData) {
 			TRACE.d("onDoTradeResult");
@@ -958,6 +962,17 @@ public class MainActivity extends Activity {
 				TRACE.d("decodeData: " + decodeData);
 				String content = getString(R.string.card_swiped);
 				String formatID = decodeData.get("formatID");
+				byte[] track1=null;
+				try {
+					track1 = DESUtil.decryptDES(keyDecDES,HexUtil.hex2byte(decodeData.get("encTrack1"), Charset.defaultCharset()));
+				} catch (GeneralSecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				TRACE.i("PagaTodo =====================");
+				TRACE.i("PagaTodo"+ HexUtil.hexStringFromBytes(track1));
+				TRACE.i("PagaTodo" +new String(track1,Charset.defaultCharset()));
+				TRACE.i("PagaTodo =====================");
 				if (formatID.equals("31") || formatID.equals("40") || formatID.equals("37") || formatID.equals("17") || formatID.equals("11") || formatID.equals("10")) {
 					String maskedPAN = decodeData.get("maskedPAN");
 					String expiryDate = decodeData.get("expiryDate");
@@ -2343,14 +2358,17 @@ public class MainActivity extends Activity {
 		public void onQposGenerateSessionKeysResult(Hashtable<String, String> arg0) {
 			 if (arg0 != null) {
 	                MainActivity.this.amountEditText.setText((CharSequence)("onQposGenerateSessionKeysResult " + arg0));
+
+	                //START DONT CHANGE THIS CODE
+				   //      开始不改变这个代码 !!!!!!!!
 	                try {
 	                	TRACE.i("" + arg0);
-	                   byte[] a= RSAUtil.decryptRSA(MainActivity.this.pair.getPrivate(),QPOSUtil.HexStringToByteArray(arg0.get("enDataCardKey")));
-	                   String palinDataKey=QPOSUtil.convertHexToString(QPOSUtil.byteArray2Hex(a));
-	                   TRACE.i("decrt key is:"+palinDataKey);
-	                    final byte[] generateKvc = KeyUtil.generateKvc(QPOSUtil.HexStringToByteArray(palinDataKey));
-	                    TRACE.i("enKcvDataCardKey: "+ (String)arg0.get("enKcvDataCardKey"));
-	                    TRACE.i("kcv: "+ HexUtil.hexStringFromBytes(generateKvc));
+						keyDecDES= RSAUtil.decryptRSA(MainActivity.this.pair.getPrivate(),HexUtil.hex2byte(arg0.get("enDataCardKey"),Charset.defaultCharset()));
+						TRACE.i("PT SIZE KEY "+keyDecDES.length);
+						final byte[] generateKvc = KeyUtil.generateKvc(keyDecDES);
+
+						TRACE.i("PT enKcvDataCardKey: "+ (String)arg0.get("enKcvDataCardKey"));
+						TRACE.i("PT kcv: "+ HexUtil.hexStringFromBytes(generateKvc));
 	                    MainActivity.this.statusEditText.setText((CharSequence)("enKcvDataCardKey: " + arg0.get("enKcvDataCardKey") + "\nkcv: " + HexUtil.hexStringFromBytes(generateKvc)));
 	                    return;
 	                }
@@ -2359,6 +2377,7 @@ public class MainActivity extends Activity {
 	                    MainActivity.this.statusEditText.setText((CharSequence)ex.getMessage());
 	                    return;
 	                }
+
 	            }
 	            MainActivity.this.statusEditText.setText((CharSequence)"get key failed,pls try again!");
 		}
