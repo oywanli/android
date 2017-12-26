@@ -2507,7 +2507,7 @@ public class MainActivity extends Activity {
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.doCheckCard();
 //					pos.setFormatId(FORMATID.MKSK);
-					pos.doTrade(30,"123");//刷卡输入pin
+					pos.doTrade(30);//刷卡输入pin
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
