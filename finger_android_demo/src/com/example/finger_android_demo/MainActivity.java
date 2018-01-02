@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 	
 	private void onBTPosSelected(Activity activity, View itemView, int index) {
 		dspPos.stopScanQPos2Mode();
-			/* 打开蓝牙连接*/
+//			 打开蓝牙连接
 //		 open(CommunicationMode.BLUETOOTH);
 		Map<String, ?> dev = (Map<String, ?>) m_Adapter.getItem(index);
 		blueTootchAddress = (String) dev.get("ADDRESS");
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 			flag=true;
 //			Toast.makeText(MainActivity.this, "begin enroll", Toast.LENGTH_SHORT).show();
 			AlertDialog.Builder builder2=new AlertDialog.Builder(MainActivity.this);
-			builder2.setTitle("");
+			builder2.setTitle("please input amount");
 			EditText editText=new EditText(MainActivity.this);
 			builder2.setView(editText);
 			builder2.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -333,12 +333,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 	protected void onPause() {
 		super.onPause();
 		if(dspPos!=null){
-			/*if(posType==POS_TYPE.BLUETOOTH){
+			if(posType==POS_TYPE.BLUETOOTH){
 				dspPos.disconnectBT();
 			}else if(posType == POS_TYPE.OTG){
 				dspPos.closeUsb();
 			}
-			dspPos=null;*/
+			dspPos=null;
 		}
 	}
 	
@@ -425,13 +425,21 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 				selectBTFlag = false;
 				break;
 			case 2001://采集指纹指令
-				dspPos.FingerTrasmission("211000000A0000010100013801006EA5010001",10);
+				dspPos.FingerTrasmission("212a0000140000010100AA380100003D0600003E02002C004404001200000034040043000000A5010001A6010000AE010000AF010000",10);
 				break;
 			case 2002://获取指纹信息
 				dspPos.getFingerInfo(5);
 				break;
 			case 2003:
-//				dspPos.FingerPenetrate("050100BF", 10);
+			/*	new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						String s=dspPos.FingerPenetrate("211000000A0000010100013801006EA5010001", 10);
+						L.i("result:"+s);
+					}
+				}).start();
+				*/
 				dspPos.getQposInfo();
 				break;
 			case 2004:
