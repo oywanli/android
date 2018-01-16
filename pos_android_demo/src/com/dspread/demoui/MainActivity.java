@@ -655,8 +655,8 @@ public class MainActivity extends Activity {
 			pos.doTradeLogOperation(DoTransactionType.GetOne, 0);
 		}
 		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
-			pos.udpateWorkKey("B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65");
-//			pos.doUpdateIPEKOperation("00", "09117121800000E00000", "9B3A7B883A100F739B3A7B883A100F73", "82E13665B4624DF5", "09117121800000E00000", "9B3A7B883A100F739B3A7B883A100F73", "82E13665B4624DF5", "09117121800000E00000", "9B3A7B883A100F739B3A7B883A100F73", "82E13665B4624DF5");
+//			pos.udpateWorkKey("B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65");
+			pos.doUpdateIPEKOperation("00", "36501A02001097D00001", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A", "36501A02001097E00001", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A", "36501A02001097F00001", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A");
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -703,7 +703,6 @@ public class MainActivity extends Activity {
 //			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
 			statusEditText.setText("updating emvapp...");
 			sendMsg(1701);
-			
 		}
 		else if(item.getItemId() == R.id.updateEMVCAPK){
 			list.add(EmvCapkTag.RID+"A000000333");
@@ -738,6 +737,7 @@ public class MainActivity extends Activity {
 		}
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
+			
 			pos.getQposInfo();
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
@@ -1384,7 +1384,7 @@ public class MainActivity extends Activity {
 			dialog.setContentView(R.layout.amount_dialog);
 			dialog.setTitle(getString(R.string.set_amount));
 
-			String[] transactionTypes = new String[] {"GOODS", "SERVICES", "CASHBACK", "INQUIRY", "TRANSFER", "PAYMENT","CHANGE_PIN" };
+			String[] transactionTypes = new String[] {"GOODS", "SERVICES", "CASHBACK", "INQUIRY", "TRANSFER", "PAYMENT","CHANGE_PIN","REFOUND"  };
 			((Spinner) dialog.findViewById(R.id.transactionTypeSpinner)).setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,
 					transactionTypes));
 
@@ -1410,6 +1410,8 @@ public class MainActivity extends Activity {
 						transactionType = TransactionType.PAYMENT;
 					}else if(transactionTypeString.equals("CHANGE_PIN")){
 						transactionType = TransactionType.UPDATE_PIN;
+					}else if(transactionTypeString.equals("REFOUND")){
+						transactionType = TransactionType.REFUND;
 					}
 					// pos.setAmountIcon("$");//设置pos设备上金额交易的图标
 					// pos.setAmountIcon("RMB");
@@ -1428,6 +1430,7 @@ public class MainActivity extends Activity {
 //			         Integer integer_amount = Integer.valueOf(amount.replace(".", ""));
 //			         amountEditText.setText("$" + amount(amount));//luyq modify 20150602
 					//pos.setAmount(integer_amount.toString(), cashbackAmount, "156", transactionType);
+					pos.setPosDisplayAmountFlag(true);
 					pos.setAmount(amount, cashbackAmount, "156", transactionType);
 					TRACE.d("输入金额  -- 结束");
 					dismissDialog();
@@ -2511,9 +2514,9 @@ public class MainActivity extends Activity {
 //					pos.setJudgeDebitOrCreditFlag(true);//做磁条卡判断是借记卡还是信用卡
 //					pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");
 //					pos.doTrade_QF(0x0f, "345", "456");
-//					pos.doCheckCard();
-					pos.setFormatId("0012");
-					pos.doTrade(30);//刷卡输入pin
+//					pos.setFormatId("0018");
+//					pos.setIsSaveLog(true);
+					pos.doTrade(30);//start do trade
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
