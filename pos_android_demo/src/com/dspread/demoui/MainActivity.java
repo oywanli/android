@@ -135,7 +135,7 @@ public class MainActivity extends Activity {
 	private boolean isTest = false;
 	private boolean isUsb = true;
 	private boolean isUart = true;
-	private boolean isPosComm = false;
+	private boolean isPosComm = true;
 	ArrayList<String> list=new ArrayList<String>();
 	private boolean isOTG = false;
 	private boolean isQuickEmv=false;
@@ -705,8 +705,11 @@ public class MainActivity extends Activity {
 			sendMsg(1701);
 		}
 		else if(item.getItemId() == R.id.updateEMVCAPK){
-			list.add(EmvCapkTag.RID+"A000000333");
-			list.add(EmvCapkTag.Public_Key_Index+"09");
+			list.add(EmvCapkTag.RID+"A000000004");
+			list.add(EmvCapkTag.Public_Key_Index+"F1");
+			list.add(EmvCapkTag.Public_Key_Module+"A0DCF4BDE19C3546B4B6F0414D174DDE294AABBB828C5A834D73AAE27C99B0B053A90278007239B6459FF0BBCD7B4B9C6C50AC02CE91368DA1BD21AAEADBC65347337D89B68F5C99A09D05BE02DD1F8C5BA20E2F13FB2A27C41D3F85CAD5CF6668E75851EC66EDBF98851FD4E42C44C1D59F5984703B27D5B9F21B8FA0D93279FBBF69E090642909C9EA27F898959541AA6757F5F624104F6E1D3A9532F2A6E51515AEAD1B43B3D7835088A2FAFA7BE7");
+			list.add(EmvCapkTag.Public_Key_CheckValue+"D8E68DA167AB5A85D8C3D55ECB9B0517A1A5B4BB");
+			list.add(EmvCapkTag.pk_exponent+"03");
 			statusEditText.setText("updating emvcapk...");
 			sendMsg(1702);
 		}
@@ -2516,7 +2519,7 @@ public class MainActivity extends Activity {
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setFormatId("0018");
 //					pos.setIsSaveLog(true);
-					pos.doTrade(30);//start do trade
+//					pos.doTrade(30);//start do trade
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
@@ -2664,7 +2667,7 @@ public class MainActivity extends Activity {
 				pos.setKeyValue(data);
 				pos.doMifareCard("0F", 20);
 			}else if(v == updateFwBtn){//update firmware
-				byte[] data = readLine("A27CAYC_S1_master.asc");
+				byte[] data = readLine("A19IYC_master.asc");
 				pos.updatePosFirmware(data, blueTootchAddress);
 				UpdateThread updateThread = new UpdateThread();
 				updateThread.start();
@@ -2823,7 +2826,7 @@ public class MainActivity extends Activity {
 				pos.updateEmvAPP(EMVDataOperation.update,list);
 				break;
 			case 1702:
-				pos.updateEmvCAPK(EMVDataOperation.getEmv, list);
+				pos.updateEmvCAPK(EMVDataOperation.update, list);
 				break;
 			default:
 				break;
