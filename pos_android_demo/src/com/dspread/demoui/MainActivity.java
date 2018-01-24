@@ -2517,9 +2517,9 @@ public class MainActivity extends Activity {
 //					pos.setJudgeDebitOrCreditFlag(true);//做磁条卡判断是借记卡还是信用卡
 //					pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");
 //					pos.doTrade_QF(0x0f, "345", "456");
-//					pos.setFormatId("0018");
 //					pos.setIsSaveLog(true);
-//					pos.doTrade(30);//start do trade
+//					pos.setFormatId("0025");
+					pos.doTrade(30);//start do trade
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
@@ -2664,10 +2664,12 @@ public class MainActivity extends Activity {
 				pos.doMifareCard("0B", 20);
 			}else if(v == transferBtn){//透传数据
 				String data=status.getText().toString();
+				String len=blockAdd.getText().toString();
+				pos.setMafireLen(Integer.parseInt(len));
 				pos.setKeyValue(data);
 				pos.doMifareCard("0F", 20);
 			}else if(v == updateFwBtn){//update firmware
-				byte[] data = readLine("A19IYC_master.asc");
+				byte[] data = readLine("A27CAYC_S1_mafire_master.asc");
 				pos.updatePosFirmware(data, blueTootchAddress);
 				UpdateThread updateThread = new UpdateThread();
 				updateThread.start();
