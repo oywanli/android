@@ -135,7 +135,7 @@ public class MainActivity extends Activity {
 	private boolean isTest = false;
 	private boolean isUsb = true;
 	private boolean isUart = true;
-	private boolean isPosComm = true;
+	private boolean isPosComm = false;
 	ArrayList<String> list=new ArrayList<String>();
 	private boolean isOTG = false;
 	private boolean isQuickEmv=false;
@@ -656,7 +656,7 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
 //			pos.udpateWorkKey("B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65");
-			pos.doUpdateIPEKOperation("00", "36501A02001097D00001", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A", "36501A02001097E00001", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A", "36501A02001097F00001", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A");
+			pos.doUpdateIPEKOperation("00", "17091822100341E00000", "7B4723CEACDB006EC12EE9E18F9386C9", "F84BB40000000000", "17091822100341E00000", "7B4723CEACDB006EC12EE9E18F9386C9", "F84BB40000000000", "17091822100341E00000", "7B4723CEACDB006EC12EE9E18F9386C9", "F84BB40000000000");
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -670,7 +670,7 @@ public class MainActivity extends Activity {
 		}
 		//更新ipek
 		else if(item.getItemId()==R.id.updateIPEK){
-			pos.doUpdateIPEKOperation("00", "36501A02001097E00000", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A", "36501A02001097E00000", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A", "36501A02001097E00000", "B8F399D43759BCCBAB434617A0272AC1", "D834F864A66F756A");
+			pos.doUpdateIPEKOperation("00", "17091822100340E00000", "4F23D1949FCA4B4CECD0905D4C205CED", "01ADE80000000000", "17091822100340E00000", "4F23D1949FCA4B4CECD0905D4C205CED", "01ADE80000000000", "17091822100340E00000", "4F23D1949FCA4B4CECD0905D4C205CED", "01ADE80000000000");
 		}else if(item.getItemId()==R.id.getSleepTime){
 //			pos.getSleepModeTime();
 			pos.getShutDownTime();
@@ -691,13 +691,14 @@ public class MainActivity extends Activity {
 			list.add(EmvAppTag.status+"01");
 			list.add(EmvAppTag.Electronic_cash_Terminal_Transaction_Limit+"000000500000");
 			list.add(EmvAppTag.terminal_contactless_offline_floor_limit+"000000000000");
-			list.add(EmvAppTag.terminal_contactless_transaction_limit+"002000000000");
+			
 			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000999999");
 			list.add(EmvAppTag.Terminal_Floor_Limit+"00000000");
 			list.add(EmvAppTag.Identity_of_each_limit_exist+"0F");
 			list.add(EmvAppTag.terminal_status_check+"01");
 			list.add(EmvAppTag.Terminal_Default_Transaction_Qualifiers+"36C04000");
-			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000002000");
+			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000060000");
+			list.add(EmvAppTag.terminal_contactless_transaction_limit+"000000060000");
 			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000000000");
 //			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000001000");
 //			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
@@ -740,10 +741,11 @@ public class MainActivity extends Activity {
 		}
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
-			
 			pos.getQposInfo();
+//			pos.doUpdateIPEKOperation("00", "17091822100342E00000", "D09825C1EAEE65458FD367601E8B3672", "FC1E3A0000000000", "17091822100342E00000", "D09825C1EAEE65458FD367601E8B3672", "FC1E3A0000000000", "17091822100342E00000", "D09825C1EAEE65458FD367601E8B3672", "FC1E3A0000000000");
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
+//			pos.doUpdateIPEKOperation("00", "17091822100343E00000", "AA90B8DF7831E644894B93CC7995BEE5", "FB44CF0000000000", "17091822100343E00000", "AA90B8DF7831E644894B93CC7995BEE5", "FB44CF0000000000", "17091822100343E00000", "AA90B8DF7831E644894B93CC7995BEE5", "FB44CF0000000000");
 			pos.getQposId();
 		} else if(item.getItemId()==R.id.setMasterkey){
 			pos.setMasterKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885");
@@ -1507,8 +1509,8 @@ public class MainActivity extends Activity {
 				dialog.setTitle(R.string.request_data_to_server);
 				TRACE.d("onRequestOnlineProcess tlv:" + tlv);
 				Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-				decodeData =pos.getICCTag(EncryptType.ENCRYPTED,2, 1, "57");
-				TRACE.i("57 tag: " + decodeData.get("tlv"));
+				decodeData =pos.getICCTag(0, 1, "8F");
+				TRACE.i("8f tag: " + decodeData.get("tlv"));
 				TRACE.i("onlineProcess: "+decodeData);
 				if (isPinCanceled) {
 					((TextView) dialog.findViewById(R.id.messageTextView))
@@ -2518,7 +2520,7 @@ public class MainActivity extends Activity {
 //					pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setIsSaveLog(true);
-//					pos.setFormatId("0025");
+//					pos.setFormatId("0020");
 					pos.doTrade(30);//start do trade
 				}
 			}else if(v == btnUSB){

@@ -21,7 +21,7 @@ public class WelcomeActivity extends Activity implements OnClickListener{
 		serial_port=(Button) findViewById(R.id.serial_port);
 		normal_blu=(Button) findViewById(R.id.normal_bluetooth);
 		other_blu=(Button) findViewById(R.id.other_bluetooth);
-		other_blu.setEnabled(false);
+//		other_blu.setEnabled(false);
 		audio.setOnClickListener(this);
 		serial_port.setOnClickListener(this);
 		normal_blu.setOnClickListener(this);
