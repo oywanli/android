@@ -2520,7 +2520,7 @@ public class MainActivity extends Activity {
 //					pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setIsSaveLog(true);
-//					pos.setFormatId("0020");
+//					pos.setFormatId("0025");
 					pos.doTrade(30);//start do trade
 				}
 			}else if(v == btnUSB){
@@ -2667,11 +2667,11 @@ public class MainActivity extends Activity {
 			}else if(v == transferBtn){//透传数据
 				String data=status.getText().toString();
 				String len=blockAdd.getText().toString();
-				pos.setMafireLen(Integer.parseInt(len));
+				pos.setMafireLen(Integer.valueOf(len, 16));
 				pos.setKeyValue(data);
 				pos.doMifareCard("0F", 20);
 			}else if(v == updateFwBtn){//update firmware
-				byte[] data = readLine("A27CAYC_S1_mafire_master.asc");
+				byte[] data = readLine("A27CAYC_S1_master.asc");
 				pos.updatePosFirmware(data, blueTootchAddress);
 				UpdateThread updateThread = new UpdateThread();
 				updateThread.start();
