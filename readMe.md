@@ -7,8 +7,8 @@
 
 Version | Author        | Date       | Description
 --------|---------------|------------|----------------
-0.1     | Austin Wang   | 2017-05-01 | Initially Added
-1.0     | Austin Wang   | 2017-09-01 | Added EMV related function
+0.1     | Austin Wang   | 2016-05-01 | Initially Added
+1.0     | Austin Wang   | 2016-09-01 | Added EMV related function
 1.1     | Ausitn Wang   | 2017-03-01 | Merge QPOS standard and EMV Card reader together
 1.2     | Austin Wang   | 2017-10-20 | Added UART interface support for GES device
 
