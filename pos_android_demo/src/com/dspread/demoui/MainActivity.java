@@ -156,6 +156,7 @@ public class MainActivity extends Activity {
 	private boolean isCardExisted=false;
 	private Button updateFwBtn;
 	private Handler myHandler=new Handler();
+	private int index=0;
 	private Runnable r=new Runnable() {
 		
 		@Override
@@ -656,7 +657,8 @@ public class MainActivity extends Activity {
 		}
 		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
 //			pos.udpateWorkKey("B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65");
-			pos.doUpdateIPEKOperation("00", "17091822100341E00000", "7B4723CEACDB006EC12EE9E18F9386C9", "F84BB40000000000", "17091822100341E00000", "7B4723CEACDB006EC12EE9E18F9386C9", "F84BB40000000000", "17091822100341E00000", "7B4723CEACDB006EC12EE9E18F9386C9", "F84BB40000000000");
+			pos.doUpdateIPEKOperation("00", "09117081600001E00001", "413DF85BD9D9A7C34EDDB2D2B5CA0C0F", "6A52E41A7F91C9F5", "09117081600001E00001", "413DF85BD9D9A7C34EDDB2D2B5CA0C0F", "6A52E41A7F91C9F5", "09117081600001E00001", "413DF85BD9D9A7C34EDDB2D2B5CA0C0F", "6A52E41A7F91C9F5");
+			
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -682,9 +684,9 @@ public class MainActivity extends Activity {
 			pos.setQuickEmvStatus(true);
 		}
 		else if(item.getItemId() == R.id.updateEMVAPP){
-//			list.add(EmvAppTag.Application_Identifier_AID_terminal+"00000000000000000000000000000000");
-//			list.add(EmvAppTag.Terminal_Capabilities+"e0f8c8");
-			list.add(EmvAppTag.ICS+"F4F0F0FAAFFE8000");
+			list.add(EmvAppTag.Application_Identifier_AID_terminal+"00000000000000000000000000000000");
+			list.add(EmvAppTag.Terminal_Capabilities+"e0f8c8");
+			/*list.add(EmvAppTag.ICS+"F4F0F0FAAFFE8000");
 			list.add(EmvAppTag.Terminal_type+"22");
 			list.add(EmvAppTag.Terminal_Capabilities+"60B8C8");
 			list.add(EmvAppTag.Additional_Terminal_Capabilities+"F000F0A001");
@@ -697,9 +699,9 @@ public class MainActivity extends Activity {
 			list.add(EmvAppTag.Identity_of_each_limit_exist+"0F");
 			list.add(EmvAppTag.terminal_status_check+"01");
 			list.add(EmvAppTag.Terminal_Default_Transaction_Qualifiers+"36C04000");
-			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000060000");
-			list.add(EmvAppTag.terminal_contactless_transaction_limit+"000000060000");
-			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000000000");
+			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000060000");*/
+//			list.add(EmvAppTag.terminal_contactless_transaction_limit+"000000060000");
+//			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000000000");
 //			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000001000");
 //			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
 			statusEditText.setText("updating emvapp...");
@@ -710,7 +712,7 @@ public class MainActivity extends Activity {
 			list.add(EmvCapkTag.Public_Key_Index+"F1");
 			list.add(EmvCapkTag.Public_Key_Module+"A0DCF4BDE19C3546B4B6F0414D174DDE294AABBB828C5A834D73AAE27C99B0B053A90278007239B6459FF0BBCD7B4B9C6C50AC02CE91368DA1BD21AAEADBC65347337D89B68F5C99A09D05BE02DD1F8C5BA20E2F13FB2A27C41D3F85CAD5CF6668E75851EC66EDBF98851FD4E42C44C1D59F5984703B27D5B9F21B8FA0D93279FBBF69E090642909C9EA27F898959541AA6757F5F624104F6E1D3A9532F2A6E51515AEAD1B43B3D7835088A2FAFA7BE7");
 			list.add(EmvCapkTag.Public_Key_CheckValue+"D8E68DA167AB5A85D8C3D55ECB9B0517A1A5B4BB");
-			list.add(EmvCapkTag.pk_exponent+"03");
+			list.add(EmvCapkTag.Pk_exponent+"03");
 			statusEditText.setText("updating emvcapk...");
 			sendMsg(1702);
 		}
@@ -941,6 +943,7 @@ public class MainActivity extends Activity {
 				pos.doEmvApp(EmvOption.START);
 			} else if (result == DoTradeResult.NOT_ICC) {
 				statusEditText.setText(getString(R.string.card_inserted));
+//				pos.resetPosStatus();
 				/*time++;
 				if(time<=3){//表示插卡三次错误
 					dialog=new Dialog(MainActivity.this);
@@ -1509,7 +1512,7 @@ public class MainActivity extends Activity {
 				dialog.setTitle(R.string.request_data_to_server);
 				TRACE.d("onRequestOnlineProcess tlv:" + tlv);
 				Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-				decodeData =pos.getICCTag(0, 1, "8F");
+//				decodeData =pos.getICCTag(0, 1, "8F");
 				TRACE.i("8f tag: " + decodeData.get("tlv"));
 				TRACE.i("onlineProcess: "+decodeData);
 				if (isPinCanceled) {
@@ -2055,9 +2058,9 @@ public class MainActivity extends Activity {
 		@Override
 		public void onReturnUpdateEMVRIDResult(boolean arg0) {
 			if(arg0){
-				statusEditText.setText("更新RID的EMV成功");
+				statusEditText.setText("update RID EMV success");
 			}else{
-				statusEditText.setText("更新RID的EMV失败");
+				statusEditText.setText("update RID EMV fail");
 			}
 		}
 
@@ -2521,7 +2524,10 @@ public class MainActivity extends Activity {
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setIsSaveLog(true);
 //					pos.setFormatId("0025");
-					pos.doTrade(30);//start do trade
+					index++;
+					pos.setIsSaveLog(true);
+					pos.doTrade(30, "trade"+index);
+//					pos.doTrade(30);//start do trade
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
@@ -2830,7 +2836,7 @@ public class MainActivity extends Activity {
 				pos.updateEmvAPP(EMVDataOperation.update,list);
 				break;
 			case 1702:
-				pos.updateEmvCAPK(EMVDataOperation.update, list);
+				pos.updateEmvCAPK(EMVDataOperation.AttainList, list);
 				break;
 			default:
 				break;
@@ -2839,8 +2845,8 @@ public class MainActivity extends Activity {
 	};
 	
 	public void updateEmvConfig(){
-		String emvAppCfg = QPOSUtil.byteArray2Hex(readLine("quickemvcfg_app.bin"));
-		String emvCapkCfg = QPOSUtil.byteArray2Hex(readLine("quickemvcfg_capk.bin"));
+		String emvAppCfg = QPOSUtil.byteArray2Hex(readLine("emv_app.bin"));
+		String emvCapkCfg = QPOSUtil.byteArray2Hex(readLine("emv_capk.bin"));
 		TRACE.d("emvAppCfg: "+emvAppCfg);
 		TRACE.d("emvCapkCfg: "+emvCapkCfg);
 		pos.updateEmvConfig(emvAppCfg,emvCapkCfg);
