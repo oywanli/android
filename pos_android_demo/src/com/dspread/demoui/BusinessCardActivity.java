@@ -953,6 +953,12 @@ public class BusinessCardActivity extends Activity {
 			
 		}
 
+		@Override
+		public void onReturnRSAResult(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
 
 		
 

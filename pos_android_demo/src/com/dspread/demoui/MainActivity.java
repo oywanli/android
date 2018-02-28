@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -21,7 +19,6 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.http.util.ByteArrayBuffer;
 
@@ -56,9 +53,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Trace;
-import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -79,7 +74,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -90,8 +84,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -345,7 +337,6 @@ public class MainActivity extends Activity {
 		((MarginLayoutParams) params).setMargins(10, 10, 10, 10);
 		listView.setLayoutParams(params);
 	}
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -361,7 +352,6 @@ public class MainActivity extends Activity {
 			Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivity(enabler);
 		}
-		
 		imvAnimScan = (ImageView) findViewById(R.id.img_anim_scanbt);
 		animScan = (AnimationDrawable) getResources().getDrawable(
 				R.anim.progressanmi);
@@ -744,7 +734,7 @@ public class MainActivity extends Activity {
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
 			pos.getQposInfo();
-//			pos.doUpdateIPEKOperation("00", "17091822100342E00000", "D09825C1EAEE65458FD367601E8B3672", "FC1E3A0000000000", "17091822100342E00000", "D09825C1EAEE65458FD367601E8B3672", "FC1E3A0000000000", "17091822100342E00000", "D09825C1EAEE65458FD367601E8B3672", "FC1E3A0000000000");
+//			pos.getIccCardNo("201801261112");
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
 //			pos.doUpdateIPEKOperation("00", "17091822100343E00000", "AA90B8DF7831E644894B93CC7995BEE5", "FB44CF0000000000", "17091822100343E00000", "AA90B8DF7831E644894B93CC7995BEE5", "FB44CF0000000000", "17091822100343E00000", "AA90B8DF7831E644894B93CC7995BEE5", "FB44CF0000000000");
@@ -2372,6 +2362,15 @@ public class MainActivity extends Activity {
 				statusEditText.setText("transfer data failed!");
 			}
 		}
+
+		@Override
+		public void onReturnRSAResult(String arg0) {
+			if(arg0!=null){
+				statusEditText.setText("rsa data:\n"+arg0);
+			}else{
+				statusEditText.setText("get the rsa failed");
+			}
+		}
 	}
 
 	private void clearDisplay() {
@@ -2524,10 +2523,9 @@ public class MainActivity extends Activity {
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setIsSaveLog(true);
 //					pos.setFormatId("0025");
-					index++;
-					pos.setIsSaveLog(true);
-					pos.doTrade(30, "trade"+index);
-//					pos.doTrade(30);//start do trade
+//					pos.setIsSaveLog(true);
+//					pos.doTrade(30, "trade"+index);
+					pos.doTrade(30);//start do trade
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
@@ -2677,7 +2675,7 @@ public class MainActivity extends Activity {
 				pos.setKeyValue(data);
 				pos.doMifareCard("0F", 20);
 			}else if(v == updateFwBtn){//update firmware
-				byte[] data = readLine("A27CAYC_S1_master.asc");
+				byte[] data = readLine("A19IM0112 _master.asc");
 				pos.updatePosFirmware(data, blueTootchAddress);
 				UpdateThread updateThread = new UpdateThread();
 				updateThread.start();
