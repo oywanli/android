@@ -1,8 +1,6 @@
 package com.dspread.demoui;
 
 import java.io.ByteArrayInputStream;
-
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +36,7 @@ import com.dspread.xpos.QPOSService.EncryptType;
 import com.dspread.xpos.QPOSService.Error;
 import com.dspread.xpos.QPOSService.FORMATID;
 import com.dspread.xpos.QPOSService.LcdModeAlign;
+import com.dspread.xpos.QPOSService.PanStatus;
 import com.dspread.xpos.QPOSService.TransactionResult;
 import com.dspread.xpos.QPOSService.TransactionType;
 import com.dspread.xpos.QPOSService.QPOSServiceListener;
@@ -46,8 +45,6 @@ import com.dspread.xpos.Tlv;
 
 import envelope.DukptKeys;
 import envelope.Envelope;
-
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -149,6 +146,7 @@ public class MainActivity extends Activity {
 	private Button updateFwBtn;
 	private Handler myHandler=new Handler();
 	private int index=0;
+	private String bufksn;
 	private Runnable r=new Runnable() {
 		
 		@Override
@@ -421,14 +419,14 @@ public class MainActivity extends Activity {
 			});
 			break;
 		case 3://普通蓝牙
-//			open(CommunicationMode.BLUETOOTH);
-//			posType=POS_TYPE.BLUETOOTH;
+			open(CommunicationMode.BLUETOOTH);
+			posType=POS_TYPE.BLUETOOTH;
 			btnBT.setVisibility(View.VISIBLE);
 			isNormalBlu=true;
 			break;
 		case 4://其他蓝牙
-//			open(CommunicationMode.BLUETOOTH_BLE);
-//			posType=POS_TYPE.BLUETOOTH_BLE;
+			open(CommunicationMode.BLUETOOTH_BLE);
+			posType=POS_TYPE.BLUETOOTH_BLE;
 			btnBT.setVisibility(View.VISIBLE);
 			isNormalBlu=false;
 			break;
@@ -1035,6 +1033,7 @@ public class MainActivity extends Activity {
 					content += "trackRandomNumber: " + trackRandomNumber + "\n";
 					content += "pinRandomNumber:" + " " + pinRandomNumber + "\n";
 					cardNo=maskedPAN;
+					
 				}
 				TRACE.d("swipe card:" + content);
 				statusEditText.setText(content);
@@ -1171,6 +1170,10 @@ public class MainActivity extends Activity {
 					: posInfoData.get("batteryPercentage");
 			String hardwareVersion = posInfoData.get("hardwareVersion") == null ? "" : posInfoData.get("hardwareVersion");
 			String SUB=posInfoData.get("SUB")== null ? "" : posInfoData.get("SUB");
+			String pciFirmwareVersion=posInfoData.get("PCI_firmwareVersion")== null ? ""
+					: posInfoData.get("PCI_firmwareVersion");
+			String pciHardwareVersion=posInfoData.get("PCI_hardwareVersion")== null ? ""
+					: posInfoData.get("PCI_hardwareVersion");
 			String content = "";
 			content += getString(R.string.bootloader_version) + bootloaderVersion + "\n";
 			content += getString(R.string.firmware_version) + firmwareVersion + "\n";
@@ -1186,6 +1189,8 @@ public class MainActivity extends Activity {
 			content += getString(R.string.track_1_supported) + isSupportedTrack1 + "\n";
 			content += getString(R.string.track_2_supported) + isSupportedTrack2 + "\n";
 			content += getString(R.string.track_3_supported) + isSupportedTrack3 + "\n";
+			content+="PCI FirmwareVresion:"+pciFirmwareVersion+"\n";
+			content+="PCI HardwareVersion:"+pciHardwareVersion+"\n";
 			statusEditText.setText(content);
 		}
 
@@ -1502,8 +1507,8 @@ public class MainActivity extends Activity {
 				dialog.setTitle(R.string.request_data_to_server);
 				TRACE.d("onRequestOnlineProcess tlv:" + tlv);
 				Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-//				decodeData =pos.getICCTag(0, 1, "8F");
-				TRACE.i("8f tag: " + decodeData.get("tlv"));
+				decodeData =pos.getICCTag(0, 1, "5A");
+				TRACE.i("5A tag: " + decodeData.get("tlv"));
 				TRACE.i("onlineProcess: "+decodeData);
 				if (isPinCanceled) {
 					((TextView) dialog.findViewById(R.id.messageTextView))
@@ -2608,6 +2613,7 @@ public class MainActivity extends Activity {
 			}else if(v == btnGetInfo){
 				if(pos!=null){
 //					pos.getQposInfo();
+//					pos.getRSAText(135);
 //					pos.setPosSleepTime(300);
 				}
 			}else if(v == pollBtn){
@@ -2819,8 +2825,8 @@ public class MainActivity extends Activity {
 				String content="";
 				if(nfcLog==null){
 					Hashtable<String, String> h =  pos.getNFCBatchData();
+					TRACE.i("nfc batchdata1: "+h);
 //					Hashtable<String, String> h =pos.getICCTag(1, 0, "");
-					TRACE.w("nfc batchdata: "+h);
 					content = statusEditText.getText().toString()+ "\nNFCbatchData: "+h.get("tlv");
 				}else{
 					content = statusEditText.getText().toString()+ "\nNFCbatchData: "+nfcLog;
