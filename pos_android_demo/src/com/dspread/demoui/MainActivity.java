@@ -672,8 +672,9 @@ public class MainActivity extends Activity {
 			pos.setQuickEmvStatus(true);
 		}
 		else if(item.getItemId() == R.id.updateEMVAPP){
-			list.add(EmvAppTag.Application_Identifier_AID_terminal+"00000000000000000000000000000000");
-			list.add(EmvAppTag.Terminal_Capabilities+"e0f8c8");
+//			list.add(EmvAppTag.Application_Identifier_AID_terminal+"00000000000000000000000000000000");
+//			list.add(EmvAppTag.Terminal_Capabilities+"e0f8c8");
+			list.add(EmvAppTag.Terminal_Country_Code+"0484");
 			/*list.add(EmvAppTag.ICS+"F4F0F0FAAFFE8000");
 			list.add(EmvAppTag.Terminal_type+"22");
 			list.add(EmvAppTag.Terminal_Capabilities+"60B8C8");
@@ -735,8 +736,8 @@ public class MainActivity extends Activity {
 //			pos.getIccCardNo("201801261112");
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
-//			pos.doUpdateIPEKOperation("00", "17091822100343E00000", "AA90B8DF7831E644894B93CC7995BEE5", "FB44CF0000000000", "17091822100343E00000", "AA90B8DF7831E644894B93CC7995BEE5", "FB44CF0000000000", "17091822100343E00000", "AA90B8DF7831E644894B93CC7995BEE5", "FB44CF0000000000");
-			pos.getQposId();
+			pos.doUpdateIPEKOperation("03", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604");
+//			pos.getQposId();
 		} else if(item.getItemId()==R.id.setMasterkey){
 			pos.setMasterKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885");
 		}else if (item.getItemId() == R.id.one) {
@@ -2526,10 +2527,7 @@ public class MainActivity extends Activity {
 //					pos.setJudgeDebitOrCreditFlag(true);//做磁条卡判断是借记卡还是信用卡
 //					pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");
 //					pos.doTrade_QF(0x0f, "345", "456");
-//					pos.setIsSaveLog(true);
-//					pos.setFormatId("0025");
-//					pos.setIsSaveLog(true);
-//					pos.doTrade(30, "trade"+index);
+//					pos.setPanStatus(PanStatus.PLAINTEXT);
 					pos.doTrade(30);//start do trade
 				}
 			}else if(v == btnUSB){
@@ -2840,7 +2838,7 @@ public class MainActivity extends Activity {
 				pos.updateEmvAPP(EMVDataOperation.update,list);
 				break;
 			case 1702:
-				pos.updateEmvCAPK(EMVDataOperation.AttainList, list);
+				pos.updateEmvCAPK(EMVDataOperation.Add, list);
 				break;
 			default:
 				break;
