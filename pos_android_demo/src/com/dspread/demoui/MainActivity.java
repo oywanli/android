@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.io.UnsupportedEncodingException;
+import java.io.ObjectOutputStream.PutField;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -514,6 +515,7 @@ public class MainActivity extends Activity {
 			pos.closeAudio();
 		} else if (posType == POS_TYPE.BLUETOOTH) {
 			pos.disconnectBT();
+//			pos.disConnectBtPos();
 		}else if(posType == POS_TYPE.BLUETOOTH_BLE){
 			pos.disconnectBLE();
 		} else if (posType == POS_TYPE.UART) {
@@ -643,10 +645,24 @@ public class MainActivity extends Activity {
 		else if(item.getItemId() == R.id.doTradeLogOperation){
 			pos.doTradeLogOperation(DoTransactionType.GetOne, 0);
 		}
-		else if(item.getItemId()==R.id.injectKeys){//注入更新密钥
-//			pos.udpateWorkKey("B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65", "B4ABA2BB791C50E7B4ABA2BB791C50E7", "00962B60AA556E65");
-			pos.doUpdateIPEKOperation("00", "09117081600001E00001", "413DF85BD9D9A7C34EDDB2D2B5CA0C0F", "6A52E41A7F91C9F5", "09117081600001E00001", "413DF85BD9D9A7C34EDDB2D2B5CA0C0F", "6A52E41A7F91C9F5", "09117081600001E00001", "413DF85BD9D9A7C34EDDB2D2B5CA0C0F", "6A52E41A7F91C9F5");
-			
+		else if(item.getItemId()==R.id.injectKeys){//inject key
+			/*1.set the track ipek,emv ipek,pin ipek keys and track ksn,emv ksn,pin ksn and tmk.
+			  2.use the getRsa tool to get the RSA_Public_key
+			  3.put the pem file to the assets folder,then use the DukptKeys.setFilePath value
+			  4.use the method Envelope.getDigitalEnvelopStr() to get the envelopStr
+			  5.use the method pos.udpateWorkKey(envelopStr) to inject your keys
+			   The follow is the simple*/
+			DukptKeys.setTrackipek("A4C122E2887212F60682B64DCBF705B8");
+			DukptKeys.setTrackksn("09117121100165E00001");
+			DukptKeys.setEmvipek("A4C122E2887212F60682B64DCBF705B8");
+			DukptKeys.setEmvksn("09117121100165E00001");
+			DukptKeys.setPinipek("A4C122E2887212F60682B64DCBF705B8");
+			DukptKeys.setPinksn("09117121100165E00001");
+			DukptKeys.setRSA_public_key("D0ED9CFB50633EB8CE7180B1A920FCBBB6CDE9609A6498311AEAA07F125E601B7B4F6A870ACD45BB336C09211C408BF8B7457BCA07AAE2BF23FA02D88FAB49A32DA1AF57F7D01867583514454DBB2481AF162A91982F1CFA962555B3B8603DDF23A879BEB01A9A79D864CBDA2E03A92C9E4600AF3DDD91744F41DB901B713173");
+			DukptKeys.setTmk("0123456789ABCDEFFEDCBA9876543210");
+			DukptKeys.setFilePath("/assets/rsa_private_pkcs8.pem");
+			String envelopStr=Envelope.getDigitalEnvelopStr();
+			pos.udpateWorkKey(envelopStr);
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -660,7 +676,7 @@ public class MainActivity extends Activity {
 		}
 		//更新ipek
 		else if(item.getItemId()==R.id.updateIPEK){
-			pos.doUpdateIPEKOperation("00", "17091822100340E00000", "4F23D1949FCA4B4CECD0905D4C205CED", "01ADE80000000000", "17091822100340E00000", "4F23D1949FCA4B4CECD0905D4C205CED", "01ADE80000000000", "17091822100340E00000", "4F23D1949FCA4B4CECD0905D4C205CED", "01ADE80000000000");
+			pos.doUpdateIPEKOperation("00", "01807031800000E00000", "368CD0597F7E476BC0BBEF9DE2A7A913", "431E2F0000000000", "01807031800000E00000", "368CD0597F7E476BC0BBEF9DE2A7A913", "431E2F0000000000", "01807031800000E00000", "368CD0597F7E476BC0BBEF9DE2A7A913", "431E2F0000000000");
 		}else if(item.getItemId()==R.id.getSleepTime){
 //			pos.getSleepModeTime();
 			pos.getShutDownTime();
@@ -736,8 +752,8 @@ public class MainActivity extends Activity {
 //			pos.getIccCardNo("201801261112");
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
-			pos.doUpdateIPEKOperation("03", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604");
-//			pos.getQposId();
+//			pos.doUpdateIPEKOperation("03", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604");
+			pos.getQposId();
 		} else if(item.getItemId()==R.id.setMasterkey){
 			pos.setMasterKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885");
 		}else if (item.getItemId() == R.id.one) {
@@ -758,7 +774,8 @@ public class MainActivity extends Activity {
 //			pos.setMasterKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885");
 		} else if (item.getItemId() == R.id.menu_get_pin) {
 			statusEditText.setText(R.string.input_pin);
-			pos.getPin("201402121655");
+//			pos.getPin("201402121655");
+			pos.getPin(1, 0, 6, "please input pin", "5295172002836310", "", 20);
 		} else if (item.getItemId() == R.id.menu_icc) {
 //			if (pos != null && pos.getBluetoothState()) {//判断蓝牙是否连接
 				Intent intent = new Intent(this, IccActivity.class);
@@ -1154,6 +1171,7 @@ public class MainActivity extends Activity {
 				statusEditText.setText(getString(R.string.card_no_response));
 			}
 //			pos.buildPinBLock("B710FDBCDFD7D1D4CD7477C899E71A00", "0000000000000000", 1, 0, 6, "622526XXXXXX5453", "please input pin");
+//			pos.getPin(1, 0, 6, "please input pin", "5295172002836310", "", 20);
 		}
 
 		@Override
@@ -2529,6 +2547,9 @@ public class MainActivity extends Activity {
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setPanStatus(PanStatus.PLAINTEXT);
 					pos.doTrade(30);//start do trade
+//					pos.doCheckCard(20);
+//					pos.setIsSaveLog(true);
+//					pos.doTrade(20, "tra");
 				}
 			}else if(v == btnUSB){
 				USBClass usb = new USBClass();
