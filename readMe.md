@@ -262,11 +262,11 @@ encTrack3	  | Encrypted track 3 data with T-Des encryption key derived from DATA
 partialTrack  |	Reserved
 trackksn	  | KSN of the track data
 
-The track data returned in the hashtable is encrytped. It can be encrypted by Dukpt Data Key Variant 3DES ECB mode, or by Dukpt Data Key 3DES CBC mode. Per ANSI X9.24 2009 version request, The later (Data Key with 3DES CBC mode) is usually a recommanded choice.
+The track data returned in the hashtable is encrytped. It can be encrypted by Dukpt Data Key Variant 3DES CBC mode, or by Dukpt Data Key 3DES CBC mode. Per ANSI X9.24 2009 version request, The later (Data Key with 3DES CBC mode) is usually a recommanded choice.
 
 ### Decoding Track Data Encrypted with Data Key Variant
 
-Below is an example of the data captured during a live magnatic transaction, the track data is encrypted using data key variant, in 3DES ECB mode:
+Below is an example of the data captured during a live magnatic transaction, the track data is encrypted using data key variant, in 3DES CBC mode:
 
 ```
 01-20 06:58:29.412: D/POS_SDK(3609): decodeData: {track3Length=0, track2Length=32, expiryDate=1011, encTrack3=, encPAN=, encTrack1=744B8A95FF1982CD63FB24D581FCD1A0590E7F6DD12B86ED1B1D26E687EA853A128598C16BE14964A34607452511C4B6CBDCACD72BEB566E32094937C18C2424, pinRandomNumber=, encTrack2=5E7E2D56D3496B2721EBD4C590031EB9D7883B75B97A71FF, trackRandomNumber=, trackksn=00000332100300E0000A, maskedPAN=622526XXXXXX5453, cardholderName=MR.ZHOU CHENG HAO         , partialTrack=, encTracks=5E7E2D56D3496B2721EBD4C590031EB9D7883B75B97A71FF, psamNo=, formatID=30, track1Length=68, pinKsn=, serviceCode=106, ksn=, pinBlock=}
@@ -300,7 +300,7 @@ Track 1 data:
 Track 2 data:
 5E7E2D56D3496B2721EBD4C590031EB9D7883B75B97A71FF
 
-Below python script demostrate how to decode track data encrypted with DataKey Variant in ECB mode:
+Below python script demostrate how to decode track data encrypted with DataKey Variant in CBC mode:
 ```python
 def GetDataKeyVariant(ksn, ipek):
     key = GetDUKPTKey(ksn, ipek)
@@ -310,7 +310,7 @@ def GetDataKeyVariant(ksn, ipek):
     return str(key)
 
 def TDES_Dec(data, key):
-    t = triple_des(key, ECB, padmode=None)
+    t = triple_des(key, CBC, padmode=None)
     res = t.decrypt(data)
     return res
 
@@ -450,7 +450,7 @@ def GetPINKeyVariant(ksn, ipek):
     return str(key)
 
 def TDES_Dec(data, key):
-    t = triple_des(key, ECB, padmode=None)
+    t = triple_des(key, CBC, padmode=None)
     res = t.decrypt(data)
     return res
 
