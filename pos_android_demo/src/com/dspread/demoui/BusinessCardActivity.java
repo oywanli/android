@@ -959,6 +959,12 @@ public class BusinessCardActivity extends Activity {
 			
 		}
 
+		@Override
+		public void onRequestNoQposDetectedUnbond() {
+			// TODO Auto-generated method stub
+			
+		}
+
 
 		
 

@@ -1007,6 +1007,12 @@ public class IccActivity extends Activity {
 			
 		}
 
+		@Override
+		public void onRequestNoQposDetectedUnbond() {
+			// TODO Auto-generated method stub
+			
+		}
+
     }
     
     private void clearDisplay() {

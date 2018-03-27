@@ -643,7 +643,7 @@ public class MainActivity extends Activity {
 			pos.addKsn("00");
 		}
 		else if(item.getItemId() == R.id.doTradeLogOperation){
-			pos.doTradeLogOperation(DoTransactionType.GetOne, 0);
+			pos.doTradeLogOperation(DoTransactionType.GetAll, 0);
 		}
 		else if(item.getItemId()==R.id.injectKeys){//inject key
 			/*1.set the track ipek,emv ipek,pin ipek keys and track ksn,emv ksn,pin ksn and tmk.
@@ -663,6 +663,7 @@ public class MainActivity extends Activity {
 			DukptKeys.setFilePath("/assets/rsa_private_pkcs8.pem");
 			String envelopStr=Envelope.getDigitalEnvelopStr();
 			pos.udpateWorkKey(envelopStr);
+//			pos.udpateWorkKey("952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", 0);
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -755,7 +756,7 @@ public class MainActivity extends Activity {
 //			pos.doUpdateIPEKOperation("03", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604");
 			pos.getQposId();
 		} else if(item.getItemId()==R.id.setMasterkey){
-			pos.setMasterKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885");
+			pos.setMasterKey("4D6181F09ED71641C3F541F7670B8DE2", "EA68E4A4B881B890");
 		}else if (item.getItemId() == R.id.one) {
 			HashMap<Integer, Tlv> map=new HashMap<Integer, Tlv>();
 			map=pos.getTag("9F0607A00000000310105F300202209F02060000000001009F160F4243544553542031323334353637385F24031809304F07A00000000310109F34035E03009A031712229F03060000000000005A084374520007376277570E4374520007376277D1809220866F9F100706010A0360AC009F4E0F61626364000000000000000000000082025C008E0E000000000000000042035E031F025F25031509309F0702FF009F0D05F0608488009F0E0500100800009F0F05F0689498009F2608919EB54167F569719F2701409F360200549C01009F3303E028C89F3704ACBAC7119F3901059F4005F000F0A001950502000080009B02E8008407A00000000310105F2A0201565F3401009F0902008C9F1A0208409F1E0838333230314943439F3501229F4104000000015F200D2F52414B455348204B554D41525F280205868A023030500A566973612044656269749F0802008C00000000000000");
@@ -2395,6 +2396,12 @@ public class MainActivity extends Activity {
 				statusEditText.setText("get the rsa failed");
 			}
 		}
+
+		@Override
+		public void onRequestNoQposDetectedUnbond() {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	private void clearDisplay() {
@@ -2825,6 +2832,7 @@ public class MainActivity extends Activity {
 //				pos.stopQPos2Mode();
 				if(isNormalBlu){
 					pos.connectBluetoothDevice(true, 25, blueTootchAddress);
+//					pos.connectBluetoothDevice(true, 25, 3, blueTootchAddress);
 				}else{
 					pos.connectBLE(blueTootchAddress);
 				}
