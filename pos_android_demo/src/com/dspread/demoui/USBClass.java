@@ -3,7 +3,8 @@ package com.dspread.demoui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,14 +13,14 @@ import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
-import android.widget.Toast;
+import android.os.Build;
 
 public class USBClass {
 
 	private static UsbManager mManager = null;
 	
 	private static HashMap<String, UsbDevice> mdevices;
-	protected static HashMap<String, UsbDevice> getMdevices() {
+	public static HashMap<String, UsbDevice> getMdevices() {
 		return mdevices;
 	}
 
@@ -48,9 +49,10 @@ public class USBClass {
 		}
 	};
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+	@SuppressLint("NewApi")
 	public ArrayList<String> GetUSBDevices(Context context) {
 		mManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
-		
 		
 		mdevices = new HashMap<String, UsbDevice>();
 		ArrayList<String> deviceList = new ArrayList<String>();
@@ -71,7 +73,6 @@ public class USBClass {
 			UsbDeviceConnection connection = null;
 			if (device.getVendorId() == 2965 || device.getVendorId() == 0x03EB )
 			{
-				
 				mManager.requestPermission(device, mPermissionIntent);
 				connection = mManager.openDevice(device);
 				byte rawBuf[] = new byte[255];

@@ -420,14 +420,14 @@ public class MainActivity extends Activity {
 			});
 			break;
 		case 3://普通蓝牙
-			open(CommunicationMode.BLUETOOTH);
-			posType=POS_TYPE.BLUETOOTH;
+//			open(CommunicationMode.BLUETOOTH);//此时不能设置pos的连接类型。需要在扫描前再设置，另外扫描前一定要将类型重置，否则影响下一个类型
+//			posType=POS_TYPE.BLUETOOTH;
 			btnBT.setVisibility(View.VISIBLE);
 			isNormalBlu=true;
 			break;
 		case 4://其他蓝牙
-			open(CommunicationMode.BLUETOOTH_BLE);
-			posType=POS_TYPE.BLUETOOTH_BLE;
+//			open(CommunicationMode.BLUETOOTH_BLE);
+//			posType=POS_TYPE.BLUETOOTH_BLE;
 			btnBT.setVisibility(View.VISIBLE);
 			isNormalBlu=false;
 			break;
@@ -501,6 +501,7 @@ public class MainActivity extends Activity {
 		Handler handler = new Handler(Looper.myLooper());
 		pos.initListener(handler, listener);
 		sdkVersion = pos.getSdkVersion();
+		 Toast.makeText(MainActivity.this, "sdkVersion--"+sdkVersion, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -511,7 +512,7 @@ public class MainActivity extends Activity {
 		if (pos == null) {
 			return;
 		}
-		if (posType == POS_TYPE.AUDIO) {
+		else if (posType == POS_TYPE.AUDIO) {
 			pos.closeAudio();
 		} else if (posType == POS_TYPE.BLUETOOTH) {
 			pos.disconnectBT();
@@ -617,8 +618,12 @@ public class MainActivity extends Activity {
 			/*pos.setCardTradeMode(CardTradeMode.UNALLOWED_LOW_TRADE);
 			statusEditText.setText("降级设置");*/
 		}else if(item.getItemId() == R.id.menu_update){// update the device
-			byte[] data = readLine("upgrader.asc");
-			pos.updatePosFirmware(data, blueTootchAddress);
+			byte[] data = readLine("A27CAYC_S1_master.asc");
+			int a=pos.updatePosFirmware(data, blueTootchAddress);
+			if(a==-1){
+				Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+				return false;
+			}
 			UpdateThread updateThread = new UpdateThread();
 			updateThread.start();
 		}
@@ -652,7 +657,7 @@ public class MainActivity extends Activity {
 			  4.use the method Envelope.getDigitalEnvelopStr() to get the envelopStr
 			  5.use the method pos.udpateWorkKey(envelopStr) to inject your keys
 			   The follow is the simple*/
-			DukptKeys.setTrackipek("A4C122E2887212F60682B64DCBF705B8");
+			/*DukptKeys.setTrackipek("A4C122E2887212F60682B64DCBF705B8");
 			DukptKeys.setTrackksn("09117121100165E00001");
 			DukptKeys.setEmvipek("A4C122E2887212F60682B64DCBF705B8");
 			DukptKeys.setEmvksn("09117121100165E00001");
@@ -662,8 +667,8 @@ public class MainActivity extends Activity {
 			DukptKeys.setTmk("0123456789ABCDEFFEDCBA9876543210");
 			DukptKeys.setFilePath("/assets/rsa_private_pkcs8.pem");
 			String envelopStr=Envelope.getDigitalEnvelopStr();
-			pos.udpateWorkKey(envelopStr);
-//			pos.udpateWorkKey("952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", "952DB8AEB03C4CAF952DB8AEB03C4CAF", "82E13665B4624DF5", 0);
+			pos.udpateWorkKey(envelopStr);*/
+			pos.udpateWorkKey("950973182317F80B950973182317F80B", "00962B60AA556E65", "950973182317F80B950973182317F80B", "00962B60AA556E65", "950973182317F80B950973182317F80B", "00962B60AA556E65", 0);
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -677,7 +682,7 @@ public class MainActivity extends Activity {
 		}
 		//更新ipek
 		else if(item.getItemId()==R.id.updateIPEK){
-			pos.doUpdateIPEKOperation("00", "01807031800000E00000", "8A485FF263F469EF0BF7DB363473479E", "273FC498644AD5B6", "01807031800000E00000", "8A485FF263F469EF0BF7DB363473479E", "273FC498644AD5B6", "01807031800000E00000", "8A485FF263F469EF0BF7DB363473479E", "273FC498644AD5B6");
+			pos.doUpdateIPEKOperation("00", "01807031800000E00000", "9B3A7B883A100F739B3A7B883A100F73", "0001366000624DF5", "01807031800000E00000", "9B3A7B883A100F739B3A7B883A100F73", "0001366000624DF5", "01807031800000E00000", "9B3A7B883A100F739B3A7B883A100F73", "0001366000624DF5");
 		}else if(item.getItemId()==R.id.getSleepTime){
 //			pos.getSleepModeTime();
 			pos.getShutDownTime();
@@ -691,7 +696,8 @@ public class MainActivity extends Activity {
 		else if(item.getItemId() == R.id.updateEMVAPP){
 //			list.add(EmvAppTag.Application_Identifier_AID_terminal+"00000000000000000000000000000000");
 //			list.add(EmvAppTag.Terminal_Capabilities+"e0f8c8");
-			list.add(EmvAppTag.Terminal_Country_Code+"0484");
+//			list.add(EmvAppTag.Terminal_Country_Code+"0484");
+//			list.add(EmvAppTag.Merchant_Identifier+"");
 			/*list.add(EmvAppTag.ICS+"F4F0F0FAAFFE8000");
 			list.add(EmvAppTag.Terminal_type+"22");
 			list.add(EmvAppTag.Terminal_Capabilities+"60B8C8");
@@ -708,6 +714,7 @@ public class MainActivity extends Activity {
 			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000060000");*/
 //			list.add(EmvAppTag.terminal_contactless_transaction_limit+"000000060000");
 //			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000000000");
+			list.add(EmvAppTag.ICS+"F4F060FAAFFE8000");
 //			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000001000");
 //			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
 			statusEditText.setText("updating emvapp...");
@@ -756,7 +763,7 @@ public class MainActivity extends Activity {
 //			pos.doUpdateIPEKOperation("03", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604");
 			pos.getQposId();
 		} else if(item.getItemId()==R.id.setMasterkey){
-			pos.setMasterKey("4D6181F09ED71641C3F541F7670B8DE2", "EA68E4A4B881B890");
+			pos.setMasterKey("9B3A7B883A100F739B3A7B883A100F73", "82E13665B4624DF5",0);
 		}else if (item.getItemId() == R.id.one) {
 			HashMap<Integer, Tlv> map=new HashMap<Integer, Tlv>();
 			map=pos.getTag("9F0607A00000000310105F300202209F02060000000001009F160F4243544553542031323334353637385F24031809304F07A00000000310109F34035E03009A031712229F03060000000000005A084374520007376277570E4374520007376277D1809220866F9F100706010A0360AC009F4E0F61626364000000000000000000000082025C008E0E000000000000000042035E031F025F25031509309F0702FF009F0D05F0608488009F0E0500100800009F0F05F0689498009F2608919EB54167F569719F2701409F360200549C01009F3303E028C89F3704ACBAC7119F3901059F4005F000F0A001950502000080009B02E8008407A00000000310105F2A0201565F3401009F0902008C9F1A0208409F1E0838333230314943439F3501229F4104000000015F200D2F52414B455348204B554D41525F280205868A023030500A566973612044656269749F0802008C00000000000000");
@@ -842,8 +849,8 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 		TRACE.d("onDestroy");
 		if (pos != null) {
-			close();
-//			pos.onDestroy();
+//			close();
+			pos.onDestroy();
 			pos=null;
 		}
 //		android.os.Process.killProcess(android.os.Process.myPid());//直接杀死进程，保证在无意退出系统后能重新加载扫描蓝牙
@@ -1527,8 +1534,8 @@ public class MainActivity extends Activity {
 				dialog.setTitle(R.string.request_data_to_server);
 				TRACE.d("onRequestOnlineProcess tlv:" + tlv);
 				Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-				decodeData =pos.getICCTag(0, 1, "5A");
-				TRACE.i("5A tag: " + decodeData.get("tlv"));
+				decodeData =pos.getICCTag(0, 1, "DF72");
+				TRACE.i("DF72: " + decodeData.get("tlv"));
 				TRACE.i("onlineProcess: "+decodeData);
 				if (isPinCanceled) {
 					((TextView) dialog.findViewById(R.id.messageTextView))
@@ -1664,7 +1671,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onRequestQposDisconnected() {
 			dismissDialog();
-			TRACE.w("onRequestQposDisconnected");
+			TRACE.d("onRequestQposDisconnected");
 			statusEditText.setText(getString(R.string.device_unplugged));
 			btnDisconnect.setEnabled(false);
 			doTradeButton.setEnabled(false);
@@ -2553,6 +2560,8 @@ public class MainActivity extends Activity {
 //					pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setPanStatus(PanStatus.PLAINTEXT);
+//					pos.setDoTradeMode(DoTradeMode.COMMON);
+//					pos.setFormatId("0002");
 					pos.doTrade(30);//start do trade
 //					pos.doCheckCard(20);
 //					pos.setIsSaveLog(true);
@@ -2586,6 +2595,8 @@ public class MainActivity extends Activity {
 			}
 			else if (v == btnBT) {
 				isOTG = false;
+				TRACE.d("trype=="+type);
+				pos=null;//在连接前一定要保证之前的连接类型已经重置。
 				if(pos==null){
 					if(type==3){
 						open(CommunicationMode.BLUETOOTH);
@@ -2613,21 +2624,6 @@ public class MainActivity extends Activity {
 			} else if (v == btnDisconnect) {
 				close();
 //				pos.disconnectBT();
-				/*Set<BluetoothSocket> connectedList = pos.getConnectedSocketList();
-				if (connectedList == null) {
-					close();
-					return;
-				}
-				ArrayList<CharSequence> list = new ArrayList<CharSequence>();
-				for (BluetoothSocket item : connectedList) {
-					String value = item.getRemoteDevice().getName() + "\n" + item.getRemoteDevice().getAddress();
-					list.add(value);
-				}
-				Intent intent = new Intent(MainActivity.this, ConnectedDeviceListActivity.class);
-				Bundle extras = new Bundle();
-				extras.putCharSequenceArrayList("list", list);
-				intent.putExtra("bundle", extras);
-				startActivityForResult(intent, REQUEST_CONNECTED_DEVICE);*/
 			}
 			else if (v == btnQuickEMV) {
 				statusEditText.setText("updating emv config, please wait...");
@@ -2638,9 +2634,6 @@ public class MainActivity extends Activity {
 				isQuickEmv=true;
 			}else if(v == btnGetInfo){
 				if(pos!=null){
-//					pos.getQposInfo();
-//					pos.getRSAText(135);
-//					pos.setPosSleepTime(300);
 				}
 			}else if(v == pollBtn){
 				statusEditText.setText("begin to poll card!");
@@ -2708,7 +2701,11 @@ public class MainActivity extends Activity {
 				pos.doMifareCard("0F", 20);
 			}else if(v == updateFwBtn){//update firmware
 				byte[] data = readLine("A19IM0112 _master.asc");
-				pos.updatePosFirmware(data, blueTootchAddress);
+				int a=pos.updatePosFirmware(data, blueTootchAddress);
+				if(a==-1){
+					Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+					return;
+				}
 				UpdateThread updateThread = new UpdateThread();
 				updateThread.start();
 			}
