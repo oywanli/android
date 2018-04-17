@@ -1,4 +1,4 @@
-#Wed Apr 04 13:47:52 CST 2018
+#Tue Apr 17 18:12:44 CST 2018
 base.0=C\:\\Users\\94585\\Desktop\\pos_android_demo\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
 renamed.0=classes.dex
 file.0=C\:\\Users\\94585\\Desktop\\pos_android_demo\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex

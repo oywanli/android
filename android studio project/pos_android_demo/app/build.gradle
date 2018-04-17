@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.dspread.demoui"
-        minSdkVersion 7
-        targetSdkVersion 26
+        minSdkVersion 12
+        targetSdkVersion 21
 
         ndk {
             moduleName "serial_port"
