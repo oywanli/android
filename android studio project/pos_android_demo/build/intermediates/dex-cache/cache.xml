@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\94585\Desktop\pos_android_demo\app\libs\bcprov-ext-jdk15on-154.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="08abae535dafbc48b379071efa7372bce1aa9782">
+        <dex dex="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\pre-dexed\debug\bcprov-ext-jdk15on-154_8e740d936eac259af4b55de23b2c0d616144bf97.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3_c62404acfaf83c91f6232d6fef1204ce00e94431.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\94585\Desktop\pos_android_demo\app\libs\sun.misc.BASE64Decoder.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="acd93e3727886196f9b8434279ff445ba8611186">
+        <dex dex="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\pre-dexed\debug\sun.misc.BASE64Decoder_277442a1e98b695d5338e8a0acc895c2ed79da14.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-21.0.3_13ee9e5102ddfb9caa79ef08b048f1c3c2a77286.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\94585\Desktop\pos_android_demo\app\libs\mpaysdk.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="5e50dff02cfcd7f24af7ef11fdee3fe41975c4e4">
+        <dex dex="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\pre-dexed\debug\mpaysdk_c902955b0f916eb90dacd6621cd3e66814d84754.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\94585\Desktop\pos_android_demo\app\libs\dspread_android_sdk_2.7.8.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="5d882eae687591a529584b9fc0c2acee9e9b15f6">
+        <dex dex="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\pre-dexed\debug\dspread_android_sdk_2.7.8_b0157953fabf276472f2f48441d4b3128d37bb29.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\94585\Desktop\pos_android_demo\app\libs\injectKey.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="5dcb401547766bd81ad8085fc15bcc6e15e7b684">
+        <dex dex="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\pre-dexed\debug\injectKey_ebcd0976a4725c94c17d2621f95a472d3214ffb1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\android\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\Users\94585\Desktop\pos_android_demo\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3_7cc198b81fdbbbf4c355fe0e9020bcfd19e472b9.jar" />
+    </item>
+
+</items>
