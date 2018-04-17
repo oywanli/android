@@ -489,6 +489,7 @@ public class MainActivity extends Activity {
 	 */
 	private void open(CommunicationMode mode) {
 		TRACE.d("open");
+		//pos=null;
 		listener = new MyPosListener();
 		//实现类的单例模式
 		pos = QPOSService.getInstance(mode);
@@ -501,7 +502,7 @@ public class MainActivity extends Activity {
 		Handler handler = new Handler(Looper.myLooper());
 		pos.initListener(handler, listener);
 		sdkVersion = pos.getSdkVersion();
-		 Toast.makeText(MainActivity.this, "sdkVersion--"+sdkVersion, Toast.LENGTH_SHORT).show();
+		Toast.makeText(MainActivity.this, "sdkVersion--"+sdkVersion, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -668,7 +669,7 @@ public class MainActivity extends Activity {
 			DukptKeys.setFilePath("/assets/rsa_private_pkcs8.pem");
 			String envelopStr=Envelope.getDigitalEnvelopStr();
 			pos.udpateWorkKey(envelopStr);*/
-			pos.udpateWorkKey("950973182317F80B950973182317F80B", "00962B60AA556E65", "950973182317F80B950973182317F80B", "00962B60AA556E65", "950973182317F80B950973182317F80B", "00962B60AA556E65", 0);
+			pos.udpateWorkKey("50C6157C419FEF26456EA2DD14CB7BC7", "104C8D24B7F12567", "50C6157C419FEF26456EA2DD14CB7BC7", "104C8D24B7F12567", "50C6157C419FEF26456EA2DD14CB7BC7", "104C8D24B7F12567", 0);
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -763,7 +764,7 @@ public class MainActivity extends Activity {
 //			pos.doUpdateIPEKOperation("03", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604");
 			pos.getQposId();
 		} else if(item.getItemId()==R.id.setMasterkey){
-			pos.setMasterKey("9B3A7B883A100F739B3A7B883A100F73", "82E13665B4624DF5",0);
+			pos.setMasterKey("AFDB5C93E423EFE5EEEE279F4E7EC9C8", "EBF4AD3348AA7F5E",0);
 		}else if (item.getItemId() == R.id.one) {
 			HashMap<Integer, Tlv> map=new HashMap<Integer, Tlv>();
 			map=pos.getTag("9F0607A00000000310105F300202209F02060000000001009F160F4243544553542031323334353637385F24031809304F07A00000000310109F34035E03009A031712229F03060000000000005A084374520007376277570E4374520007376277D1809220866F9F100706010A0360AC009F4E0F61626364000000000000000000000082025C008E0E000000000000000042035E031F025F25031509309F0702FF009F0D05F0608488009F0E0500100800009F0F05F0689498009F2608919EB54167F569719F2701409F360200549C01009F3303E028C89F3704ACBAC7119F3901059F4005F000F0A001950502000080009B02E8008407A00000000310105F2A0201565F3401009F0902008C9F1A0208409F1E0838333230314943439F3501229F4104000000015F200D2F52414B455348204B554D41525F280205868A023030500A566973612044656269749F0802008C00000000000000");
@@ -833,7 +834,7 @@ public class MainActivity extends Activity {
 				//停止扫描ble的蓝牙
 				pos.stopScanQposBLE();
 			}
-			close();
+//			close();
 //			pos.onDestroy();
 		}
 	}
@@ -849,8 +850,8 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 		TRACE.d("onDestroy");
 		if (pos != null) {
-//			close();
-			pos.onDestroy();
+			close();
+//			pos.onDestroy();
 			pos=null;
 		}
 //		android.os.Process.killProcess(android.os.Process.myPid());//直接杀死进程，保证在无意退出系统后能重新加载扫描蓝牙
@@ -2561,7 +2562,7 @@ public class MainActivity extends Activity {
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setPanStatus(PanStatus.PLAINTEXT);
 //					pos.setDoTradeMode(DoTradeMode.COMMON);
-//					pos.setFormatId("0002");
+					pos.setFormatId("0002");
 					pos.doTrade(30);//start do trade
 //					pos.doCheckCard(20);
 //					pos.setIsSaveLog(true);
