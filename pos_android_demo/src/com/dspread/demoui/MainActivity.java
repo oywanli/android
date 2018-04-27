@@ -669,7 +669,7 @@ public class MainActivity extends Activity {
 			DukptKeys.setFilePath("/assets/rsa_private_pkcs8.pem");
 			String envelopStr=Envelope.getDigitalEnvelopStr();
 			pos.udpateWorkKey(envelopStr);*/
-			pos.udpateWorkKey("50C6157C419FEF26456EA2DD14CB7BC7", "104C8D24B7F12567", "50C6157C419FEF26456EA2DD14CB7BC7", "104C8D24B7F12567", "50C6157C419FEF26456EA2DD14CB7BC7", "104C8D24B7F12567", 0);
+			pos.udpateWorkKey("9B3A7B883A100F739B3A7B883A100F73", "0000000000000000", "9B3A7B883A100F739B3A7B883A100F73", "0000000000000000", "9B3A7B883A100F739B3A7B883A100F73", "0000000000000000", 0);
 		}
 		else if(item.getItemId()==R.id.get_update_key){//get the key value
 			pos.getUpdateCheckValue();
@@ -695,9 +695,9 @@ public class MainActivity extends Activity {
 			pos.setQuickEmvStatus(true);
 		}
 		else if(item.getItemId() == R.id.updateEMVAPP){
-//			list.add(EmvAppTag.Application_Identifier_AID_terminal+"00000000000000000000000000000000");
+//			list.add(EmvAppTag.Application_Identifier_AID_terminal+"A0000006110102");
 //			list.add(EmvAppTag.Terminal_Capabilities+"e0f8c8");
-//			list.add(EmvAppTag.Terminal_Country_Code+"0484");
+			list.add(EmvAppTag.Terminal_Country_Code+"0524");
 //			list.add(EmvAppTag.Merchant_Identifier+"");
 			/*list.add(EmvAppTag.ICS+"F4F0F0FAAFFE8000");
 			list.add(EmvAppTag.Terminal_type+"22");
@@ -715,7 +715,7 @@ public class MainActivity extends Activity {
 			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000060000");*/
 //			list.add(EmvAppTag.terminal_contactless_transaction_limit+"000000060000");
 //			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000000000");
-			list.add(EmvAppTag.ICS+"F4F060FAAFFE8000");
+//			list.add(EmvAppTag.ICS+"F4F060FAAFFE8000");//这个可以disable设备键盘上的pin
 //			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000001000");
 //			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
 			statusEditText.setText("updating emvapp...");
@@ -761,10 +761,10 @@ public class MainActivity extends Activity {
 //			pos.getIccCardNo("201801261112");
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
-//			pos.doUpdateIPEKOperation("03", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604", "00000332100300E00000", "B77DA5FF9A126CD67AB15039F9C2E1B1", "93906AA157EE2604");
 			pos.getQposId();
+//			pos.getBuzzerStatus();
 		} else if(item.getItemId()==R.id.setMasterkey){
-			pos.setMasterKey("AFDB5C93E423EFE5EEEE279F4E7EC9C8", "EBF4AD3348AA7F5E",0);
+			pos.setMasterKey("AD3AD57E56E9C1BE3CB7385ECC64F6F0", "EBF4AD3348AA7F5E",0);
 		}else if (item.getItemId() == R.id.one) {
 			HashMap<Integer, Tlv> map=new HashMap<Integer, Tlv>();
 			map=pos.getTag("9F0607A00000000310105F300202209F02060000000001009F160F4243544553542031323334353637385F24031809304F07A00000000310109F34035E03009A031712229F03060000000000005A084374520007376277570E4374520007376277D1809220866F9F100706010A0360AC009F4E0F61626364000000000000000000000082025C008E0E000000000000000042035E031F025F25031509309F0702FF009F0D05F0608488009F0E0500100800009F0F05F0689498009F2608919EB54167F569719F2701409F360200549C01009F3303E028C89F3704ACBAC7119F3901059F4005F000F0A001950502000080009B02E8008407A00000000310105F2A0201565F3401009F0902008C9F1A0208409F1E0838333230314943439F3501229F4104000000015F200D2F52414B455348204B554D41525F280205868A023030500A566973612044656269749F0802008C00000000000000");
@@ -1017,6 +1017,7 @@ public class MainActivity extends Activity {
 				} else {
 					String orderID=decodeData.get("orderId");
 					String maskedPAN = decodeData.get("maskedPAN");
+					String hashPAN=decodeData.get("hashPan");
 					String expiryDate = decodeData.get("expiryDate");
 					String cardHolderName = decodeData.get("cardholderName");
 //					String ksn = decodeData.get("ksn");
@@ -1041,6 +1042,7 @@ public class MainActivity extends Activity {
 					}
 					content += getString(R.string.format_id) + " " + formatID + "\n";
 					content += getString(R.string.masked_pan) + " " + maskedPAN + "\n";
+					content += getString(R.string.hash_pan) + " " + hashPAN + "\n";
 					content += getString(R.string.expiry_date) + " " + expiryDate + "\n";
 					content += getString(R.string.cardholder_name) + " " + cardHolderName + "\n";
 //					content += getString(R.string.ksn) + " " + ksn + "\n";
@@ -1444,7 +1446,7 @@ public class MainActivity extends Activity {
 					}else if(transactionTypeString.equals("REFOUND")){
 						transactionType = TransactionType.REFUND;
 					}
-					// pos.setAmountIcon("$");//设置pos设备上金额交易的图标
+//					 pos.setAmountIcon("INR");//设置pos设备上金额交易的图标
 					// pos.setAmountIcon("RMB");
 //					amountEditText.setText("$" + amount(amount));
 					// amount = "00000000";
@@ -1535,8 +1537,8 @@ public class MainActivity extends Activity {
 				dialog.setTitle(R.string.request_data_to_server);
 				TRACE.d("onRequestOnlineProcess tlv:" + tlv);
 				Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-				decodeData =pos.getICCTag(0, 1, "DF72");
-				TRACE.i("DF72: " + decodeData.get("tlv"));
+//				decodeData =pos.getICCTag(0, 1, "9F1A");
+//				TRACE.i("DF72: " + decodeData.get("tlv"));
 				TRACE.i("onlineProcess: "+decodeData);
 				if (isPinCanceled) {
 					((TextView) dialog.findViewById(R.id.messageTextView))
@@ -1667,6 +1669,13 @@ public class MainActivity extends Activity {
 			btnQuickEMV.setEnabled(true);
 			btnQuickEMVtrade.setEnabled(true);
 			selectQuickEMVButtonFlag=false;
+			/*try {
+				Thread.sleep(500);
+				pos.getQposInfo();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
 		}
 
 		@Override
@@ -2410,6 +2419,36 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public void onGetBuzzerStatusResult(String arg0) {
+			if(arg0!=null){
+				TRACE.i("=="+arg0);
+				if(arg0.equals("00")){
+					statusEditText.setText("has buzzer");
+				}else{
+					statusEditText.setText("no buzzer");
+				}
+				
+			}else{
+				statusEditText.setText("het fial");
+			}
+		}
+
+		@Override
+		public void onSetBuzzerStatusResult(boolean arg0) {
+			if(arg0){
+				statusEditText.setText("set buzzer status success");
+			}else{
+				statusEditText.setText("set buzzer status fail");
+			}
+		}
+
+		@Override
+		public void onSetBuzzerTimeResult(boolean arg0) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	private void clearDisplay() {
@@ -2562,7 +2601,8 @@ public class MainActivity extends Activity {
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setPanStatus(PanStatus.PLAINTEXT);
 //					pos.setDoTradeMode(DoTradeMode.COMMON);
-					pos.setFormatId("0002");
+//					pos.setFormatId("0000");
+//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD);
 					pos.doTrade(30);//start do trade
 //					pos.doCheckCard(20);
 //					pos.setIsSaveLog(true);

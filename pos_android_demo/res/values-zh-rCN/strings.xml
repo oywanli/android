@@ -58,6 +58,7 @@
     <string name="nfc_track2">已拍卡 (模拟磁轨2):\n</string>
     <string name="format_id">格式ID: </string>
     <string name="masked_pan">屏蔽卡号:</string>
+     <string name="hash_pan">哈希卡号： </string>
     <string name="expiry_date">到期日: </string>
     <string name="cardholder_name">持卡人姓名: </string>
     <string name="ksn">KSN：</string>

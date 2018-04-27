@@ -68,6 +68,7 @@
     <string name="nfc_track2">Card Tapped (Track 2 Emulation):\n</string>
     <string name="format_id">Format ID: </string>
     <string name="masked_pan">Masked PAN: </string>
+    <string name="hash_pan">Hash PAN: </string>
     <string name="expiry_date">Expiry Date: </string>
     <string name="cardholder_name">Cardholder Name: </string>
     <string name="ksn">KSN: </string>

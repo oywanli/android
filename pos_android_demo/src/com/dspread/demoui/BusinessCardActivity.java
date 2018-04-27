@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 
-
 import com.dspread.demoui.R;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.QPOSService.CommunicationMode;
@@ -961,6 +960,24 @@ public class BusinessCardActivity extends Activity {
 
 		@Override
 		public void onRequestNoQposDetectedUnbond() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onGetBuzzerStatusResult(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSetBuzzerStatusResult(boolean arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSetBuzzerTimeResult(boolean arg0) {
 			// TODO Auto-generated method stub
 			
 		}
