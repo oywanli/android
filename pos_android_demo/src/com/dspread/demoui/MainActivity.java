@@ -2596,7 +2596,6 @@ public class MainActivity extends Activity {
 				if (posType == POS_TYPE.UART) {//通用异步收发报机
 					pos.doTrade(terminalTime, 0, 30);
 				}else {
-//					pos.setJudgeDebitOrCreditFlag(true);//做磁条卡判断是借记卡还是信用卡
 //					pos.setDesKey("0000E68FCB6E9C9F8D064521C87B0000");
 //					pos.doTrade_QF(0x0f, "345", "456");
 //					pos.setPanStatus(PanStatus.PLAINTEXT);
