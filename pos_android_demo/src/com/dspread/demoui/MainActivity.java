@@ -697,7 +697,7 @@ public class MainActivity extends Activity {
 		else if(item.getItemId() == R.id.updateEMVAPP){
 //			list.add(EmvAppTag.Application_Identifier_AID_terminal+"A0000006110102");
 //			list.add(EmvAppTag.Terminal_Capabilities+"e0f8c8");
-			list.add(EmvAppTag.Terminal_Country_Code+"0524");
+//			list.add(EmvAppTag.Terminal_Country_Code+"0524");
 //			list.add(EmvAppTag.Merchant_Identifier+"");
 			/*list.add(EmvAppTag.ICS+"F4F0F0FAAFFE8000");
 			list.add(EmvAppTag.Terminal_type+"22");
@@ -717,7 +717,7 @@ public class MainActivity extends Activity {
 //			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000000000");
 //			list.add(EmvAppTag.ICS+"F4F060FAAFFE8000");//这个可以disable设备键盘上的pin
 //			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000001000");
-//			pos.updateEmvAPP(EMVDataOperation.update,"9F0608A000000333010101DF2006000000100000DF010100DF14039F3704DF170199DF180101DF1205D84004F8009F1B0400010000DF2106000000100000DF160199DF150400004000DF1105D84000A8009F08020020DF19060000001000009F7B06000000100000DF13050010000000","");
+			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000001000");
 			statusEditText.setText("updating emvapp...");
 			sendMsg(1701);
 		}
@@ -758,7 +758,7 @@ public class MainActivity extends Activity {
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
 			pos.getQposInfo();
-//			pos.getIccCardNo("201801261112");
+//			pos.setBuzzerStatus(1);
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
 			pos.getQposId();
