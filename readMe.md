@@ -1,4 +1,19 @@
-*QPOS Programming Guide*
+
+You can download to install our [android-demo-app][android-app]
+ and [ios-demo-app][ios-app] by scanning bellow corresponding QR code or directly click the link.
+ 
+    Note: You will need accept "Dsprad Technology Co., Ltd" in "Setting->General->Device Management"
+
+![alt text1][logo]    
+
+
+[logo]: pos_android_demo/assets/qrcode.png
+[android-app]: pos_android_demo/bin/pos_android_demo.apk
+[ios-app]: https://fir.im/latestQposDemo
+
+----
+
+# QPOS Programming Guide
 
 
 [TOC]
