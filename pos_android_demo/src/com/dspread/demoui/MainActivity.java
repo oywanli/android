@@ -713,7 +713,7 @@ public class MainActivity extends Activity {
 			list.add(EmvAppTag.terminal_status_check+"01");
 			list.add(EmvAppTag.Terminal_Default_Transaction_Qualifiers+"36C04000");
 			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000060000");*/
-//			list.add(EmvAppTag.terminal_contactless_transaction_limit+"000000060000");
+//			list.add(EmvAppTag.terminal_contactless_transaction_limit+"000000000000");
 //			list.add(EmvAppTag.terminal_execute_cvm_limit+"000000000000");
 //			list.add(EmvAppTag.ICS+"F4F060FAAFFE8000");//这个可以disable设备键盘上的pin
 //			list.add(EmvAppTag.Contactless_CVM_Required_limit+"000000001000");
@@ -757,7 +757,7 @@ public class MainActivity extends Activity {
 		}
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
-			pos.getQposInfo();
+			pos.getQposInfo(3);
 //			pos.setBuzzerStatus(1);
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
@@ -1670,7 +1670,7 @@ public class MainActivity extends Activity {
 			btnQuickEMVtrade.setEnabled(true);
 			selectQuickEMVButtonFlag=false;
 			/*try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 				pos.getQposInfo();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -1696,6 +1696,7 @@ public class MainActivity extends Activity {
 				statusEditText.setText(getString(R.string.command_not_available));
 			} else if (errorState == Error.TIMEOUT) {
 				statusEditText.setText(getString(R.string.device_no_response));
+//				pos.getQposInfo();
 			} else if (errorState == Error.DEVICE_RESET) {
 				statusEditText.setText(getString(R.string.device_reset));
 			} else if (errorState == Error.UNKNOWN) {
@@ -2601,7 +2602,7 @@ public class MainActivity extends Activity {
 //					pos.setPanStatus(PanStatus.PLAINTEXT);
 //					pos.setDoTradeMode(DoTradeMode.COMMON);
 //					pos.setFormatId("0000");
-//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD);
+					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
 					pos.doTrade(30);//start do trade
 //					pos.doCheckCard(20);
 //					pos.setIsSaveLog(true);

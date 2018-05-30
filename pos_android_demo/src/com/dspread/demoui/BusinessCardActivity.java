@@ -94,7 +94,7 @@ public class BusinessCardActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
     	if(item.getItemId() == R.id.menu_get_deivce_info) {
     		statusEditText.setText(R.string.getting_info);
-    		pos.getQposInfo();
+    		pos.getQposInfo(3);
     	} else if(item.getItemId() == R.id.menu_get_pos_id) {
     		statusEditText.setText(R.string.getting_pos_id);
     		pos.getQposId();
