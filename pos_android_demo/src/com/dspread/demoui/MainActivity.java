@@ -37,7 +37,6 @@ import com.dspread.xpos.QPOSService.EncryptType;
 import com.dspread.xpos.QPOSService.Error;
 import com.dspread.xpos.QPOSService.FORMATID;
 import com.dspread.xpos.QPOSService.LcdModeAlign;
-import com.dspread.xpos.QPOSService.PanStatus;
 import com.dspread.xpos.QPOSService.TransactionResult;
 import com.dspread.xpos.QPOSService.TransactionType;
 import com.dspread.xpos.QPOSService.QPOSServiceListener;
@@ -108,6 +107,7 @@ public class MainActivity extends Activity {
 	private Button pollBtn,pollULbtn,veriftBtn,veriftULBtn,readBtn,writeBtn,finishBtn,finishULBtn,getULBtn,readULBtn,fastReadUL,writeULBtn,transferBtn;
 
 	private Button btnUSB,btnGetId,btnGetInfo;
+	private TransactionType transactionType;
 	private Button btnQuickEMV;
 	private Button btnQuickEMVtrade;
 	private Button btnBT;
@@ -722,10 +722,10 @@ public class MainActivity extends Activity {
 			sendMsg(1701);
 		}
 		else if(item.getItemId() == R.id.updateEMVCAPK){
-			list.add(EmvCapkTag.RID+"A000000004");
-			list.add(EmvCapkTag.Public_Key_Index+"F1");
-			list.add(EmvCapkTag.Public_Key_Module+"A0DCF4BDE19C3546B4B6F0414D174DDE294AABBB828C5A834D73AAE27C99B0B053A90278007239B6459FF0BBCD7B4B9C6C50AC02CE91368DA1BD21AAEADBC65347337D89B68F5C99A09D05BE02DD1F8C5BA20E2F13FB2A27C41D3F85CAD5CF6668E75851EC66EDBF98851FD4E42C44C1D59F5984703B27D5B9F21B8FA0D93279FBBF69E090642909C9EA27F898959541AA6757F5F624104F6E1D3A9532F2A6E51515AEAD1B43B3D7835088A2FAFA7BE7");
-			list.add(EmvCapkTag.Public_Key_CheckValue+"D8E68DA167AB5A85D8C3D55ECB9B0517A1A5B4BB");
+			list.add(EmvCapkTag.RID+"A000000003");
+			list.add(EmvCapkTag.Public_Key_Index+"92");
+			list.add(EmvCapkTag.Public_Key_Module+"996AF56F569187D09293C14810450ED8EE3357397B18A2458EFAA92DA3B6DF6514EC060195318FD43BE9B8F0CC669E3F844057CBDDF8BDA191BB64473BC8DC9A730DB8F6B4EDE3924186FFD9B8C7735789C23A36BA0B8AF65372EB57EA5D89E7D14E9C7B6B557460F10885DA16AC923F15AF3758F0F03EBD3C5C2C949CBA306DB44E6A2C076C5F67E281D7EF56785DC4D75945E491F01918800A9E2DC66F60080566CE0DAF8D17EAD46AD8E30A247C9F");
+			list.add(EmvCapkTag.Public_Key_CheckValue+"429C954A3859CEF91295F663C963E582ED6EB253");
 			list.add(EmvCapkTag.Pk_exponent+"03");
 			statusEditText.setText("updating emvcapk...");
 			sendMsg(1702);
@@ -1671,7 +1671,7 @@ public class MainActivity extends Activity {
 			selectQuickEMVButtonFlag=false;
 			/*try {
 				Thread.sleep(1000);
-				pos.getQposInfo();
+				pos.getQposInfo(1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1696,7 +1696,7 @@ public class MainActivity extends Activity {
 				statusEditText.setText(getString(R.string.command_not_available));
 			} else if (errorState == Error.TIMEOUT) {
 				statusEditText.setText(getString(R.string.device_no_response));
-//				pos.getQposInfo();
+//				pos.getQposInfo(10);
 			} else if (errorState == Error.DEVICE_RESET) {
 				statusEditText.setText(getString(R.string.device_reset));
 			} else if (errorState == Error.UNKNOWN) {
@@ -1859,7 +1859,6 @@ public class MainActivity extends Activity {
 					dismissDialog();
 				}
 			});
-
 			dialog.show();
 
 		}
@@ -2534,7 +2533,7 @@ public class MainActivity extends Activity {
 
 	private String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
 	private String currencyCode = "156";
-	private TransactionType transactionType = TransactionType.GOODS;
+//	private TransactionType transactionType = TransactionType.GOODS;
 	private void testDoTradeNFC(){
 		String customDisplayString = "";
 		try {
@@ -2559,8 +2558,8 @@ public class MainActivity extends Activity {
 	}
 	
 	// Intent request codes
-	private static final int REQUEST_CONNECT_DEVICE = 1;
-	private static final int REQUEST_CONNECTED_DEVICE = 2;
+/*	private static final int REQUEST_CONNECT_DEVICE = 1;
+	private static final int REQUEST_CONNECTED_DEVICE = 2;*/
 	private static final int REQUEST_SELECT_USB_DEVICE = 3;
 	
 
@@ -2602,7 +2601,7 @@ public class MainActivity extends Activity {
 //					pos.setPanStatus(PanStatus.PLAINTEXT);
 //					pos.setDoTradeMode(DoTradeMode.COMMON);
 //					pos.setFormatId("0000");
-					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
 					pos.doTrade(30);//start do trade
 //					pos.doCheckCard(20);
 //					pos.setIsSaveLog(true);
@@ -2756,7 +2755,7 @@ public class MainActivity extends Activity {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		isOTG = false;
 		switch (requestCode) {
-		case REQUEST_CONNECT_DEVICE://提示：该demo中自动扫描连接过程中用不到该连接方法
+		case 1://提示：该demo中自动扫描连接过程中用不到该连接方法
 			// When DeviceListActivity returns with a device to connect
 			/*if (resultCode == Activity.RESULT_OK) {
 				// Get the device MAC address
@@ -2796,7 +2795,7 @@ public class MainActivity extends Activity {
 				}
 			}*/
 			break;
-		case REQUEST_CONNECTED_DEVICE:
+		case 2:
 			//断开
 			/*if (resultCode == Activity.RESULT_OK) {
 				String address = data.getExtras().getString(ConnectedDeviceListActivity.EXTRA_CONNECTED_ADDRESS);
@@ -2905,7 +2904,7 @@ public class MainActivity extends Activity {
 				pos.updateEmvAPP(EMVDataOperation.update,list);
 				break;
 			case 1702:
-				pos.updateEmvCAPK(EMVDataOperation.Add, list);
+				pos.updateEmvCAPK(EMVDataOperation.Delete, list);
 				break;
 			default:
 				break;
