@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="mpaysdk">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/mpaysdk.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
