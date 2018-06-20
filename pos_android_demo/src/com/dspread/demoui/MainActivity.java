@@ -619,7 +619,7 @@ public class MainActivity extends Activity {
 			/*pos.setCardTradeMode(CardTradeMode.UNALLOWED_LOW_TRADE);
 			statusEditText.setText("降级设置");*/
 		}else if(item.getItemId() == R.id.menu_update){// update the device
-			byte[] data = readLine("A27CAYC_S1_master.asc");
+			byte[] data = readLine("A27CAYC_S1_master(1).asc");
 			int a=pos.updatePosFirmware(data, blueTootchAddress);
 			if(a==-1){
 				Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
@@ -757,8 +757,7 @@ public class MainActivity extends Activity {
 		}
 		else if (item.getItemId() == R.id.menu_get_deivce_info) {
 			statusEditText.setText(R.string.getting_info);
-			pos.getQposInfo(3);
-//			pos.setBuzzerStatus(1);
+			pos.getQposInfo();
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
 			pos.getQposId();
@@ -2740,7 +2739,7 @@ public class MainActivity extends Activity {
 				pos.setKeyValue(data);
 				pos.doMifareCard("0F", 20);
 			}else if(v == updateFwBtn){//update firmware
-				byte[] data = readLine("A19IM0112 _master.asc");
+				byte[] data = readLine("A27CAYC_S1_master(1).asc");
 				int a=pos.updatePosFirmware(data, blueTootchAddress);
 				if(a==-1){
 					Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
