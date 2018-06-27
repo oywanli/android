@@ -502,7 +502,6 @@ public class MainActivity extends Activity {
 		Handler handler = new Handler(Looper.myLooper());
 		pos.initListener(handler, listener);
 		sdkVersion = pos.getSdkVersion();
-		Toast.makeText(MainActivity.this, "sdkVersion--"+sdkVersion, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -619,7 +618,7 @@ public class MainActivity extends Activity {
 			/*pos.setCardTradeMode(CardTradeMode.UNALLOWED_LOW_TRADE);
 			statusEditText.setText("降级设置");*/
 		}else if(item.getItemId() == R.id.menu_update){// update the device
-			byte[] data = readLine("A27CAYC_S1_master(1).asc");
+			byte[] data = readLine("A27CAYC_S1_master.asc");
 			int a=pos.updatePosFirmware(data, blueTootchAddress);
 			if(a==-1){
 				Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
@@ -761,7 +760,6 @@ public class MainActivity extends Activity {
 		} else if (item.getItemId() == R.id.menu_get_pos_id) {
 			statusEditText.setText(R.string.getting_pos_id);
 			pos.getQposId();
-//			pos.getBuzzerStatus();
 		} else if(item.getItemId()==R.id.setMasterkey){
 			pos.setMasterKey("AD3AD57E56E9C1BE3CB7385ECC64F6F0", "EBF4AD3348AA7F5E",0);
 		}else if (item.getItemId() == R.id.one) {
@@ -831,7 +829,8 @@ public class MainActivity extends Activity {
 				pos.stopScanQPos2Mode();
 			}else{
 				//停止扫描ble的蓝牙
-				pos.stopScanQposBLE();
+				close();
+//				pos.stopScanQposBLE();
 			}
 //			close();
 //			pos.onDestroy();
@@ -1658,7 +1657,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onRequestQposConnected() {
 			TRACE.w("onRequestQposConnected");
-			Toast.makeText(MainActivity.this, "onRequestQposConnected", Toast.LENGTH_LONG).show();
+//			Toast.makeText(MainActivity.this, "onRequestQposConnected", Toast.LENGTH_LONG).show();
 			dismissDialog();
 			long use_time = new Date().getTime() - start_time;
 			// statusEditText.setText(getString(R.string.device_plugged));
@@ -1668,13 +1667,16 @@ public class MainActivity extends Activity {
 			btnQuickEMV.setEnabled(true);
 			btnQuickEMVtrade.setEnabled(true);
 			selectQuickEMVButtonFlag=false;
-			/*try {
-				Thread.sleep(1000);
-				pos.getQposInfo(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+			if(secondConnect){
+				byte[] data = readLine("A27CAYC_S1_master.asc");
+				int a=pos.updatePosFirmware(data, blueTootchAddress);
+				if(a==-1){
+					Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+					return;
+				}
+				UpdateThread updateThread = new UpdateThread();
+				updateThread.start();
+			}
 		}
 
 		@Override
@@ -1684,6 +1686,7 @@ public class MainActivity extends Activity {
 			statusEditText.setText(getString(R.string.device_unplugged));
 			btnDisconnect.setEnabled(false);
 			doTradeButton.setEnabled(false);
+			secondConnect=false;
 		}
 
 		@Override
@@ -1806,7 +1809,7 @@ public class MainActivity extends Activity {
 				statusEditText.setText("update work key packet vefiry error");
 			} else if (result == UpdateInformationResult.UPDATE_PACKET_LEN_ERROR) {
 				statusEditText.setText("update work key packet len error");
-			}
+			} 
 		}
 
 		@Override
@@ -1924,6 +1927,35 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onUpdatePosFirmwareResult(UpdateInformationResult arg0) {
+			if (arg0 == UpdateInformationResult.UPDATE_SUCCESS) {
+				statusEditText.setText("update work key success");
+			} else if (arg0 == UpdateInformationResult.UPDATE_FAIL) {
+				statusEditText.setText("update work key fail");
+			} else if (arg0 == UpdateInformationResult.UPDATE_PACKET_VEFIRY_ERROR) {
+				statusEditText.setText("update work key packet vefiry error");
+			} else if (arg0 == UpdateInformationResult.UPDATE_PACKET_LEN_ERROR) {
+				statusEditText.setText("update work key packet len error");
+			}else if(arg0 == UpdateInformationResult.USB_RECONNECTING){
+				ArrayList<String> deviceList = null;
+				USBClass usb = new USBClass();
+				usb.setPer(false);
+				while(!usb.isGrantPermission()){
+					deviceList= usb.GetUSBDevices(getBaseContext());
+					if (deviceList == null) {
+						TRACE.i("no permission");
+//				    	Toast.makeText(MainActivity.this, "没有权限", Toast.LENGTH_SHORT).show();
+					}else{
+						usbDevice = USBClass.getMdevices().get(devicename);
+						TRACE.d("==========device=="+usbDevice);
+						isOTG = true;
+			            open(CommunicationMode.USB_OTG_CDC_ACM);
+						posType = POS_TYPE.OTG;
+						pos.openUsb(usbDevice);
+						secondConnect=true;
+						break;
+					}
+				}
+			}
 		}
 
 		@Override
@@ -2560,7 +2592,8 @@ public class MainActivity extends Activity {
 /*	private static final int REQUEST_CONNECT_DEVICE = 1;
 	private static final int REQUEST_CONNECTED_DEVICE = 2;*/
 	private static final int REQUEST_SELECT_USB_DEVICE = 3;
-	
+	private String devicename;
+	private boolean secondConnect;
 
 	class MyOnClickListener implements OnClickListener {
 
@@ -2590,7 +2623,7 @@ public class MainActivity extends Activity {
 				statusEditText.setText(R.string.starting);
 				
 				terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());	
-//				pos.setCardTradeMode(CardTradeMode.ONLY_TAP_CARD);
+//				pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
 				
 				if (posType == POS_TYPE.UART) {//通用异步收发报机
 					pos.doTrade(terminalTime, 0, 30);
@@ -2600,7 +2633,7 @@ public class MainActivity extends Activity {
 //					pos.setPanStatus(PanStatus.PLAINTEXT);
 //					pos.setDoTradeMode(DoTradeMode.COMMON);
 //					pos.setFormatId("0000");
-//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+//					pos.setCardTradeMode(CardTradeMode.SWIPE_TAP_INSERT_CARD);
 					pos.doTrade(30);//start do trade
 //					pos.doCheckCard(20);
 //					pos.setIsSaveLog(true);
@@ -2621,7 +2654,7 @@ public class MainActivity extends Activity {
 			        public void onClick(DialogInterface dialog, int item) {
 			            String selectedDevice = (String) items[item];
 			            dialog.dismiss();
-
+			            devicename=selectedDevice;
 			            usbDevice = USBClass.getMdevices().get(selectedDevice);
 			            isOTG = true;
 			            open(CommunicationMode.USB_OTG_CDC_ACM);
@@ -2739,7 +2772,7 @@ public class MainActivity extends Activity {
 				pos.setKeyValue(data);
 				pos.doMifareCard("0F", 20);
 			}else if(v == updateFwBtn){//update firmware
-				byte[] data = readLine("A27CAYC_S1_master(1).asc");
+				byte[] data = readLine("A27CAYC_S1_master.asc");
 				int a=pos.updatePosFirmware(data, blueTootchAddress);
 				if(a==-1){
 					Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();

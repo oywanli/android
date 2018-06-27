@@ -40,6 +40,7 @@ public class USBClass {
 							// call method to set up device communication
 							TRACE.i("usb"+ "permission granted for device "
 									+ device);
+							isPer=true;
 						}
 					} else {
 						TRACE.i("usb"+ "permission denied for device " + device);
@@ -48,6 +49,15 @@ public class USBClass {
 			}
 		}
 	};
+	
+	private boolean isPer;
+	public boolean isGrantPermission(){
+		 return this.isPer;
+	}
+	
+	public void setPer(boolean per){
+		this.isPer=per;
+	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 	@SuppressLint("NewApi")
