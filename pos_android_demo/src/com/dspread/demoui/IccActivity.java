@@ -1036,7 +1036,7 @@ public class IccActivity extends Activity {
 		statusEditText.setText("");
 	}
     
-    private boolean isNFC = false;
+    private boolean isNFC = true;
     private int nfcIndex = 0;
     //按钮的监听事件
     class MyOnClickListener implements OnClickListener {
