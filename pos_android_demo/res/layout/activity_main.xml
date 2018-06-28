@@ -71,11 +71,11 @@
             android:layout_weight="1"
             android:text="@string/scan_usb_device" />
     </LinearLayout>
-    <Button android:id="@+id/getPosInfo" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:text="set_shutdowm_time"
+    <Button android:id="@+id/updatePro" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="production firmware"
         />
      <Button android:id="@+id/updateFW" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:text="update"
+        android:layout_height="wrap_content" android:text="dev firmware"
         />
     <LinearLayout android:id="@+id/ll"
         android:layout_width="fill_parent"
@@ -85,7 +85,7 @@
         <Button
             android:id="@+id/btnQuickEMV"
             android:enabled="true"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

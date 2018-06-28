@@ -106,7 +106,7 @@ public class MainActivity extends Activity {
 	private Spinner mafireSpinner;
 	private Button pollBtn,pollULbtn,veriftBtn,veriftULBtn,readBtn,writeBtn,finishBtn,finishULBtn,getULBtn,readULBtn,fastReadUL,writeULBtn,transferBtn;
 
-	private Button btnUSB,btnGetId,btnGetInfo;
+	private Button btnUSB,btnGetId,btnUpdatPro;
 	private TransactionType transactionType;
 	private Button btnQuickEMV;
 	private Button btnQuickEMVtrade;
@@ -148,6 +148,7 @@ public class MainActivity extends Activity {
 	private Handler myHandler=new Handler();
 	private int index=0;
 	private String bufksn;
+	private boolean isProFir;
 	private Runnable r=new Runnable() {
 		
 		@Override
@@ -376,7 +377,7 @@ public class MainActivity extends Activity {
 		btnBT = (Button) findViewById(R.id.btnBT);//选择设备开始扫描按钮
 		btnUSB = (Button) findViewById(R.id.btnUSB);//扫描USB设备
 		btnDisconnect = (Button) findViewById(R.id.disconnect);//断开连接
-		btnGetInfo=(Button) findViewById(R.id.getPosInfo);
+		btnUpdatPro=(Button) findViewById(R.id.updatePro);
 		btnQuickEMV   = (Button) findViewById(R.id.btnQuickEMV);//隐藏按钮
 		btnQuickEMVtrade   = (Button) findViewById(R.id.btnQuickEMVtrade);
 		pollBtn=(Button) findViewById(R.id.search_card);
@@ -455,7 +456,7 @@ public class MainActivity extends Activity {
 		btnBT.setOnClickListener(myOnClickListener);
 		btnDisconnect.setOnClickListener(myOnClickListener);
 		btnUSB.setOnClickListener(myOnClickListener);
-		btnGetInfo.setOnClickListener(myOnClickListener);
+		btnUpdatPro.setOnClickListener(myOnClickListener);
 		updateFwBtn.setOnClickListener(myOnClickListener);
 		
 		btnQuickEMV.setOnClickListener(myOnClickListener);
@@ -618,7 +619,7 @@ public class MainActivity extends Activity {
 			/*pos.setCardTradeMode(CardTradeMode.UNALLOWED_LOW_TRADE);
 			statusEditText.setText("降级设置");*/
 		}else if(item.getItemId() == R.id.menu_update){// update the device
-			byte[] data = readLine("A27CAYC_S1_master.asc");
+			byte[] data = readLine("A27DN5001_S1_master.asc");
 			int a=pos.updatePosFirmware(data, blueTootchAddress);
 			if(a==-1){
 				Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
@@ -1668,14 +1669,25 @@ public class MainActivity extends Activity {
 			btnQuickEMVtrade.setEnabled(true);
 			selectQuickEMVButtonFlag=false;
 			if(secondConnect){
-				byte[] data = readLine("A27CAYC_S1_master.asc");
-				int a=pos.updatePosFirmware(data, blueTootchAddress);
-				if(a==-1){
-					Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
-					return;
+				if(isProFir){
+					byte[] data = readLine("A27DN5001_S1_master.asc");
+					int a=pos.updatePosFirmware(data, blueTootchAddress);
+					if(a==-1){
+						Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+						return;
+					}
+					UpdateThread updateThread = new UpdateThread();
+					updateThread.start();
+				}else{
+					byte[] data = readLine("A27CAYC_S1_master.asc");
+					int a=pos.updatePosFirmware(data, blueTootchAddress);
+					if(a==-1){
+						Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+						return;
+					}
+					UpdateThread updateThread = new UpdateThread();
+					updateThread.start();
 				}
-				UpdateThread updateThread = new UpdateThread();
-				updateThread.start();
 			}
 		}
 
@@ -2704,9 +2716,15 @@ public class MainActivity extends Activity {
 			else if (v == btnQuickEMVtrade) {
 				pos.doTrade();
 				isQuickEmv=true;
-			}else if(v == btnGetInfo){
-				if(pos!=null){
+			}else if(v == btnUpdatPro){
+				byte[] data = readLine("A27DN5001_S1_master.asc");
+				int a=pos.updatePosFirmware(data, blueTootchAddress);
+				if(a==-1){
+					Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+					return;
 				}
+				UpdateThread updateThread = new UpdateThread();
+				updateThread.start();
 			}else if(v == pollBtn){
 				statusEditText.setText("begin to poll card!");
 				sendMsg(3000);
