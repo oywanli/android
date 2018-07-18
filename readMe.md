@@ -7,7 +7,7 @@ You can download to install our [android-demo-app][android-app]
 
 
 [logo]: pos_android_demo/androidDemo.png
-[android-app]: pos_android_demo/pos_android_studio_app-debug.apk
+[android-app]: https://fir.im/AndroidDemo
 [ios-app]: https://fir.im/latestQposDemo
 
 ----
