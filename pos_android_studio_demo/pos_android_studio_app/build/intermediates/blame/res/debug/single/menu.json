@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\gitDemo\\new\\android\\pos_android_studio_demo\\pos_android_studio_app\\build\\intermediates\\res\\merged\\debug\\menu\\icc_activity_main.xml",
+        "source": "D:\\gitDemo\\new\\android\\pos_android_studio_demo\\pos_android_studio_app\\src\\main\\res\\menu\\icc_activity_main.xml"
+    },
+    {
+        "merged": "D:\\gitDemo\\new\\android\\pos_android_studio_demo\\pos_android_studio_app\\build\\intermediates\\res\\merged\\debug\\menu\\activity_main.xml",
+        "source": "D:\\gitDemo\\new\\android\\pos_android_studio_demo\\pos_android_studio_app\\src\\main\\res\\menu\\activity_main.xml"
+    }
+]

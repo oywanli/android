@@ -1,0 +1,4 @@
+#Tue Dec 17 17:46:47 CST 2019
+base.0=D\:\\gitDemo\\new\\android\\pos_android_studio_demo\\pos_android_studio_app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+path.0=classes.dex
+renamed.0=classes.dex
