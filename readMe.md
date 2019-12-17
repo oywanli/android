@@ -6,7 +6,7 @@ You can download to install our [android-demo-app][android-app]
 ![alt text1][logo]    
 
 
-[logo]: pos_android_demo/androidDemo.png
+[logo]: androidDemo.png
 [android-app]: https://fir.im/AndroidDemo
 [ios-app]: https://fir.im/iOSDemo
  
@@ -15,8 +15,9 @@ You can download to install our [android-demo-app][android-app]
 
 # QPOS Programming Guide
 
+- TOC
+{:toc}
 
-[TOC]
 
 # Change List
 
