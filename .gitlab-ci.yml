@@ -62,12 +62,9 @@ assembleRelease:
     -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
     -Pandroid.injected.signing.key.alias=$KEY_ALIAS
     -Pandroid.injected.signing.key.password=$KEY_PASSWORD
-    
-  - cd pos_android_studio_app/build/outputs/apk/release
-  - ls
   artifacts:
     paths:
-    - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release
+    - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk
 
 #debugTests:
 #  stage: test
