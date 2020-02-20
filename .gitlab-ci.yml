@@ -28,6 +28,11 @@ before_script:
   - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
   - set -o pipefail
 
+cache:
+  key: ${CI_PROJECT_ID}
+  paths:
+  - .gradle/
+
 lintDebug:
   stage: build
   script:
@@ -40,12 +45,25 @@ assembleDebug:
     - ls
     - cd pos_android_studio_demo/
     - ./gradlew assembleDebug
+    
+
+assembleRelease:
+  stage: release
+  script:
+  - cd pos_android_studio_demo/
+  - echo $KEYSTORE_FILE | base64 -d > my.keystore
+  - ./gradlew assembleRelease
+    -Pandroid.injected.signing.store.file=$(pwd)/my.keystore
+    -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
+    -Pandroid.injected.signing.key.alias=$KEY_ALIAS
+    -Pandroid.injected.signing.key.password=$KEY_PASSWORD
   artifacts:
     paths:
       - pos_android_studio_app/release/
+      - CHANGELOG 
 
-debugTests:
-  stage: test
-  script:
-    - cd pos_android_studio_demo/
-    - ./gradlew -Pci --console=plain :pos_android_studio_app:testDebug
+#debugTests:
+#  stage: test
+#  script:
+#    - cd pos_android_studio_demo/
+#    - ./gradlew -Pci --console=plain :pos_android_studio_app:testDebug
