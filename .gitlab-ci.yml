@@ -31,13 +31,14 @@ before_script:
 lintDebug:
   stage: build
   script:
-    - ./pos_android_studio_demo/gradlew -Pci --console=plain :pos_android_studio_demo:lintDebug -PbuildDir=lint
+    - cd pos_android_studio_demo/
+    - ./gradlew -Pci --console=plain :pos_android_studio_app:lintDebug -PbuildDir=lint
 
 assembleDebug:
   stage: build
   script:
-    - cd pos_android_studio_demo/
     - ls
+    - cd pos_android_studio_demo/
     - ./gradlew assembleDebug
   artifacts:
     paths:
