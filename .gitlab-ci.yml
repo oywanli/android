@@ -35,13 +35,16 @@ lintDebug:
 
 assembleDebug:
   stage: build
+  - cd pos_android_studio_demo/
+  - ls
   script:
-    - ./pos_android_studio_demo/gradlew assembleDebug
+    - ./gradlew assembleDebug
   artifacts:
     paths:
-      - pos_android_studio_demo/pos_android_studio_app/build/outputs/
+      - pos_android_studio_app/build/outputs/
 
 debugTests:
   stage: test
+  - ls
   script:
     - ./pos_android_studio_demo/gradlew -Pci --console=plain :app:testDebug
