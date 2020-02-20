@@ -63,7 +63,7 @@ assembleRelease:
     -Pandroid.injected.signing.key.alias=$KEY_ALIAS
     -Pandroid.injected.signing.key.password=$KEY_PASSWORD
     
-  - cd pos_android_studio_app/build/outputs/apk/
+  - cd pos_android_studio_app/build/outputs/apk/release
   - ls
   artifacts:
     paths:
