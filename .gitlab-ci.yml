@@ -64,8 +64,7 @@ assembleRelease:
     -Pandroid.injected.signing.key.password=$KEY_PASSWORD
   artifacts:
     paths:
-      - pos_android_studio_app/release/
-      - CHANGELOG 
+    - pos_android_studio_app/release/
 
 #debugTests:
 #  stage: test
