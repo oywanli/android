@@ -47,5 +47,5 @@ assembleDebug:
 debugTests:
   stage: test
   script:
-    - ls
+    - cd pos_android_studio_demo/
     - ./gradlew -Pci --console=plain :app:testDebug
