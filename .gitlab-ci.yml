@@ -62,6 +62,7 @@ stages:
 assembleRelease:
   stage: release
   script:
+  - ls
   - cd pos_android_studio_demo/
   - echo $KEYSTORE_FILE | base64 -d > my.keystore
   - ./gradlew assembleRelease
