@@ -67,7 +67,7 @@ assembleRelease:
   - ls
   artifacts:
     paths:
-    - pos_android_studio_app/build/outputs/apk/release
+    -pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release
 
 #debugTests:
 #  stage: test
