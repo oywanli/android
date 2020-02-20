@@ -36,7 +36,7 @@ lintDebug:
 assembleDebug:
   stage: build
   script:
-    - cd pos_android_studio_app/
+    - cd pos_android_studio_demo/
     - ls
     - ./gradlew assembleDebug
   artifacts:
