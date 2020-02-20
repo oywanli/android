@@ -26,6 +26,7 @@ android {
         jni.srcDirs = []
     }
     lintOptions {
+        abortOnError false
         disable 'MissingTranslation'
         disable 'ExtraTranslation'
     }
