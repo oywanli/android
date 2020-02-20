@@ -33,6 +33,11 @@ cache:
   paths:
   - .gradle/
 
+stages:
+- build
+- test
+- release
+
 lintDebug:
   stage: build
   script:
