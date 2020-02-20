@@ -48,4 +48,4 @@ debugTests:
   stage: test
   script:
     - cd pos_android_studio_demo/
-    - ./gradlew -Pci --console=plain :app:testDebug
+    - ./gradlew -Pci --console=plain :pos_android_studio_app:testDebug
