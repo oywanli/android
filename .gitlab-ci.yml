@@ -32,7 +32,7 @@ lintDebug:
   stage: build
   script:
     - cd pos_android_studio_demo/
-    - ./gradlew -Pci --console=plain :pos_android_studio_app:lintDebug -PbuildDir=lint --info
+    - ./gradlew -Pci --console=plain :pos_android_studio_app:lintDebug -PbuildDir=lint --stacktrace
 
 assembleDebug:
   stage: build
