@@ -41,7 +41,7 @@ assembleDebug:
     - ./gradlew assembleDebug
   artifacts:
     paths:
-      - pos_android_studio_app/build/outputs/
+      - pos_android_studio_app/release/
 
 debugTests:
   stage: test
