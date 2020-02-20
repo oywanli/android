@@ -31,6 +31,7 @@
 image: jangrewe/gitlab-ci-android
 
 before_script:
+- cd pos_android_studio_demo/
 - export GRADLE_USER_HOME=$(pwd)/.gradle
 - chmod +x ./gradlew
 
