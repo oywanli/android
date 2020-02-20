@@ -38,18 +38,18 @@ stages:
 - test
 - release
 
-lintDebug:
-  stage: build
-  script:
-    - cd pos_android_studio_demo/
-    - ./gradlew -Pci --console=plain :pos_android_studio_app:lintDebug -PbuildDir=lint --stacktrace
+#lintDebug:
+#  stage: build
+#  script:
+#    - cd pos_android_studio_demo/
+#    - ./gradlew -Pci --console=plain :pos_android_studio_app:lintDebug -PbuildDir=lint --stacktrace
 
-assembleDebug:
-  stage: build
-  script:
-    - ls
-    - cd pos_android_studio_demo/
-    - ./gradlew assembleDebug
+#assembleDebug:
+#  stage: build
+#  script:
+#    - ls
+#    - cd pos_android_studio_demo/
+#    - ./gradlew assembleDebug
     
 
 assembleRelease:
