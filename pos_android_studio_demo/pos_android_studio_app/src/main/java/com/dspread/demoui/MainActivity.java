@@ -602,10 +602,14 @@ public class MainActivity extends Activity {
             pos.getShutDownTime();
         }  else if (item.getItemId() == R.id.updateEMVAPP) {
             statusEditText.setText("updating emvapp...");
-            sendMsg(1701);
+            String appTLV = "9F0610000000000000000000000000000000005F2A0201565F3601009F01060000000000009F090200969F150200009F161e3030303030303030303030303030303030303030303030303030303030309F1A0201569F1B04000000009F1C0800000000000000009F1E0800000000000000009F33032009C89F3501229F3901009F3C0201569F3D01009F4005F000F0A0019F4E0f0000000000000000000000000000009F6604300040809F7B06000000001388DF010101DF11050000000000DF12050000000000DF13050000000000DF1400DF150400000000DF160100DF170100DF1906000000001388DF2006999999999999DF2106000000020000DF7208F4F0F0FAAFFE8000DF730101DF74010FDF750101DF7600DF7806000000020000DF7903E0F8C8DF7A05F000F0A001DF7B00";
+            pos.updateEmvAPPByTlv(EMVDataOperation.Add, appTLV);
+
         } else if (item.getItemId() == R.id.updateEMVCAPK) {
             statusEditText.setText("updating emvcapk...");
-            sendMsg(1702);
+            String capkTLV = "9F0605A0000003339F22010BDF0281f8CF9FDF46B356378E9AF311B0F981B21A1F22F250FB11F55C958709E3C7241918293483289EAE688A094C02C344E2999F315A72841F489E24B1BA0056CFAB3B479D0E826452375DCDBB67E97EC2AA66F4601D774FEAEF775ACCC621BFEB65FB0053FC5F392AA5E1D4C41A4DE9FFDFDF1327C4BB874F1F63A599EE3902FE95E729FD78D4234DC7E6CF1ABABAA3F6DB29B7F05D1D901D2E76A606A8CBFFFFECBD918FA2D278BDB43B0434F5D45134BE1C2781D157D501FF43E5F1C470967CD57CE53B64D82974C8275937C5D8502A1252A8A5D6088A259B694F98648D9AF2CB0EFD9D943C69F896D49FA39702162ACB5AF29B90BADE005BC157DF0314BD331F9996A490B33C13441066A09AD3FEB5F66CDF0403000003DF050420311222DF060101DF070101";
+            pos.updateEmvCAPKByTlv(EMVDataOperation.Add, capkTLV);
+
         } else if (item.getItemId() == R.id.setBuzzer) {
             pos.doSetBuzzerOperation(3);//显示设置蜂鸣器响3次
         } else if (item.getItemId() == R.id.menu_get_deivce_info) {
@@ -2802,15 +2806,8 @@ public class MainActivity extends Activity {
         mHandler.sendMessage(msg);
     }
 
-    private void sendMsgDelay(int what) {
-        Message msg = new Message();
-        msg.what = what;
-        mHandler.sendMessageDelayed(msg, 500);
-    }
-
     private boolean selectBTFlag = false;
     private long start_time = 0L;
-    private List<TagCapk> capkList;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -2858,56 +2855,6 @@ public class MainActivity extends Activity {
                     statusEditText.setText(content);
                     break;
 
-                case 1701:
-                    updateEMVCfgByXML();
-                    if (appList == null) {
-                        Toast.makeText(MainActivity.this, "File read failed", Toast.LENGTH_SHORT).show();
-                        ConfigUtil.putReadXmlStatus(MainActivity.this, false);
-
-                        return;
-                    }
-                    if (appList.size() < 1) {
-                        Toast.makeText(MainActivity.this, R.string.updateEMVAppStatus, Toast.LENGTH_SHORT).show();
-                        statusEditText.setText(R.string.updateEMVAppStatus);
-                        return;
-                    }
-                    TagApp tagApp = appList.get(0);
-                    ArrayList<String> emvApp = new ArrayList<>();
-                    int appLen = BaseTag.TAG_APP.length > tagApp.getDatasLength() ? tagApp.getDatasLength() : BaseTag.TAG_APP.length;
-                    for (int i = 0; i < appLen; i++) {
-                        String data = tagApp.getData(i);
-                        if (TextUtils.isEmpty(data))
-                            continue;
-                        if (data.contains(EmvAppTag.Currency_conversion_factor))
-                            continue;
-                        emvApp.add(data);
-                    }
-                    pos.updateEmvAPP(EMVDataOperation.Add, emvApp);
-                    break;
-                case 1702:
-                    updateEMVCfgByXML();
-                    if (capkList == null) {
-                        Toast.makeText(MainActivity.this, "File read failed", Toast.LENGTH_SHORT).show();
-                        ConfigUtil.putReadXmlStatus(MainActivity.this, false);
-
-                        return;
-                    }
-
-                    if (capkList.size() < 1) {
-                        Toast.makeText(MainActivity.this, R.string.updateEMVCapkStatus, Toast.LENGTH_SHORT).show();
-                        statusEditText.setText(R.string.updateEMVCapkStatus);
-                        return;
-                    }
-                    TagCapk tagCapk = capkList.get(0);
-                    ArrayList<String> emvCapk = new ArrayList<>();
-                    int caLen = BaseTag.TAG_APP.length > tagCapk.getDatasLength() ? tagCapk.getDatasLength() : BaseTag.TAG_APP.length;
-
-                    for (int i = 0; i < caLen; i++) {
-                        emvCapk.add(tagCapk.getData(i));
-                    }
-                    pos.updateEmvCAPK(EMVDataOperation.Add, emvCapk);
-                    break;
-
                 case 1703:
 //                    statusEditText.setText(clearPubKeyModel);
 
@@ -2941,33 +2888,6 @@ public class MainActivity extends Activity {
 
 
 
-    private void updateEMVCfgByXML() {
-        InputStream open = null;
-        try {
-            if (!ConfigUtil.hasReadXml(MainActivity.this)) {
-                AssetManager assets = getAssets();
-                open = assets.open("test.xml");
-                SAXParserFactory factory = SAXParserFactory.newInstance();
-                SAXParser parser = factory.newSAXParser();
-                SAXParserHandler handler = new SAXParserHandler();
-                parser.parse(open, handler);
-                capkList = handler.getCapkList();
-                appList = handler.getAppList();
-                ConfigUtil.putReadXmlStatus(MainActivity.this, true);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(MainActivity.this, R.string.failedRead, Toast.LENGTH_SHORT).show();
-        } finally {
-            try {
-                if (open != null)
-                    open.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
     public void updateEmvConfig() {
