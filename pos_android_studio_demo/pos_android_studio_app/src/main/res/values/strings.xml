@@ -40,7 +40,7 @@
     <string name="card_is_exist">card is exist</string>
     <string name="card_is_not_exist">card is not exist</string>
     <string name="scan_bt_device">scan device</string>
-    <string name="scan_usb_device">scan usb device</string>
+    <string name="scan_usb_device">usb device</string>
     <string name="text_quick_emv">update quick emv config</string>
     <string name="getId">getPosId</string>
     <string name="text_quick_emv_trade">do quick emv transaction</string>
