@@ -440,7 +440,7 @@ public class MainActivity extends Activity {
             return;
         }
         if (mode == CommunicationMode.USB_OTG_CDC_ACM) {
-            pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.FTDI);
+            pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
         pos.setConext(MainActivity.this);
         //通过handler处理，监听MyPosListener，实现QposService的接口，（回调接口）
