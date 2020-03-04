@@ -1,14 +1,11 @@
 package com.dspread.demoui;
 
-import android.*;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,10 +15,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-
-import com.dspread.demoui.R;
-
-import java.io.File;
 
 public class WelcomeActivity extends Activity implements OnClickListener{
 
@@ -82,7 +75,7 @@ public class WelcomeActivity extends Activity implements OnClickListener{
 
 	public void bluetoothRelaPer() {
 		BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-		if (!adapter.isEnabled()) {//表示蓝牙不可用
+		if (adapter != null && !adapter.isEnabled()) {//表示蓝牙不可用 add one fix
 			Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivity(enabler);
 		}
