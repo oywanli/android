@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-
+    <string name="msg_select_device">Click here to scan and connect device</string>
+    <string name="msg_do_trade">Click here to start do trade after finish connected</string>
+    <string name="msg_disconnect">Click here to disConnected device</string>
+    <string name="msg_conn_usb">Click here to find and connect usb</string>
+    <string name="device_info">Device Info</string>
+    <string name="device_update">Device Update</string>
+    <string name="device_operate">Device Operate</string>
+    <string name="device_other">Other</string>
+    <string name="title_audio">Audio</string>
+    <string name="title_uart">Uart</string>
+    <string name="title_blu">Bluetooth</string>
+    <string name="title_ble">Ble Bluetooth</string>
+    <string name="title_welcome">Dspread Pos</string>
+    <string name="msg_allowed_location_permission">Location permission is on</string>
+    <string name="msg_not_allowed_loaction_permission">Location permission is forbidden, related map functions are not available</string>
     <string name="refreshing">Refreshing</string>
     <string name="audio_open">audio control:open</string>
     <string name="audio_close">audio control:close</string>

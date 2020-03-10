@@ -1,75 +1,29 @@
 package com.dspread.demoui;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-
-import com.dspread.demoui.injectKey.DukptKeys;
-import com.dspread.demoui.injectKey.Envelope;
-import com.dspread.demoui.injectKey.Poskeys;
-import com.dspread.demoui.injectKey.TMKKey;
-import com.dspread.demoui.utils.ConfigUtil;
-import com.dspread.demoui.utils.DUKPK2009_CBC;
-import com.dspread.demoui.utils.FileUtils;
-import com.dspread.demoui.utils.TLV;
-import com.dspread.demoui.utils.TLVParser;
-import com.dspread.demoui.xmlparse.BaseTag;
-import com.dspread.demoui.xmlparse.SAXParserHandler;
-import com.dspread.demoui.xmlparse.TagApp;
-import com.dspread.demoui.xmlparse.TagCapk;
-
-import com.dspread.xpos.EmvAppTag;
-import com.dspread.xpos.LogFileConfig;
-import com.dspread.xpos.QPOSService;
-import com.dspread.xpos.QPOSService.CommunicationMode;
-import com.dspread.xpos.QPOSService.DoTradeResult;
-import com.dspread.xpos.QPOSService.DoTransactionType;
-import com.dspread.xpos.QPOSService.Display;
-import com.dspread.xpos.QPOSService.EMVDataOperation;
-import com.dspread.xpos.QPOSService.EmvOption;
-import com.dspread.xpos.QPOSService.Error;
-import com.dspread.xpos.QPOSService.LcdModeAlign;
-import com.dspread.xpos.QPOSService.TransactionResult;
-import com.dspread.xpos.QPOSService.TransactionType;
-
-import com.dspread.xpos.QPOSService.UpdateInformationResult;
-import com.dspread.xpos.SyncUtil;
-
-
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
+import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
-
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-
-
 import android.support.v4.app.ActivityCompat;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,10 +31,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -95,69 +49,108 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.res.AssetManager;
-import android.graphics.drawable.AnimationDrawable;
-import android.hardware.usb.UsbDevice;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import com.dspread.demoui.injectKey.DukptKeys;
+import com.dspread.demoui.injectKey.Envelope;
+import com.dspread.demoui.injectKey.Poskeys;
+import com.dspread.demoui.injectKey.TMKKey;
+import com.dspread.demoui.utils.DUKPK2009_CBC;
+import com.dspread.demoui.utils.FileUtils;
+import com.dspread.demoui.utils.ShowGuideView;
+import com.dspread.xpos.LogFileConfig;
+import com.dspread.xpos.QPOSService;
+import com.dspread.xpos.QPOSService.CommunicationMode;
+import com.dspread.xpos.QPOSService.Display;
+import com.dspread.xpos.QPOSService.DoTradeResult;
+import com.dspread.xpos.QPOSService.DoTransactionType;
+import com.dspread.xpos.QPOSService.EMVDataOperation;
+import com.dspread.xpos.QPOSService.EmvOption;
+import com.dspread.xpos.QPOSService.Error;
+import com.dspread.xpos.QPOSService.LcdModeAlign;
+import com.dspread.xpos.QPOSService.TransactionResult;
+import com.dspread.xpos.QPOSService.TransactionType;
+import com.dspread.xpos.QPOSService.UpdateInformationResult;
 
-import Decoder.BASE64Decoder;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import Decoder.BASE64Encoder;
 
 
-public class MainActivity extends Activity {
-
-    private Button doTradeButton;
-    private Button operateCardBtn;
-    private Spinner cmdSp;
-
-    private EditText statusEditText, blockAdd, status;
-    private ListView appListView;
-    private LinearLayout mafireLi, mafireUL;
-    private Dialog dialog;
-    private String nfcLog = "";
-    private Spinner mafireSpinner;
-    private Button pollBtn, pollULbtn, veriftBtn, veriftULBtn, readBtn, writeBtn, finishBtn, finishULBtn, getULBtn, readULBtn, fastReadUL, writeULBtn, transferBtn;
-    private Button btnUSB;
-    private Button btnQuickEMV;
-
-    private Button btnBT;
-    private Button btnDisconnect;
-
-    private EditText mKeyIndex;
-
-    private Button updateFwBtn;
-
+public class MainActivity extends BaseActivity implements ShowGuideView.onGuideViewListener {
     private QPOSService pos;
     private UpdateThread updateThread;
-
-
-    private String pubModel;
-    private String amount = "";
-    private String cashbackAmount = "";
-    private boolean isPinCanceled = false;
-    private String blueTootchAddress = "";
-    private int type;
     private UsbDevice usbDevice;
+    private Spinner cmdSp;
     private InnerListview m_ListView;
+    private EditText statusEditText, blockAdd, status;
     private MyListViewAdapter m_Adapter = null;
     private ImageView imvAnimScan;
     private AnimationDrawable animScan;
+    private ListView appListView;
     private List<BluetoothDevice> lstDevScanned;
+    //private List<TagApp> appList;
+    private LinearLayout mafireLi, mafireUL;
+    private Dialog dialog;
+
+    private Spinner mafireSpinner;
+    private Button doTradeButton;
+    private Button operateCardBtn;
+    private Button pollBtn, pollULbtn, veriftBtn, veriftULBtn, readBtn, writeBtn, finishBtn, finishULBtn, getULBtn, readULBtn, fastReadUL, writeULBtn, transferBtn;
+    private Button btnUSB;
+    private Button btnQuickEMV;
+    private Button btnBT;
+    private Button btnDisconnect;
+    private Button updateFwBtn;
+    private EditText mKeyIndex;
+
+    private String nfcLog = "";
+    private String pubModel;
+    private String amount = "";
+    private String cashbackAmount = "";
+    private String blueTootchAddress = "";
+    private String blueTitle;
+    private String title;
+    private boolean isPinCanceled = false;
     private boolean isNormalBlu = false;//判断是否为普通蓝牙的标志
-    private List<TagApp> appList;
+    private int type;
+    private ShowGuideView showGuideView;
+
+    private POS_TYPE posType = POS_TYPE.BLUETOOTH;
+
+    @Override
+    public void onGuideListener(Button button) {
+        switch (button.getId()){
+            case R.id.doTradeButton:
+                showGuideView.show(btnDisconnect,MainActivity.this,getString(R.string.msg_disconnect));
+                break;
+            case R.id.disconnect:
+                showGuideView.show(btnUSB,MainActivity.this,getString(R.string.msg_conn_usb));
+                break;
+            case R.id.btnBT:
+                showGuideView.show(doTradeButton,MainActivity.this,getString(R.string.msg_do_trade));
+                break;
+        }
+    }
+
+    private enum POS_TYPE {
+        BLUETOOTH, AUDIO, UART, USB, OTG, BLUETOOTH_BLE
+    }
 
     private void onBTPosSelected(Activity activity, View itemView, int index) {
         if (isNormalBlu) {
@@ -166,9 +159,11 @@ public class MainActivity extends Activity {
             pos.stopScanQposBLE();
         }
         start_time = new Date().getTime();
-            Map<String, ?> dev = (Map<String, ?>) m_Adapter.getItem(index);
-            blueTootchAddress = (String) dev.get("ADDRESS");
-            sendMsg(1001);
+        Map<String, ?> dev = (Map<String, ?>) m_Adapter.getItem(index);
+        blueTootchAddress = (String) dev.get("ADDRESS");
+        blueTitle = (String) dev.get("TITLE");
+        blueTitle = blueTitle.split("\\(")[0];
+        sendMsg(1001);
     }
 
     protected List<Map<String, ?>> generateAdapterData() {
@@ -180,8 +175,6 @@ public class MainActivity extends Activity {
         }
         TRACE.d("lstDevScanned----" + lstDevScanned);
         List<Map<String, ?>> data = new ArrayList<Map<String, ?>>();
-
-
         for (BluetoothDevice dev : lstDevScanned) {
             TRACE.i("++++++++++");
             Map<String, Object> itm = new HashMap<String, Object>();
@@ -191,10 +184,8 @@ public class MainActivity extends Activity {
                             .valueOf(R.drawable.bluetooth_blue_unbond));
             itm.put("TITLE", dev.getName() + "(" + dev.getAddress() + ")");
             itm.put("ADDRESS", dev.getAddress());
-
             data.add(itm);
         }
-        //
         return data;
     }
 
@@ -203,12 +194,9 @@ public class MainActivity extends Activity {
             m_Adapter.clearData();
             m_Adapter = null;
         }
-        //
         List<Map<String, ?>> data = generateAdapterData();
         m_Adapter = new MyListViewAdapter(this, data);
-        //
         m_ListView.setAdapter(m_Adapter);
-
         setListViewHeightBasedOnChildren(m_ListView);
     }
 
@@ -252,17 +240,13 @@ public class MainActivity extends Activity {
                     .findViewById(R.id.item_iv_icon);
             TextView m_TitleName = (TextView) convertView
                     .findViewById(R.id.item_tv_lable);
-            //
             Map<String, ?> itemdata = (Map<String, ?>) m_DataMap.get(position);
             int idIcon = (Integer) itemdata.get("ICON");
             String sTitleName = (String) itemdata.get("TITLE");
-            //
             m_Icon.setBackgroundResource(idIcon);
             m_TitleName.setText(sTitleName);
-            //
             return convertView;
         }
-
     }
 
     //设置listview的高度
@@ -271,14 +255,12 @@ public class MainActivity extends Activity {
         if (listAdapter == null) {
             return;
         }
-
         int totalHeight = 0;
         for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
         }
-
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight
                 + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
@@ -291,12 +273,20 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         //当窗口为用户可见，保持设备常开，并保持亮度不变
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        setContentView(R.layout.activity_main);
-
+        //setContentView(R.layout.activity_main);
         initView();
         initIntent();
         initListener();
+    }
+
+    @Override
+    public void onToolbarLinstener() {
+        finish();
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
     }
 
     private void initIntent() {
@@ -304,22 +294,21 @@ public class MainActivity extends Activity {
         type = intent.getIntExtra("connect_type", 0);
         switch (type) {
             case 3://普通蓝牙
-
                 btnBT.setVisibility(View.VISIBLE);
                 this.isNormalBlu = true;
+                title = getString(R.string.title_blu);
                 break;
             case 4://其他蓝牙
-
                 btnBT.setVisibility(View.VISIBLE);
                 isNormalBlu = false;
+                title = getString(R.string.title_ble);
                 break;
         }
+        setTitle(title);
     }
 
-
-
-
     private void initView() {
+        showGuideView = new ShowGuideView();
         imvAnimScan = (ImageView) findViewById(R.id.img_anim_scanbt);
         animScan = (AnimationDrawable) getResources().getDrawable(
                 R.drawable.progressanmi);
@@ -330,7 +319,6 @@ public class MainActivity extends Activity {
         operateCardBtn = (Button) findViewById(R.id.operate_card);
         updateFwBtn = (Button) findViewById(R.id.updateFW);
         cmdSp = (Spinner) findViewById(R.id.cmd_spinner);
-
         String[] cmdList = new String[]{"add", "reduce", "restore"};
         ArrayAdapter<String> cmdAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, cmdList);
         cmdSp.setAdapter(cmdAdapter);
@@ -340,8 +328,6 @@ public class MainActivity extends Activity {
         ArrayAdapter<String> spinneradapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, keyClass);
         mafireSpinner.setAdapter(spinneradapter);
         doTradeButton = (Button) findViewById(R.id.doTradeButton);//开始交易
-
-
         statusEditText = (EditText) findViewById(R.id.statusEditText);
         btnBT = (Button) findViewById(R.id.btnBT);//选择设备开始扫描按钮
         btnUSB = (Button) findViewById(R.id.btnUSB);//扫描USB设备
@@ -364,15 +350,16 @@ public class MainActivity extends Activity {
         parentScrollView.smoothScrollTo(0, 0);
         m_ListView = (InnerListview) findViewById(R.id.lv_indicator_BTPOS);
         mKeyIndex = ((EditText) findViewById(R.id.keyindex));
-
-
-
+        btnBT.post(new Runnable() {
+            @Override
+            public void run() {
+                showGuideView.show(btnBT,MainActivity.this,getString(R.string.msg_select_device));
+            }
+        });
+        showGuideView.setListener(this);
     }
 
-
     private void initListener() {
-
-
         m_ListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -390,12 +377,8 @@ public class MainActivity extends Activity {
         btnBT.setOnClickListener(myOnClickListener);
         btnDisconnect.setOnClickListener(myOnClickListener);
         btnUSB.setOnClickListener(myOnClickListener);
-
         updateFwBtn.setOnClickListener(myOnClickListener);
-
         btnQuickEMV.setOnClickListener(myOnClickListener);
-
-
         pollBtn.setOnClickListener(myOnClickListener);
         pollULbtn.setOnClickListener(myOnClickListener);
         finishBtn.setOnClickListener(myOnClickListener);
@@ -410,19 +393,7 @@ public class MainActivity extends Activity {
         fastReadUL.setOnClickListener(myOnClickListener);
         writeULBtn.setOnClickListener(myOnClickListener);
         transferBtn.setOnClickListener(myOnClickListener);
-
     }
-
-
-
-
-
-    private POS_TYPE posType = POS_TYPE.BLUETOOTH;
-
-    private enum POS_TYPE {
-        BLUETOOTH, AUDIO, UART, USB, OTG, BLUETOOTH_BLE
-    }
-
 
     /**
      * 打开设备，获取类对象，开始监听
@@ -488,9 +459,7 @@ public class MainActivity extends Activity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-
     MenuItem audioitem = null;
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -508,11 +477,8 @@ public class MainActivity extends Activity {
         return true;
     }
 
-
     class UpdateThread extends Thread {
-
         private boolean concelFlag = false;
-
         public void run() {
 
             while (!concelFlag) {
@@ -678,7 +644,6 @@ public class MainActivity extends Activity {
         }
         return true;
     }
-
     private boolean resetIpekFlag;
     private boolean resetMasterKeyFlag;
 
@@ -700,12 +665,6 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        TRACE.d("onResume");
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         TRACE.d("onDestroy");
@@ -719,7 +678,6 @@ public class MainActivity extends Activity {
     }
 
     private int yourChoice = 0;
-
     private void showSingleChoiceDialog() {
         final String[] items = {"Mifare classic 1", "Mifare UL"};
 //	    yourChoice = -1;
@@ -757,7 +715,6 @@ public class MainActivity extends Activity {
             dialog = null;
         }
     }
-
 
     /**
      * @author qianmengChen
@@ -1219,8 +1176,6 @@ public class MainActivity extends Activity {
         public void onRequestSetAmount() {
             TRACE.d("输入金额 -- S");
             TRACE.d("onRequestSetAmount()");
-
-
             dismissDialog();
             dialog = new Dialog(MainActivity.this);
             dialog.setContentView(R.layout.amount_dialog);
@@ -1305,7 +1260,6 @@ public class MainActivity extends Activity {
             });
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
-
         }
 
         /**
@@ -1363,7 +1317,6 @@ public class MainActivity extends Activity {
                             dismissDialog();
                         }
                     });
-
             dialog.show();
 
         }
@@ -1474,18 +1427,17 @@ public class MainActivity extends Activity {
             doTradeButton.setEnabled(true);
             btnDisconnect.setEnabled(true);
             btnQuickEMV.setEnabled(true);
-
-
+            setTitle(title +"("+blueTitle.substring(0,6)+"..."+blueTitle.substring(blueTitle.length()-3,blueTitle.length())+")");
         }
 
         @Override
         public void onRequestQposDisconnected() {
             dismissDialog();
+            setTitle(title);
             TRACE.d("onRequestQposDisconnected()");
             statusEditText.setText(getString(R.string.device_unplugged));
             btnDisconnect.setEnabled(false);
             doTradeButton.setEnabled(false);
-
         }
 
         @Override
@@ -2371,10 +2323,8 @@ public class MainActivity extends Activity {
 
         @Override
         public void writeMifareULData(String arg0) {
-
             if (arg0 != null) {
                 TRACE.d("writeMifareULData(String arg0):" + arg0.toString());
-
                 statusEditText.setText("addr:" + arg0);
             } else {
                 statusEditText.setText("write UL failed");
@@ -2631,7 +2581,7 @@ public class MainActivity extends Activity {
                 AlertDialog alert = builder.create();
                 alert.show();
             } else if (v == btnBT) {
-                TRACE.d("trype==" + type);
+                TRACE.d("type==" + type);
                 pos = null;//在连接前一定要保证之前的连接类型已经重置。
                 if (pos == null) {
                     if (type == 3) {
@@ -2642,7 +2592,6 @@ public class MainActivity extends Activity {
                         posType = POS_TYPE.BLUETOOTH_BLE;
                     }
                 }
-
                 pos.clearBluetoothBuffer();
                 //	close();//扫描前断开蓝牙
                 if (isNormalBlu) {//普通蓝牙的扫描
@@ -2661,7 +2610,6 @@ public class MainActivity extends Activity {
                 }
             } else if (v == btnDisconnect) {
                 close();
-
             } else if (v == btnQuickEMV) {
                 statusEditText.setText("updating emv config, please wait...");
                 updateEmvConfig();

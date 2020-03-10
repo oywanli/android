@@ -2,7 +2,7 @@
 
 
     <!-- 一级菜单 -->
-    <item android:title="device_info">
+    <item android:title="@string/device_info">
 
         <!-- 二级菜单 -->
         <menu>
@@ -44,7 +44,7 @@
 
 
     <!-- 一级菜单 -->
-    <item android:title="device_update">
+    <item android:title="@string/device_update">
 
         <!-- 二级菜单 -->
         <menu>
@@ -78,8 +78,6 @@
                 android:id="@+id/three"
                 android:orderInCategory="100"
                 android:title="clear" />
-
-
             <item
                 android:id="@+id/resetMasterKey"
                 android:orderInCategory="100"
@@ -100,12 +98,10 @@
 
 
     <!-- 一级菜单 -->
-    <item android:title="device_operate">
+    <item android:title="@string/device_operate">
 
         <!-- 二级菜单 -->
         <menu>
-
-
             <item
                 android:id="@+id/reset_qpos"
                 android:orderInCategory="100"
@@ -178,9 +174,8 @@
         </menu>
     </item>
 
-
     <!-- 一级菜单 -->
-    <item android:title="other">
+    <item android:title="@string/device_other">
 
         <!-- 二级菜单 -->
         <menu>
@@ -188,9 +183,6 @@
                 android:id="@+id/about"
                 android:orderInCategory="100"
                 android:title="@string/about" />
-
-
-
         </menu>
     </item>
 

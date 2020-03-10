@@ -1,25 +1,43 @@
 package com.dspread.demoui;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.PendingIntent;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dspread.demoui.injectKey.DukptKeys;
 import com.dspread.demoui.injectKey.Envelope;
@@ -30,94 +48,31 @@ import com.dspread.demoui.utils.DUKPK2009_CBC;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.TLV;
 import com.dspread.demoui.utils.TLVParser;
-import com.dspread.demoui.xmlparse.BaseTag;
-import com.dspread.demoui.xmlparse.SAXParserHandler;
-import com.dspread.demoui.xmlparse.TagApp;
-import com.dspread.demoui.xmlparse.TagCapk;
-
-import com.dspread.xpos.EmvAppTag;
-import com.dspread.xpos.LogFileConfig;
 import com.dspread.xpos.QPOSService;
-import com.dspread.xpos.QPOSService.CommunicationMode;
-import com.dspread.xpos.QPOSService.DoTradeResult;
-import com.dspread.xpos.QPOSService.DoTransactionType;
-import com.dspread.xpos.QPOSService.Display;
 import com.dspread.xpos.QPOSService.EMVDataOperation;
-import com.dspread.xpos.QPOSService.EmvOption;
-import com.dspread.xpos.QPOSService.Error;
-import com.dspread.xpos.QPOSService.LcdModeAlign;
-import com.dspread.xpos.QPOSService.TransactionResult;
 import com.dspread.xpos.QPOSService.TransactionType;
-
-import com.dspread.xpos.QPOSService.UpdateInformationResult;
 import com.dspread.xpos.SyncUtil;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.List;
 
-import android.Manifest;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.hardware.usb.UsbDeviceConnection;
-import android.hardware.usb.UsbManager;
-
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-
-
-import android.support.v4.app.ActivityCompat;
-
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.MarginLayoutParams;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.res.AssetManager;
-import android.graphics.drawable.AnimationDrawable;
-import android.hardware.usb.UsbDevice;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import Decoder.BASE64Decoder;
 import Decoder.BASE64Encoder;
 
 
-public class OtherActivity extends Activity {
+public class OtherActivity extends BaseActivity {
 
     private Button doTradeButton, serialBtn;
 
@@ -163,11 +118,21 @@ public class OtherActivity extends Activity {
         if (!isUart) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        setContentView(R.layout.activity_other);
+        //setContentView(R.layout.activity_other);
         mContext = this;
         initView();
         initIntent();
         initListener();
+    }
+
+    @Override
+    public void onToolbarLinstener() {
+        finish();
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_other;
     }
 
     private void initIntent() {
@@ -175,11 +140,13 @@ public class OtherActivity extends Activity {
         type = intent.getIntExtra("connect_type", 0);
         switch (type) {
             case 1:
+                setTitle(getString(R.string.title_audio));
                 open(QPOSService.CommunicationMode.AUDIO);
                 posType = POS_TYPE.AUDIO;
                 pos.openAudio();
                 break;
             case 2:
+                setTitle(getString(R.string.serial_port));
                 serialBtn.setVisibility(View.VISIBLE);
                 serialBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -187,11 +154,9 @@ public class OtherActivity extends Activity {
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
                         open(QPOSService.CommunicationMode.UART);
-
                         posType = POS_TYPE.UART;
 //                        blueTootchAddress = "/dev/ttyMT0";//同方那边是s1，天波是s3
                         blueTootchAddress = "/dev/ttyHSL1";//同方那边是s1，天波是s3
-//
                         pos.setDeviceAddress(blueTootchAddress);
                         pos.openUart();
                     }
@@ -205,7 +170,6 @@ public class OtherActivity extends Activity {
     private void initView() {
         doTradeButton = (Button) findViewById(R.id.doTradeButton);//开始交易
         serialBtn = (Button) findViewById(R.id.serialPort);
-
         statusEditText = (EditText) findViewById(R.id.statusEditText);
         btnUSB = (Button) findViewById(R.id.btnUSB);//扫描USB设备
         btnDisconnect = (Button) findViewById(R.id.disconnect);//断开连接
@@ -217,7 +181,6 @@ public class OtherActivity extends Activity {
 
 
     private void initListener() {
-
         MyOnClickListener myOnClickListener = new MyOnClickListener();
         //以下是按钮的点击事件
         doTradeButton.setOnClickListener(myOnClickListener);//开始

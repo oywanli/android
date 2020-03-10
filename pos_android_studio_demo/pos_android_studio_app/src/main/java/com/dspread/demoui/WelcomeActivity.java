@@ -1,6 +1,5 @@
 package com.dspread.demoui;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,14 +15,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class WelcomeActivity extends Activity implements OnClickListener{
-
+public class WelcomeActivity extends BaseActivity implements OnClickListener{
 	private Button audio,serial_port,normal_blu,other_blu;
 	private Intent intent;
+	private static final int LOCATION_CODE = 101;
+	private LocationManager lm;//【位置管理】
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_welcome);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		setTitle(getString(R.string.title_welcome));
 		audio=(Button) findViewById(R.id.audio);
 		serial_port=(Button) findViewById(R.id.serial_port);
 		normal_blu=(Button) findViewById(R.id.normal_bluetooth);
@@ -33,18 +35,26 @@ public class WelcomeActivity extends Activity implements OnClickListener{
 		serial_port.setOnClickListener(this);
 		normal_blu.setOnClickListener(this);
 		other_blu.setOnClickListener(this);
-
 		bluetoothRelaPer();
 	}
+
+	@Override
+	public void onToolbarLinstener() {
+
+	}
+
+	@Override
+	protected int getLayoutId() {
+		return R.layout.activity_welcome;
+	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch(v.getId()){
 			case R.id.audio://音频
 				intent = new Intent(this,OtherActivity.class);
-
 				intent.putExtra("connect_type", 1);
-
 				startActivity(intent);
 				break;
 			case R.id.serial_port://串口连接
@@ -61,17 +71,11 @@ public class WelcomeActivity extends Activity implements OnClickListener{
 				break;
 			case R.id.other_bluetooth://其他蓝牙连接，例如：BLE，，，
 				intent = new Intent(this,MainActivity.class);
-
 				intent.putExtra("connect_type", 4);
 				startActivity(intent);
 				break;
-
 		}
 	}
-
-
-	private static final int LOCATION_CODE = 101;
-	private LocationManager lm;//【位置管理】
 
 	public void bluetoothRelaPer() {
 		BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
@@ -89,9 +93,7 @@ public class WelcomeActivity extends Activity implements OnClickListener{
 				// 申请授权。
 				ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
 //                        Toast.makeText(getActivity(), "没有权限", Toast.LENGTH_SHORT).show();
-
 			} else {
-
 				// 有权限了，去放肆吧。
 				Toast.makeText(WelcomeActivity.this, "有权限", Toast.LENGTH_SHORT).show();
 			}
@@ -112,12 +114,11 @@ public class WelcomeActivity extends Activity implements OnClickListener{
 				if (grantResults.length > 0
 						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					// 权限被用户同意。
-					Toast.makeText(WelcomeActivity.this, "定位权限被tongyi！", Toast.LENGTH_LONG).show();
+					Toast.makeText(WelcomeActivity.this, getString(R.string.msg_allowed_location_permission), Toast.LENGTH_LONG).show();
 				} else {
 					// 权限被用户拒绝了。
-					Toast.makeText(WelcomeActivity.this, "定位权限被禁止，相关地图功能无法使用！", Toast.LENGTH_LONG).show();
+					Toast.makeText(WelcomeActivity.this, getString(R.string.msg_not_allowed_loaction_permission), Toast.LENGTH_LONG).show();
 				}
-
 			}
 			break;
 		}

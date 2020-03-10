@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="msg_select_device">点击这里扫描和连接设备</string>
+    <string name="msg_do_trade">连接设备后在这里开始点击交易</string>
+    <string name="msg_disconnect">点击这里断开连接</string>
+    <string name="msg_conn_usb">点击这里去发现和连接usb</string>
+    <string name="device_info">设备信息</string>
+    <string name="device_update">设备更新</string>
+    <string name="device_operate">设备操作</string>
+    <string name="device_other">其他</string>
+    <string name="title_audio">音频</string>
+    <string name="title_uart">串口</string>
+    <string name="title_blu">蓝牙</string>
+    <string name="title_ble">Ble蓝牙</string>
+    <string name="title_welcome">鼎合Pos</string>
+    <string name="msg_allowed_location_permission">定位权限已开启</string>
+    <string name="msg_not_allowed_loaction_permission">定位权限被禁止，相关地图功能无法使用</string>
     <string name="refreshing">Refreshing</string>
     <string name="scan_usb_device">扫描USB设备</string>
     <string name="audio_open">音效控制:开</string>
