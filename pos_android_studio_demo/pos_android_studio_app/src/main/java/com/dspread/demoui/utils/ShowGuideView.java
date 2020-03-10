@@ -8,8 +8,8 @@ import com.binioter.guideview.GuideBuilder;
 import com.dspread.demoui.widget.SimpleComponent;
 
 /**
- * Created by Zola on 2020/3/10
- * Edited by Zola on 2020/3/10
+ * Created by Qianmeng on 2020/3/10
+ * Edited by Qianmeng on 2020/3/10
  */
 public class ShowGuideView {
     public void show(final Button button, final Activity context,String msg){
