@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="transfer_card">透传APDU指令</string>
     <string name="msg_select_device">点击这里扫描和连接设备</string>
     <string name="msg_do_trade">连接设备后在这里开始点击交易</string>
     <string name="msg_disconnect">点击这里断开连接</string>

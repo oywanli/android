@@ -2614,34 +2614,36 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 statusEditText.setText("updating emv config, please wait...");
                 updateEmvConfig();
             }
-
             else if (v == pollBtn) {
-
-                pos.doMifareCard("01", 20);
-
+                pos.pollOnMifareCard(20);
+//                pos.doMifareCard("01", 20);
             } else if (v == pollULbtn) {
-
-                pos.doMifareCard("01", 20);
-
+                pos.pollOnMifareCard(20);
+//                pos.doMifareCard("01", 20);
             } else if (v == finishBtn) {
-                pos.doMifareCard("0E", 20);
+                pos.finishMifareCard(20);
+//                pos.doMifareCard("0E", 20);
             } else if (v == finishULBtn) {
-                pos.doMifareCard("0E", 20);
+                pos.finishMifareCard(20);
+//                pos.doMifareCard("0E", 20);
             } else if (v == veriftBtn) {
                 String keyValue = status.getText().toString();
                 String blockaddr = blockAdd.getText().toString();
                 String keyclass = (String) mafireSpinner.getSelectedItem();
                 pos.setBlockaddr(blockaddr);
                 pos.setKeyValue(keyValue);
-                pos.doMifareCard("02" + keyclass, 20);
+//                pos.doMifareCard("02" + keyclass, 20);
+                pos.authenticateMifareCard(QPOSService.MifareCardType.CLASSIC,keyclass,blockaddr,keyValue,20);
             } else if (v == veriftULBtn) {
                 String keyValue = status.getText().toString();
                 pos.setKeyValue(keyValue);
-                pos.doMifareCard("0D", 20);
+//                pos.doMifareCard("0D", 20);
+                pos.authenticateMifareCard(QPOSService.MifareCardType.UlTRALIGHT,"","",keyValue,20);
             } else if (v == readBtn) {
                 String blockaddr = blockAdd.getText().toString();
                 pos.setBlockaddr(blockaddr);
-                pos.doMifareCard("03", 20);
+//                pos.doMifareCard("03", 20);
+                pos.readMifareCard(QPOSService.MifareCardType.CLASSIC,blockaddr,20);
             } else if (v == writeBtn) {
                 String blockaddr = blockAdd.getText().toString();
                 String cardData = status.getText().toString();
@@ -2649,41 +2651,47 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 //		        status.setHint(s);
                 pos.setBlockaddr(blockaddr);
                 pos.setKeyValue(cardData);
-                pos.doMifareCard("04", 20);
+//                pos.doMifareCard("04", 20);
+                pos.writeMifareCard(QPOSService.MifareCardType.CLASSIC,blockaddr,cardData,20);
             } else if (v == operateCardBtn) {
                 String blockaddr = blockAdd.getText().toString();
                 String cardData = status.getText().toString();
                 String cmd = (String) cmdSp.getSelectedItem();
                 pos.setBlockaddr(blockaddr);
                 pos.setKeyValue(cardData);
-                pos.doMifareCard("05" + cmd, 20);
+                if(cmd.equals("add")){
+                    pos.operateMifareCardData(QPOSService.MifareCardOperationType.ADD,blockaddr,cardData,20);
+                }
+//                pos.doMifareCard("05" + cmd, 20);
             } else if (v == getULBtn) {
-                pos.doMifareCard("06", 20);
+//                pos.doMifareCard("06", 20);
+                pos.getMifareCardInfo(20);
             } else if (v == readULBtn) {
                 String blockaddr = blockAdd.getText().toString();
                 pos.setBlockaddr(blockaddr);
-                pos.doMifareCard("07", 20);
+//                pos.doMifareCard("07", 20);
+                pos.readMifareCard(QPOSService.MifareCardType.CLASSIC,blockaddr,20);
             } else if (v == fastReadUL) {
                 String endAddr = blockAdd.getText().toString();
                 String startAddr = status.getText().toString();
                 pos.setKeyValue(startAddr);
                 pos.setBlockaddr(endAddr);
-                pos.doMifareCard("08", 20);
+//                pos.doMifareCard("08", 20);
+                pos.faseReadMifareCardData(startAddr,endAddr,20);
             } else if (v == writeULBtn) {
                 String addr = blockAdd.getText().toString();
                 String data = status.getText().toString();
                 pos.setKeyValue(data);
                 pos.setBlockaddr(addr);
-                pos.doMifareCard("0B", 20);
+//                pos.doMifareCard("0B", 20);
+                pos.writeMifareCard(QPOSService.MifareCardType.UlTRALIGHT,addr,data,20);
             } else if (v == transferBtn) {//透传数据
-                String data = status.getText().toString();
-                String len = blockAdd.getText().toString();
-                pos.setMafireLen(Integer.valueOf(len, 16));
-                pos.setKeyValue(data);
-                pos.doMifareCard("0F", 20);
+//                String data = status.getText().toString();
+//                String len = blockAdd.getText().toString();
+//                pos.setMafireLen(Integer.valueOf(len, 16));
+//                pos.setKeyValue(data);
+//                pos.transferMifareData(data,20);
             } else if (v == updateFwBtn) {//update firmware
-
-
                 if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
                     //申请权限

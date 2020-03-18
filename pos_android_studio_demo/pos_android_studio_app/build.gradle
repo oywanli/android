@@ -22,6 +22,10 @@ android {
             abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
     }
+    packagingOptions {
+        exclude 'org/bouncycastle/x509/CertPathReviewerMessages_de.properties'
+        exclude 'org/bouncycastle/x509/CertPathReviewerMessages.properties'
+    }
     buildTypes {
         release {
             minifyEnabled true
