@@ -55,8 +55,7 @@
 
 
 #忽略警告
--ignorewarning
-
+-ignorewarnings
 ##记录生成的日志数据,gradle build时在本项目根目录输出##
 #apk 包内所有 class 的内部结构
 -dump proguard/class_files.txt
