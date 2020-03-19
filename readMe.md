@@ -756,7 +756,7 @@ During the transaction, if there is anything abnormal happened, the onError call
 Blow introduce how to transmit datas on the different mifare cards and pos.There are three typr mifare card - Mifare Classic, Mifare Ultralight, Mifare Desfire.
 
 **1.Mifare Classic**
-![](https://gitlab.com/dspread/android/-/blob/master/mifare%20card.jpg)
+![](https://gitlab.com/dspread/android/-/blob/abec566b8a836492f3d19dcfc319af4a3e85cf0d/mifare%20card.jpg)
 As the above image, we can know the work flow for the Mifare Classic.
 1).poll on Card
 ```java
