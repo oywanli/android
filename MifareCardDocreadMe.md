@@ -7,6 +7,7 @@ Blow introduce how to transmit datas on the different mifare cards and pos.There
 ![](./mifare%20card.jpg)
 
 As the above image, we can know the work flow for the Mifare Classic.
+
 1).poll on Card
 ```java
 	pos.pollOnMifareCard(int timeout)
@@ -35,6 +36,7 @@ As the above image, we can know the work flow for the Mifare Classic.
 
 **2.Mifare Ultralight**
   	The Ultralight card most operate is same with the classic card, except some part is different.
+  	
 	 1).It don't need to use key A/B to verify, just verify the data.
  	2).It don't have the Add/Reduce/Restore operation,but can read and write data.
  	3).It have a special method to read data.
@@ -43,6 +45,7 @@ As the above image, we can know the work flow for the Mifare Classic.
 ```
 **3.Mifare Desfire**
 	Desfire card is different from the above two cards. It has easy method to transfer data.
+	
 	1).Power on card
 ```java
 	pos.powerOnNFC(int isEncrypt, int timeout)
