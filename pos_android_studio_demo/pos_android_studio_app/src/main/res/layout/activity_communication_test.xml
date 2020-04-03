@@ -17,7 +17,7 @@
             android:gravity="center">
             <Button android:id="@+id/btn_led"
                 style="@style/BtnTestCommand"
-                android:text="@string/test_led"/>
+                android:text="@string/test_led_start"/>
             <Button android:id="@+id/btn_blu_led"
                 style="@style/BtnTestCommand" android:visibility="gone"
                 android:text="@string/test_led_blu"/>
@@ -26,7 +26,7 @@
                 android:text="@string/test_led_yel"/>
             <Button android:id="@+id/btn_buzzer"
                 style="@style/BtnTestCommand"
-                android:text="@string/test_buzzer"/>
+                android:text="@string/test_buzzer_start"/>
             <Button android:id="@+id/btn_mcr"
                 style="@style/BtnTestCommand"
                 android:text="@string/mcr_test"/>

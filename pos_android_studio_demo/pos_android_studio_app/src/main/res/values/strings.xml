@@ -3,12 +3,15 @@
     <string name="communicate_test">Communication Command Test</string>
     <string name="result">Result is :</string>
     <string name="test_led">LED Test</string>
-    <string name="test_led_blu">Blue LED Test</string>
+    <string name="test_led_start">LED Test Start</string>
+    <string name="test_led_end">LED Test End</string>
     <string name="test_led_red">Red LED Test</string>
     <string name="test_led_yel">Yellow LED Test</string>
+    <string name="test_led_blu">Blue LED Test</string>
     <string name="test_led_green">Green LED Test</string>
 
-    <string name="test_buzzer">Buzzer Test</string>
+    <string name="test_buzzer_start">Buzzer Test Start</string>
+    <string name="test_buzzer_end">Buzzer Test End</string>
     <string name="icc_test">ICC Test</string>
     <string name="mcr_test">MCR Test</string>
     <string name="nfc_test">NFC Test</string>

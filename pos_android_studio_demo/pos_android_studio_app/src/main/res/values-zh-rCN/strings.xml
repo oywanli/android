@@ -4,9 +4,11 @@
     <string name="msg_pls_swipe_card">请刷卡</string>
     <string name="msg_pls_tap_card">请帖卡</string>
     <string name="result">测试结果是:</string>
-    <string name="test_led">LED测试</string>
+    <string name="test_led_start">LED测试开始</string>
+    <string name="test_led_end">LED测试结束</string>
     <string name="communicate_test">通信指令测试</string>
-    <string name="test_buzzer">蜂鸣器测试</string>
+    <string name="test_buzzer_start">蜂鸣器测试开始</string>
+    <string name="test_buzzer_end">蜂鸣器测试结束</string>
     <string name="icc_test">ICC测试</string>
     <string name="mcr_test">MCR测试</string>
     <string name="nfc_test">NFC测试</string>

@@ -35,6 +35,8 @@ public class CommunicationTestActivity extends BaseActivity implements View.OnCl
     private Button btn_led;
     private Button btn_reset_pos;
     private TextView txt_result;
+    private boolean flagLed = false;
+    private boolean flagBuzzer = false;
     private QPOSService pos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,31 +96,50 @@ public class CommunicationTestActivity extends BaseActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_led:
-                pos.testPosFunctionCommand(20, QPOSService.TestCommand.LED_TEST);
+                //test LED
+                if(btn_led.getText().toString().equals(getString(R.string.test_led_start))){
+                    pos.testPosFunctionCommand(20, QPOSService.TestCommand.LED_TEST_START);
+                    btn_led.setText(getString(R.string.test_led_end));
+                }else if(btn_led.getText().toString().equals(getString(R.string.test_led_end))){
+                    btn_led.setText(getString(R.string.test_led_start));
+                    pos.testPosFunctionCommand(20, QPOSService.TestCommand.LED_TEST_STOP);
+                }
                 break;
             case R.id.btn_buzzer:
-                pos.testPosFunctionCommand(20, QPOSService.TestCommand.BUZZER_TEST);
+                //test buzzer
+                if(btn_buzzer.getText().toString().equals(getString(R.string.test_buzzer_start))){
+                    pos.testPosFunctionCommand(20, QPOSService.TestCommand.BUZZER_TEST_START);
+                    btn_buzzer.setText(getString(R.string.test_buzzer_end));
+                }else if(btn_buzzer.getText().toString().equals(getString(R.string.test_buzzer_end))){
+                    btn_buzzer.setText(getString(R.string.test_buzzer_start));
+                    pos.testPosFunctionCommand(20, QPOSService.TestCommand.BUZZER_TEST_STOP);
+                }
                 break;
             case R.id.btn_psam:
                 break;
             case R.id.btn_icc:
+                //test ICC card
                 txt_result.setText(getString(R.string.msg_pls_insert_card));
                 pos.testPosFunctionCommand(20, QPOSService.TestCommand.ICC_TEST);
                 break;
             case R.id.btn_mcr:
+                //test MCR card
                 txt_result.setText(getString(R.string.msg_pls_swipe_card));
                 pos.testPosFunctionCommand(20, QPOSService.TestCommand.MRC_TEST);
                 break;
             case R.id.btn_nfc:
+                //Test NFC card
                 txt_result.setText(getString(R.string.msg_pls_tap_card));
                 pos.testPosFunctionCommand(20, QPOSService.TestCommand.NFC_TEST);
                 break;
             case R.id.btn_get_version:
+                //qpos don't support it now, so can not use
                 pos.doPosSelfTest(20, QPOSService.PosSelfTestCommand.GET_VERSION);
                 break;
             case R.id.btn_hardware_check:
                 break;
             case R.id.btn_reset_pos:
+                //reset the qpos status
                 pos.resetPosStatus();
                 break;
             default:
@@ -126,7 +147,9 @@ public class CommunicationTestActivity extends BaseActivity implements View.OnCl
         }
     }
 
-    //init the pos
+    /**
+     * Init the pos instance
+     */
     private void open() {
         TRACE.d("open");
         MyQposClass listener = new MyQposClass();
@@ -139,7 +162,7 @@ public class CommunicationTestActivity extends BaseActivity implements View.OnCl
         //通过handler处理，监听MyPosListener，实现QposService的接口，（回调接口）
         Handler handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
-        String blueTootchAddress = "/dev/ttyHSL1";//同方那边是s1，天波是s3
+        String blueTootchAddress = "/dev/ttyS1";//同方那边是s1，天波是s3 ttyHSL1
         pos.setDeviceAddress(blueTootchAddress);
         pos.openUart();
     }
@@ -150,6 +173,9 @@ public class CommunicationTestActivity extends BaseActivity implements View.OnCl
         pos.closeUart();
     }
 
+    /**
+     * The callback of all method
+     */
     class MyQposClass extends CQPOSService {
         @Override
         public void onRequestQposConnected() {
