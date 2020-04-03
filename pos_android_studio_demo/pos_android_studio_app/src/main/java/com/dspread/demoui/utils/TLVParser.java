@@ -1,8 +1,5 @@
 package com.dspread.demoui.utils;
 
-import com.dspread.demoui.TRACE;
-
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 

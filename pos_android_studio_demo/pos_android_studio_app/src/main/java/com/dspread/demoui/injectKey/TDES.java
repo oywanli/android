@@ -111,7 +111,7 @@ public class TDES {
 
         try {
             byte[] bytes = tdesDecrypt(tdeskeyBytes,input);
-            System.out.println(parseByte2HexStr(bytes));
+            System.out.println("result = "+parseByte2HexStr(bytes));
 
         } catch (Exception var8) {
             var8.printStackTrace();

@@ -4,23 +4,12 @@ package com.dspread.demoui.injectKey;//
 //
 
 
-import com.dspread.demoui.QPOSUtil;
-
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.ShortBufferException;
 
 public class Envelope {
     public static String digitalEnvelopStr;
@@ -325,11 +314,11 @@ public class Envelope {
         try{
 
         byte[] de = null;
-        if (rsa_key_len == Poskeys.RSA_KEY_LEN.RSA_KEY_1024)
+        if (rsa_key_len == Poskeys.RSA_KEY_LEN.RSA_KEY_1024) {
             de = byteEvelope(message2, senderRsa, receiverRsa);
-        else if (rsa_key_len == Poskeys.RSA_KEY_LEN.RSA_KEY_2048)
+        } else if (rsa_key_len == Poskeys.RSA_KEY_LEN.RSA_KEY_2048) {
             de = byteEvelope(message2, senderRsa, receiverRsa, 2048);
-        else {
+        } else {
             throw new Exception("Bad key length");
         }
         int blockSize = de.length / 256;

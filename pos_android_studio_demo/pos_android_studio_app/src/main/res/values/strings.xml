@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
+    <string name="communicate_test">Communication Command Test</string>
+    <string name="result">Result is :</string>
+    <string name="test_led">LED Test</string>
+    <string name="test_led_blu">Blue LED Test</string>
+    <string name="test_led_red">Red LED Test</string>
+    <string name="test_led_yel">Yellow LED Test</string>
+    <string name="test_led_green">Green LED Test</string>
+
+    <string name="test_buzzer">Buzzer Test</string>
+    <string name="icc_test">ICC Test</string>
+    <string name="mcr_test">MCR Test</string>
+    <string name="nfc_test">NFC Test</string>
+    <string name="psam_test">PSAM Test</string>
+    <string name="hardware_check">POS Self Test</string>
+    <string name="get_version">Get Version</string>
+
+    <string name="msg_pls_insert_card">Please insert card</string>
+    <string name="msg_pls_swipe_card">Please swipe card</string>
+    <string name="msg_pls_tap_card">Please tap card</string>
+
+    <string name="test_command">Communication Test Command</string>
     <string name="msg_select_device">Click here to scan and connect device</string>
     <string name="msg_do_trade">Click here to start do trade after finish connected</string>
     <string name="msg_disconnect">Click here to disConnected device</string>

@@ -163,7 +163,7 @@
             android:id="@+id/fast_read_ul"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="fase read UL" />
+            android:text="fast read UL" />
 
         <Button
             android:id="@+id/finish_ulcard"

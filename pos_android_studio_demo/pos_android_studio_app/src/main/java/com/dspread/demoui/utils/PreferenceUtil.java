@@ -17,7 +17,7 @@ public class PreferenceUtil {
    public static void putLong(Context context,String name, long value){
        SharedPreferences preferences = getSharePre(context);
        SharedPreferences.Editor edit = preferences.edit();
-       edit.putLong(name,value).commit();
+       edit.putLong(name,value).apply();
    }
 
     public static long getLong(Context context,String name, long deValue){
@@ -31,7 +31,7 @@ public class PreferenceUtil {
     public static void putBoolean(Context context,String name, boolean value){
         SharedPreferences preferences = getSharePre(context);
         SharedPreferences.Editor edit = preferences.edit();
-        edit.putBoolean(name,value).commit();
+        edit.putBoolean(name,value).apply();
     }
 
     public static boolean getBoolean(Context context,String name, boolean deValue){

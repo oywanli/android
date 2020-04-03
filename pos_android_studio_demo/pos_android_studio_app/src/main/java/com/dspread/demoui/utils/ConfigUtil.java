@@ -2,8 +2,6 @@ package com.dspread.demoui.utils;
 
 import android.content.Context;
 
-import com.dspread.demoui.MainActivity;
-
 /**
  * Created by dsppc11 on 2018/7/24.
  */

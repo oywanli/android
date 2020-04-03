@@ -1,6 +1,6 @@
 package com.dspread.demoui.task;
 
-import com.dspread.demoui.TRACE;
+import com.dspread.demoui.utils.TRACE;
 import com.dspread.xpos.QPOSService;
 
 /**
