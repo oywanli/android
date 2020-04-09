@@ -132,6 +132,4 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 		}
 	}
 
-
-
 }

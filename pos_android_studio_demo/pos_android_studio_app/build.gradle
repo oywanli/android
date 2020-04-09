@@ -16,6 +16,9 @@ android {
         minSdkVersion 17
         targetSdkVersion 28
 
+        versionCode 1
+        versionName "2.9.9"
+
         ndk {
             moduleName "serial_port"
             // 根据需要添加必要的ABI

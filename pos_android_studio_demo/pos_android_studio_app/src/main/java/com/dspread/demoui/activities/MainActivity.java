@@ -685,7 +685,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         if (updateThread != null) {
             updateThread.concelSelf();
         }
-
         if (pos != null) {
             close();
             pos = null;
@@ -1050,8 +1049,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 }
                 messageTextView.setText(message);
 //                    deviceShowDisplay("APPROVED");
-
-
             } else if (transactionResult == TransactionResult.TERMINATED) {
                 clearDisplay();
                 messageTextView.setText(getString(R.string.transaction_terminated));
@@ -2135,7 +2132,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 }
             }
 
-
         }
 
         @Override
@@ -2166,16 +2162,14 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 sum += bit * Math.pow(16, (3 - i));
             }
             pubModel = clearKeys.substring(4, 4 + sum * 2);
-            if (resetIpekFlag || resetMasterKeyFlag)
+            if (resetIpekFlag || resetMasterKeyFlag) {
                 sendMsg(1703);
-
-
+            }
         }
 
         @Override
         public void onSetPosBlePinCode(boolean b) {
             TRACE.d("onSetPosBlePinCode(b):" + b);
-
             if (b) {
                 statusEditText.setText("onSetPosBlePinCode success");
             } else {
