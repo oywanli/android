@@ -75,9 +75,9 @@ assembleRelease:
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
 
-artifacts:
-    reports:
-      dependency_scanning: gl-dependency-scanning-report.json
+    artifacts:
+        reports:
+          dependency_scanning: gl-dependency-scanning-report.json
 
 #debugTests:
 #  stage: test
