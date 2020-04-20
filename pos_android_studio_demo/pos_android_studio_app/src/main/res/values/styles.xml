@@ -18,6 +18,17 @@
         <item name="windowNoTitle">true</item>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    <style name="BtnTestCommand">
+<!--        <item name="android:layout_weight">1</item>-->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="LinTestCommand">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
 
 
 </resources>

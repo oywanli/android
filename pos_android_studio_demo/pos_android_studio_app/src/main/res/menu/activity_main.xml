@@ -49,10 +49,10 @@
         <!-- 二级菜单 -->
         <menu>
 
-            <item
+ <!--           <item
                 android:id="@+id/injectKeys"
                 android:orderInCategory="100"
-                android:title="@string/updateInjectKeys" />
+                android:title="@string/updateInjectKeys" />-->
             <item
                 android:id="@+id/updateIPEK"
                 android:orderInCategory="100"
@@ -78,19 +78,19 @@
                 android:id="@+id/three"
                 android:orderInCategory="100"
                 android:title="clear" />
-            <item
+<!--            <item
                 android:id="@+id/resetMasterKey"
                 android:orderInCategory="100"
-                android:title="resetMasterKey" />
+                android:title="resetMasterKey" />-->
             <item
                 android:id="@+id/resetSessionKey"
                 android:orderInCategory="100"
                 android:title="resetSessionKey" />
 
-            <item
+<!--            <item
                 android:id="@+id/resetIpek"
                 android:orderInCategory="100"
-                android:title="resetIpek" />
+                android:title="resetIpek" />-->
 
 
         </menu>

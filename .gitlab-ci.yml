@@ -72,6 +72,13 @@ assembleRelease:
     paths:
     - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk
 
+include:
+  - template: Dependency-Scanning.gitlab-ci.yml
+
+    artifacts:
+        reports:
+          dependency_scanning: gl-dependency-scanning-report.json
+
 #debugTests:
 #  stage: test
 #  script:

@@ -283,6 +283,21 @@ public class Utils {
 		
 		return maxstrlen;
 	}
+
+	public static byte[] int2Byte(int intValue) {
+		byte[] b = new byte[4];
+		byte[] r = new byte[4];
+
+		for(int i = 0; i < 4; ++i) {
+			b[i] = (byte)(intValue >> 8 * (3 - i) & 255);
+		}
+
+		r[3] = b[0];
+		r[2] = b[1];
+		r[1] = b[2];
+		r[0] = b[3];
+		return r;
+	}
 }
 
 

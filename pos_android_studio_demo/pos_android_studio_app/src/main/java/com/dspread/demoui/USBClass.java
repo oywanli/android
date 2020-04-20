@@ -3,7 +3,6 @@ package com.dspread.demoui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -12,14 +11,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.os.Build;
-import android.util.Log;
-import android.widget.Toast;
+
+import com.dspread.demoui.utils.TRACE;
 
 public class USBClass {
 

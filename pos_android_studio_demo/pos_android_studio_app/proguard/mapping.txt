@@ -1,7 +1,7 @@
 # compiler: R8
 # compiler_version: 1.6.67
 # min_api: 17
-# pg_map_id: 5774ad4
+# pg_map_id: 118dd2a
 # common_typos_disable
 android.arch.core.executor.ArchTaskExecutor -> a.a.a.a.a:
     android.arch.core.executor.ArchTaskExecutor sInstance -> c
@@ -12621,10 +12621,18 @@ com.binioter.guideview.MaskView$LayoutParams -> com.binioter.guideview.MaskView$
     int targetParentPosition -> b
     int offsetX -> c
     int targetAnchor -> a
-com.dspread.demoui.BaseActivity -> com.dspread.demoui.BaseActivity:
+com.dspread.demoui.USBClass -> com.dspread.demoui.a:
+    android.content.BroadcastReceiver mUsbReceiver -> a
+    android.hardware.usb.UsbManager mManager -> b
+    java.util.HashMap mdevices -> c
+    android.app.PendingIntent mPermissionIntent -> d
+    java.util.ArrayList GetUSBDevices(android.content.Context) -> a
+    java.util.HashMap getMdevices() -> a
+com.dspread.demoui.USBClass$1 -> com.dspread.demoui.a$a:
+com.dspread.demoui.activities.BaseActivity -> com.dspread.demoui.activities.BaseActivity:
     android.widget.TextView txt_toolbar_title -> r
     android.support.v7.widget.Toolbar toolbar -> q
-    void access$000(com.dspread.demoui.BaseActivity,android.view.View,android.view.ViewTreeObserver$OnGlobalLayoutListener) -> a
+    void access$000(com.dspread.demoui.activities.BaseActivity,android.view.View,android.view.ViewTreeObserver$OnGlobalLayoutListener) -> a
     void removeOnGlobalLayoutListener(android.view.View,android.view.ViewTreeObserver$OnGlobalLayoutListener) -> a
     void setOverflowButtonColor(android.app.Activity,android.graphics.PorterDuffColorFilter) -> a
     void setTitle(java.lang.String) -> a
@@ -12635,18 +12643,43 @@ com.dspread.demoui.BaseActivity -> com.dspread.demoui.BaseActivity:
     boolean isAboveKITKAT() -> m
     void onToolbarLinstener() -> n
     void setDefaultToolbarColor() -> o
-com.dspread.demoui.BaseActivity$1 -> com.dspread.demoui.BaseActivity$a:
-    com.dspread.demoui.BaseActivity this$0 -> a
-com.dspread.demoui.BaseActivity$2 -> com.dspread.demoui.BaseActivity$b:
+com.dspread.demoui.activities.BaseActivity$1 -> com.dspread.demoui.activities.BaseActivity$a:
+    com.dspread.demoui.activities.BaseActivity this$0 -> a
+com.dspread.demoui.activities.BaseActivity$2 -> com.dspread.demoui.activities.BaseActivity$b:
     android.graphics.PorterDuffColorFilter val$colorFilter -> c
     android.view.View val$innerView -> a
     int val$finalK -> b
-com.dspread.demoui.BaseActivity$3 -> com.dspread.demoui.BaseActivity$c:
+com.dspread.demoui.activities.BaseActivity$3 -> com.dspread.demoui.activities.BaseActivity$c:
     android.view.ViewGroup val$decorView -> a
+    com.dspread.demoui.activities.BaseActivity this$0 -> d
     android.graphics.PorterDuffColorFilter val$colorFilter -> c
-    com.dspread.demoui.BaseActivity this$0 -> d
     java.lang.String val$overflowDescription -> b
-com.dspread.demoui.MainActivity -> com.dspread.demoui.MainActivity:
+com.dspread.demoui.activities.CommunicationTestActivity -> com.dspread.demoui.activities.CommunicationTestActivity:
+    android.widget.Button btn_led_gre -> y
+    android.widget.Button btn_red_led -> x
+    com.dspread.xpos.QPOSService pos -> G
+    android.widget.Button btn_psam -> w
+    android.widget.Button btn_mcr -> v
+    android.widget.Button btn_icc -> z
+    android.widget.Button btn_buzzer -> u
+    android.widget.Button btn_yel_led -> t
+    android.widget.Button btn_blu_led -> s
+    android.widget.Button btn_nfc -> A
+    android.widget.TextView txt_result -> F
+    android.widget.Button btn_reset_pos -> E
+    android.widget.Button btn_led -> D
+    android.widget.Button btn_hardware_check -> C
+    android.widget.Button btn_get_version -> B
+    android.widget.TextView access$000(com.dspread.demoui.activities.CommunicationTestActivity) -> a
+    com.dspread.xpos.QPOSService access$100(com.dspread.demoui.activities.CommunicationTestActivity) -> b
+    int getLayoutId() -> l
+    void onToolbarLinstener() -> n
+    void initData() -> p
+    void initView() -> q
+    void open() -> r
+com.dspread.demoui.activities.CommunicationTestActivity$MyQposClass -> com.dspread.demoui.activities.CommunicationTestActivity$a:
+    com.dspread.demoui.activities.CommunicationTestActivity this$0 -> a
+com.dspread.demoui.activities.MainActivity -> com.dspread.demoui.activities.MainActivity:
     android.widget.Button fastReadUL -> V
     android.widget.Button btnQuickEMV -> Z
     android.widget.EditText mKeyIndex -> d0
@@ -12654,7 +12687,6 @@ com.dspread.demoui.MainActivity -> com.dspread.demoui.MainActivity:
     android.widget.Button btnBT -> a0
     android.widget.LinearLayout mafireLi -> F
     com.dspread.xpos.QPOSService pos -> s
-    com.dspread.demoui.InnerListview m_ListView -> w
     android.widget.ImageView imvAnimScan -> B
     android.widget.Button finishBtn -> R
     android.app.Dialog dialog -> H
@@ -12662,14 +12694,14 @@ com.dspread.demoui.MainActivity -> com.dspread.demoui.MainActivity:
     android.widget.EditText blockAdd -> y
     android.widget.Button updateFwBtn -> c0
     android.widget.Button doTradeButton -> J
-    com.dspread.demoui.MainActivity$UpdateThread updateThread -> t
+    com.dspread.demoui.activities.MainActivity$POS_TYPE posType -> p0
     android.widget.Button btnUSB -> Y
     java.lang.String blueTitle -> j0
     java.lang.String cashbackAmount -> h0
     android.os.Handler mHandler -> z0
     java.lang.String pubModel -> f0
     android.widget.Button writeBtn -> Q
-    com.dspread.demoui.MainActivity$MyListViewAdapter m_Adapter -> A
+    com.dspread.demoui.activities.MainActivity$UpdateThread updateThread -> t
     android.widget.Button readULBtn -> U
     boolean selectBTFlag -> x0
     int type -> n0
@@ -12688,15 +12720,16 @@ com.dspread.demoui.MainActivity -> com.dspread.demoui.MainActivity:
     android.widget.Button readBtn -> P
     android.widget.Button btnDisconnect -> b0
     android.widget.Button getULBtn -> T
+    com.dspread.demoui.activities.MainActivity$MyListViewAdapter m_Adapter -> A
     android.content.BroadcastReceiver mUsbReceiver -> u0
     java.util.List lstDevScanned -> E
     android.widget.Button pollBtn -> L
-    com.dspread.demoui.MainActivity$POS_TYPE posType -> p0
     java.lang.String title -> k0
     java.lang.String blueTootchAddress -> i0
     android.widget.Button writeULBtn -> W
     java.lang.String amount -> g0
     java.lang.String nfcLog -> e0
+    com.dspread.demoui.widget.InnerListview m_ListView -> w
     com.dspread.demoui.utils.ShowGuideView showGuideView -> o0
     android.graphics.drawable.AnimationDrawable animScan -> C
     android.widget.Button veriftULBtn -> O
@@ -12707,164 +12740,164 @@ com.dspread.demoui.MainActivity -> com.dspread.demoui.MainActivity:
     boolean resetMasterKeyFlag -> s0
     boolean isNormalBlu -> m0
     android.widget.ListView appListView -> D
-    java.lang.String access$3500(com.dspread.demoui.MainActivity) -> A
+    java.lang.String access$3500(com.dspread.demoui.activities.MainActivity) -> A
     void showSingleChoiceDialog() -> A
-    com.dspread.demoui.MainActivity$POS_TYPE access$3600(com.dspread.demoui.MainActivity) -> B
-    int access$3700(com.dspread.demoui.MainActivity) -> C
-    android.widget.Button access$3800(com.dspread.demoui.MainActivity) -> D
-    android.hardware.usb.UsbDevice access$3900(com.dspread.demoui.MainActivity) -> E
-    android.graphics.drawable.AnimationDrawable access$400(com.dspread.demoui.MainActivity) -> F
-    int access$4100(com.dspread.demoui.MainActivity) -> G
-    boolean access$4200(com.dspread.demoui.MainActivity) -> H
-    com.dspread.demoui.MainActivity$MyListViewAdapter access$4300(com.dspread.demoui.MainActivity) -> I
-    void access$4400(com.dspread.demoui.MainActivity) -> J
-    android.widget.Button access$4500(com.dspread.demoui.MainActivity) -> K
-    android.widget.Button access$4600(com.dspread.demoui.MainActivity) -> L
-    android.widget.Button access$4700(com.dspread.demoui.MainActivity) -> M
-    android.widget.Button access$4800(com.dspread.demoui.MainActivity) -> N
-    android.widget.Button access$4900(com.dspread.demoui.MainActivity) -> O
-    android.widget.ImageView access$500(com.dspread.demoui.MainActivity) -> P
-    android.widget.EditText access$5000(com.dspread.demoui.MainActivity) -> Q
-    android.widget.EditText access$5100(com.dspread.demoui.MainActivity) -> R
-    android.widget.Spinner access$5200(com.dspread.demoui.MainActivity) -> S
-    android.widget.Button access$5300(com.dspread.demoui.MainActivity) -> T
-    android.widget.Button access$5400(com.dspread.demoui.MainActivity) -> U
-    android.widget.Button access$5500(com.dspread.demoui.MainActivity) -> V
-    android.widget.Button access$5600(com.dspread.demoui.MainActivity) -> W
-    android.widget.Spinner access$5700(com.dspread.demoui.MainActivity) -> X
-    android.widget.Button access$5800(com.dspread.demoui.MainActivity) -> Y
-    android.widget.Button access$5900(com.dspread.demoui.MainActivity) -> Z
-    android.widget.Button access$000(com.dspread.demoui.MainActivity) -> a
-    java.lang.String access$1102(com.dspread.demoui.MainActivity,java.lang.String) -> a
-    void access$1200(com.dspread.demoui.MainActivity,int) -> a
-    android.app.Dialog access$1402(com.dspread.demoui.MainActivity,android.app.Dialog) -> a
-    android.widget.ListView access$1702(com.dspread.demoui.MainActivity,android.widget.ListView) -> a
-    com.dspread.xpos.QPOSService$TransactionType access$1802(com.dspread.demoui.MainActivity,com.dspread.xpos.QPOSService$TransactionType) -> a
-    boolean access$1902(com.dspread.demoui.MainActivity,boolean) -> a
-    void access$200(com.dspread.demoui.MainActivity,android.app.Activity,android.view.View,int) -> a
-    com.dspread.demoui.MainActivity$UpdateThread access$2602(com.dspread.demoui.MainActivity,com.dspread.demoui.MainActivity$UpdateThread) -> a
-    void access$2900(com.dspread.demoui.MainActivity,android.hardware.usb.UsbManager,android.hardware.usb.UsbDevice) -> a
-    com.dspread.demoui.MainActivity$POS_TYPE access$3602(com.dspread.demoui.MainActivity,com.dspread.demoui.MainActivity$POS_TYPE) -> a
-    android.hardware.usb.UsbDevice access$3902(com.dspread.demoui.MainActivity,android.hardware.usb.UsbDevice) -> a
-    void access$4000(com.dspread.demoui.MainActivity,com.dspread.xpos.QPOSService$CommunicationMode) -> a
-    com.dspread.xpos.QPOSService access$602(com.dspread.demoui.MainActivity,com.dspread.xpos.QPOSService) -> a
+    com.dspread.demoui.activities.MainActivity$POS_TYPE access$3600(com.dspread.demoui.activities.MainActivity) -> B
+    int access$3700(com.dspread.demoui.activities.MainActivity) -> C
+    android.widget.Button access$3800(com.dspread.demoui.activities.MainActivity) -> D
+    android.hardware.usb.UsbDevice access$3900(com.dspread.demoui.activities.MainActivity) -> E
+    android.graphics.drawable.AnimationDrawable access$400(com.dspread.demoui.activities.MainActivity) -> F
+    int access$4100(com.dspread.demoui.activities.MainActivity) -> G
+    boolean access$4200(com.dspread.demoui.activities.MainActivity) -> H
+    com.dspread.demoui.activities.MainActivity$MyListViewAdapter access$4300(com.dspread.demoui.activities.MainActivity) -> I
+    void access$4400(com.dspread.demoui.activities.MainActivity) -> J
+    android.widget.Button access$4500(com.dspread.demoui.activities.MainActivity) -> K
+    android.widget.Button access$4600(com.dspread.demoui.activities.MainActivity) -> L
+    android.widget.Button access$4700(com.dspread.demoui.activities.MainActivity) -> M
+    android.widget.Button access$4800(com.dspread.demoui.activities.MainActivity) -> N
+    android.widget.Button access$4900(com.dspread.demoui.activities.MainActivity) -> O
+    android.widget.ImageView access$500(com.dspread.demoui.activities.MainActivity) -> P
+    android.widget.EditText access$5000(com.dspread.demoui.activities.MainActivity) -> Q
+    android.widget.EditText access$5100(com.dspread.demoui.activities.MainActivity) -> R
+    android.widget.Spinner access$5200(com.dspread.demoui.activities.MainActivity) -> S
+    android.widget.Button access$5300(com.dspread.demoui.activities.MainActivity) -> T
+    android.widget.Button access$5400(com.dspread.demoui.activities.MainActivity) -> U
+    android.widget.Button access$5500(com.dspread.demoui.activities.MainActivity) -> V
+    android.widget.Button access$5600(com.dspread.demoui.activities.MainActivity) -> W
+    android.widget.Spinner access$5700(com.dspread.demoui.activities.MainActivity) -> X
+    android.widget.Button access$5800(com.dspread.demoui.activities.MainActivity) -> Y
+    android.widget.Button access$5900(com.dspread.demoui.activities.MainActivity) -> Z
+    android.widget.Button access$000(com.dspread.demoui.activities.MainActivity) -> a
+    java.lang.String access$1102(com.dspread.demoui.activities.MainActivity,java.lang.String) -> a
+    void access$1200(com.dspread.demoui.activities.MainActivity,int) -> a
+    android.app.Dialog access$1402(com.dspread.demoui.activities.MainActivity,android.app.Dialog) -> a
+    android.widget.ListView access$1702(com.dspread.demoui.activities.MainActivity,android.widget.ListView) -> a
+    com.dspread.xpos.QPOSService$TransactionType access$1802(com.dspread.demoui.activities.MainActivity,com.dspread.xpos.QPOSService$TransactionType) -> a
+    boolean access$1902(com.dspread.demoui.activities.MainActivity,boolean) -> a
+    void access$200(com.dspread.demoui.activities.MainActivity,android.app.Activity,android.view.View,int) -> a
+    com.dspread.demoui.activities.MainActivity$UpdateThread access$2602(com.dspread.demoui.activities.MainActivity,com.dspread.demoui.activities.MainActivity$UpdateThread) -> a
+    void access$2900(com.dspread.demoui.activities.MainActivity,android.hardware.usb.UsbManager,android.hardware.usb.UsbDevice) -> a
+    com.dspread.demoui.activities.MainActivity$POS_TYPE access$3602(com.dspread.demoui.activities.MainActivity,com.dspread.demoui.activities.MainActivity$POS_TYPE) -> a
+    android.hardware.usb.UsbDevice access$3902(com.dspread.demoui.activities.MainActivity,android.hardware.usb.UsbDevice) -> a
+    void access$4000(com.dspread.demoui.activities.MainActivity,com.dspread.xpos.QPOSService$CommunicationMode) -> a
+    com.dspread.xpos.QPOSService access$602(com.dspread.demoui.activities.MainActivity,com.dspread.xpos.QPOSService) -> a
     void devicePermissionRequest(android.hardware.usb.UsbManager,android.hardware.usb.UsbDevice) -> a
     void onBTPosSelected(android.app.Activity,android.view.View,int) -> a
     void onGuideListener(android.widget.Button) -> a
     void open(com.dspread.xpos.QPOSService$CommunicationMode) -> a
     void setListViewHeightBasedOnChildren(android.widget.ListView) -> a
-    com.dspread.xpos.QPOSService access$600(com.dspread.demoui.MainActivity) -> a0
-    com.dspread.demoui.utils.ShowGuideView access$100(com.dspread.demoui.MainActivity) -> b
-    java.lang.String access$1502(com.dspread.demoui.MainActivity,java.lang.String) -> b
-    boolean access$3402(com.dspread.demoui.MainActivity,boolean) -> b
-    int access$802(com.dspread.demoui.MainActivity,int) -> b
+    com.dspread.xpos.QPOSService access$600(com.dspread.demoui.activities.MainActivity) -> a0
+    com.dspread.demoui.utils.ShowGuideView access$100(com.dspread.demoui.activities.MainActivity) -> b
+    java.lang.String access$1502(com.dspread.demoui.activities.MainActivity,java.lang.String) -> b
+    boolean access$3402(com.dspread.demoui.activities.MainActivity,boolean) -> b
+    int access$802(com.dspread.demoui.activities.MainActivity,int) -> b
     void deviceShowDisplay(java.lang.String) -> b
-    android.widget.Button access$6000(com.dspread.demoui.MainActivity) -> b0
-    android.widget.LinearLayout access$1000(com.dspread.demoui.MainActivity) -> c
-    java.lang.String access$1602(com.dspread.demoui.MainActivity,java.lang.String) -> c
-    android.widget.Button access$6100(com.dspread.demoui.MainActivity) -> c0
-    java.lang.String access$1100(com.dspread.demoui.MainActivity) -> d
-    java.lang.String access$3002(com.dspread.demoui.MainActivity,java.lang.String) -> d
-    android.widget.Button access$6200(com.dspread.demoui.MainActivity) -> d0
-    void access$1300(com.dspread.demoui.MainActivity) -> e
-    java.lang.String access$3502(com.dspread.demoui.MainActivity,java.lang.String) -> e
-    android.widget.Button access$6300(com.dspread.demoui.MainActivity) -> e0
-    android.app.Dialog access$1400(com.dspread.demoui.MainActivity) -> f
+    android.widget.Button access$6000(com.dspread.demoui.activities.MainActivity) -> b0
+    android.widget.LinearLayout access$1000(com.dspread.demoui.activities.MainActivity) -> c
+    java.lang.String access$1602(com.dspread.demoui.activities.MainActivity,java.lang.String) -> c
+    android.widget.Button access$6100(com.dspread.demoui.activities.MainActivity) -> c0
+    java.lang.String access$1100(com.dspread.demoui.activities.MainActivity) -> d
+    java.lang.String access$3002(com.dspread.demoui.activities.MainActivity,java.lang.String) -> d
+    android.widget.Button access$6200(com.dspread.demoui.activities.MainActivity) -> d0
+    void access$1300(com.dspread.demoui.activities.MainActivity) -> e
+    java.lang.String access$3502(com.dspread.demoui.activities.MainActivity,java.lang.String) -> e
+    android.widget.Button access$6300(com.dspread.demoui.activities.MainActivity) -> e0
+    android.app.Dialog access$1400(com.dspread.demoui.activities.MainActivity) -> f
     void sendMsg(int) -> f
-    java.lang.String access$6400(com.dspread.demoui.MainActivity) -> f0
-    java.lang.String access$1500(com.dspread.demoui.MainActivity) -> g
-    android.widget.EditText access$700(com.dspread.demoui.MainActivity) -> g0
-    java.lang.String access$1600(com.dspread.demoui.MainActivity) -> h
-    int access$800(com.dspread.demoui.MainActivity) -> h0
-    android.widget.ListView access$1700(com.dspread.demoui.MainActivity) -> i
-    android.widget.LinearLayout access$900(com.dspread.demoui.MainActivity) -> i0
-    com.dspread.xpos.QPOSService$TransactionType access$1800(com.dspread.demoui.MainActivity) -> j
-    boolean access$1900(com.dspread.demoui.MainActivity) -> k
-    long access$2000(com.dspread.demoui.MainActivity) -> l
+    java.lang.String access$6400(com.dspread.demoui.activities.MainActivity) -> f0
+    java.lang.String access$1500(com.dspread.demoui.activities.MainActivity) -> g
+    android.widget.EditText access$700(com.dspread.demoui.activities.MainActivity) -> g0
+    java.lang.String access$1600(com.dspread.demoui.activities.MainActivity) -> h
+    int access$800(com.dspread.demoui.activities.MainActivity) -> h0
+    android.widget.ListView access$1700(com.dspread.demoui.activities.MainActivity) -> i
+    android.widget.LinearLayout access$900(com.dspread.demoui.activities.MainActivity) -> i0
+    com.dspread.xpos.QPOSService$TransactionType access$1800(com.dspread.demoui.activities.MainActivity) -> j
+    boolean access$1900(com.dspread.demoui.activities.MainActivity) -> k
+    long access$2000(com.dspread.demoui.activities.MainActivity) -> l
     int getLayoutId() -> l
-    android.widget.Button access$2100(com.dspread.demoui.MainActivity) -> m
-    android.widget.Button access$2200(com.dspread.demoui.MainActivity) -> n
+    android.widget.Button access$2100(com.dspread.demoui.activities.MainActivity) -> m
+    android.widget.Button access$2200(com.dspread.demoui.activities.MainActivity) -> n
     void onToolbarLinstener() -> n
-    android.widget.Button access$2300(com.dspread.demoui.MainActivity) -> o
-    java.lang.String access$2400(com.dspread.demoui.MainActivity) -> p
+    android.widget.Button access$2300(com.dspread.demoui.activities.MainActivity) -> o
+    java.lang.String access$2400(com.dspread.demoui.activities.MainActivity) -> p
     void dismissDialog() -> p
-    java.lang.String access$2500(com.dspread.demoui.MainActivity) -> q
+    java.lang.String access$2500(com.dspread.demoui.activities.MainActivity) -> q
     java.util.List generateAdapterData() -> q
-    com.dspread.demoui.MainActivity$UpdateThread access$2600(com.dspread.demoui.MainActivity) -> r
+    com.dspread.demoui.activities.MainActivity$UpdateThread access$2600(com.dspread.demoui.activities.MainActivity) -> r
     void updateEmvConfig() -> r
-    void access$2700(com.dspread.demoui.MainActivity) -> s
+    void access$2700(com.dspread.demoui.activities.MainActivity) -> s
     void clearDisplay() -> s
-    java.util.List access$2800(com.dspread.demoui.MainActivity) -> t
+    java.util.List access$2800(com.dspread.demoui.activities.MainActivity) -> t
     void close() -> t
-    com.dspread.demoui.InnerListview access$300(com.dspread.demoui.MainActivity) -> u
+    com.dspread.demoui.widget.InnerListview access$300(com.dspread.demoui.activities.MainActivity) -> u
     int getKeyIndex() -> u
-    java.lang.String access$3000(com.dspread.demoui.MainActivity) -> v
+    java.lang.String access$3000(com.dspread.demoui.activities.MainActivity) -> v
     java.util.List getPermissionDeviceList() -> v
-    boolean access$3100(com.dspread.demoui.MainActivity) -> w
+    boolean access$3100(com.dspread.demoui.activities.MainActivity) -> w
     void initIntent() -> w
-    boolean access$3200(com.dspread.demoui.MainActivity) -> x
+    boolean access$3200(com.dspread.demoui.activities.MainActivity) -> x
     void initListener() -> x
-    android.content.BroadcastReceiver access$3300(com.dspread.demoui.MainActivity) -> y
+    android.content.BroadcastReceiver access$3300(com.dspread.demoui.activities.MainActivity) -> y
     void initView() -> y
-    boolean access$3400(com.dspread.demoui.MainActivity) -> z
+    boolean access$3400(com.dspread.demoui.activities.MainActivity) -> z
     void refreshAdapter() -> z
-com.dspread.demoui.MainActivity$1 -> com.dspread.demoui.MainActivity$a:
-    com.dspread.demoui.MainActivity this$0 -> a
-com.dspread.demoui.MainActivity$2 -> com.dspread.demoui.MainActivity$b:
-    com.dspread.demoui.MainActivity this$0 -> a
-com.dspread.demoui.MainActivity$3 -> com.dspread.demoui.MainActivity$c:
-    com.dspread.demoui.MainActivity this$0 -> a
-com.dspread.demoui.MainActivity$4 -> com.dspread.demoui.MainActivity$d:
-    com.dspread.demoui.MainActivity this$0 -> a
-com.dspread.demoui.MainActivity$5 -> com.dspread.demoui.MainActivity$e:
-    com.dspread.demoui.MainActivity this$0 -> a
-com.dspread.demoui.MainActivity$6 -> com.dspread.demoui.MainActivity$f:
-    com.dspread.demoui.MainActivity this$0 -> a
-com.dspread.demoui.MainActivity$MyListViewAdapter -> com.dspread.demoui.MainActivity$g:
+com.dspread.demoui.activities.MainActivity$1 -> com.dspread.demoui.activities.MainActivity$a:
+    com.dspread.demoui.activities.MainActivity this$0 -> a
+com.dspread.demoui.activities.MainActivity$2 -> com.dspread.demoui.activities.MainActivity$b:
+    com.dspread.demoui.activities.MainActivity this$0 -> a
+com.dspread.demoui.activities.MainActivity$3 -> com.dspread.demoui.activities.MainActivity$c:
+    com.dspread.demoui.activities.MainActivity this$0 -> a
+com.dspread.demoui.activities.MainActivity$4 -> com.dspread.demoui.activities.MainActivity$d:
+    com.dspread.demoui.activities.MainActivity this$0 -> a
+com.dspread.demoui.activities.MainActivity$5 -> com.dspread.demoui.activities.MainActivity$e:
+    com.dspread.demoui.activities.MainActivity this$0 -> a
+com.dspread.demoui.activities.MainActivity$6 -> com.dspread.demoui.activities.MainActivity$f:
+    com.dspread.demoui.activities.MainActivity this$0 -> a
+com.dspread.demoui.activities.MainActivity$MyListViewAdapter -> com.dspread.demoui.activities.MainActivity$g:
     java.util.List m_DataMap -> a
     android.view.LayoutInflater m_Inflater -> b
     void clearData() -> a
-com.dspread.demoui.MainActivity$MyOnClickListener -> com.dspread.demoui.MainActivity$h:
-    com.dspread.demoui.MainActivity this$0 -> a
-com.dspread.demoui.MainActivity$MyOnClickListener$1 -> com.dspread.demoui.MainActivity$h$a:
+com.dspread.demoui.activities.MainActivity$MyOnClickListener -> com.dspread.demoui.activities.MainActivity$h:
+    com.dspread.demoui.activities.MainActivity this$0 -> a
+com.dspread.demoui.activities.MainActivity$MyOnClickListener$1 -> com.dspread.demoui.activities.MainActivity$h$a:
+    com.dspread.demoui.activities.MainActivity$MyOnClickListener this$1 -> b
     java.lang.CharSequence[] val$items -> a
-    com.dspread.demoui.MainActivity$MyOnClickListener this$1 -> b
-com.dspread.demoui.MainActivity$MyPosListener -> com.dspread.demoui.MainActivity$i:
-    com.dspread.demoui.MainActivity this$0 -> a
-com.dspread.demoui.MainActivity$MyPosListener$1 -> com.dspread.demoui.MainActivity$i$c:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$10 -> com.dspread.demoui.MainActivity$i$a:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$11 -> com.dspread.demoui.MainActivity$i$b:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$2 -> com.dspread.demoui.MainActivity$i$d:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$3 -> com.dspread.demoui.MainActivity$i$e:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$4 -> com.dspread.demoui.MainActivity$i$f:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$5 -> com.dspread.demoui.MainActivity$i$g:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$6 -> com.dspread.demoui.MainActivity$i$h:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$7 -> com.dspread.demoui.MainActivity$i$i:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$8 -> com.dspread.demoui.MainActivity$i$j:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$MyPosListener$9 -> com.dspread.demoui.MainActivity$i$k:
-    com.dspread.demoui.MainActivity$MyPosListener this$1 -> a
-com.dspread.demoui.MainActivity$POS_TYPE -> com.dspread.demoui.MainActivity$POS_TYPE:
-    com.dspread.demoui.MainActivity$POS_TYPE[] $VALUES -> a
-com.dspread.demoui.MainActivity$UpdateThread -> com.dspread.demoui.MainActivity$j:
+com.dspread.demoui.activities.MainActivity$MyQposClass -> com.dspread.demoui.activities.MainActivity$i:
+    com.dspread.demoui.activities.MainActivity this$0 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$1 -> com.dspread.demoui.activities.MainActivity$i$c:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$10 -> com.dspread.demoui.activities.MainActivity$i$a:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$11 -> com.dspread.demoui.activities.MainActivity$i$b:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$2 -> com.dspread.demoui.activities.MainActivity$i$d:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$3 -> com.dspread.demoui.activities.MainActivity$i$e:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$4 -> com.dspread.demoui.activities.MainActivity$i$f:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$5 -> com.dspread.demoui.activities.MainActivity$i$g:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$6 -> com.dspread.demoui.activities.MainActivity$i$h:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$7 -> com.dspread.demoui.activities.MainActivity$i$i:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$8 -> com.dspread.demoui.activities.MainActivity$i$j:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$MyQposClass$9 -> com.dspread.demoui.activities.MainActivity$i$k:
+    com.dspread.demoui.activities.MainActivity$MyQposClass this$1 -> a
+com.dspread.demoui.activities.MainActivity$POS_TYPE -> com.dspread.demoui.activities.MainActivity$POS_TYPE:
+    com.dspread.demoui.activities.MainActivity$POS_TYPE[] $VALUES -> a
+com.dspread.demoui.activities.MainActivity$UpdateThread -> com.dspread.demoui.activities.MainActivity$j:
+    com.dspread.demoui.activities.MainActivity this$0 -> b
     boolean concelFlag -> a
-    com.dspread.demoui.MainActivity this$0 -> b
     void concelSelf() -> a
-com.dspread.demoui.MainActivity$UpdateThread$1 -> com.dspread.demoui.MainActivity$j$a:
+com.dspread.demoui.activities.MainActivity$UpdateThread$1 -> com.dspread.demoui.activities.MainActivity$j$a:
+    com.dspread.demoui.activities.MainActivity$UpdateThread this$1 -> b
     int val$progress -> a
-    com.dspread.demoui.MainActivity$UpdateThread this$1 -> b
-com.dspread.demoui.MainActivity$UpdateThread$2 -> com.dspread.demoui.MainActivity$j$b:
-    com.dspread.demoui.MainActivity$UpdateThread this$1 -> a
-com.dspread.demoui.OtherActivity -> com.dspread.demoui.OtherActivity:
+com.dspread.demoui.activities.MainActivity$UpdateThread$2 -> com.dspread.demoui.activities.MainActivity$j$b:
+    com.dspread.demoui.activities.MainActivity$UpdateThread this$1 -> a
+com.dspread.demoui.activities.OtherActivity -> com.dspread.demoui.activities.OtherActivity:
     android.widget.Button btnUSB -> y
     java.lang.String blueTootchAddress -> G
     boolean resetIpekFlag -> P
@@ -12875,7 +12908,6 @@ com.dspread.demoui.OtherActivity -> com.dspread.demoui.OtherActivity:
     android.widget.EditText statusEditText -> u
     java.lang.String nfcLog -> x
     android.widget.Button btnEMVTest -> L
-    com.dspread.demoui.OtherActivity$POS_TYPE posType -> N
     boolean selectBTFlag -> Z
     java.lang.String[] appTLVList -> U
     int couFlag -> V
@@ -12885,6 +12917,7 @@ com.dspread.demoui.OtherActivity -> com.dspread.demoui.OtherActivity:
     android.app.Dialog dialog -> w
     android.widget.Button btnDisconnect -> z
     android.content.Context mContext -> K
+    com.dspread.demoui.activities.OtherActivity$POS_TYPE posType -> N
     boolean resetMasterKeyFlag -> Q
     android.widget.Button serialBtn -> t
     android.widget.ListView appListView -> v
@@ -12900,143 +12933,126 @@ com.dspread.demoui.OtherActivity -> com.dspread.demoui.OtherActivity:
     com.dspread.xpos.QPOSService pos -> B
     java.lang.String cashbackAmount -> E
     android.view.MenuItem audioitem -> O
-    void access$3300(com.dspread.demoui.OtherActivity) -> A
-    android.widget.Button access$3400(com.dspread.demoui.OtherActivity) -> B
-    android.widget.EditText access$400(com.dspread.demoui.OtherActivity) -> C
-    java.lang.String access$500(com.dspread.demoui.OtherActivity) -> D
-    void access$700(com.dspread.demoui.OtherActivity) -> E
-    android.app.Dialog access$800(com.dspread.demoui.OtherActivity) -> F
-    android.content.Context access$900(com.dspread.demoui.OtherActivity) -> G
-    void access$000(com.dspread.demoui.OtherActivity,com.dspread.xpos.QPOSService$CommunicationMode) -> a
-    com.dspread.demoui.OtherActivity$POS_TYPE access$100(com.dspread.demoui.OtherActivity) -> a
-    java.lang.String access$1002(com.dspread.demoui.OtherActivity,java.lang.String) -> a
-    com.dspread.demoui.OtherActivity$POS_TYPE access$102(com.dspread.demoui.OtherActivity,com.dspread.demoui.OtherActivity$POS_TYPE) -> a
-    android.widget.ListView access$1202(com.dspread.demoui.OtherActivity,android.widget.ListView) -> a
-    boolean access$1302(com.dspread.demoui.OtherActivity,boolean) -> a
-    void access$1700(com.dspread.demoui.OtherActivity,int) -> a
-    void access$2000(com.dspread.demoui.OtherActivity,android.hardware.usb.UsbManager,android.hardware.usb.UsbDevice) -> a
-    android.hardware.usb.UsbDevice access$2902(com.dspread.demoui.OtherActivity,android.hardware.usb.UsbDevice) -> a
-    int access$3500(com.dspread.demoui.OtherActivity,int,java.lang.String,java.lang.String) -> a
-    android.app.Dialog access$802(com.dspread.demoui.OtherActivity,android.app.Dialog) -> a
+    void access$3300(com.dspread.demoui.activities.OtherActivity) -> A
+    android.widget.Button access$3400(com.dspread.demoui.activities.OtherActivity) -> B
+    android.widget.EditText access$400(com.dspread.demoui.activities.OtherActivity) -> C
+    java.lang.String access$500(com.dspread.demoui.activities.OtherActivity) -> D
+    void access$700(com.dspread.demoui.activities.OtherActivity) -> E
+    android.app.Dialog access$800(com.dspread.demoui.activities.OtherActivity) -> F
+    android.content.Context access$900(com.dspread.demoui.activities.OtherActivity) -> G
+    void access$000(com.dspread.demoui.activities.OtherActivity,com.dspread.xpos.QPOSService$CommunicationMode) -> a
+    com.dspread.demoui.activities.OtherActivity$POS_TYPE access$100(com.dspread.demoui.activities.OtherActivity) -> a
+    java.lang.String access$1002(com.dspread.demoui.activities.OtherActivity,java.lang.String) -> a
+    com.dspread.demoui.activities.OtherActivity$POS_TYPE access$102(com.dspread.demoui.activities.OtherActivity,com.dspread.demoui.activities.OtherActivity$POS_TYPE) -> a
+    android.widget.ListView access$1202(com.dspread.demoui.activities.OtherActivity,android.widget.ListView) -> a
+    boolean access$1302(com.dspread.demoui.activities.OtherActivity,boolean) -> a
+    void access$1700(com.dspread.demoui.activities.OtherActivity,int) -> a
+    void access$2000(com.dspread.demoui.activities.OtherActivity,android.hardware.usb.UsbManager,android.hardware.usb.UsbDevice) -> a
+    android.hardware.usb.UsbDevice access$2902(com.dspread.demoui.activities.OtherActivity,android.hardware.usb.UsbDevice) -> a
+    int access$3500(com.dspread.demoui.activities.OtherActivity,int,java.lang.String,java.lang.String) -> a
+    android.app.Dialog access$802(com.dspread.demoui.activities.OtherActivity,android.app.Dialog) -> a
     int checkBin(int,java.lang.String,java.lang.String) -> a
     void devicePermissionRequest(android.hardware.usb.UsbManager,android.hardware.usb.UsbDevice) -> a
     void open(com.dspread.xpos.QPOSService$CommunicationMode) -> a
-    java.lang.String access$1000(com.dspread.demoui.OtherActivity) -> b
-    java.lang.String access$1102(com.dspread.demoui.OtherActivity,java.lang.String) -> b
-    boolean access$1602(com.dspread.demoui.OtherActivity,boolean) -> b
-    int access$3102(com.dspread.demoui.OtherActivity,int) -> b
+    java.lang.String access$1000(com.dspread.demoui.activities.OtherActivity) -> b
+    java.lang.String access$1102(com.dspread.demoui.activities.OtherActivity,java.lang.String) -> b
+    boolean access$1602(com.dspread.demoui.activities.OtherActivity,boolean) -> b
+    int access$3102(com.dspread.demoui.activities.OtherActivity,int) -> b
     void deviceShowDisplay(java.lang.String) -> b
-    java.lang.String access$1100(com.dspread.demoui.OtherActivity) -> c
-    boolean access$1802(com.dspread.demoui.OtherActivity,boolean) -> c
-    java.lang.String access$202(com.dspread.demoui.OtherActivity,java.lang.String) -> c
-    int access$3202(com.dspread.demoui.OtherActivity,int) -> c
-    android.widget.ListView access$1200(com.dspread.demoui.OtherActivity) -> d
-    java.lang.String access$2102(com.dspread.demoui.OtherActivity,java.lang.String) -> d
-    void access$600(com.dspread.demoui.OtherActivity,int) -> d
-    boolean access$1300(com.dspread.demoui.OtherActivity) -> e
-    java.lang.String access$2602(com.dspread.demoui.OtherActivity,java.lang.String) -> e
-    android.widget.Button access$1400(com.dspread.demoui.OtherActivity) -> f
-    java.lang.String access$502(com.dspread.demoui.OtherActivity,java.lang.String) -> f
+    java.lang.String access$1100(com.dspread.demoui.activities.OtherActivity) -> c
+    boolean access$1802(com.dspread.demoui.activities.OtherActivity,boolean) -> c
+    java.lang.String access$202(com.dspread.demoui.activities.OtherActivity,java.lang.String) -> c
+    int access$3202(com.dspread.demoui.activities.OtherActivity,int) -> c
+    android.widget.ListView access$1200(com.dspread.demoui.activities.OtherActivity) -> d
+    java.lang.String access$2102(com.dspread.demoui.activities.OtherActivity,java.lang.String) -> d
+    void access$600(com.dspread.demoui.activities.OtherActivity,int) -> d
+    boolean access$1300(com.dspread.demoui.activities.OtherActivity) -> e
+    java.lang.String access$2602(com.dspread.demoui.activities.OtherActivity,java.lang.String) -> e
+    android.widget.Button access$1400(com.dspread.demoui.activities.OtherActivity) -> f
+    java.lang.String access$502(com.dspread.demoui.activities.OtherActivity,java.lang.String) -> f
     void sendMsg(int) -> f
-    android.widget.Button access$1500(com.dspread.demoui.OtherActivity) -> g
+    android.widget.Button access$1500(com.dspread.demoui.activities.OtherActivity) -> g
     void sendMsgDelay(int) -> g
-    boolean access$1600(com.dspread.demoui.OtherActivity) -> h
-    boolean access$1800(com.dspread.demoui.OtherActivity) -> i
-    java.util.List access$1900(com.dspread.demoui.OtherActivity) -> j
-    java.lang.String access$200(com.dspread.demoui.OtherActivity) -> k
-    java.lang.String access$2100(com.dspread.demoui.OtherActivity) -> l
+    boolean access$1600(com.dspread.demoui.activities.OtherActivity) -> h
+    boolean access$1800(com.dspread.demoui.activities.OtherActivity) -> i
+    java.util.List access$1900(com.dspread.demoui.activities.OtherActivity) -> j
+    java.lang.String access$200(com.dspread.demoui.activities.OtherActivity) -> k
+    java.lang.String access$2100(com.dspread.demoui.activities.OtherActivity) -> l
     int getLayoutId() -> l
-    boolean access$2200(com.dspread.demoui.OtherActivity) -> m
-    boolean access$2300(com.dspread.demoui.OtherActivity) -> n
+    boolean access$2200(com.dspread.demoui.activities.OtherActivity) -> m
+    boolean access$2300(com.dspread.demoui.activities.OtherActivity) -> n
     void onToolbarLinstener() -> n
-    android.content.BroadcastReceiver access$2400(com.dspread.demoui.OtherActivity) -> o
-    boolean access$2500(com.dspread.demoui.OtherActivity) -> p
+    android.content.BroadcastReceiver access$2400(com.dspread.demoui.activities.OtherActivity) -> o
+    boolean access$2500(com.dspread.demoui.activities.OtherActivity) -> p
     void dismissDialog() -> p
-    java.lang.String access$2600(com.dspread.demoui.OtherActivity) -> q
+    java.lang.String access$2600(com.dspread.demoui.activities.OtherActivity) -> q
     void clearDisplay() -> q
-    int access$2700(com.dspread.demoui.OtherActivity) -> r
+    int access$2700(com.dspread.demoui.activities.OtherActivity) -> r
     void close() -> r
-    android.widget.Button access$2800(com.dspread.demoui.OtherActivity) -> s
+    android.widget.Button access$2800(com.dspread.demoui.activities.OtherActivity) -> s
     int getKeyIndex() -> s
-    android.hardware.usb.UsbDevice access$2900(com.dspread.demoui.OtherActivity) -> t
+    android.hardware.usb.UsbDevice access$2900(com.dspread.demoui.activities.OtherActivity) -> t
     java.util.List getPermissionDeviceList() -> t
-    com.dspread.xpos.QPOSService access$300(com.dspread.demoui.OtherActivity) -> u
+    com.dspread.xpos.QPOSService access$300(com.dspread.demoui.activities.OtherActivity) -> u
     void initIntent() -> u
-    android.widget.Button access$3000(com.dspread.demoui.OtherActivity) -> v
+    android.widget.Button access$3000(com.dspread.demoui.activities.OtherActivity) -> v
     void initListener() -> v
-    int access$3100(com.dspread.demoui.OtherActivity) -> w
+    int access$3100(com.dspread.demoui.activities.OtherActivity) -> w
     void initView() -> w
-    int access$3108(com.dspread.demoui.OtherActivity) -> x
+    int access$3108(com.dspread.demoui.activities.OtherActivity) -> x
     void updateEmvConfigTest() -> x
-    int access$3200(com.dspread.demoui.OtherActivity) -> y
-    int access$3208(com.dspread.demoui.OtherActivity) -> z
-com.dspread.demoui.OtherActivity$1 -> com.dspread.demoui.OtherActivity$a:
-    com.dspread.demoui.OtherActivity this$0 -> a
-com.dspread.demoui.OtherActivity$2 -> com.dspread.demoui.OtherActivity$b:
-    com.dspread.demoui.OtherActivity this$0 -> a
-com.dspread.demoui.OtherActivity$3 -> com.dspread.demoui.OtherActivity$c:
-    com.dspread.demoui.OtherActivity this$0 -> a
-com.dspread.demoui.OtherActivity$MyOnClickListener -> com.dspread.demoui.OtherActivity$d:
-    com.dspread.demoui.OtherActivity this$0 -> a
-com.dspread.demoui.OtherActivity$MyOnClickListener$1 -> com.dspread.demoui.OtherActivity$d$a:
-    com.dspread.demoui.OtherActivity$MyOnClickListener this$1 -> b
+    int access$3200(com.dspread.demoui.activities.OtherActivity) -> y
+    int access$3208(com.dspread.demoui.activities.OtherActivity) -> z
+com.dspread.demoui.activities.OtherActivity$1 -> com.dspread.demoui.activities.OtherActivity$a:
+    com.dspread.demoui.activities.OtherActivity this$0 -> a
+com.dspread.demoui.activities.OtherActivity$2 -> com.dspread.demoui.activities.OtherActivity$b:
+    com.dspread.demoui.activities.OtherActivity this$0 -> a
+com.dspread.demoui.activities.OtherActivity$3 -> com.dspread.demoui.activities.OtherActivity$c:
+    com.dspread.demoui.activities.OtherActivity this$0 -> a
+com.dspread.demoui.activities.OtherActivity$MyOnClickListener -> com.dspread.demoui.activities.OtherActivity$d:
+    com.dspread.demoui.activities.OtherActivity this$0 -> a
+com.dspread.demoui.activities.OtherActivity$MyOnClickListener$1 -> com.dspread.demoui.activities.OtherActivity$d$a:
     java.lang.CharSequence[] val$items -> a
-com.dspread.demoui.OtherActivity$MyPosListener -> com.dspread.demoui.OtherActivity$e:
-    com.dspread.demoui.OtherActivity this$0 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$1 -> com.dspread.demoui.OtherActivity$e$c:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$10 -> com.dspread.demoui.OtherActivity$e$a:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$11 -> com.dspread.demoui.OtherActivity$e$b:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$2 -> com.dspread.demoui.OtherActivity$e$d:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$3 -> com.dspread.demoui.OtherActivity$e$e:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$4 -> com.dspread.demoui.OtherActivity$e$f:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$5 -> com.dspread.demoui.OtherActivity$e$g:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$6 -> com.dspread.demoui.OtherActivity$e$h:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$7 -> com.dspread.demoui.OtherActivity$e$i:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$8 -> com.dspread.demoui.OtherActivity$e$j:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$MyPosListener$9 -> com.dspread.demoui.OtherActivity$e$k:
-    com.dspread.demoui.OtherActivity$MyPosListener this$1 -> a
-com.dspread.demoui.OtherActivity$POS_TYPE -> com.dspread.demoui.OtherActivity$POS_TYPE:
-    com.dspread.demoui.OtherActivity$POS_TYPE[] $VALUES -> a
-com.dspread.demoui.QPOSUtil -> com.dspread.demoui.a:
-    java.lang.String byteArray2Hex(byte[]) -> a
-    boolean checkStringAllZero(java.lang.String) -> a
-    java.lang.String formatLongToTimeStr(java.lang.Long,android.content.Context) -> a
-    java.lang.String convertHexToString(java.lang.String) -> b
-com.dspread.demoui.TRACE -> com.dspread.demoui.b:
-    java.lang.String NEW_LINE -> a
-    java.lang.Boolean isTesting -> c
-    java.lang.String AppName -> b
-    void d(java.lang.String) -> a
-    void i(java.lang.String) -> b
-    void w(java.lang.String) -> c
-com.dspread.demoui.USBClass -> com.dspread.demoui.c:
-    android.content.BroadcastReceiver mUsbReceiver -> a
-    android.hardware.usb.UsbManager mManager -> b
-    java.util.HashMap mdevices -> c
-    android.app.PendingIntent mPermissionIntent -> d
-    java.util.ArrayList GetUSBDevices(android.content.Context) -> a
-    java.util.HashMap getMdevices() -> a
-com.dspread.demoui.USBClass$1 -> com.dspread.demoui.c$a:
-com.dspread.demoui.WelcomeActivity -> com.dspread.demoui.WelcomeActivity:
+    com.dspread.demoui.activities.OtherActivity$MyOnClickListener this$1 -> b
+com.dspread.demoui.activities.OtherActivity$MyPosListener -> com.dspread.demoui.activities.OtherActivity$e:
+    com.dspread.demoui.activities.OtherActivity this$0 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$1 -> com.dspread.demoui.activities.OtherActivity$e$c:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$10 -> com.dspread.demoui.activities.OtherActivity$e$a:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$11 -> com.dspread.demoui.activities.OtherActivity$e$b:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$2 -> com.dspread.demoui.activities.OtherActivity$e$d:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$3 -> com.dspread.demoui.activities.OtherActivity$e$e:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$4 -> com.dspread.demoui.activities.OtherActivity$e$f:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$5 -> com.dspread.demoui.activities.OtherActivity$e$g:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$6 -> com.dspread.demoui.activities.OtherActivity$e$h:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$7 -> com.dspread.demoui.activities.OtherActivity$e$i:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$8 -> com.dspread.demoui.activities.OtherActivity$e$j:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$MyPosListener$9 -> com.dspread.demoui.activities.OtherActivity$e$k:
+    com.dspread.demoui.activities.OtherActivity$MyPosListener this$1 -> a
+com.dspread.demoui.activities.OtherActivity$POS_TYPE -> com.dspread.demoui.activities.OtherActivity$POS_TYPE:
+    com.dspread.demoui.activities.OtherActivity$POS_TYPE[] $VALUES -> a
+com.dspread.demoui.activities.WelcomeActivity -> com.dspread.demoui.activities.WelcomeActivity:
+    android.widget.Button btn_test_command -> w
+    android.content.Intent intent -> x
     android.widget.Button other_blu -> v
-    android.content.Intent intent -> w
-    android.location.LocationManager lm -> x
+    android.location.LocationManager lm -> y
     android.widget.Button normal_blu -> u
     android.widget.Button serial_port -> t
     android.widget.Button audio -> s
     int getLayoutId() -> l
     void onToolbarLinstener() -> n
     void bluetoothRelaPer() -> p
+com.dspread.demoui.beans.ConstantsBean -> com.dspread.demoui.b.a:
+    com.dspread.xpos.QPOSService pos -> a
 com.dspread.demoui.injectKey.DukptKeys -> com.dspread.demoui.injectKey.a:
     java.lang.String pinksn -> g
     java.lang.String emvksn -> f
@@ -13124,22 +13140,34 @@ com.dspread.demoui.utils.FileUtils -> com.dspread.demoui.utils.b:
 com.dspread.demoui.utils.PreferenceUtil -> com.dspread.demoui.utils.c:
     android.content.SharedPreferences getSharePre(android.content.Context) -> a
     void putBoolean(android.content.Context,java.lang.String,boolean) -> a
-com.dspread.demoui.utils.ShowGuideView -> com.dspread.demoui.utils.d:
+com.dspread.demoui.utils.QPOSUtil -> com.dspread.demoui.utils.d:
+    java.lang.String byteArray2Hex(byte[]) -> a
+    boolean checkStringAllZero(java.lang.String) -> a
+    java.lang.String formatLongToTimeStr(java.lang.Long,android.content.Context) -> a
+    java.lang.String convertHexToString(java.lang.String) -> b
+com.dspread.demoui.utils.ShowGuideView -> com.dspread.demoui.utils.e:
     com.dspread.demoui.utils.ShowGuideView$onGuideViewListener listener -> a
     com.dspread.demoui.utils.ShowGuideView$onGuideViewListener access$000(com.dspread.demoui.utils.ShowGuideView) -> a
     void setListener(com.dspread.demoui.utils.ShowGuideView$onGuideViewListener) -> a
     void show(android.widget.Button,android.app.Activity,java.lang.String) -> a
-com.dspread.demoui.utils.ShowGuideView$1 -> com.dspread.demoui.utils.d$a:
+com.dspread.demoui.utils.ShowGuideView$1 -> com.dspread.demoui.utils.e$a:
     com.dspread.demoui.utils.ShowGuideView this$0 -> b
     android.widget.Button val$button -> a
     void onShown() -> a
-com.dspread.demoui.utils.ShowGuideView$onGuideViewListener -> com.dspread.demoui.utils.d$b:
+com.dspread.demoui.utils.ShowGuideView$onGuideViewListener -> com.dspread.demoui.utils.e$b:
     void onGuideListener(android.widget.Button) -> a
-com.dspread.demoui.utils.TLVParser -> com.dspread.demoui.utils.e:
+com.dspread.demoui.utils.TLVParser -> com.dspread.demoui.utils.f:
     boolean VerifyTLV(java.lang.String) -> a
     int getLengthInt(byte[]) -> a
     byte[] hexToByteArray(java.lang.String) -> b
-com.dspread.demoui.widget.SimpleComponent -> com.dspread.demoui.d.a:
+com.dspread.demoui.utils.TRACE -> com.dspread.demoui.utils.g:
+    java.lang.String NEW_LINE -> a
+    java.lang.Boolean isTesting -> c
+    java.lang.String AppName -> b
+    void d(java.lang.String) -> a
+    void i(java.lang.String) -> b
+    void w(java.lang.String) -> c
+com.dspread.demoui.widget.SimpleComponent -> com.dspread.demoui.widget.a:
     android.widget.TextView txt -> a
     int getAnchor() -> a
     android.view.View getView(android.view.LayoutInflater) -> a
@@ -13147,7 +13175,7 @@ com.dspread.demoui.widget.SimpleComponent -> com.dspread.demoui.d.a:
     int getXOffset() -> b
     int getYOffset() -> c
     int getFitPosition() -> d
-com.dspread.demoui.widget.SimpleComponent$1 -> com.dspread.demoui.d.a$a:
+com.dspread.demoui.widget.SimpleComponent$1 -> com.dspread.demoui.widget.a$a:
 xcrash.ActivityMonitor -> xcrash.a:
     xcrash.ActivityMonitor instance -> b
     java.util.LinkedList activities -> a

@@ -63,25 +63,6 @@
                 android:focusableInTouchMode="true"
                 android:orientation="vertical">
 
-                <Button
-
-
-                    android:id="@+id/btnEMVTest"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="test emv update TLV"
-                    android:visibility="gone"/>
-
-                <Button
-                    android:id="@+id/btnAutoEMV"
-
-
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="auto emv update"
-                    android:visibility="gone"/>
 
 
                 <EditText

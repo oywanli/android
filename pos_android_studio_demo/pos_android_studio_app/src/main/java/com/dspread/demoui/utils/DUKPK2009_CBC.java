@@ -461,13 +461,10 @@ public class DUKPK2009_CBC {
         return result;
     }
 
-
-
-
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args)  {
 //        07-08 17:50:27.306 12376-12376/com.dspread.demoui D/POS_SDK: onRequestOnlineProcess5F201A20202020202020202020202020202020202020202020202020204F08A0000003330101015F24032612319F160F4243544553542031323334353637389F21031750229A031907089F02060000000001119F03060000000000009F34030203009F120A50424F432044454249549F0607A00000033301015F300202209F4E0F616263640000000000000000000000C408622622FFFFFF3603C10A09118012400705E00002C708DBD7F58811779698C00A09118012400705E00001C28201880C54D377643A72400707E993BDEB6AFD891CFD5EC8CA03A251DF9301E70F76999ADABCECF859C26B9320724644D15B53BDE669414C7C8336EFDC0892A6F883DB5163D0613557949D66349BB6CB6BBCD8877017D3FEF5404C4446F2F2244CB62C62CAAE6EB86F99C9F31E69DB32BBDA2390A73EA907E4D8BDEED105E876319F4D17A5DE1788B0DA32730E4102F42A7232BE4D9D5E7BF46E7313C0F190E4F7A7D320D29DD3765E06DB5FE847C8B2B5ABBBAC0B22E5C9722303EF6E1C050C33B4F88D1BE8E79A8FBACA1086E466CB79A54A528DF53D98DA85E79EACAC4F464B0BC2941A540E1E6DFA47D4D369F50BEECFDC37AED04F63500BED4D4DB524E69345F6FE94A1CB2353D39959953393ADDD7930A43E2FCC3AE8AB348B0A8025C63C8650AF6F7C2F613EEF31549B6E073898D256815A851B5C39341B609BB3DB9974985550F096DEA5440B429BB0346D93FC25A17441F27F219A4004EE2A244014434E5D17B9F645CACB534E0CF7D3D555EE861780CF33A674D0A9A04C523C85D3F8062CE34309514A32F2AA
 
-//        String tlvDate = "5F201A20202020202020202020202020202020202020202020202020204F08A0000003330101015F24032512319F160F4243544553543132333435363738009F21031824329A031908019F02060000000011119F03060000000000009F34030203009F120A50424F432044454249549F0607A00000033301015F300202209F4E0F616263640000000000000000000000C408621691FFFFFF5696C10A00000510F3C360600001C708F6368E3D35599107C00A00000510F3C360600001C22046FF9418E43BAC13B98549CFA3C3BA60816EE7BF1F231711FD1C2F3EFD43D891D010A274BDC41868B91F5069764D5797B823";
+        String tlvDate = "202CFFDB89310951F878D5EFDA0B3F72886924D614B6E86F5796DAB3062F7F863DA7EAF1DF76AFCCD2AF6BB4EAF4FBFE60147573A04C899C56F988FC97CACBDA32EF4C7E14F6553F660758B3D66296C9300B3E5CE35E34FBAC9F06D1618534631140E42A16A2A0ED710DC56BBE709D7A7EA6961DDEEE180A6165EAA596295B7A06EAAD1A247B2BD10A4B011B2C80B1DC09416CD78FCB0E5C62F741F24DBE375A68E0A8D2C231AE6B95F895BD30F8FAF93CC14A6F6DAB4FE12886B0A2B90D29BC081633E125CC99715BA9DD933DFD1AD1DA942EF66B9FF0C37190755DC1118AF00F88EE6AC23581026FF4886BBB90E531AB02E0FA56183929179E2F56CF14E5D076799CE493F9132E59D55B3E3EB31FDE118957EC49490F051D287372F672507F8365CE4D8ECC9963";
 //        String tlvDate = "5f200a46414e2f4a49554855414f07a00000000310105f24032110319f160f4243544553543132333435363738009f21030542259a037005079f02060000000011119f03060000000000009f34031f03009f120b56495341204352454449549f0607a00000000310105f300202019f4e0f616263640000000000000000000000c408451461ffffff2125c00a00000332100300e0001dc22045e76e7f539c7ae82061b909dcc05b5151210784da7fe1ad82b3b5a9fa14c6e2d0105214696f298eddf4b12519f8d185a01e";
 //        List<TLV> parse = TLVParser.parse(tlvDate);
 
@@ -481,8 +478,10 @@ public class DUKPK2009_CBC {
 //        String pinblockData = TLVParser.searchTLV(parse, "c7").value;
 
 //        String pin = getDate(Pinksn, pinblockData, Enum_key.PIN, Enum_mode.ECB);
-//        String onLinedate = getDate(onLineksn, onLineblockData, Enum_key.DATA, Enum_mode.CBC);
-//        System.out.println(onLinedate);
+//        String a = "123";
+//        System.out.println(a == "123");
+        String onLinedate = getDate("00219111900082E0000C", tlvDate, Enum_key.DATA, Enum_mode.ECB);
+        System.out.println(onLinedate);
 
 //        parse = TLVParser.parse(onLinedate);
 //
@@ -497,93 +496,6 @@ public class DUKPK2009_CBC {
 
     }
 
-    public static void printArrFun(Object[] cl) {
-        for (int i = 0; i < cl.length; i++) {
-            System.out.println(cl[i].toString());
-        }
-    }
 
-
-    public static Object copyOfFun(Object[] cl, int newLen) {
-        Class<? extends Object[]> aClass = cl.getClass();
-        if (!aClass.isArray())
-             return null;
-        Class<?> componentType = aClass.getComponentType();
-        Object Arr  = Array.newInstance(componentType, newLen);
-        System.arraycopy(cl,0,Arr,0,Math.min(cl.length,newLen));
-        return Arr;
-    }
-
-    public static void printFields(Class cl) {
-        Field[] fields = cl.getDeclaredFields();
-        for (Field f : fields) {
-            Class type = f.getType();
-            String name = f.getName();
-            System.out.print(" ");
-            String modifiers = Modifier.toString(f.getModifiers());
-            if (modifiers.length() > 0)
-                System.out.print(modifiers + " ");
-            System.out.println(type.getName() + " " + name + ";");
-        }
-
-    }
-
-
-    static class TestClass extends TimerTask {
-        private String name;
-        private String age;
-        private String color;
-        private int aint;
-        private boolean aBoolean;
-
-        public TestClass(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getAge() {
-            return age;
-        }
-
-        public void setAge(String age) {
-            this.age = age;
-        }
-
-        public String getColor() {
-            return color;
-        }
-
-        public void setColor(String color) {
-            this.color = color;
-        }
-
-        public int getAint() {
-            return aint;
-        }
-
-        public void setAint(int aint) {
-            this.aint = aint;
-        }
-
-        public boolean isaBoolean() {
-            return aBoolean;
-        }
-
-        public void setaBoolean(boolean aBoolean) {
-            this.aBoolean = aBoolean;
-        }
-
-        @Override
-        public void run() {
-            System.out.println("dsvdsvdvssdv");
-        }
-    }
 
 }

@@ -228,14 +228,6 @@ android.support.design.widget.HeaderBehavior:
     private static final int INVALID_POINTER
 android.support.fragment.R$string
 android.support.v7.app.AppCompatDelegateImpl$ActionBarDrawableToggleImpl
-com.dspread.demoui.OtherActivity:
-    private java.lang.String transformDevice(android.hardware.usb.UsbDevice)
-    private void analyData(java.lang.String)
-    public static void saveObject(android.content.Context,java.lang.String,java.lang.Object)
-    public java.lang.Object readObject(android.content.Context,java.lang.String)
-    private static final java.lang.String ACTION_USB_PERMISSION
-    private static final int REQUEST_WRITE_EXTERNAL_STORAGE
-    private static final java.lang.String FILENAME
 android.support.v7.widget.AppCompatCompoundButtonHelper$DirectSetButtonDrawableInterface
 android.support.v7.widget.helper.ItemTouchHelper$RecoverAnimation$1
 android.support.design.internal.ThemeEnforcement:
@@ -634,8 +626,6 @@ android.support.transition.Transition:
     private static final java.lang.String MATCH_ID_STR
     private static final java.lang.String MATCH_ITEM_ID_STR
 android.support.v7.util.MessageThreadUtil$2$1
-com.dspread.demoui.WelcomeActivity:
-    private static final int LOCATION_CODE
 android.support.v7.widget.StaggeredGridLayoutManager$SavedState:
     void invalidateAnchorPositionInfo()
 android.support.design.widget.FloatingActionButton$Behavior:
@@ -692,10 +682,6 @@ android.support.constraint.Constraints:
     public static final java.lang.String TAG
 android.support.v4.app.FrameMetricsAggregator$FrameMetricsApi24Impl
 android.support.transition.ViewOverlayApi14$OverlayViewGroup$TouchInterceptor
-com.dspread.demoui.TRACE:
-    public void <init>()
-    public static void e(java.lang.Exception)
-    public static void a(int)
 android.support.v4.widget.DrawerLayout$LayoutParams:
     public void <init>(int,int,int)
     private static final int FLAG_IS_OPENED
@@ -2029,24 +2015,6 @@ android.support.v7.widget.helper.ItemTouchHelper$Callback
 androidx.versionedparcelable.VersionedParcelStream$FieldBuffer
 android.support.compat.R$id:
     private void <init>()
-com.dspread.demoui.QPOSUtil:
-    public void <init>()
-    public static byte[] HexStringToByteArray(java.lang.String)
-    private static byte charToByte(char)
-    public static byte[] CNToHex(java.lang.String)
-    public static java.lang.String getHexString(byte[])
-    public static byte[] IntToHex(int)
-    public static void printHexString(byte[])
-    public static int byteArrayToInt(byte[])
-    public static byte XorByteStream(byte[],int,int)
-    public static byte[] get(byte[],int)
-    public static byte[] get(byte[],int,int)
-    public static void turnUpVolume(android.content.Context,int)
-    public static byte[] bcd2asc(byte[])
-    public static byte[] ecb(byte[])
-    public static byte[] xor8(byte[],byte[])
-    public static java.lang.String readRSAStream(java.io.InputStream)
-    static final java.lang.String HEXES
 android.support.v4.text.PrecomputedTextCompat:
     public static android.support.v4.text.PrecomputedTextCompat create(java.lang.CharSequence,android.support.v4.text.PrecomputedTextCompat$Params)
     private void <init>(java.lang.CharSequence,android.support.v4.text.PrecomputedTextCompat$Params,int[])
@@ -2341,13 +2309,6 @@ android.support.v7.widget.RecyclerView$State:
     static final int STEP_START
     static final int STEP_LAYOUT
     static final int STEP_ANIMATIONS
-com.dspread.demoui.BaseActivity:
-    public android.support.v7.widget.Toolbar getToolbar()
-    public void setActionBarIcon(int)
-    public void setCustomToolbarColor(java.lang.String)
-    public void setToolbarTextColor(int)
-    public int getStatusBarHeight()
-    public static final java.lang.String TAG
 android.support.v4.app.NotificationCompatJellybean
 android.support.v4.widget.AutoScrollHelper:
     public boolean isEnabled()
@@ -2399,13 +2360,6 @@ android.support.v7.app.AlertController$ButtonHandler:
 android.support.v7.widget.PopupMenu$1
 android.support.v7.app.AlertController$AlertParams:
     public boolean mForceInverseBackground
-com.dspread.demoui.MainActivity:
-    private java.lang.String transformDevice(android.hardware.usb.UsbDevice)
-    public static void saveObject(android.content.Context,java.lang.String,java.lang.Object)
-    public java.lang.Object readObject(android.content.Context,java.lang.String)
-    private static final java.lang.String ACTION_USB_PERMISSION
-    private static final int REQUEST_WRITE_EXTERNAL_STORAGE
-    private static final java.lang.String FILENAME
 android.support.v4.view.WindowInsetsCompat:
     public void <init>(android.support.v4.view.WindowInsetsCompat)
     public boolean hasInsets()
@@ -2593,6 +2547,10 @@ android.support.v4.view.NestedScrollingChild2:
 android.support.v7.util.AsyncListUtil
 android.support.v7.widget.LinearSnapHelper
 android.support.v7.widget.helper.ItemTouchHelper$Callback$1
+com.dspread.demoui.utils.TRACE:
+    public void <init>()
+    public static void e(java.lang.Exception)
+    public static void a(int)
 android.support.design.bottomnavigation.LabelVisibilityMode
 xcrash.NativeHandler:
     void testNativeCrash(boolean)
@@ -2884,6 +2842,13 @@ android.support.design.widget.SwipeDismissBehavior:
     private static final float DEFAULT_DRAG_DISMISS_THRESHOLD
     private static final float DEFAULT_ALPHA_START_DISTANCE
     private static final float DEFAULT_ALPHA_END_DISTANCE
+com.dspread.demoui.activities.BaseActivity:
+    public android.support.v7.widget.Toolbar getToolbar()
+    public void setActionBarIcon(int)
+    public void setCustomToolbarColor(java.lang.String)
+    public void setToolbarTextColor(int)
+    public int getStatusBarHeight()
+    public static final java.lang.String TAG
 android.support.v4.widget.ResourceCursorAdapter:
     public void <init>(android.content.Context,int,android.database.Cursor)
     public void <init>(android.content.Context,int,android.database.Cursor,int)
@@ -3102,6 +3067,14 @@ android.support.design.widget.FloatingActionButton$BaseBehavior:
 android.support.v4.app.NotificationCompat$MessagingStyle$Message
 com.binioter.guideview.BuildConfig
 android.support.v4.text.util.LinkifyCompat
+com.dspread.demoui.activities.OtherActivity:
+    private java.lang.String transformDevice(android.hardware.usb.UsbDevice)
+    private void analyData(java.lang.String)
+    public static void saveObject(android.content.Context,java.lang.String,java.lang.Object)
+    public java.lang.Object readObject(android.content.Context,java.lang.String)
+    private static final java.lang.String ACTION_USB_PERMISSION
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE
+    private static final java.lang.String FILENAME
 android.support.v7.widget.RecyclerView$Adapter:
     public void setHasStableIds(boolean)
     public final boolean hasObservers()
@@ -4560,6 +4533,13 @@ android.support.v4.util.LruCache:
     public final synchronized int evictionCount()
     public final synchronized java.util.Map snapshot()
 com.dspread.demoui.R
+com.dspread.demoui.activities.MainActivity:
+    private java.lang.String transformDevice(android.hardware.usb.UsbDevice)
+    public static void saveObject(android.content.Context,java.lang.String,java.lang.Object)
+    public java.lang.Object readObject(android.content.Context,java.lang.String)
+    private static final java.lang.String ACTION_USB_PERMISSION
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE
+    private static final java.lang.String FILENAME
 android.support.v4.content.FileProvider$SimplePathStrategy:
     public android.net.Uri getUriForFile(java.io.File)
 android.support.cursoradapter.R
@@ -5054,6 +5034,24 @@ androidx.versionedparcelable.NonParcelField
 android.support.v7.util.DiffUtil$PostponedUpdate
 android.support.v7.widget.SnapHelper$2
 com.dspread.demoui.utils.TLV
+com.dspread.demoui.utils.QPOSUtil:
+    public void <init>()
+    public static byte[] HexStringToByteArray(java.lang.String)
+    private static byte charToByte(char)
+    public static byte[] CNToHex(java.lang.String)
+    public static java.lang.String getHexString(byte[])
+    public static byte[] IntToHex(int)
+    public static void printHexString(byte[])
+    public static int byteArrayToInt(byte[])
+    public static byte XorByteStream(byte[],int,int)
+    public static byte[] get(byte[],int)
+    public static byte[] get(byte[],int,int)
+    public static void turnUpVolume(android.content.Context,int)
+    public static byte[] bcd2asc(byte[])
+    public static byte[] ecb(byte[])
+    public static byte[] xor8(byte[],byte[])
+    public static java.lang.String readRSAStream(java.io.InputStream)
+    static final java.lang.String HEXES
 android.support.design.R$animator:
     private void <init>()
 android.support.design.circularreveal.CircularRevealWidget$RevealInfo:
@@ -5076,6 +5074,8 @@ android.support.design.widget.BaseTransientBottomBar$Behavior:
 android.support.v4.net.ConnectivityManagerCompat
 android.support.v4.app.SharedElementCallback$OnSharedElementsReadyListener
 android.support.v7.graphics.drawable.DrawerArrowDrawable
+com.dspread.demoui.beans.ConstantsBean:
+    public void <init>()
 android.support.v7.appcompat.R$anim
 android.support.v7.widget.RecyclerView$Orientation
 android.support.v4.print.PrintHelper$PrintUriAdapter
@@ -5345,6 +5345,8 @@ android.support.v4.content.ContextCompat:
     public static java.lang.String getSystemServiceName(android.content.Context,java.lang.Class)
     private static final java.lang.String TAG
 android.support.fragment.R$drawable
+com.dspread.demoui.activities.WelcomeActivity:
+    private static final int LOCATION_CODE
 android.support.v7.recyclerview.R$id
 android.arch.lifecycle.ClassesInfoCache:
     private static final int CALL_TYPE_NO_ARG
@@ -5616,8 +5618,6 @@ android.support.v4.app.FragmentTransitionImpl$3:
     final synthetic android.support.v4.app.FragmentTransitionImpl this$0
 android.support.transition.FragmentTransitionSupport$1:
     final synthetic android.support.transition.FragmentTransitionSupport this$0
-com.dspread.demoui.OtherActivity:
-    private android.widget.EditText mhipStatus
 android.support.v4.app.FragmentActivity$NonConfigurationInstances:
     java.lang.Object custom
 android.support.v4.view.ActionProvider:
@@ -5637,8 +5637,6 @@ com.dspread.demoui.utils.TLVParser:
     private static java.util.ArrayList tlvList
 android.support.transition.ChangeBounds$9:
     final synthetic android.support.transition.ChangeBounds this$0
-com.dspread.demoui.BaseActivity$2:
-    final synthetic com.dspread.demoui.BaseActivity this$0
 android.support.transition.Transition:
     private android.view.ViewGroup mSceneRoot
 android.support.v4.provider.SelfDestructiveThread$2:
@@ -5719,8 +5717,6 @@ android.support.constraint.solver.widgets.ConstraintWidget:
     boolean mVerticalChainFixedPosition
     android.support.constraint.solver.widgets.ConstraintWidget mHorizontalNextWidget
     android.support.constraint.solver.widgets.ConstraintWidget mVerticalNextWidget
-com.dspread.demoui.MainActivity$MyListViewAdapter:
-    final synthetic com.dspread.demoui.MainActivity this$0
 android.support.graphics.drawable.AnimatedVectorDrawableCompat:
     private android.animation.Animator$AnimatorListener mAnimatorListener
     java.util.ArrayList mAnimationCallbacks
@@ -5817,6 +5813,8 @@ android.support.constraint.solver.widgets.ConstraintWidgetContainer:
 android.support.transition.Styleable:
     static final int[] TRANSITION_TARGET
     static final int[] TRANSITION_MANAGER
+com.dspread.demoui.activities.OtherActivity:
+    private android.widget.EditText mhipStatus
 android.support.v7.view.menu.ListMenuItemView:
     private int mMenuType
 android.support.v7.view.StandaloneActionMode:
@@ -5878,6 +5876,8 @@ android.support.v7.widget.CardViewApi17Impl$1:
 xcrash.XCrash:
     private static java.lang.String appVersion
     private static java.lang.String logDir
+com.dspread.demoui.activities.MainActivity$MyListViewAdapter:
+    final synthetic com.dspread.demoui.activities.MainActivity this$0
 com.dspread.demoui.USBClass$1:
     final synthetic com.dspread.demoui.USBClass this$0
 android.support.v4.content.FileProvider$SimplePathStrategy:
@@ -5888,6 +5888,8 @@ android.support.v4.app.LoaderManagerImpl$LoaderObserver:
     boolean hasDeliveredData()
     void reset()
     public void dump(java.lang.String,java.io.PrintWriter)
+com.dspread.demoui.activities.BaseActivity$2:
+    final synthetic com.dspread.demoui.activities.BaseActivity this$0
 android.support.v4.app.FragmentTransitionCompat21$2:
     final synthetic android.support.v4.app.FragmentTransitionCompat21 this$0
 android.support.constraint.solver.widgets.ResolutionAnchor:

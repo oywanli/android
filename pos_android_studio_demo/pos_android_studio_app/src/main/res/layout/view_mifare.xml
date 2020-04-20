@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/mifareid" android:visibility="gone"
+        android:id="@+id/mifareid"
+        android:visibility="gone"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:padding="8dp"
         android:orientation="vertical">
@@ -163,7 +165,7 @@
             android:id="@+id/fast_read_ul"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="fase read UL" />
+            android:text="fast read UL" />
 
         <Button
             android:id="@+id/finish_ulcard"
@@ -183,7 +185,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tv11"
             android:hint="please input key value or cardData"
-            android:text="ffffffffffff"
+            android:text="ffffffff"
             android:background="@drawable/edit_background"/>
         <TextView android:textStyle="bold"
             android:textSize="15sp"
