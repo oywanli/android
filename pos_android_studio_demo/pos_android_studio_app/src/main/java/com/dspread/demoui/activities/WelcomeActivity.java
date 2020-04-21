@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.dspread.demoui.R;
 
 public class WelcomeActivity extends BaseActivity implements OnClickListener{
-	private Button audio,serial_port,normal_blu,other_blu,btn_test_command;
+	private Button audio,serial_port,normal_blu,other_blu;
 	private Intent intent;
 	private static final int LOCATION_CODE = 101;
 	private LocationManager lm;//【位置管理】
@@ -32,13 +32,11 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 		serial_port=(Button) findViewById(R.id.serial_port);
 		normal_blu=(Button) findViewById(R.id.normal_bluetooth);
 		other_blu=(Button) findViewById(R.id.other_bluetooth);
-		btn_test_command = findViewById(R.id.btn_test_command);
 		other_blu.setEnabled(false);
 		audio.setOnClickListener(this);
 		serial_port.setOnClickListener(this);
 		normal_blu.setOnClickListener(this);
 		other_blu.setOnClickListener(this);
-		btn_test_command.setOnClickListener(this);
 		bluetoothRelaPer();
 	}
 
@@ -54,7 +52,6 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch(v.getId()){
 			case R.id.audio://音频
 				intent = new Intent(this,OtherActivity.class);
@@ -76,10 +73,6 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 			case R.id.other_bluetooth://其他蓝牙连接，例如：BLE，，，
 				intent = new Intent(this,MainActivity.class);
 				intent.putExtra("connect_type", 4);
-				startActivity(intent);
-				break;
-			case R.id.btn_test_command:
-				intent = new Intent(this,CommunicationTestActivity.class);
 				startActivity(intent);
 				break;
 		}

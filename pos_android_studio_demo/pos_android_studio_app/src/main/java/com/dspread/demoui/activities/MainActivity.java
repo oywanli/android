@@ -91,9 +91,7 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import Decoder.BASE64Encoder;
-
 
 public class MainActivity extends BaseActivity implements ShowGuideView.onGuideViewListener {
     private QPOSService pos;
@@ -120,7 +118,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private Button btnBT;
     private Button btnDisconnect;
     private Button updateFwBtn;
-
     private EditText mKeyIndex;
 
     private String nfcLog = "";
@@ -131,9 +128,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private String blueTitle;
     private String title;
     private boolean isPinCanceled = false;
-    private boolean isNormalBlu = false;//判断是否为普通蓝牙的标志
+    private boolean isNormalBlu = false;//to judge if is normal bluetooth
     private int type;
     private ShowGuideView showGuideView;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
 
     private POS_TYPE posType = POS_TYPE.BLUETOOTH;
 
@@ -220,7 +218,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
             return m_DataMap.size();
         }
 
@@ -253,7 +250,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         }
     }
 
-    //设置listview的高度
+    //set listview's height
     public void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
@@ -275,9 +272,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //当窗口为用户可见，保持设备常开，并保持亮度不变
+        //When the window is visible to the user, keep the device normally open and keep the brightness unchanged
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //setContentView(R.layout.activity_main);
         initView();
         initIntent();
         initListener();
@@ -297,12 +293,12 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         Intent intent = getIntent();
         type = intent.getIntExtra("connect_type", 0);
         switch (type) {
-            case 3://普通蓝牙
+            case 3://normal bluetooth
                 btnBT.setVisibility(View.VISIBLE);
                 this.isNormalBlu = true;
                 title = getString(R.string.title_blu);
                 break;
-            case 4://其他蓝牙
+            case 4://Ble
                 btnBT.setVisibility(View.VISIBLE);
                 isNormalBlu = false;
                 title = getString(R.string.title_ble);
@@ -334,12 +330,12 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         String[] keyClass = new String[]{"Key A", "Key B"};
         ArrayAdapter<String> spinneradapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, keyClass);
         mafireSpinner.setAdapter(spinneradapter);
-        doTradeButton = (Button) findViewById(R.id.doTradeButton);//开始交易
+        doTradeButton = (Button) findViewById(R.id.doTradeButton);//start to do trade
         statusEditText = (EditText) findViewById(R.id.statusEditText);
-        btnBT = (Button) findViewById(R.id.btnBT);//选择设备开始扫描按钮
-        btnUSB = (Button) findViewById(R.id.btnUSB);//扫描USB设备
-        btnDisconnect = (Button) findViewById(R.id.disconnect);//断开连接
-        btnQuickEMV = (Button) findViewById(R.id.btnQuickEMV);//隐藏按钮
+        btnBT = (Button) findViewById(R.id.btnBT);//start to scan bluetooth device
+        btnUSB = (Button) findViewById(R.id.btnUSB);//scan USB device
+        btnDisconnect = (Button) findViewById(R.id.disconnect);//disconnect
+        btnQuickEMV = (Button) findViewById(R.id.btnQuickEMV);
         pollBtn = (Button) findViewById(R.id.search_card);
         pollULbtn = (Button) findViewById(R.id.poll_ulcard);
         veriftBtn = (Button) findViewById(R.id.verify_card);
@@ -379,8 +375,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             }
         });
         MyOnClickListener myOnClickListener = new MyOnClickListener();
-        //以下是按钮的点击事件
-        doTradeButton.setOnClickListener(myOnClickListener);//开始
+        //btn click
+        doTradeButton.setOnClickListener(myOnClickListener);
 
         btnBT.setOnClickListener(myOnClickListener);
         btnDisconnect.setOnClickListener(myOnClickListener);
@@ -404,7 +400,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     }
 
     /**
-     * 打开设备，获取类对象，开始监听
+     * open and init bluetooth
      *
      * @param mode
      */
@@ -413,7 +409,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         //pos=null;
 //        MyPosListener listener = new MyPosListener();
         MyQposClass listener = new MyQposClass();
-        //实现类的单例模式
         pos = QPOSService.getInstance(mode);
         if (pos == null) {
             statusEditText.setText("CommunicationMode unknow");
@@ -423,7 +418,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
         pos.setConext(MainActivity.this);
-        //通过handler处理，监听MyPosListener，实现QposService的接口，（回调接口）
+        //init handler
         Handler handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
         String sdkVersion = pos.getSdkVersion();
@@ -431,7 +426,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     }
 
     /**
-     * 关闭设备
+     * close device
      */
     private void close() {
         TRACE.d("close");
@@ -476,12 +471,12 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         audioitem = menu.findItem(R.id.audio_test);
         if (pos != null) {
             if (pos.getAudioControl()) {
-                audioitem.setTitle("音效控制:打开");
+                audioitem.setTitle("Audio Control : Open");
             } else {
-                audioitem.setTitle("音效控制:关闭");
+                audioitem.setTitle("Audio Control : Close");
             }
         } else {
-            audioitem.setTitle("音效控制:点击查看");
+            audioitem.setTitle("Audio Control : Check");
         }
         return true;
     }
@@ -521,7 +516,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        statusEditText.setText("升级完成" + "%");
+                        statusEditText.setText("Update Finished 100%");
                     }
                 });
 
@@ -534,14 +529,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         }
     }
 
-
-    /**
-     * 菜单栏的点击事件
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (pos == null) {
-            Toast.makeText(getApplicationContext(), "设备未连接", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Device Disconnect", Toast.LENGTH_LONG).show();
             return true;
         } else if (item.getItemId() == R.id.reset_qpos) {
             boolean a = pos.resetPosStatus();
@@ -555,18 +546,16 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         } else if (item.getItemId() == R.id.get_device_public_key) {//get the key value
 
             pos.getDevicePublicKey(5);
-        } else if (item.getItemId() == R.id.set_sleepmode_time) {//设置设备睡眠时间
+        } else if (item.getItemId() == R.id.set_sleepmode_time) {//set pos sleep mode time
 //            0~Integer.MAX_VALUE
-
             pos.setSleepModeTime(20);//the time is in 10s and 10000s
         } else if (item.getItemId() == R.id.set_shutdowm_time) {
             pos.setShutDownTime(15 * 60);
         }
-        //更新ipek
+        //update ipek
         else if (item.getItemId() == R.id.updateIPEK) {
             int keyIndex = getKeyIndex();
             String ipekGrop = "0" + keyIndex;
-
             pos.doUpdateIPEKOperation(
                     ipekGrop, "09118012400705E00000", "C22766F7379DD38AA5E1DA8C6AFA75AC", "B2DE27F60A443944",
                     "09118012400705E00000", "C22766F7379DD38AA5E1DA8C6AFA75AC", "B2DE27F60A443944",
@@ -584,7 +573,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             pos.updateEmvCAPKByTlv(EMVDataOperation.Add, capkTLV);
 
         } else if (item.getItemId() == R.id.setBuzzer) {
-            pos.doSetBuzzerOperation(3);//显示设置蜂鸣器响3次
+            pos.doSetBuzzerOperation(3);//set buzzer
         } else if (item.getItemId() == R.id.menu_get_deivce_info) {
             statusEditText.setText(R.string.getting_info);
             pos.getQposInfo();
@@ -593,10 +582,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             statusEditText.setText("get_deivce_key_checkvalue..............");
             int keyIdex = getKeyIndex();
             pos.getKeyCheckValue(keyIdex, QPOSService.CHECKVALUE_KEYTYPE.DUKPT_MKSK_ALLTYPE);
-
-
         } else if (item.getItemId() == R.id.menu_get_pos_id) {
-
             pos.getQposId();
             statusEditText.setText(R.string.getting_pos_id);
         } else if (item.getItemId() == R.id.setMasterkey) {
@@ -604,7 +590,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             //result；0123456789ABCDEFFEDCBA9876543210
             int keyIndex = getKeyIndex();
             pos.setMasterKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", keyIndex);
-
         } else if (item.getItemId() == R.id.menu_get_pin) {
             statusEditText.setText(R.string.input_pin);
             pos.getPin(1, 0, 6, "please input pin", "622262XXXXXXXXX4406", "", 20);
@@ -616,16 +601,13 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             if (updateFwBtn.getVisibility() == View.VISIBLE || btnQuickEMV.getVisibility() == View.VISIBLE  ) {
                 updateFwBtn.setVisibility(View.GONE);
                 btnQuickEMV.setVisibility(View.GONE);
-
             } else {
                 updateFwBtn.setVisibility(View.VISIBLE);
                 btnQuickEMV.setVisibility(View.VISIBLE);
-
             }
         } else if (item.getItemId() == R.id.resetSessionKey) {
             //key：0123456789ABCDEFFEDCBA9876543210
             //result：0123456789ABCDEFFEDCBA9876543210
-
             int keyIndex = getKeyIndex();
             pos.udpateWorkKey(
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",//PIN KEY
@@ -633,7 +615,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
                     keyIndex, 5);
         } else if (item.getItemId() == R.id.cusDisplay) {
-
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
 
@@ -651,10 +632,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         if (type == 3 || type == 4) {
             if (pos != null) {
                 if (isNormalBlu) {
-                    //停止扫描普通蓝牙
+                    //stop to scan bluetooth
                     pos.stopScanQPos2Mode();
                 } else {
-                    //停止扫描ble的蓝牙
+                    //stop to scan ble
                     pos.stopScanQposBLE();
                 }
             }
@@ -681,7 +662,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         AlertDialog.Builder singleChoiceDialog =
                 new AlertDialog.Builder(MainActivity.this);
         singleChoiceDialog.setTitle("please select one");
-        // 第二个参数是默认选项，此处设置为0
+        // The second parameter is default
         singleChoiceDialog.setSingleChoiceItems(items, 0,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -715,21 +696,17 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     /**
      * @author qianmengChen
      * @ClassName: MyPosListener
-     * @Function: TODO ADD FUNCTION
      * @date: 2016-11-10 下午6:35:06
      */
     class MyQposClass extends CQPOSService {
 
         @Override
-        public void onRequestWaitingUser() {//等待卡片
+        public void onRequestWaitingUser() {//wait user to insert/swipe/tap card
             TRACE.d("onRequestWaitingUser()");
             dismissDialog();
             statusEditText.setText(getString(R.string.waiting_for_card));
         }
 
-        /**
-         * 返回选择的开始，返回交易的结果
-         */
         @Override
         public void onDoTradeResult(DoTradeResult result, Hashtable<String, String> decodeData) {
             TRACE.d("(DoTradeResult result, Hashtable<String, String> decodeData) " + result.toString() + TRACE.NEW_LINE + "decodeData:" + decodeData);
@@ -743,7 +720,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 pos.doEmvApp(EmvOption.START);
             } else if (result == DoTradeResult.NOT_ICC) {
                 statusEditText.setText(getString(R.string.card_inserted));
-
             } else if (result == DoTradeResult.BAD_SWIPE) {
                 statusEditText.setText(getString(R.string.bad_swipe));
             } else if (result == DoTradeResult.MCR) {//磁条卡
@@ -761,12 +737,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     String macblock = decodeData.get("macblock");
                     String activateCode = decodeData.get("activateCode");
                     String trackRandomNumber = decodeData.get("trackRandomNumber");
-
                     content += getString(R.string.format_id) + " " + formatID + "\n";
                     content += getString(R.string.masked_pan) + " " + maskedPAN + "\n";
                     content += getString(R.string.expiry_date) + " " + expiryDate + "\n";
                     content += getString(R.string.cardholder_name) + " " + cardHolderName + "\n";
-
                     content += getString(R.string.service_code) + " " + serviceCode + "\n";
                     content += "trackblock: " + trackblock + "\n";
                     content += "psamId: " + psamId + "\n";
@@ -845,9 +819,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                         content += "PIN:" + " " + s + "\n";
                     }
                 }
-
                 statusEditText.setText(content);
-
             } else if ((result == DoTradeResult.NFC_ONLINE) || (result == DoTradeResult.NFC_OFFLINE)) {
                 nfcLog = decodeData.get("nfcLog");
                 String content = getString(R.string.tap_card);
@@ -889,7 +861,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     content += "trackRandomNumber: " + trackRandomNumber + "\n";
                     cardNo = maskedPAN;
                 } else {
-
                     String maskedPAN = decodeData.get("maskedPAN");
                     String expiryDate = decodeData.get("expiryDate");
                     String cardHolderName = decodeData.get("cardholderName");
@@ -903,7 +874,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     String encTrack2 = decodeData.get("encTrack2");
                     String encTrack3 = decodeData.get("encTrack3");
                     String partialTrack = decodeData.get("partialTrack");
-                    // TODO
                     String pinKsn = decodeData.get("pinKsn");
                     String trackksn = decodeData.get("trackksn");
                     String pinBlock = decodeData.get("pinBlock");
@@ -951,7 +921,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     cardNo = maskedPAN;
                 }
 //				TRACE.w("swipe card:" + content);
-
                 statusEditText.setText(content);
                 sendMsg(8003);
             } else if ((result == DoTradeResult.NFC_DECLINED)) {
@@ -959,12 +928,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             } else if (result == DoTradeResult.NO_RESPONSE) {
                 statusEditText.setText(getString(R.string.card_no_response));
             }
-
         }
 
         @Override
         public void onQposInfoResult(Hashtable<String, String> posInfoData) {
-
             TRACE.d("onQposInfoResult" + posInfoData.toString());
             String isSupportedTrack1 = posInfoData.get("isSupportedTrack1") == null ? "" : posInfoData.get("isSupportedTrack1");
             String isSupportedTrack2 = posInfoData.get("isSupportedTrack2") == null ? "" : posInfoData.get("isSupportedTrack2");
@@ -1003,9 +970,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         }
 
         /**
-         * 请求交易
-         * TODO 简单描述该方法的实现功能（可选）
-         *
          * @see com.dspread.xpos.QPOSService.QPOSServiceListener#onRequestTransactionResult(com.dspread.xpos.QPOSService.TransactionResult)
          */
         @Override
@@ -1014,16 +978,11 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             if (transactionResult == TransactionResult.CARD_REMOVED) {
                 clearDisplay();
             }
-
-            // clearDisplay();
             dismissDialog();
-
-            // statusEditText.setText("");
             dialog = new Dialog(MainActivity.this);
             dialog.setContentView(R.layout.alert_dialog);
             dialog.setTitle(R.string.transaction_result);
             TextView messageTextView = (TextView) dialog.findViewById(R.id.messageTextView);
-
             if (transactionResult == TransactionResult.APPROVED) {
                 TRACE.d("TransactionResult.APPROVED");
                 String message = getString(R.string.transaction_approved) + "\n" + getString(R.string.amount) + ": $" + amount + "\n";
@@ -1038,11 +997,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             } else if (transactionResult == TransactionResult.DECLINED) {
                 messageTextView.setText(getString(R.string.transaction_declined));
 //                    deviceShowDisplay("DECLINED");
-
             } else if (transactionResult == TransactionResult.CANCEL) {
                 clearDisplay();
                 messageTextView.setText(getString(R.string.transaction_cancel));
-
             } else if (transactionResult == TransactionResult.CAPK_FAIL) {
                 messageTextView.setText(getString(R.string.transaction_capk_fail));
             } else if (transactionResult == TransactionResult.NOT_ICC) {
@@ -1071,8 +1028,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 clearDisplay();
                 messageTextView.setText("CARD REMOVED");
             }
-
-
             dialog.findViewById(R.id.confirmButton).setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -1080,27 +1035,23 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     dismissDialog();
                 }
             });
-
             dialog.show();
             amount = "";
             cashbackAmount = "";
-
         }
 
         @Override
         public void onRequestBatchData(String tlv) {
-            TRACE.d("ICC交易结束");
+            TRACE.d("ICC trade finished");
             String content = getString(R.string.batch_data);
             TRACE.d("onRequestBatchData(String tlv):" + tlv);
             content += tlv;
             statusEditText.setText(content);
-
         }
 
         @Override
         public void onRequestTransactionLog(String tlv) {
             TRACE.d("onRequestTransactionLog(String tlv):" + tlv);
-
             dismissDialog();
             String content = getString(R.string.transaction_log);
             content += tlv;
@@ -1123,24 +1074,21 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             content += "psamId: " + psamId + "\n";
             content += "NFCId: " + NFCId + "\n";
             statusEditText.setText(content);
-
         }
 
         @Override
         public void onRequestSelectEmvApp(ArrayList<String> appList) {
             TRACE.d("onRequestSelectEmvApp():" + appList.toString());
-            TRACE.d("请选择App -- S，emv卡片的多种配置");
+            TRACE.d("Please select App -- S，emv card config");
             dismissDialog();
             dialog = new Dialog(MainActivity.this);
             dialog.setContentView(R.layout.emv_app_dialog);
             dialog.setTitle(R.string.please_select_app);
-
             String[] appNameList = new String[appList.size()];
             for (int i = 0; i < appNameList.length; ++i) {
 
                 appNameList[i] = appList.get(i);
             }
-
             appListView = (ListView) dialog.findViewById(R.id.appList);
             appListView.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, appNameList));
             appListView.setOnItemClickListener(new OnItemClickListener() {
@@ -1149,7 +1097,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     pos.selectEmvApp(position);
-                    TRACE.d("请选择App -- 结束 position = " + position);
+                    TRACE.d("select emv app position = " + position);
                     dismissDialog();
                 }
 
@@ -1168,13 +1116,12 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onRequestSetAmount() {
-            TRACE.d("输入金额 -- S");
+            TRACE.d("input amount -- S");
             TRACE.d("onRequestSetAmount()");
             dismissDialog();
             dialog = new Dialog(MainActivity.this);
             dialog.setContentView(R.layout.amount_dialog);
             dialog.setTitle(getString(R.string.set_amount));
-
             String[] transactionTypes = new String[]{"GOODS", "SERVICES", "CASH", "CASHBACK", "INQUIRY",
                     "TRANSFER", "ADMIN", "CASHDEPOSIT",
                     "PAYMENT", "PBOCLOG||ECQ_INQUIRE_LOG", "SALE",
@@ -1231,18 +1178,13 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     } else if (transactionTypeString.equals("SALES_NEW")) {
                         transactionType = TransactionType.SALES_NEW;
                     }
-
-
                     MainActivity.this.amount = amount;
                     MainActivity.this.cashbackAmount = cashbackAmount;
-
                     pos.setAmount(amount, cashbackAmount, "156", transactionType);
-                    TRACE.d("输入金额  -- 结束");
                     dismissDialog();
                 }
 
             });
-
             dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -1257,9 +1199,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         }
 
         /**
-         * 判断是否请求在线连接请求
-         * TODO 简单描述该方法的实现功能（可选）
-         *
          * @see com.dspread.xpos.QPOSService.QPOSServiceListener#onRequestIsServerConnected()
          */
         @Override
@@ -1290,8 +1229,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
             dialog.findViewById(R.id.confirmButton).setOnClickListener(
                     new OnClickListener() {
 
@@ -1312,14 +1249,11 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                         }
                     });
             dialog.show();
-
         }
-
 
         @Override
         public void onRequestTime() {
             TRACE.d("onRequestTime");
-            TRACE.d("要求终端时间。已回覆");
             dismissDialog();
             String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
             pos.sendTime(terminalTime);
@@ -1329,17 +1263,15 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onRequestDisplay(Display displayMsg) {
             TRACE.d("onRequestDisplay(Display displayMsg):" + displayMsg.toString());
-
             dismissDialog();
-
             String msg = "";
             if (displayMsg == Display.CLEAR_DISPLAY_MSG) {
                 msg = "";
             } else if (displayMsg == Display.MSR_DATA_READY) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("音频");
+                builder.setTitle("Audio");
                 builder.setMessage("Success,Contine ready");
-                builder.setPositiveButton("确定", null);
+                builder.setPositiveButton("Confirm", null);
                 builder.show();
             } else if (displayMsg == Display.PLEASE_WAIT) {
                 msg = getString(R.string.wait);
@@ -1367,7 +1299,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onRequestFinalConfirm() {
             TRACE.d("onRequestFinalConfirm() ");
-            TRACE.d("onRequestFinalConfirm+确认金额-- S");
+            TRACE.d("onRequestFinalConfirm - S");
             dismissDialog();
             if (!isPinCanceled) {
                 dialog = new Dialog(MainActivity.this);
@@ -1378,18 +1310,14 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 if (!cashbackAmount.equals("")) {
                     message += "\n" + getString(R.string.cashback_amount) + ": $" + cashbackAmount;
                 }
-
                 ((TextView) dialog.findViewById(R.id.messageTextView)).setText(message);
-
                 dialog.findViewById(R.id.confirmButton).setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         pos.finalConfirm(true);
                         dialog.dismiss();
-                        TRACE.d("确认金额-- 结束");
                     }
                 });
-
                 dialog.findViewById(R.id.cancelButton).setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1438,15 +1366,11 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         public void onError(Error errorState) {
             if (updateThread != null) {
                 updateThread.concelSelf();
-
             }
-
             TRACE.d("onError" + errorState.toString());
             dismissDialog();
-
             if (errorState == Error.CMD_NOT_AVAILABLE) {
                 statusEditText.setText(getString(R.string.command_not_available));
-
             } else if (errorState == Error.TIMEOUT) {
                 statusEditText.setText(getString(R.string.device_no_response));
             } else if (errorState == Error.DEVICE_RESET) {
@@ -1506,22 +1430,17 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onReturnApduResult(boolean arg0, String arg1, int arg2) {
-            // TODO Auto-generated method stub
             TRACE.d("onReturnApduResult(boolean arg0, String arg1, int arg2):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2);
         }
 
         @Override
         public void onReturnPowerOffIccResult(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onReturnPowerOffIccResult(boolean arg0):" + arg0);
-
         }
 
         @Override
         public void onReturnPowerOnIccResult(boolean arg0, String arg1, String arg2, int arg3) {
-            // TODO Auto-generated method stub
             TRACE.d("onReturnPowerOnIccResult(boolean arg0, String arg1, String arg2, int arg3) :" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
-
             if (arg0) {
                 pos.sendApdu("123456");
             }
@@ -1530,7 +1449,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onReturnSetSleepTimeResult(boolean isSuccess) {
             TRACE.d("onReturnSetSleepTimeResult(boolean isSuccess):" + isSuccess);
-
             String content = "";
             if (isSuccess) {
                 content = "set the sleep time success.";
@@ -1541,36 +1459,29 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         }
 
         @Override
-        public void onGetCardNoResult(String cardNo) {//获取卡号的回调
+        public void onGetCardNoResult(String cardNo) {
             TRACE.d("onGetCardNoResult(String cardNo):" + cardNo);
-
             statusEditText.setText("cardNo: " + cardNo);
         }
 
         @Override
         public void onRequestCalculateMac(String calMac) {
-            // statusEditText.setText("calMac: " + calMac);
-            // TRACE.d("calMac_result: calMac=> " + calMac);
             TRACE.d("onRequestCalculateMac(String calMac):" + calMac);
-
             if (calMac != null && !"".equals(calMac)) {
                 calMac = QPOSUtil.byteArray2Hex(calMac.getBytes());
             }
             statusEditText.setText("calMac: " + calMac);
             TRACE.d("calMac_result: calMac=> e: " + calMac);
-
         }
 
         @Override
         public void onRequestSignatureResult(byte[] arg0) {
             TRACE.d("onRequestSignatureResult(byte[] arg0):" + arg0.toString());
-
         }
 
         @Override
         public void onRequestUpdateWorkKeyResult(UpdateInformationResult result) {
             TRACE.d("onRequestUpdateWorkKeyResult(UpdateInformationResult result):" + result);
-
             if (result == UpdateInformationResult.UPDATE_SUCCESS) {
                 statusEditText.setText("update work key success");
             } else if (result == UpdateInformationResult.UPDATE_FAIL) {
@@ -1585,7 +1496,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onReturnCustomConfigResult(boolean isSuccess, String result) {
             TRACE.d("onReturnCustomConfigResult(boolean isSuccess, String result):" + isSuccess + TRACE.NEW_LINE + result);
-
             statusEditText.setText("result: " + isSuccess + "\ndata: " + result);
         }
 
@@ -1612,7 +1522,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     }
                 }
             });
-
             dialog.findViewById(R.id.bypassButton).setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -1633,24 +1542,18 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     dismissDialog();
                 }
             });
-
             dialog.show();
-
         }
-
 
         @Override
         public void onReturnSetMasterKeyResult(boolean isSuccess) {
             TRACE.d("onReturnSetMasterKeyResult(boolean isSuccess) : " + isSuccess);
-
-
             statusEditText.setText("result: " + isSuccess);
         }
 
         @Override
         public void onReturnBatchSendAPDUResult(LinkedHashMap<Integer, String> batchAPDUResult) {
             TRACE.d("onReturnBatchSendAPDUResult(LinkedHashMap<Integer, String> batchAPDUResult):" + batchAPDUResult.toString());
-
             StringBuilder sb = new StringBuilder();
             sb.append("APDU Responses: \n");
             for (HashMap.Entry<Integer, String> entry : batchAPDUResult.entrySet()) {
@@ -1675,14 +1578,12 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         public void onBluetoothBonded() {
             TRACE.d("onBluetoothBonded()");
             statusEditText.setText("bond success");
-
         }
 
         @Override
         public void onBluetoothBonding() {
             TRACE.d("onBluetoothBonding()");
             statusEditText.setText("bonding .....");
-
         }
 
         @Override
@@ -1691,15 +1592,11 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             String s = "serviceCode: " + result.get("serviceCode");
             s += "\n";
             s += "trackblock: " + result.get("trackblock");
-
             statusEditText.setText(s);
-
         }
-
 
         @Override
         public void onLcdShowCustomDisplay(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onLcdShowCustomDisplay(boolean arg0):" + arg0);
         }
 
@@ -1708,7 +1605,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             TRACE.d("onUpdatePosFirmwareResult(UpdateInformationResult arg0):" + arg0.toString());
             if (arg0 != UpdateInformationResult.UPDATE_SUCCESS) {
                 updateThread.concelSelf();
-
             }
             statusEditText.setText("onUpdatePosFirmwareResult" + arg0.toString());
         }
@@ -1732,73 +1628,55 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onGetPosComm(int mod, String amount, String posid) {
             TRACE.d("onGetPosComm(int mod, String amount, String posid):" + mod + TRACE.NEW_LINE + amount + TRACE.NEW_LINE + posid);
-
-
         }
-
 
         @Override
         public void onPinKey_TDES_Result(String arg0) {
             TRACE.d("onPinKey_TDES_Result(String arg0):" + arg0);
             statusEditText.setText("result:" + arg0);
-
         }
 
         @Override
         public void onUpdateMasterKeyResult(boolean arg0, Hashtable<String, String> arg1) {
-            // TODO Auto-generated method stub
             TRACE.d("onUpdateMasterKeyResult(boolean arg0, Hashtable<String, String> arg1):" + arg0 + TRACE.NEW_LINE + arg1.toString());
-
         }
 
         @Override
         public void onEmvICCExceptionData(String arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onEmvICCExceptionData(String arg0):" + arg0);
-
         }
 
         @Override
         public void onSetParamsResult(boolean arg0, Hashtable<String, Object> arg1) {
-            // TODO Auto-generated method stub
             TRACE.d("onSetParamsResult(boolean arg0, Hashtable<String, Object> arg1):" + arg0 + TRACE.NEW_LINE + arg1.toString());
-
         }
 
         @Override
         public void onGetInputAmountResult(boolean arg0, String arg1) {
-            // TODO Auto-generated method stub
             TRACE.d("onGetInputAmountResult(boolean arg0, String arg1):" + arg0 + TRACE.NEW_LINE + arg1.toString());
-
         }
 
         @Override
         public void onReturnNFCApduResult(boolean arg0, String arg1, int arg2) {
-            // TODO Auto-generated method stub
             TRACE.d("onReturnNFCApduResult(boolean arg0, String arg1, int arg2):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2);
             statusEditText.setText("onReturnNFCApduResult(boolean arg0, String arg1, int arg2):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2);
-
         }
 
         @Override
         public void onReturnPowerOffNFCResult(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d(" onReturnPowerOffNFCResult(boolean arg0) :" + arg0);
             statusEditText.setText(" onReturnPowerOffNFCResult(boolean arg0) :" + arg0);
         }
 
         @Override
         public void onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3) {
-            // TODO Auto-generated method stub
             TRACE.d("onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
             statusEditText.setText("onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
         }
 
-
         @Override
         public void onCbcMacResult(String result) {
             TRACE.d("onCbcMacResult(String result):" + result);
-
             if (result == null || "".equals(result)) {
                 statusEditText.setText("cbc_mac:false");
             } else {
@@ -1808,34 +1686,26 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onReadBusinessCardResult(boolean arg0, String arg1) {
-            // TODO Auto-generated method stub
             TRACE.d(" onReadBusinessCardResult(boolean arg0, String arg1):" + arg0 + TRACE.NEW_LINE + arg1);
-
         }
 
         @Override
         public void onWriteBusinessCardResult(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d(" onWriteBusinessCardResult(boolean arg0):" + arg0);
-
         }
 
         @Override
         public void onConfirmAmountResult(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onConfirmAmountResult(boolean arg0):" + arg0);
-
         }
 
         @Override
         public void onQposIsCardExist(boolean cardIsExist) {
             TRACE.d("onQposIsCardExist(boolean cardIsExist):" + cardIsExist);
-
             if (cardIsExist) {
                 statusEditText.setText("cardIsExist:" + cardIsExist);
             } else {
                 statusEditText.setText("cardIsExist:" + cardIsExist);
-
             }
         }
 
@@ -1843,7 +1713,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         public void onSearchMifareCardResult(Hashtable<String, String> arg0) {
             if (arg0 != null) {
                 TRACE.d("onSearchMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
-
                 String statuString = arg0.get("status");
                 String cardTypeString = arg0.get("cardType");
                 String cardUidLen = arg0.get("cardUidLen");
@@ -1877,48 +1746,41 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onSetBuzzerResult(boolean arg0) {
             TRACE.d("onSetBuzzerResult(boolean arg0):" + arg0);
-
             if (arg0) {
-                statusEditText.setText("蜂鸣器设置成功");
+                statusEditText.setText("Set buzzer success");
             } else {
-                statusEditText.setText("蜂鸣器设置失败");
+                statusEditText.setText("Set buzzer failed");
             }
-
         }
 
         @Override
         public void onSetBuzzerTimeResult(boolean b) {
             TRACE.d("onSetBuzzerTimeResult(boolean b):" + b);
-
         }
 
         @Override
         public void onSetBuzzerStatusResult(boolean b) {
             TRACE.d("onSetBuzzerStatusResult(boolean b):" + b);
-
         }
 
         @Override
         public void onGetBuzzerStatusResult(String s) {
             TRACE.d("onGetBuzzerStatusResult(String s):" + s);
-
         }
 
         @Override
         public void onSetManagementKey(boolean arg0) {
             TRACE.d("onSetManagementKey(boolean arg0):" + arg0);
-
             if (arg0) {
-                statusEditText.setText("设置主密钥成功");
+                statusEditText.setText("Set master key success");
             } else {
-                statusEditText.setText("设置主密钥失败");
+                statusEditText.setText("Set master key failed");
             }
         }
 
         @Override
         public void onReturnUpdateIPEKResult(boolean arg0) {
             TRACE.d("onReturnUpdateIPEKResult(boolean arg0):" + arg0);
-
             if (arg0) {
                 statusEditText.setText("update IPEK success");
             } else {
@@ -1929,27 +1791,20 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onReturnUpdateEMVRIDResult(boolean arg0) {
             TRACE.d("onReturnUpdateEMVRIDResult(boolean arg0):" + arg0);
-
         }
 
         @Override
         public void onReturnUpdateEMVResult(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onReturnUpdateEMVResult(boolean arg0):" + arg0);
-
         }
 
         @Override
         public void onBluetoothBoardStateResult(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onBluetoothBoardStateResult(boolean arg0):" + arg0);
-
-
         }
 
         @Override
         public void onDeviceFound(BluetoothDevice arg0) {
-            // TODO Auto-generated method stub
             if (arg0 != null) {
                 TRACE.d("onDeviceFound(BluetoothDevice arg0):" + arg0.getName() + ":" + arg0.toString());
                 m_ListView.setVisibility(View.VISIBLE);
@@ -1957,22 +1812,19 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 imvAnimScan.setVisibility(View.VISIBLE);
                 refreshAdapter();
                 String address = arg0.getAddress();
-
                 String name = arg0.getName();
                 name += address + "\n";
                 statusEditText.setText(name);
-                TRACE.d("发现有新设备" + name);
+                TRACE.d("found new device" + name);
             } else {
-                statusEditText.setText("没有发现新设备");
-                TRACE.d("没有发现新设备");
+                statusEditText.setText("Don't found new device");
+                TRACE.d("Don't found new device");
             }
         }
-
 
         @Override
         public void onSetSleepModeTime(boolean arg0) {
             TRACE.d("onSetSleepModeTime(boolean arg0):" + arg0);
-
             if (arg0) {
                 statusEditText.setText("set the Sleep timee Success");
             } else {
@@ -1982,9 +1834,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onReturnGetEMVListResult(String arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onReturnGetEMVListResult(String arg0):" + arg0);
-
             if (arg0 != null && arg0.length() > 0) {
                 statusEditText.setText("The emv list is : " + arg0);
             }
@@ -1992,46 +1842,35 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onWaitingforData(String arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onWaitingforData(String arg0):" + arg0);
-
         }
 
         @Override
         public void onRequestDeviceScanFinished() {
-            // TODO Auto-generated method stub
             TRACE.d("onRequestDeviceScanFinished()");
-
             Toast.makeText(MainActivity.this, R.string.scan_over, Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onRequestUpdateKey(String arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onRequestUpdateKey(String arg0):" + arg0);
-
             statusEditText.setText("update checkvalue : " + arg0);
-
         }
 
         @Override
         public void onReturnGetQuickEmvResult(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onReturnGetQuickEmvResult(boolean arg0):" + arg0);
-
             if (arg0) {
-                statusEditText.setText("emv已配置");
-//				isQuickEmv=true;
+                statusEditText.setText("emv configed");
                 pos.setQuickEmv(true);
             } else {
-                statusEditText.setText("emv未配置");
+                statusEditText.setText("emv don't configed");
             }
         }
 
         @Override
         public void onQposDoGetTradeLogNum(String arg0) {
             TRACE.d("onQposDoGetTradeLogNum(String arg0):" + arg0);
-
             int a = Integer.parseInt(arg0, 16);
             if (a >= 188) {
                 statusEditText.setText("the trade num has become max value!!");
@@ -2043,8 +1882,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onQposDoTradeLog(boolean arg0) {
             TRACE.d("onQposDoTradeLog(boolean arg0) :" + arg0);
-
-            // TODO Auto-generated method stub
             if (arg0) {
                 statusEditText.setText("clear log success!");
             } else {
@@ -2055,7 +1892,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onAddKey(boolean arg0) {
             TRACE.d("onAddKey(boolean arg0) :" + arg0);
-
             if (arg0) {
                 statusEditText.setText("ksn add 1 success");
             } else {
@@ -2065,35 +1901,25 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onEncryptData(String arg0) {
-
             if (arg0 != null) {
                 TRACE.d("onEncryptData(String arg0) :" + arg0);
-
                 statusEditText.setText("get the encrypted result is :" + arg0);
                 TRACE.d("get the encrypted result is :" + arg0);
-//				pos.getKsn();
-//				pos.addKsn("00");
-//				pos.getEncryptData("fwe".getBytes(), "0", "0", 10);
             }
         }
 
         @Override
         public void onQposKsnResult(Hashtable<String, String> arg0) {
             TRACE.d("onQposKsnResult(Hashtable<String, String> arg0):" + arg0.toString());
-
-            // TODO Auto-generated method stub
             String pinKsn = arg0.get("pinKsn");
             String trackKsn = arg0.get("trackKsn");
             String emvKsn = arg0.get("emvKsn");
             TRACE.d("get the ksn result is :" + "pinKsn" + pinKsn + "\ntrackKsn" + trackKsn + "\nemvKsn" + emvKsn);
-
         }
 
         @Override
         public void onQposDoGetTradeLog(String arg0, String arg1) {
             TRACE.d("onQposDoGetTradeLog(String arg0, String arg1):" + arg0 + TRACE.NEW_LINE + arg1);
-
-            // TODO Auto-generated method stub
             arg1 = QPOSUtil.convertHexToString(arg1);
             statusEditText.setText("orderId:" + arg1 + "\ntrade log:" + arg0);
         }
@@ -2110,11 +1936,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                         pos.setPermissionDevice(usbDevice);
                     } else {
                         devicePermissionRequest(mManager, usbDevice);
-
                     }
                 }
             }
-
         }
 
         @Override
@@ -2126,17 +1950,13 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     buffer.append(checkValue.get(i)).append(",");
                 }
                 buffer.append("}");
-
                 statusEditText.setText(buffer.toString());
             }
-
-
         }
 
         @Override
         public void onGetDevicePubKey(String clearKeys) {
             TRACE.d("onGetDevicePubKey(clearKeys):" + clearKeys);
-
             statusEditText.setText(clearKeys);
             String lenStr = clearKeys.substring(0, 4);
             int sum = 0;
@@ -2157,22 +1977,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             }
         }
 
-
         @Override
         public void onTradeCancelled() {
             TRACE.d("onTradeCancelled");
             dismissDialog();
-
-        }
-
-        @Override
-        public void onReturnSetAESResult(boolean isSuccess, String result) {
-
-        }
-
-        @Override
-        public void onReturnAESTransmissonKeyResult(boolean isSuccess, String result) {
-
         }
 
         @Override
@@ -2190,16 +1998,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         }
 
         @Override
-        public void onQposIsCardExistInOnlineProcess(boolean haveCard) {
-
-        }
-
-
-        @Override
         public void onFinishMifareCardResult(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onFinishMifareCardResult(boolean arg0):" + arg0);
-
             if (arg0) {
                 statusEditText.setText("finish success");
             } else {
@@ -2210,25 +2010,17 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onVerifyMifareCardResult(boolean arg0) {
             TRACE.d("onVerifyMifareCardResult(boolean arg0):" + arg0);
-
-            // TODO Auto-generated method stub
-//			String msg = pos.getMifareStatusMsg();
             if (arg0) {
                 statusEditText.setText(" onVerifyMifareCardResult success");
-
             } else {
-
                 statusEditText.setText("onVerifyMifareCardResult fail");
             }
         }
 
         @Override
         public void onReadMifareCardResult(Hashtable<String, String> arg0) {
-            // TODO Auto-generated method stub
-//			String msg = pos.getMifareStatusMsg();
             if (arg0 != null) {
                 TRACE.d("onReadMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
-
                 String addr = arg0.get("addr");
                 String cardDataLen = arg0.get("cardDataLen");
                 String cardData = arg0.get("cardData");
@@ -2240,9 +2032,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onWriteMifareCardResult(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onWriteMifareCardResult(boolean arg0):" + arg0);
-
             if (arg0) {
                 statusEditText.setText("write data success!");
             } else {
@@ -2252,11 +2042,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onOperateMifareCardResult(Hashtable<String, String> arg0) {
-            // TODO Auto-generated method stub
-
             if (arg0 != null) {
                 TRACE.d("onOperateMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
-
                 String cmd = arg0.get("Cmd");
                 String blockAddr = arg0.get("blockAddr");
                 statusEditText.setText("Cmd:" + cmd + "\nBlock Addr:" + blockAddr);
@@ -2267,7 +2054,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void getMifareCardVersion(Hashtable<String, String> arg0) {
-            // TODO Auto-generated method stub
             if (arg0 != null) {
                 TRACE.d("getMifareCardVersion(Hashtable<String, String> arg0):" + arg0.toString());
 
@@ -2281,10 +2067,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void getMifareFastReadData(Hashtable<String, String> arg0) {
-            // TODO Auto-generated method stub
             if (arg0 != null) {
                 TRACE.d("getMifareFastReadData(Hashtable<String, String> arg0):" + arg0.toString());
-
                 String startAddr = arg0.get("startAddr");
                 String endAddr = arg0.get("endAddr");
                 String dataLen = arg0.get("dataLen");
@@ -2300,7 +2084,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         public void getMifareReadData(Hashtable<String, String> arg0) {
             if (arg0 != null) {
                 TRACE.d("getMifareReadData(Hashtable<String, String> arg0):" + arg0.toString());
-
                 String blockAddr = arg0.get("blockAddr");
                 String dataLen = arg0.get("dataLen");
                 String cardData = arg0.get("cardData");
@@ -2322,10 +2105,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void verifyMifareULData(Hashtable<String, String> arg0) {
-
             if (arg0 != null) {
                 TRACE.d("verifyMifareULData(Hashtable<String, String> arg0):" + arg0.toString());
-
                 String dataLen = arg0.get("dataLen");
                 String pack = arg0.get("pack");
                 statusEditText.setText("dataLen:" + dataLen + "\npack:" + pack);
@@ -2336,8 +2117,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onGetSleepModeTime(String arg0) {
-            // TODO Auto-generated method stub
-
             if (arg0 != null) {
                 TRACE.d("onGetSleepModeTime(String arg0):" + arg0.toString());
 
@@ -2350,10 +2129,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onGetShutDownTime(String arg0) {
-
             if (arg0 != null) {
                 TRACE.d("onGetShutDownTime(String arg0):" + arg0.toString());
-
                 statusEditText.setText("shut down time is : " + Integer.parseInt(arg0, 16) + "s");
             } else {
                 statusEditText.setText("get the shut down time is fail!");
@@ -2362,12 +2139,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onQposDoSetRsaPublicKey(boolean arg0) {
-            // TODO Auto-generated method stub
             TRACE.d("onQposDoSetRsaPublicKey(boolean arg0):" + arg0);
-
             if (arg0) {
                 statusEditText.setText("set rsa is successed!");
-
             } else {
                 statusEditText.setText("set rsa is failed!");
             }
@@ -2375,7 +2149,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onQposGenerateSessionKeysResult(Hashtable<String, String> arg0) {
-
             if (arg0 != null) {
                 TRACE.d("onQposGenerateSessionKeysResult(Hashtable<String, String> arg0):" + arg0.toString());
                 String rsaFileName = arg0.get("rsaReginString");
@@ -2419,12 +2192,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             TRACE.d("onRequestNoQposDetectedUnbond()");
         }
 
-
     }
 
-
     private void deviceShowDisplay(String diplay) {
-
         Log.e("execut start:", "deviceShowDisplay");
         String customDisplayString = "";
         try {
@@ -2435,10 +2205,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             e.printStackTrace();
             TRACE.d("gbk error");
             Log.e("execut error:", "deviceShowDisplay");
-
         }
         Log.e("execut end:", "deviceShowDisplay");
-
     }
 
     private String transformDevice(UsbDevice usbDevice) {
@@ -2467,6 +2235,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 
+        @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (ACTION_USB_PERMISSION.equals(action)) {
@@ -2499,9 +2268,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             deviceList.add(device);
         }
         return deviceList;
-
     }
-
 
     private void clearDisplay() {
         statusEditText.setText("");
@@ -2510,7 +2277,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private TransactionType transactionType = TransactionType.GOODS;
 
     class MyOnClickListener implements OnClickListener {
-
         @SuppressLint("NewApi")
         @Override
         public void onClick(View v) {
@@ -2518,16 +2284,15 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             if (selectBTFlag) {
                 statusEditText.setText(R.string.wait);
                 return;
-            } else if (v == doTradeButton) {//开始按钮
+            } else if (v == doTradeButton) {
                 if (pos == null) {
                     statusEditText.setText(R.string.scan_bt_pos_error);
                     return;
                 }
-
                 isPinCanceled = false;
                 statusEditText.setText(R.string.starting);
                 terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
-                if (posType == POS_TYPE.UART) {//通用异步收发报机
+                if (posType == POS_TYPE.UART) {
                     pos.doTrade(terminalTime, 0, 30);
                 } else {
                     int keyIdex = getKeyIndex();
@@ -2537,7 +2302,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 USBClass usb = new USBClass();
                 ArrayList<String> deviceList = usb.GetUSBDevices(getBaseContext());
                 if (deviceList == null) {
-                    Toast.makeText(MainActivity.this, "没有权限", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "No Permission", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 final CharSequence[] items = deviceList.toArray(new CharSequence[deviceList.size()]);
@@ -2559,7 +2324,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 alert.show();
             } else if (v == btnBT) {
                 TRACE.d("type==" + type);
-                pos = null;//在连接前一定要保证之前的连接类型已经重置。
+                pos = null;//reset the pos
                 if (pos == null) {
                     if (type == 3) {
                         open(CommunicationMode.BLUETOOTH);
@@ -2570,12 +2335,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     }
                 }
                 pos.clearBluetoothBuffer();
-                //	close();//扫描前断开蓝牙
-                if (isNormalBlu) {//普通蓝牙的扫描
-//					pos.stopQPos2Mode();//每次开始扫描，需要先停止再开始
+                if (isNormalBlu) {
                     TRACE.d("begin scan====");
-                    pos.scanQPos2Mode(MainActivity.this, 20);//等到扫描结束后再进行下次点击扫描
-                } else {//其他蓝牙的扫描
+                    pos.scanQPos2Mode(MainActivity.this, 20);
+                } else {
                     pos.startScanQposBLE(6);
                 }
                 animScan.start();
@@ -2583,7 +2346,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 refreshAdapter();
                 if (m_Adapter != null) {
                     TRACE.d("+++++=" + m_Adapter);
-                    m_Adapter.notifyDataSetChanged();//刷新一下
+                    m_Adapter.notifyDataSetChanged();
                 }
             } else if (v == btnDisconnect) {
                 close();
@@ -2662,7 +2425,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 pos.setBlockaddr(addr);
 //                pos.doMifareCard("0B", 20);
                 pos.writeMifareCard(QPOSService.MifareCardType.UlTRALIGHT,addr,data,20);
-            } else if (v == transferBtn) {//透传数据
+            } else if (v == transferBtn) {
 //                String data = status.getText().toString();
 //                String len = blockAdd.getText().toString();
 //                pos.setMafireLen(Integer.valueOf(len, 16));
@@ -2671,9 +2434,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             } else if (v == updateFwBtn) {//update firmware
                 if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
-                    //申请权限
+                    //request permission
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
-
                 } else {
                     LogFileConfig.getInstance().setWriteFlag(true);
                     byte[] data = null;
@@ -2691,7 +2453,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                             }
                         }
                     }
-
                     if (data == null || data.length == 0) {
                         data = FileUtils.readAssetsLine("upgrader.asc", MainActivity.this);
                     }
@@ -2707,31 +2468,23 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         }
     }
 
-
-
-    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
-
-
-
-
     private int getKeyIndex() {
         String s = mKeyIndex.getText().toString();
-        if (TextUtils.isEmpty(s))
+        if (TextUtils.isEmpty(s)) {
             return 0;
+        }
         int i = 0;
         try {
             i = Integer.parseInt(s);
-            if (i > 9 || i < 0)
+            if (i > 9 || i < 0) {
                 i = 0;
+            }
         } catch (Exception e) {
             i = 0;
             return i;
         }
         return i;
     }
-
-
-
 
     private void sendMsg(int what) {
         Message msg = new Message();
@@ -2751,17 +2504,14 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 case 1001:
                     btnBT.setEnabled(false);
                     btnQuickEMV.setEnabled(false);
-
                     doTradeButton.setEnabled(false);
                     selectBTFlag = true;
                     statusEditText.setText(R.string.connecting_bt_pos);
                     sendMsg(1002);
                     break;
                 case 1002:
-
                     if (isNormalBlu) {
                         pos.connectBluetoothDevice(true, 25, blueTootchAddress);
-
                     } else {
                         pos.connectBLE(blueTootchAddress);
                     }
@@ -2776,7 +2526,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     }
                     String content = "";
                     if (nfcLog == null) {
-
                         Hashtable<String, String> h = pos.getNFCBatchData();
                         String tlv = h.get("tlv");
                         TRACE.i("nfc batchdata1: " + tlv);
@@ -2784,9 +2533,26 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     } else {
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + nfcLog;
                     }
-
-
                     statusEditText.setText(content);
+                    break;
+                case 1703:
+                    int keyIndex = getKeyIndex();
+                    String digEnvelopStr = null;
+                    Poskeys posKeys = null;
+                    try {
+                        if (resetIpekFlag) {
+                            posKeys = new DukptKeys();
+                        }
+                        if (resetMasterKeyFlag) {
+                            posKeys = new TMKKey();
+                        }
+                        posKeys.setRSA_public_key(pubModel); //Model of device public key
+                        digEnvelopStr = Envelope.getDigitalEnvelopStrByKey(getAssets().open("priva.pem"),
+                                posKeys, Poskeys.RSA_KEY_LEN.RSA_KEY_1024, keyIndex);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    pos.udpateWorkKey(digEnvelopStr);
                     break;
                 default:
                     break;
@@ -2794,95 +2560,83 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         }
     };
 
-
-
-
-
-
     public void updateEmvConfig() {
-//        bin文件更新
+//      update emv config by bin files
         String emvAppCfg = QPOSUtil.byteArray2Hex(FileUtils.readAssetsLine("emv_app.bin", MainActivity.this));
         String emvCapkCfg = QPOSUtil.byteArray2Hex(FileUtils.readAssetsLine("emv_capk.bin", MainActivity.this));
         TRACE.d("emvAppCfg: " + emvAppCfg);
         TRACE.d("emvCapkCfg: " + emvCapkCfg);
         pos.updateEmvConfig(emvAppCfg, emvCapkCfg);
-
-//        xml文件更新
-//        pos.updateEmvConfig(FileUtils.readAssetsLineAsString("emv_profile_tlv.xml", MainActivity.this));
     }
-
-
 
 	/*---------------------------------------------*/
 
     private static final String FILENAME = "dsp_axdd";
 
     /**
-     * desc:保存对象
+     * desc:save object
      *
      * @param context
      * @param key
-     * @param obj     要保存的对象，只能保存实现了serializable的对象
-     *                modified:
+     * @param obj     The object to be saved can only save objects that implement serializable
      */
-    public static void saveObject(Context context, String key, Object obj) {
-        try {
-            // 保存对象
-            SharedPreferences.Editor sharedata = context.getSharedPreferences(FILENAME, 0).edit();
-            //先将序列化结果写到byte缓存中，其实就分配一个内存空间
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream os = new ObjectOutputStream(bos);
-            //将对象序列化写入byte缓存
-            os.writeObject(obj);
-            //将序列化的数据转为16进制保存
-            String bytesToHexString = QPOSUtil.byteArray2Hex(bos.toByteArray());
-            //保存该16进制数组
-            sharedata.putString(key, bytesToHexString);
-            sharedata.apply();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("", "保存obj失败");
-        }
-    }
+//    public static void saveObject(Context context, String key, Object obj) {
+//        try {
+//            // 保存对象
+//            SharedPreferences.Editor sharedata = context.getSharedPreferences(FILENAME, 0).edit();
+//            //先将序列化结果写到byte缓存中，其实就分配一个内存空间
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            ObjectOutputStream os = new ObjectOutputStream(bos);
+//            //将对象序列化写入byte缓存
+//            os.writeObject(obj);
+//            //将序列化的数据转为16进制保存
+//            String bytesToHexString = QPOSUtil.byteArray2Hex(bos.toByteArray());
+//            //保存该16进制数组
+//            sharedata.putString(key, bytesToHexString);
+//            sharedata.apply();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Log.e("", "保存obj失败");
+//        }
+//    }
 
 
     /**
-     * desc:获取保存的Object对象
+     * desc:Get saved Object
      *
      * @param context
      * @param key
      * @return modified:
      */
-    public Object readObject(Context context, String key) {
-        try {
-            SharedPreferences sharedata = context.getSharedPreferences(FILENAME, 0);
-            if (sharedata.contains(key)) {
-                String string = sharedata.getString(key, "");
-                if (string == null || "".equals(string)) {
-                    return null;
-                } else {
-                    //将16进制的数据转为数组，准备反序列化
-                    byte[] stringToBytes = QPOSUtil.HexStringToByteArray(string);
-                    ByteArrayInputStream bis = new ByteArrayInputStream(stringToBytes);
-                    ObjectInputStream is = new ObjectInputStream(bis);
-                    //返回反序列化得到的对象
-                    Object readObject = is.readObject();
-                    return readObject;
-                }
-            }
-        } catch (StreamCorruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        //所有异常返回null
-        return null;
-
-    }
+//    public Object readObject(Context context, String key) {
+//        try {
+//            SharedPreferences sharedata = context.getSharedPreferences(FILENAME, 0);
+//            if (sharedata.contains(key)) {
+//                String string = sharedata.getString(key, "");
+//                if (string == null || "".equals(string)) {
+//                    return null;
+//                } else {
+//                    //将16进制的数据转为数组，准备反序列化
+//                    byte[] stringToBytes = QPOSUtil.HexStringToByteArray(string);
+//                    ByteArrayInputStream bis = new ByteArrayInputStream(stringToBytes);
+//                    ObjectInputStream is = new ObjectInputStream(bis);
+//                    //返回反序列化得到的对象
+//                    Object readObject = is.readObject();
+//                    return readObject;
+//                }
+//            }
+//        } catch (StreamCorruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        //所有异常返回null
+//        return null;
+//    }
 
 }

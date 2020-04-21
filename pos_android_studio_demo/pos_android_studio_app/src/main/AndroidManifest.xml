@@ -67,9 +67,6 @@
         <activity
             android:name=".activities.OtherActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-        <activity
-            android:name=".activities.CommunicationTestActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
     </application>
 
 </manifest>
