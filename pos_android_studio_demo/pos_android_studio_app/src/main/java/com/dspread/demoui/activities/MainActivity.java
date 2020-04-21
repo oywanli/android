@@ -2309,6 +2309,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Select a Reader");
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int item) {
                         String selectedDevice = (String) items[item];
 
@@ -2536,23 +2537,23 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     statusEditText.setText(content);
                     break;
                 case 1703:
-                    int keyIndex = getKeyIndex();
-                    String digEnvelopStr = null;
-                    Poskeys posKeys = null;
-                    try {
-                        if (resetIpekFlag) {
-                            posKeys = new DukptKeys();
-                        }
-                        if (resetMasterKeyFlag) {
-                            posKeys = new TMKKey();
-                        }
-                        posKeys.setRSA_public_key(pubModel); //Model of device public key
-                        digEnvelopStr = Envelope.getDigitalEnvelopStrByKey(getAssets().open("priva.pem"),
-                                posKeys, Poskeys.RSA_KEY_LEN.RSA_KEY_1024, keyIndex);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    pos.udpateWorkKey(digEnvelopStr);
+//                    int keyIndex = getKeyIndex();
+//                    String digEnvelopStr = null;
+//                    Poskeys posKeys = null;
+//                    try {
+//                        if (resetIpekFlag) {
+//                            posKeys = new DukptKeys();
+//                        }
+//                        if (resetMasterKeyFlag) {
+//                            posKeys = new TMKKey();
+//                        }
+//                        posKeys.setRSA_public_key(pubModel); //Model of device public key
+//                        digEnvelopStr = Envelope.getDigitalEnvelopStrByKey(getAssets().open("priva.pem"),
+//                                posKeys, Poskeys.RSA_KEY_LEN.RSA_KEY_1024, keyIndex);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    pos.udpateWorkKey(digEnvelopStr);
                     break;
                 default:
                     break;
