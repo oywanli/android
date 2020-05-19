@@ -211,6 +211,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             m_DataMap = null;
         }
 
+        public void addData(Map<String, ?> map){
+            m_DataMap.add(map);
+        }
+
         public MyListViewAdapter(Context context, List<Map<String, ?>> map) {
             this.m_DataMap = map;
             this.m_Inflater = LayoutInflater.from(context);
@@ -1810,7 +1814,19 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 m_ListView.setVisibility(View.VISIBLE);
                 animScan.start();
                 imvAnimScan.setVisibility(View.VISIBLE);
-                refreshAdapter();
+                if(m_Adapter != null){
+                    Map<String, Object> itm = new HashMap<String, Object>();
+                    itm.put("ICON",
+                            arg0.getBondState() == BluetoothDevice.BOND_BONDED ? Integer
+                                    .valueOf(R.drawable.bluetooth_blue) : Integer
+                                    .valueOf(R.drawable.bluetooth_blue_unbond));
+                    itm.put("TITLE", arg0.getName() + "(" + arg0.getAddress() + ")");
+                    itm.put("ADDRESS", arg0.getAddress());
+                    m_Adapter.addData(itm);
+                    m_Adapter.notifyDataSetChanged();
+                }else{
+                    refreshAdapter();
+                }
                 String address = arg0.getAddress();
                 String name = arg0.getName();
                 name += address + "\n";
