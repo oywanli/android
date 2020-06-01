@@ -139,6 +139,7 @@
     <string name="unknown">Unknown</string>
     <string name="set_amount">Set Amount</string>
     <string name="enter_pin">Please enter PIN</string>
+    <string name="enter_pin_try">Please enter PIN (Last %s try)</string>
     <string name="online_process_requested">Online process requested.</string>
     <string name="request_data_to_server">Request data to server.</string>
     <string name="replied_connected">Replied connected.</string>

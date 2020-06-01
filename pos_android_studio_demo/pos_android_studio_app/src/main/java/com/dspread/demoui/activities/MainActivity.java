@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.usb.UsbDevice;
@@ -50,7 +49,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dspread.demoui.beans.ConstantsBean;
 import com.dspread.demoui.widget.InnerListview;
 import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.R;
@@ -73,14 +71,9 @@ import com.dspread.xpos.QPOSService.LcdModeAlign;
 import com.dspread.xpos.QPOSService.TransactionResult;
 import com.dspread.xpos.QPOSService.TransactionType;
 import com.dspread.xpos.QPOSService.UpdateInformationResult;
+import com.dspread.xpos.utils.AESUtil;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -711,6 +704,84 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             statusEditText.setText(getString(R.string.waiting_for_card));
         }
 
+        @SuppressLint("StringFormatInvalid")
+        @Override
+        public void onRequestCvmApp(Hashtable<String, String> value) {
+            TRACE.d("onRequestCvmApp()===" +value);
+            dismissDialog();
+            final String randomData = value.get("RandomData") == null ? "" : value.get("RandomData");
+            final String pan = value.get("PAN") == null ? "" : value.get("PAN");
+            final String AESKey = value.get("AESKey") == null ? "" : value.get("AESKey");
+            String isOnline = value.get("isOnlinePin") == null ? "" : value.get("isOnlinePin");
+            String pinTryLimit = value.get("pinTryLimit") == null ? "" : value.get("pinTryLimit");
+            dialog = new Dialog(MainActivity.this);
+            dialog.setContentView(R.layout.pin_dialog);
+            if(isOnline.equals("true")){
+                dialog.setTitle(getString(R.string.enter_pin));
+            }else{
+                dialog.setTitle(String.format(getString(R.string.enter_pin_try),pinTryLimit));
+            }
+
+            dialog.findViewById(R.id.confirmButton).setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    //iso-format4 pinblock
+                    String pin = ((EditText) dialog.findViewById(R.id.pinEditText)).getText().toString();
+                    int pinLen = pin.length();
+                    pin = "4"+pinLen+pin;
+                    for(int i = 0 ; i < 14 - pinLen ; i++){
+                        pin = pin + "A";
+                    }
+                    pin+=randomData.substring(0,16);
+                    TRACE.d("pin  ="+pin);
+
+                    String panBlock = "";
+                    int panLen = pan.length();
+                    int m = 0;
+                    if(panLen < 12){
+                        panBlock = "0";
+                        for(int i = 0 ; i <12- panLen; i++){
+                            panBlock += "0";
+                        }
+                        panBlock = panBlock + pan+ "0000000000000000000";
+                    }else{
+                        m = pan.length() - 12;
+                        panBlock = m + pan ;
+                        for(int i = 0 ; i < 31 - panLen ; i ++){
+                            panBlock += "0";
+                        }
+                    }
+                    TRACE.d("pan b ="+panBlock);
+                    String pinBlock1 = AESUtil.encrypt(AESKey,pin);
+
+                    pin =  QPOSUtil.xor16(QPOSUtil.HexStringToByteArray(pinBlock1),QPOSUtil.HexStringToByteArray(panBlock));
+                    String pinBlock2 = AESUtil.encrypt(AESKey,pin);
+                    pos.sendCvmPin(pinBlock2,true);
+                    dismissDialog();
+                }
+            });
+
+            dialog.findViewById(R.id.bypassButton).setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    pos.sendCvmPin("",false);
+                    dismissDialog();
+                }
+            });
+
+            dialog.findViewById(R.id.cancelButton).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isPinCanceled = true;
+                    pos.cancelCvmPin();
+                    dismissDialog();
+                }
+            });
+            dialog.show();
+        }
+
         @Override
         public void onDoTradeResult(DoTradeResult result, Hashtable<String, String> decodeData) {
             TRACE.d("(DoTradeResult result, Hashtable<String, String> decodeData) " + result.toString() + TRACE.NEW_LINE + "decodeData:" + decodeData);
@@ -868,7 +939,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     String maskedPAN = decodeData.get("maskedPAN");
                     String expiryDate = decodeData.get("expiryDate");
                     String cardHolderName = decodeData.get("cardholderName");
-//					String ksn = decodeData.get("ksn");
                     String serviceCode = decodeData.get("serviceCode");
                     String track1Length = decodeData.get("track1Length");
                     String track2Length = decodeData.get("track2Length");
@@ -894,7 +964,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                             + expiryDate + "\n";
                     content += getString(R.string.cardholder_name) + " "
                             + cardHolderName + "\n";
-//					content += getString(R.string.ksn) + " " + ksn + "\n";
                     content += getString(R.string.pinKsn) + " " + pinKsn + "\n";
                     content += getString(R.string.trackksn) + " " + trackksn
                             + "\n";
@@ -924,7 +993,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                             + "\n";
                     cardNo = maskedPAN;
                 }
-//				TRACE.w("swipe card:" + content);
                 statusEditText.setText(content);
                 sendMsg(8003);
             } else if ((result == DoTradeResult.NFC_DECLINED)) {
@@ -1031,6 +1099,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             } else if (transactionResult == TransactionResult.CARD_REMOVED) {
                 clearDisplay();
                 messageTextView.setText("CARD REMOVED");
+            }else if (transactionResult == TransactionResult.CONTACTLESS_TRANSACTION_NOT_ALLOW) {
+                clearDisplay();
+                messageTextView.setText("TRANS NOT ALLOW");
             }
             dialog.findViewById(R.id.confirmButton).setOnClickListener(new OnClickListener() {
 

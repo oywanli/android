@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="enter_pin_try">请输入密码(剩余%s次)</string>
     <string name="msg_pls_insert_card">请插卡</string>
     <string name="msg_pls_swipe_card">请刷卡</string>
     <string name="msg_pls_tap_card">请帖卡</string>

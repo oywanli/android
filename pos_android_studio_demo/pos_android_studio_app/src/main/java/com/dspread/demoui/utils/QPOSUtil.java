@@ -13,6 +13,10 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.os.Build;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
+
 public class QPOSUtil {
     static final String HEXES = "0123456789ABCDEF";
 
@@ -47,6 +51,15 @@ public class QPOSUtil {
         }
 
         return sb.toString();
+    }
+
+    //16 byte xor
+    public static String xor16(byte[] src1, byte[] src2){
+        byte[] results = new byte[16];
+        for (int i = 0; i < results.length; i++){
+            results[i] = (byte)(src1[i] ^ src2[i]);
+        }
+        return QPOSUtil.byteArray2Hex(results);
     }
 
     /**
