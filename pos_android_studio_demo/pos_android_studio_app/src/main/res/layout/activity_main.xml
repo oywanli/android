@@ -43,7 +43,7 @@
                 android:layout_weight="1"
                 android:text="@string/please_select_bt_name" />
 
-
+<!--            android:text="@string/check_card"-->
             <Button
                 android:id="@+id/doTradeButton"
                 android:layout_width="0dp"
