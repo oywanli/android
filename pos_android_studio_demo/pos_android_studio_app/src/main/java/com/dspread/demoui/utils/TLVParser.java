@@ -11,7 +11,6 @@ import java.util.List;
 
 public class TLVParser {
 
-
     private static ArrayList<TLV> tlvList = new ArrayList<TLV>();
 
     public static List<TLV> parse(String tlv) {

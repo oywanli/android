@@ -1024,6 +1024,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             }else if (transactionResult == TransactionResult.CONTACTLESS_TRANSACTION_NOT_ALLOW) {
                 clearDisplay();
                 messageTextView.setText("TRANS NOT ALLOW");
+            }else if (transactionResult == TransactionResult.CARD_BLOCKED) {
+                clearDisplay();
+                messageTextView.setText("CARD BLOCKED");
             }
             dialog.findViewById(R.id.confirmButton).setOnClickListener(new OnClickListener() {
 
