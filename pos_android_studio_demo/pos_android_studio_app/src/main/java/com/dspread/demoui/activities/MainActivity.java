@@ -86,6 +86,8 @@ import java.util.List;
 import java.util.Map;
 import Decoder.BASE64Encoder;
 
+import static com.dspread.xpos.QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP;
+
 public class MainActivity extends BaseActivity implements ShowGuideView.onGuideViewListener {
     private QPOSService pos;
     private UpdateThread updateThread;
