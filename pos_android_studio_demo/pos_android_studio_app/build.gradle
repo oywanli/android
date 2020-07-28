@@ -54,5 +54,5 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.iqiyi.xcrash:xcrash-android-lib:2.4.6'
     implementation 'com.binioter:guideview:1.0.0'
-    implementation files('libs/dspread_android_pos_sdk_3.0.2.jar')
+    implementation files('libs/dspread_android_pos_sdk_3.0.9.jar')
 }

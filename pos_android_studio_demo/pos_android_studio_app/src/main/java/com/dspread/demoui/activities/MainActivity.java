@@ -71,7 +71,6 @@ import com.dspread.xpos.QPOSService.LcdModeAlign;
 import com.dspread.xpos.QPOSService.TransactionResult;
 import com.dspread.xpos.QPOSService.TransactionType;
 import com.dspread.xpos.QPOSService.UpdateInformationResult;
-import com.dspread.xpos.utils.AESUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
