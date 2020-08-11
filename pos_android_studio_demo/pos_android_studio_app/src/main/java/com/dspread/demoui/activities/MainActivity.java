@@ -172,6 +172,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         TRACE.d("lstDevScanned----" + lstDevScanned);
         List<Map<String, ?>> data = new ArrayList<Map<String, ?>>();
         for (BluetoothDevice dev : lstDevScanned) {
+            if (dev.getName() == null){
+                continue;
+            }
             TRACE.i("++++++++++");
             Map<String, Object> itm = new HashMap<String, Object>();
             itm.put("ICON",
@@ -1806,7 +1809,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
         @Override
         public void onDeviceFound(BluetoothDevice arg0) {
-            if (arg0 != null) {
+            if (arg0 != null && arg0.getName() != null) {
                 TRACE.d("onDeviceFound(BluetoothDevice arg0):" + arg0.getName() + ":" + arg0.toString());
                 m_ListView.setVisibility(View.VISIBLE);
                 animScan.start();
@@ -1821,8 +1824,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     itm.put("ADDRESS", arg0.getAddress());
                     m_Adapter.addData(itm);
                     m_Adapter.notifyDataSetChanged();
-                }else{
-                    refreshAdapter();
                 }
                 String address = arg0.getAddress();
                 String name = arg0.getName();
@@ -2357,10 +2358,11 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 }
                 animScan.start();
                 imvAnimScan.setVisibility(View.VISIBLE);
-                refreshAdapter();
                 if (m_Adapter != null) {
                     TRACE.d("+++++=" + m_Adapter);
                     m_Adapter.notifyDataSetChanged();
+                }else{
+                    refreshAdapter();
                 }
             } else if (v == btnDisconnect) {
                 close();
