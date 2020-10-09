@@ -48,11 +48,11 @@ android {
 }
 
 dependencies {
-        implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.iqiyi.xcrash:xcrash-android-lib:2.4.6'
     implementation 'com.binioter:guideview:1.0.0'
-    implementation files('libs/dspread_android_pos_sdk_3.1.0.jar')
+//    implementation files('libs/dspread_android_pos_sdk_3.1.0.jar')
 }
