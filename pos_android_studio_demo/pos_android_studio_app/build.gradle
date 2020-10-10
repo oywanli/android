@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file('C:\\Users\\94585\\android\\pos_android_studio_demo\\pos_android_studio_app\\app.keystore')
+            storeFile file('C:/Users/94585/android/pos_android_studio_demo/pos_android_studio_app/app.keystore')
             storePassword 'dspread'
             keyPassword 'dspread'
             keyAlias 'gundam_wing'
