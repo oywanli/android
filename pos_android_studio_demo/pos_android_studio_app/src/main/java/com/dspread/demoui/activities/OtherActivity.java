@@ -2,7 +2,6 @@ package com.dspread.demoui.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -12,17 +11,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -34,35 +32,28 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.R;
-import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.USBClass;
+import com.dspread.demoui.keyboard.KeyBoardNumInterface;
+import com.dspread.demoui.keyboard.KeyboardUtil;
+import com.dspread.demoui.keyboard.MyKeyboardView;
 import com.dspread.demoui.utils.DUKPK2009_CBC;
-import com.dspread.demoui.utils.FileUtils;
-import com.dspread.demoui.utils.TLV;
-import com.dspread.demoui.utils.TLVParser;
+import com.dspread.demoui.utils.QPOSUtil;
+import com.dspread.demoui.utils.TRACE;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
-import com.dspread.xpos.QPOSService.EMVDataOperation;
 import com.dspread.xpos.QPOSService.TransactionType;
-import com.dspread.xpos.SyncUtil;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -71,8 +62,7 @@ import java.util.List;
 
 import Decoder.BASE64Encoder;
 
-
-public class OtherActivity extends BaseActivity {
+public class OtherActivity extends BaseActivity{
 
     private Button doTradeButton, serialBtn;
 
@@ -88,7 +78,6 @@ public class OtherActivity extends BaseActivity {
 
     private EditText mKeyIndex;
     private EditText mhipStatus;
-
 
     private QPOSService pos;
 
@@ -106,6 +95,8 @@ public class OtherActivity extends BaseActivity {
     private UsbDevice usbDevice;
 
     private Context mContext;
+    private static final int REQUEST_CODE_QRCODE_PERMISSIONS = 1;
+    private boolean autoDoTrade = false;
 
 
     @Override
@@ -116,11 +107,17 @@ public class OtherActivity extends BaseActivity {
         if (!isUart) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        //setContentView(R.layout.activity_other);
         mContext = this;
         initView();
         initIntent();
         initListener();
+        open(QPOSService.CommunicationMode.UART);
+        posType = POS_TYPE.UART;
+//                        blueTootchAddress = "/dev/ttyMT0";//同方那边是s1，天波是s3
+        blueTootchAddress = "/dev/ttyS1";//同方那边是s1，天波是s3
+//                        blueTootchAddress = "/dev/ttyHSL1";//同方那边是s1，天波是s3
+        pos.setDeviceAddress(blueTootchAddress);
+        pos.openUart();
     }
 
     @Override
@@ -154,8 +151,8 @@ public class OtherActivity extends BaseActivity {
                         open(QPOSService.CommunicationMode.UART);
                         posType = POS_TYPE.UART;
 //                        blueTootchAddress = "/dev/ttyMT0";//同方那边是s1，天波是s3
-//                        blueTootchAddress = "/dev/ttyS1";//同方那边是s1，天波是s3
-                        blueTootchAddress = "/dev/ttyHSL1";//同方那边是s1，天波是s3
+                        blueTootchAddress = "/dev/ttyS1";//同方那边是s1，天波是s3
+//                        blueTootchAddress = "/dev/ttyHSL1";//同方那边是s1，天波是s3
                         pos.setDeviceAddress(blueTootchAddress);
                         pos.openUart();
                     }
@@ -165,7 +162,6 @@ public class OtherActivity extends BaseActivity {
         }
     }
 
-
     private void initView() {
         doTradeButton = (Button) findViewById(R.id.doTradeButton);//开始交易
         serialBtn = (Button) findViewById(R.id.serialPort);
@@ -174,9 +170,7 @@ public class OtherActivity extends BaseActivity {
         btnDisconnect = (Button) findViewById(R.id.disconnect);//断开连接
         mKeyIndex = ((EditText) findViewById(R.id.keyindex));
         mhipStatus = ((EditText) findViewById(R.id.chipStatus));
-
     }
-
 
     private void initListener() {
         MyOnClickListener myOnClickListener = new MyOnClickListener();
@@ -184,16 +178,17 @@ public class OtherActivity extends BaseActivity {
         doTradeButton.setOnClickListener(myOnClickListener);//开始
         btnDisconnect.setOnClickListener(myOnClickListener);
         btnUSB.setOnClickListener(myOnClickListener);
-
     }
-
-
     private POS_TYPE posType = POS_TYPE.BLUETOOTH;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
     private enum POS_TYPE {
         BLUETOOTH, AUDIO, UART, USB, OTG, BLUETOOTH_BLE
     }
-
 
     /**
      * 打开设备，获取类对象，开始监听
@@ -383,9 +378,7 @@ public class OtherActivity extends BaseActivity {
 
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
-
             pos.lcdShowCloseDisplay();
-
         }
         return true;
     }
@@ -424,7 +417,9 @@ public class OtherActivity extends BaseActivity {
         }
     }
 
-
+    private KeyboardUtil keyboardUtil;
+    private List<String> keyBoardList = new ArrayList<>();
+    private LinearLayout lin;
     /**
      * @author qianmengChen
      * @ClassName: MyPosListener
@@ -432,6 +427,43 @@ public class OtherActivity extends BaseActivity {
      * @date: 2016-11-10 下午6:35:06
      */
     class MyPosListener extends CQPOSService {
+
+        @Override
+        public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
+            super.onQposRequestPinResult(dataList, offlineTime);
+            keyBoardList = dataList;
+            MyKeyboardView.setKeyBoardListener(new KeyBoardNumInterface() {
+                @Override
+                public void getNumberValue(String value) {
+//                    statusEditText.setText("Pls click "+dataList.get(0));
+                    pos.pinMapSync(value,20);
+                }
+            });
+            keyboardUtil = new KeyboardUtil(OtherActivity.this, lin,dataList);
+            keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, statusEditText);//随机键盘
+        }
+
+        @Override
+        public void onReturnGetKeyBoardInputResult(String result) {
+            super.onReturnGetKeyBoardInputResult(result);
+            mhipStatus.setText(result);
+        }
+
+        @Override
+        public void onReturnGetPinInputResult(int num) {
+            super.onReturnGetPinInputResult(num);
+            String s = "";
+            if(num == -1){
+                if(keyboardUtil != null) {
+                    keyboardUtil.hide();
+                }
+            }else{
+                for(int i = 0 ; i <num ; i ++){
+                    s += "*";
+                }
+                statusEditText.setText("result is ：" +s);
+            }
+        }
 
         @Override
         public void onRequestWaitingUser() {//等待卡片
@@ -456,7 +488,6 @@ public class OtherActivity extends BaseActivity {
                 pos.doEmvApp(QPOSService.EmvOption.START);
             } else if (result == QPOSService.DoTradeResult.NOT_ICC) {
                 statusEditText.setText(getString(R.string.card_inserted));
-
             } else if (result == QPOSService.DoTradeResult.BAD_SWIPE) {
                 statusEditText.setText(getString(R.string.bad_swipe));
             } else if (result == QPOSService.DoTradeResult.MCR) {//磁条卡
@@ -558,6 +589,7 @@ public class OtherActivity extends BaseActivity {
                 }
 
                 statusEditText.setText(content);
+//                autoDoTrade(0);
 
             } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
                 nfcLog = decodeData.get("nfcLog");
@@ -659,8 +691,6 @@ public class OtherActivity extends BaseActivity {
                     content += "pinRandomNumber:" + " " + pinRandomNumber
                             + "\n";
                 }
-
-
                 statusEditText.setText(content);
                 sendMsg(8003);
             } else if ((result == QPOSService.DoTradeResult.NFC_DECLINED)) {
@@ -673,7 +703,6 @@ public class OtherActivity extends BaseActivity {
 
         @Override
         public void onQposInfoResult(Hashtable<String, String> posInfoData) {
-
             TRACE.d("onQposInfoResult" + posInfoData.toString());
             String isSupportedTrack1 = posInfoData.get("isSupportedTrack1") == null ? "" : posInfoData.get("isSupportedTrack1");
             String isSupportedTrack2 = posInfoData.get("isSupportedTrack2") == null ? "" : posInfoData.get("isSupportedTrack2");
@@ -801,7 +830,7 @@ public class OtherActivity extends BaseActivity {
             TRACE.d("onRequestBatchData(String tlv):" + tlv);
             content += tlv;
             statusEditText.setText(content);
-
+//            autoDoTrade(0);
         }
 
         @Override
@@ -948,6 +977,7 @@ public class OtherActivity extends BaseActivity {
                     OtherActivity.this.cashbackAmount = cashbackAmount;
 
                     pos.setAmount(amount, cashbackAmount, "156", transactionType);
+
                     TRACE.d("输入金额  -- 结束");
                     dismissDialog();
                 }
@@ -964,8 +994,8 @@ public class OtherActivity extends BaseActivity {
 
             });
             dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
-
+//            dialog.show();
+            pos.setAmount("200", cashbackAmount, "156", QPOSService.TransactionType.GOODS);
         }
 
         /**
@@ -1956,7 +1986,6 @@ public class OtherActivity extends BaseActivity {
 
             if (arg0 != null) {
                 TRACE.d("getMifareFastReadData(Hashtable<String, String> arg0):" + arg0.toString());
-
                 String startAddr = arg0.get("startAddr");
                 String endAddr = arg0.get("endAddr");
                 String dataLen = arg0.get("dataLen");
@@ -2105,7 +2134,6 @@ public class OtherActivity extends BaseActivity {
         mHandler.sendMessageDelayed(msg,500);
     }
 
-
     private void deviceShowDisplay(String diplay) {
 
         Log.e("execut start:", "deviceShowDisplay");
@@ -2118,25 +2146,9 @@ public class OtherActivity extends BaseActivity {
             e.printStackTrace();
             TRACE.d("gbk error");
             Log.e("execut error:", "deviceShowDisplay");
-
         }
         Log.e("execut end:", "deviceShowDisplay");
 
-    }
-
-    private String transformDevice(UsbDevice usbDevice) {
-        String deviceName = new String();
-        UsbManager mManager = (UsbManager) this.getSystemService(Context.USB_SERVICE);
-        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
-                "com.android.example.USB_PERMISSION"), 0);
-        mManager.requestPermission(usbDevice, mPermissionIntent);
-        UsbDeviceConnection connection = mManager.openDevice(usbDevice);
-        byte rawBuf[] = new byte[255];
-        int len = connection.controlTransfer(0x80, 0x06, 0x0302,
-                0x0409, rawBuf, 0x00FF, 60);
-        rawBuf = Arrays.copyOfRange(rawBuf, 2, len);
-        deviceName = new String(rawBuf);
-        return deviceName;
     }
 
     private void devicePermissionRequest(UsbManager mManager, UsbDevice usbDevice) {
@@ -2150,6 +2162,7 @@ public class OtherActivity extends BaseActivity {
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 
+        @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (ACTION_USB_PERMISSION.equals(action)) {
@@ -2181,72 +2194,13 @@ public class OtherActivity extends BaseActivity {
         for (UsbDevice device : mManager.getDeviceList().values()) {
 
             deviceList.add(device);
-
-
         }
         return deviceList;
-
     }
-
-    private void analyData(String tlv) {
-        List<TLV> list = TLVParser.parse(tlv);// get the tag list
-        String[] tlvStrArr = {"c0", "c2", "c1", "c7", "5F20", "4F", "5F24", "9F06", "c4"};
-        TLV c0Tlv = TLVParser.searchTLV(list, tlvStrArr[0]); // get the  value which tag name "c0"
-        TLV c2Tlv = TLVParser.searchTLV(list, tlvStrArr[1]);
-        TLV c1Tlv = TLVParser.searchTLV(list, tlvStrArr[2]);
-        TLV c7Tlv = TLVParser.searchTLV(list, tlvStrArr[3]);
-        TLV tlv5F20 = TLVParser.searchTLV(list, tlvStrArr[4]);
-        TLV tlv9F06 = TLVParser.searchTLV(list, tlvStrArr[7]);
-        TLV tlvc4 = TLVParser.searchTLV(list, tlvStrArr[8]);
-
-
-        if (!TextUtils.isEmpty(tlv5F20.value))
-            QPOSUtil.convertHexToString(tlv5F20.value);
-        if (c0Tlv == null || c2Tlv == null) return;
-        String ksn = c0Tlv.value;//ksn
-        String datastr = c2Tlv.value;//datastr
-        String date = DUKPK2009_CBC.getDate(ksn, datastr, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.CBC);
-        List<TLV> dates = TLVParser.parse(date);
-        if (dates == null) return;
-        String[] tlvStrArrs = {"5A", "5F2A", "9F09"};
-        TLV dateTlv = TLVParser.searchTLV(dates, tlvStrArrs[0]);
-        TLV dataCu = TLVParser.searchTLV(dates, tlvStrArrs[1]);
-        TLV data9F09 = TLVParser.searchTLV(dates, tlvStrArrs[2]);
-        String clearCardNum = dateTlv.value;
-        String data = "";
-        if (clearCardNum == null) return;
-        {
-            TRACE.d("Application Primary Account Number (PAN)：" + dateTlv.value);
-            data += "pan:" + clearCardNum + "\n";
-        }
-
-        if (c1Tlv != null || c7Tlv != null) {
-            String pinKsn = c1Tlv.value;
-            String pinBlock = c7Tlv.value;
-            if (pinKsn != null || pinBlock != null) {
-                String Enpin = DUKPK2009_CBC.getDate(pinKsn, pinBlock, DUKPK2009_CBC.Enum_key.PIN, DUKPK2009_CBC.Enum_mode.CBC);
-                String parsCarN = "0000" + clearCardNum.substring(clearCardNum.length() - 13, clearCardNum.length() - 1);
-                String s = DUKPK2009_CBC.xor(parsCarN, Enpin);
-                TRACE.d("PIN:" + s);
-                data += "PIN:" + s + "/n";
-
-            }
-        }
-        mhipStatus.setText(data);
-    }
-
 
     private void clearDisplay() {
         statusEditText.setText("");
     }
-
-
-    private String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
-
-    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
-
-
-
     class MyOnClickListener implements View.OnClickListener {
 
         @SuppressLint("NewApi")
@@ -2257,6 +2211,8 @@ public class OtherActivity extends BaseActivity {
                 statusEditText.setText(R.string.wait);
                 return;
             } else if (v == doTradeButton) {//开始按钮
+                mhipStatus.setTextColor(getResources().getColor(R.color.eb_col_34));
+                mhipStatus.setText("");
                 if (pos == null) {
                     statusEditText.setText(R.string.scan_bt_pos_error);
                     return;
@@ -2264,14 +2220,14 @@ public class OtherActivity extends BaseActivity {
                 isPinCanceled = false;
 
                 statusEditText.setText(R.string.starting);
-
-                terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
-
-
+//                terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
                 if (posType == POS_TYPE.UART) {//通用异步收发报机
-                    pos.doTrade(terminalTime, 0, 30);
+                    pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+//                    pos.doTrade(terminalTime, 0, 30);
+                    pos.doTrade(20);
                 } else {
                     int keyIdex = getKeyIndex();
+//                    pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
                     pos.doTrade(keyIdex, 30);//start do trade
                 }
             } else if (v == btnUSB) {
@@ -2300,56 +2256,8 @@ public class OtherActivity extends BaseActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
         }
-
-
     }
-
-
-
-    private void updateEmvConfigTest() {
-
-        pos.updateEmvAPPByTlv(EMVDataOperation.Clear, null);
-        statusEditText.setText("Clear EMV app");
-
-    }
-
-    private int checkBin(int i, String emvAppCfg, String emvCapkCfg) {
-        int flag = -1;
-
-        if (!TextUtils.isEmpty(emvAppCfg) && !TextUtils.isEmpty(emvCapkCfg)) {
-
-            if (TLVParser.VerifyTLV(emvAppCfg) && TLVParser.VerifyTLV(emvCapkCfg)) {
-                //新平台
-                flag = 1;
-            } else {
-                if (!TLVParser.VerifyTLV(emvAppCfg) && !TLVParser.VerifyTLV(emvCapkCfg)) {
-                    flag = -1;
-                } else {
-                    flag = 0;
-                }
-            }
-        } else {
-            if (!TextUtils.isEmpty(emvAppCfg)) {
-
-                if (TLVParser.VerifyTLV(emvAppCfg)) {
-                    //新平台
-                    flag = 1;
-                }
-            } else {
-
-                if (TLVParser.VerifyTLV(emvCapkCfg)) {
-                    //新平台
-                    flag = 1;
-                }
-            }
-        }
-
-        return i * flag;
-
-    }
-
 
     private int getKeyIndex() {
         String s = mKeyIndex.getText().toString();
@@ -2367,17 +2275,13 @@ public class OtherActivity extends BaseActivity {
         return i;
     }
 
-
     private void sendMsg(int what) {
         Message msg = new Message();
         msg.what = what;
         mHandler.sendMessage(msg);
     }
 
-
     private boolean selectBTFlag = false;
-
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -2400,9 +2304,8 @@ public class OtherActivity extends BaseActivity {
                     } else {
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + nfcLog;
                     }
-
-
                     statusEditText.setText(content);
+//                    autoDoTrade(0);
                     break;
 
                 default:
@@ -2411,81 +2314,8 @@ public class OtherActivity extends BaseActivity {
         }
     };
 
-
-
-
-
 	/*---------------------------------------------*/
-
     private static final String FILENAME = "dsp_axdd";
-
-    /**
-     * desc:保存对象
-     *
-     * @param context
-     * @param key
-     * @param obj     要保存的对象，只能保存实现了serializable的对象
-     *                modified:
-     */
-    public static void saveObject(Context context, String key, Object obj) {
-        try {
-            // 保存对象
-            SharedPreferences.Editor sharedata = context.getSharedPreferences(FILENAME, 0).edit();
-            //先将序列化结果写到byte缓存中，其实就分配一个内存空间
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream os = new ObjectOutputStream(bos);
-            //将对象序列化写入byte缓存
-            os.writeObject(obj);
-            //将序列化的数据转为16进制保存
-            String bytesToHexString = QPOSUtil.byteArray2Hex(bos.toByteArray());
-            //保存该16进制数组
-            sharedata.putString(key, bytesToHexString);
-            sharedata.commit();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("", "保存obj失败");
-        }
-    }
-
-
-    /**
-     * desc:获取保存的Object对象
-     *
-     * @param context
-     * @param key
-     * @return modified:
-     */
-    public Object readObject(Context context, String key) {
-        try {
-            SharedPreferences sharedata = context.getSharedPreferences(FILENAME, 0);
-            if (sharedata.contains(key)) {
-                String string = sharedata.getString(key, "");
-                if (string == null || "".equals(string)) {
-                    return null;
-                } else {
-                    //将16进制的数据转为数组，准备反序列化
-                    byte[] stringToBytes = QPOSUtil.HexStringToByteArray(string);
-                    ByteArrayInputStream bis = new ByteArrayInputStream(stringToBytes);
-                    ObjectInputStream is = new ObjectInputStream(bis);
-                    //返回反序列化得到的对象
-                    Object readObject = is.readObject();
-                    return readObject;
-                }
-            }
-        } catch (StreamCorruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        //所有异常返回null
-        return null;
-
-    }
 
 }
 

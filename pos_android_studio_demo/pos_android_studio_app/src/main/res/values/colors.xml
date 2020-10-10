@@ -16,6 +16,15 @@
     <color name="membership_green">#FF00B832</color>
     <color name="membership_grey">#FF999999</color>
 
+    <!--自定义键盘颜色-->
+    <color name="keyboard_back_color">#E5E5E5</color>
+    <color name="keyboard_pressed_color">#D4D6D8</color>
+    <color name="keyboard_text_color">#333333</color>
+    <color name="keyboard_blue_color">#03A9F4</color>
+    <color name="keyboard_white_color">#FFFFFF</color>
+    <color name="blue_03A9F4">#03A9F4</color>
+    <color name="navigationBarColor">#f46444</color>
+
     <!-- Blue -->
     <color name="eb_col_14">#00A1DE</color>
     <color name="eb_col_9">#4b81b1</color>
