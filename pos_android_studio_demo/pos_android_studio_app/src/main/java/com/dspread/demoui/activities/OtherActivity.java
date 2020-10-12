@@ -89,6 +89,7 @@ public class OtherActivity extends BaseActivity{
     private String blueTootchAddress = "";
 
     private boolean isUart = true;
+    private LinearLayout lin;
 
 
     private int type;
@@ -169,7 +170,8 @@ public class OtherActivity extends BaseActivity{
         btnUSB = (Button) findViewById(R.id.btnUSB);//扫描USB设备
         btnDisconnect = (Button) findViewById(R.id.disconnect);//断开连接
         mKeyIndex = ((EditText) findViewById(R.id.keyindex));
-        mhipStatus = ((EditText) findViewById(R.id.chipStatus));
+        mhipStatus = (findViewById(R.id.chipStatus));
+        lin = findViewById(R.id.lin);
     }
 
     private void initListener() {
@@ -419,7 +421,7 @@ public class OtherActivity extends BaseActivity{
 
     private KeyboardUtil keyboardUtil;
     private List<String> keyBoardList = new ArrayList<>();
-    private LinearLayout lin;
+
     /**
      * @author qianmengChen
      * @ClassName: MyPosListener
@@ -2224,6 +2226,7 @@ public class OtherActivity extends BaseActivity{
                 if (posType == POS_TYPE.UART) {//通用异步收发报机
                     pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
 //                    pos.doTrade(terminalTime, 0, 30);
+//                    pos.setD20Trade(true);
                     pos.doTrade(20);
                 } else {
                     int keyIdex = getKeyIndex();
