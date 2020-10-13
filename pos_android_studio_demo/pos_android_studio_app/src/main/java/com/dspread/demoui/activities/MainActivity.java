@@ -1516,13 +1516,16 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 public void onClick(View v) {
                     String pin = ((EditText) dialog.findViewById(R.id.pinEditText)).getText().toString();
                     if (pin.length() >= 4 && pin.length() <= 12) {
-                        if (pin.equals("000000")) {
-                            pos.sendEncryptPin("5516422217375116");
-
-                        } else {
-                            pos.sendPin(pin);
-                        }
+//                        if (pin.equals("000000")) {
+//                            pos.sendEncryptPin("5516422217375116");
+//
+//                        } else {
+//                            pos.sendPin(pin);
+//                        }
+                        pos.sendPin(pin);
                         dismissDialog();
+                    }else{
+                        Toast.makeText(MainActivity.this,"The length just can input 4 - 12 digits",Toast.LENGTH_LONG).show();
                     }
                 }
             });
