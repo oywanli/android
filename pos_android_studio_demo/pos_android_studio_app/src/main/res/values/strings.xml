@@ -56,6 +56,7 @@
     <string name="bluetooth">Bluetooth</string>
     <string name="getQuickEmvStatus">get Quick Emv Status</string>
     <string name="setQuickEmvStatus">set Quick Emv Status</string>
+    <string name="updateEMVByXml">update EMV By Xml</string>
     <string name="audio">Audio</string>
     <string name="serial_port">Serial port</string>
     <string name="normal_bluetooth">Normal Blutooth</string>

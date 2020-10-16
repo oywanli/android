@@ -166,10 +166,15 @@
                 android:id="@+id/getQuickEmvStatus"
                 android:orderInCategory="100"
                 android:title="@string/getQuickEmvStatus" />
+
             <item
                 android:id="@+id/setQuickEmvStatus"
                 android:orderInCategory="100"
                 android:title="@string/setQuickEmvStatus" />
+            <item
+                android:id="@+id/updateEMVByXml"
+                android:orderInCategory="100"
+                android:title="@string/updateEMVByXml"/>
 
         </menu>
     </item>

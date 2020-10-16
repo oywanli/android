@@ -621,6 +621,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
             pos.lcdShowCloseDisplay();
 
+        } else if (item.getItemId()==R.id.updateEMVByXml){
+            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv.xml",MainActivity.this)));
         }
         return true;
     }

@@ -59,6 +59,7 @@
     <string name="updateEMV">更新EMV</string>
     <string name="getQuickEmvStatus">get Quick Emv Status</string>
  	<string name="setQuickEmvStatus">set Quick Emv Status</string>
+    <string name="updateEMVByXml">用xml更新EMV</string>
     <string name="updateEMVRID">更新RID的EMV</string>
     <string name="swipe_card">请刷卡</string>
     <string name="bluetooth">蓝牙</string>
