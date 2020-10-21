@@ -1355,7 +1355,12 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             doTradeButton.setEnabled(true);
             btnDisconnect.setEnabled(true);
             btnQuickEMV.setEnabled(true);
-            setTitle(title +"("+blueTitle.substring(0,6)+"..."+blueTitle.substring(blueTitle.length()-3,blueTitle.length())+")");
+            if(posType == POS_TYPE.BLUETOOTH || posType == POS_TYPE.BLUETOOTH_BLE) {
+                setTitle(title +"("+blueTitle.substring(0,6)+"..."+blueTitle.substring(blueTitle.length()-3)+")");
+            }
+            else{
+                setTitle("Device connect");
+            }
         }
 
         @Override
