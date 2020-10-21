@@ -2226,7 +2226,6 @@ public class OtherActivity extends BaseActivity{
                 if (posType == POS_TYPE.UART) {//通用异步收发报机
                     pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
 //                    pos.doTrade(terminalTime, 0, 30);
-//                    pos.setD20Trade(true);
                     pos.doTrade(20);
                 } else {
                     int keyIdex = getKeyIndex();

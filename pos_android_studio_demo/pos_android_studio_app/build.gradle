@@ -3,16 +3,16 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file('/Users/kelvin/android/pos_android_studio_demo/pos_android_studio_app/app.keystore')
+            storeFile file('app.keystore')
             storePassword 'dspread'
             keyPassword 'dspread'
             keyAlias 'gundam_wing'
         }
         config {
-            keyAlias 'dspread'
-            keyPassword '111111'
-            storeFile file('/Users/kelvin/android/pos_android_studio_demo/pos_android_studio_app/dspread.jks')
-            storePassword '111111'
+            keyAlias 'key0'
+            keyPassword '123789'
+            storeFile file('dspread.jks')
+            storePassword '123789'
         }
     }
     compileSdkVersion 28

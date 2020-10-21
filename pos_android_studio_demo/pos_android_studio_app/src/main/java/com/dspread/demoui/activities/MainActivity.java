@@ -1357,8 +1357,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             btnQuickEMV.setEnabled(true);
             if(posType == POS_TYPE.BLUETOOTH || posType == POS_TYPE.BLUETOOTH_BLE) {
                 setTitle(title +"("+blueTitle.substring(0,6)+"..."+blueTitle.substring(blueTitle.length()-3)+")");
-            }
-            else{
+            } else{
                 setTitle("Device connect");
             }
         }
