@@ -725,7 +725,11 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 statusEditText.setText(getString(R.string.card_inserted));
             } else if (result == DoTradeResult.BAD_SWIPE) {
                 statusEditText.setText(getString(R.string.bad_swipe));
-            } else if (result == DoTradeResult.MCR) {//磁条卡
+            }  else if (result == DoTradeResult.CARD_NOT_SUPPORT) {
+                statusEditText.setText("GPO NOT SUPPORT");
+            } else if (result == DoTradeResult.PLS_SEE_PHONE) {
+                statusEditText.setText("PLS SEE PHONE");
+            }else if (result == DoTradeResult.MCR) {//磁条卡
                 String content = getString(R.string.card_swiped);
                 String formatID = decodeData.get("formatID");
                 if (formatID.equals("31") || formatID.equals("40") || formatID.equals("37") || formatID.equals("17") || formatID.equals("11") || formatID.equals("10")) {
