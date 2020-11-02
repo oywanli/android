@@ -482,7 +482,7 @@ if __name__ == "__main__":
 The decrypted PINBLOCK (formated Pin data) is: 0411019efaaeeeee
 The real PIN value can be caculated using formated pin data and PAN as inputs, according to ANSI X9.8. Below is an example:
 
-1) PAN: 6221061055111111
+1) PAN: 6221061055111112
 2) 12 right most PAN digits without checksum: 106105511111
 3) Add 0000 to the left: 0000106105511111
 4) XOR (#3) and Formated PIN Data 
