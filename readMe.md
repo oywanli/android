@@ -487,7 +487,7 @@ The real PIN value can be caculated using formated pin data and PAN as inputs, a
 3) Add 0000 to the left: 0000622012926325
 4) XOR (#3) and Formated PIN Data 
 
-XOR (0000106105511111, 0411019efaaeeeee) = 041111FFFFFFFFFF
+XOR (0000622012926325, 041173DFED6D9CDA) = 041111FFFFFFFFFF
 In our example, the plain PIN is 4 bytes in length with data "1111"
 
 
