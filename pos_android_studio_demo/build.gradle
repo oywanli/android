@@ -2,8 +2,7 @@
 
 buildscript {
     repositories {
-        maven { url 'https://maven.google.com' }
-        jcenter()
+        jcenter(){ url 'https://jcenter.bintray.com/'}
         google()
     }
     dependencies {
@@ -16,9 +15,8 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://maven.google.com' }
         google()
-        jcenter()
+        jcenter(){ url 'https://jcenter.bintray.com/'}
 
 
     }
