@@ -2323,7 +2323,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     pos.doTrade(terminalTime, 0, 30);
                 } else {
                     int keyIdex = getKeyIndex();
-                    pos.doTrade_QF(0x10,"345","123",10) ;//start do trade
+                    pos.doTrade(keyIdex,30);//start do trade
                 }
             } else if (v == btnUSB) {
                 USBClass usb = new USBClass();
