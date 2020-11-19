@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private EditText mKeyIndex;
 
     private String nfcLog = "";
-    private String pubModel;
+    private String pubModel ="";
     private String amount = "";
     private String cashbackAmount = "";
     private String blueTootchAddress = "";
