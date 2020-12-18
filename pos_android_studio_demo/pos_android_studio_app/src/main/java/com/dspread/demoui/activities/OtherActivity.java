@@ -1848,16 +1848,16 @@ public class OtherActivity extends BaseActivity{
 
         }
 
-        @Override
-        public void onSetPosBlePinCode(boolean b) {
-            TRACE.d("onSetPosBlePinCode(b):" + b);
-
-            if (b) {
-                statusEditText.setText("onSetPosBlePinCode success");
-            } else {
-                statusEditText.setText("onSetPosBlePinCode fail");
-            }
-        }
+//        @Override
+//        public void onSetPosBlePinCode(boolean b) {
+//            TRACE.d("onSetPosBlePinCode(b):" + b);
+//
+//            if (b) {
+//                statusEditText.setText("onSetPosBlePinCode success");
+//            } else {
+//                statusEditText.setText("onSetPosBlePinCode fail");
+//            }
+//        }
 
 
         @Override

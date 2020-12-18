@@ -1994,15 +1994,15 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             pubModel = clearKeys.substring(4, 4 + sum * 2);
         }
 
-        @Override
-        public void onSetPosBlePinCode(boolean b) {
-            TRACE.d("onSetPosBlePinCode(b):" + b);
-            if (b) {
-                statusEditText.setText("onSetPosBlePinCode success");
-            } else {
-                statusEditText.setText("onSetPosBlePinCode fail");
-            }
-        }
+//        @Override
+//        public void onSetPosBlePinCode(boolean b) {
+//            TRACE.d("onSetPosBlePinCode(b):" + b);
+//            if (b) {
+//                statusEditText.setText("onSetPosBlePinCode success");
+//            } else {
+//                statusEditText.setText("onSetPosBlePinCode fail");
+//            }
+//        }
 
         @Override
         public void onTradeCancelled() {
