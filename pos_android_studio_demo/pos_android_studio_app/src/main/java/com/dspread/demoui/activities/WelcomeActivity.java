@@ -92,8 +92,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 				Log.e("POS_SDK", "没有权限");
 				// 没有权限，申请权限。
 				// 申请授权。
-                ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
-//				ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
+				ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
 //                        Toast.makeText(getActivity(), "没有权限", Toast.LENGTH_SHORT).show();
 			} else {
 				// 有权限了，去放肆吧。
