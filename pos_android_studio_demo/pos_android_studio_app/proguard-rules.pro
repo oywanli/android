@@ -53,6 +53,14 @@
 #如果有引用v4包可以添加下面这行
 -keep public class * extends android.support.v4.app.Fragment
 
+ #下面的类将不会被混淆，这样的类是需要被jar包使用者直接调用的
+-keep,allowshrinking public  class android_serialport_api.SerialPort{
+    public *;
+}
+-keep,allowshrinking public  class android_serialport_api.SerialPortFinder{
+        public *;
+}
+
 
 #忽略警告
 -ignorewarnings
