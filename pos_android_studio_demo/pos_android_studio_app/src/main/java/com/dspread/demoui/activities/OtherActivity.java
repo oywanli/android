@@ -1763,14 +1763,9 @@ public class OtherActivity extends BaseActivity{
         }
 
         @Override
-        public void onEncryptData(String arg0) {
-
-            if (arg0 != null) {
-                TRACE.d("onEncryptData(String arg0) :" + arg0);
-
-                statusEditText.setText("get the encrypted result is :" + arg0);
-                TRACE.d("get the encrypted result is :" + arg0);
-
+        public void onEncryptData(Hashtable<String, String> resultTable) {
+            if (resultTable != null) {
+                TRACE.d("onEncryptData(String arg0) :" + resultTable);
             }
         }
 
