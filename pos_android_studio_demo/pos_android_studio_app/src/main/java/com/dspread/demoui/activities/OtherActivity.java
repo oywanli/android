@@ -210,6 +210,7 @@ public class OtherActivity extends BaseActivity{
         if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CH34XU);
         }
+        //pos.setD20Trade(true);
         pos.setConext(this);
         //通过handler处理，监听MyPosListener，实现QposService的接口，（回调接口）
         Handler handler = new Handler(Looper.myLooper());
@@ -996,8 +997,8 @@ public class OtherActivity extends BaseActivity{
 
             });
             dialog.setCanceledOnTouchOutside(false);
-//            dialog.show();
-            pos.setAmount("200", cashbackAmount, "156", QPOSService.TransactionType.GOODS);
+            dialog.show();
+//            pos.setAmount("200", cashbackAmount, "156", QPOSService.TransactionType.GOODS);
         }
 
         /**
