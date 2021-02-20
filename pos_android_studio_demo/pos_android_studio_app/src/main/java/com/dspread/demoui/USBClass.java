@@ -66,10 +66,10 @@ public class USBClass {
 
 		// check for existing devices
 		for (UsbDevice device : mManager.getDeviceList().values()) {
-			// 判断是否有权限
+			// judge whether there is permission
 	        if(!mManager.hasPermission(device) && (device.getVendorId() == 2965 || device.getVendorId() == 0x03EB || device.getVendorId() == 1027)) {
 	        	TRACE.d("km  没有权限");
-	            // 打开设备，获取 UsbDeviceConnection 对象，连接设备，用于后面的通讯
+	            // open device，get UsbDeviceConnection object ，Connect device for subsequent communication
 	        	mManager.requestPermission(device, mPermissionIntent);
 	            return null;
 	        }

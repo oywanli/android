@@ -56,7 +56,7 @@ public class DUKPK2009_CBC {
         } else {
             ipek = parseHexStr2Byte(clearIpek);
         }
-        String ipekStr = parseByte2HexStr(ipek);// 经测试 ipek都一样
+        String ipekStr = parseByte2HexStr(ipek);// after testing, ipek is the same
         System.out.println("ipekStr=" + ipekStr);
         byte[] dataKey = GetDataKey(byte_ksn, ipek);
         String dataKeyStr = parseByte2HexStr(dataKey);
@@ -313,7 +313,7 @@ public class DUKPK2009_CBC {
         return key;
     }
 
-    // 3DES加密
+    // 3DES encryption
     public static byte[] TriDesEncryption(byte[] byteKey, byte[] dec) {
 
         try {
@@ -345,7 +345,7 @@ public class DUKPK2009_CBC {
         return null;
     }
 
-    // 3DES解密 CBC
+    // 3DES decryption CBC
     public static byte[] TriDesDecryptionCBC(byte[] byteKey, byte[] dec) {
         byte[] en_key = new byte[24];
         if (byteKey.length == 16) {
@@ -381,7 +381,7 @@ public class DUKPK2009_CBC {
     }
 
 
-    // 3DES解密 ECB
+    // 3DES decryption ECB
     public static byte[] TriDesDecryptionECB(byte[] byteKey, byte[] dec) {
         // private String TriDesDecryption(String dnc_key, byte[] dec){
         // byte[] byteKey = parseHexStr2Byte(dnc_key);
@@ -422,7 +422,7 @@ public class DUKPK2009_CBC {
         return null;
     }
 
-    // 十六进制字符串转字节数组
+    // convert hexadecimal string to byte array
     public static byte[] parseHexStr2Byte(String hexStr) {
         if (hexStr.length() < 1)
             return null;
@@ -436,7 +436,7 @@ public class DUKPK2009_CBC {
         return result;
     }
 
-    // 字节数组转十六进制字符串
+    // convert byte array to hexadecimal string
     public static String parseByte2HexStr(byte buf[]) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < buf.length; i++) {
@@ -449,7 +449,7 @@ public class DUKPK2009_CBC {
         return sb.toString();
     }
 
-    // 数据补位
+    // data fill
     public static String dataFill(String dataStr) {
         int len = dataStr.length();
         if (len % 16 != 0) {

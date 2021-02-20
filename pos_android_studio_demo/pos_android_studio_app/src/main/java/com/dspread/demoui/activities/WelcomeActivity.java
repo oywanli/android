@@ -21,7 +21,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 	private Button audio,serial_port,normal_blu,other_blu;
 	private Intent intent;
 	private static final int LOCATION_CODE = 101;
-	private LocationManager lm;//【位置管理】
+	private LocationManager lm;//【Location management】
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,24 +53,24 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()){
-			case R.id.audio://音频
+			case R.id.audio://Audio
 				intent = new Intent(this,OtherActivity.class);
 				intent.putExtra("connect_type", 1);
 				startActivity(intent);
 				break;
-			case R.id.serial_port://串口连接
+			case R.id.serial_port://Serial Port
 				intent = new Intent(this, OtherActivity.class);
 
 				intent.putExtra("connect_type", 2);
 				startActivity(intent);
 				break;
-			case R.id.normal_bluetooth://普通蓝牙连接
+			case R.id.normal_bluetooth://Normal Bluetooth
 				intent = new Intent(this, MainActivity.class);
 
 				intent.putExtra("connect_type", 3);
 				startActivity(intent);
 				break;
-			case R.id.other_bluetooth://其他蓝牙连接，例如：BLE，，，
+			case R.id.other_bluetooth://Other Bluetooth，such as：BLE，，，
 				intent = new Intent(this,MainActivity.class);
 				intent.putExtra("connect_type", 4);
 				startActivity(intent);
@@ -80,22 +80,22 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 
 	public void bluetoothRelaPer() {
 		BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-		if (adapter != null && !adapter.isEnabled()) {//表示蓝牙不可用 add one fix
+		if (adapter != null && !adapter.isEnabled()) {//if bluetooth is disabled, add one fix
 			Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivity(enabler);
 		}
 		lm = (LocationManager) WelcomeActivity.this.getSystemService(WelcomeActivity.this.LOCATION_SERVICE);
 		boolean ok = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		if (ok) {//开了定位服务
+		if (ok) {//Location service is on
 			if (ContextCompat.checkSelfPermission(WelcomeActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
 					!= PackageManager.PERMISSION_GRANTED) {
 				Log.e("POS_SDK", "没有权限");
-				// 没有权限，申请权限。
-				// 申请授权。
+				// Permission denied
+				// Request authorization
 				ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
 //                        Toast.makeText(getActivity(), "没有权限", Toast.LENGTH_SHORT).show();
 			} else {
-				// 有权限了，去放肆吧。
+				// have permission
 				Toast.makeText(WelcomeActivity.this, "有权限", Toast.LENGTH_SHORT).show();
 			}
 		} else {
@@ -114,10 +114,10 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 			case LOCATION_CODE: {
 				if (grantResults.length > 0
 						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					// 权限被用户同意。
+					// Permission is agreed by the user
 					Toast.makeText(WelcomeActivity.this, getString(R.string.msg_allowed_location_permission), Toast.LENGTH_LONG).show();
 				} else {
-					// 权限被用户拒绝了。
+					// Permission is denied by the user
 					Toast.makeText(WelcomeActivity.this, getString(R.string.msg_not_allowed_loaction_permission), Toast.LENGTH_LONG).show();
 				}
 			}

@@ -729,7 +729,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 statusEditText.setText("GPO NOT SUPPORT");
             } else if (result == DoTradeResult.PLS_SEE_PHONE) {
                 statusEditText.setText("PLS SEE PHONE");
-            }else if (result == DoTradeResult.MCR) {//磁条卡
+            }else if (result == DoTradeResult.MCR) {//Magnetic card
                 String content = getString(R.string.card_swiped);
                 String formatID = decodeData.get("formatID");
                 if (formatID.equals("31") || formatID.equals("40") || formatID.equals("37") || formatID.equals("17") || formatID.equals("11") || formatID.equals("10")) {
@@ -1252,7 +1252,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                                 String str = "8A023030";//Currently the default value,
                                 // should be assigned to the server to return data,
                                 // the data format is TLV
-                                pos.sendOnlineProcessResult(str);//脚本通知/55域/ICCDATA
+                                pos.sendOnlineProcessResult(str);//Script notification/55domain/ICCDATA
 
                             }
                             dismissDialog();
@@ -2609,16 +2609,16 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
      */
 //    public static void saveObject(Context context, String key, Object obj) {
 //        try {
-//            // 保存对象
+//            // Save object
 //            SharedPreferences.Editor sharedata = context.getSharedPreferences(FILENAME, 0).edit();
-//            //先将序列化结果写到byte缓存中，其实就分配一个内存空间
+//            //Write the serialization result to the byte cache，actually allocates a memory space
 //            ByteArrayOutputStream bos = new ByteArrayOutputStream();
 //            ObjectOutputStream os = new ObjectOutputStream(bos);
-//            //将对象序列化写入byte缓存
+//            //Serialize the object into the byte cache
 //            os.writeObject(obj);
-//            //将序列化的数据转为16进制保存
+//            //Convert the serialized data to hexadecimal and save
 //            String bytesToHexString = QPOSUtil.byteArray2Hex(bos.toByteArray());
-//            //保存该16进制数组
+//            //Save the hexadecimal array
 //            sharedata.putString(key, bytesToHexString);
 //            sharedata.apply();
 //        } catch (IOException e) {
@@ -2643,11 +2643,11 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 //                if (string == null || "".equals(string)) {
 //                    return null;
 //                } else {
-//                    //将16进制的数据转为数组，准备反序列化
+//                    //Convert hexadecimal data into an array, ready to deserialize
 //                    byte[] stringToBytes = QPOSUtil.HexStringToByteArray(string);
 //                    ByteArrayInputStream bis = new ByteArrayInputStream(stringToBytes);
 //                    ObjectInputStream is = new ObjectInputStream(bis);
-//                    //返回反序列化得到的对象
+//                    //Return the object obtained by deserialization
 //                    Object readObject = is.readObject();
 //                    return readObject;
 //                }
@@ -2662,7 +2662,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
-//        //所有异常返回null
+//        //All exceptions return null
 //        return null;
 //    }
 

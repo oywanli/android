@@ -170,7 +170,7 @@ public class TLVParser {
 
 
 
-    // 十六进制字符串转字节数组
+    // convert hexadecimal string to byte array
     public static byte[] hexToByteArray(String hexStr) {
         if (hexStr.length() < 1)
             return null;
@@ -219,8 +219,8 @@ public class TLVParser {
 
     /*
     *
-    * 验证tlv格式
-    * 只取第一个tlv作判断 一旦遇到0代表结束
+    * Verify the tlv format
+    * take the first tlv for judgment, once it encounters 0, it means the end
     * tlv 为true
     * tv 为false
     * */

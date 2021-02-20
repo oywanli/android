@@ -9,7 +9,7 @@ public class BaseApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        //  默认初始化
+        //  Default init
         XCrash.init(this);
     }
 

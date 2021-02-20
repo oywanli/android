@@ -31,7 +31,7 @@ public class QPOSUtil {
         return hex.toString();
     }
 
-    //将hex值转为ascii码
+    //Convert hex value to ascii code
     public static String convertHexToString(String hex) {
 
         StringBuilder sb = new StringBuilder();
@@ -54,9 +54,9 @@ public class QPOSUtil {
     }
 
     /**
-     * int到byte[] 由高位到低位
-     * @param i 需要转换为byte数组的整行值。
-     * @return byte数组
+     * convert int to byte[]
+     * @param i need to be converted to byte array
+     * @return byte array
      */
     public static byte[] intToByteArray(int i) {
         byte[] result = new byte[2];
@@ -77,7 +77,7 @@ public class QPOSUtil {
     }
 
     /**
-     * 16进制格式的字符串转成16进制byte 44 --> byte 0x44
+     * convert a string in hexadecimal format to byte in hexadecimal format 44 --> byte 0x44
      *
      * @param hexString
      * @return
@@ -105,7 +105,7 @@ public class QPOSUtil {
     }
 
     /**
-     * 中文字符串转成16进制数组
+     * convert Chinese string into hexadecimal array
      *
      * @param str
      * @return
@@ -134,7 +134,7 @@ public class QPOSUtil {
     }
 
     /**
-     * byte 转换成16进制格式字符串显示
+     * convert byte to hexadecimal string
      *
      * @param b
      * @return
@@ -148,7 +148,7 @@ public class QPOSUtil {
     }
 
     /**
-     * int转成16进制的byte
+     * convert int to hexadecimal byte
      *
      * @param i
      * @return
@@ -164,7 +164,7 @@ public class QPOSUtil {
     }
 
     /**
-     * 将指定byte数组以16进制的形式打印到控制台
+     * convert the specified byte array to hexadecimal and print
      *
      * @param b
      */
@@ -180,7 +180,7 @@ public class QPOSUtil {
     }
 
     /**
-     * 把16进制字节转换成int
+     * convert hexadecimal byte to int
      *
      * @param b
      * @return
@@ -195,7 +195,7 @@ public class QPOSUtil {
     }
 
     /**
-     * 异或输入字节流
+     * XOR input byte stream
      *
      * @param b
      * @param startPos
@@ -236,7 +236,7 @@ public class QPOSUtil {
     }
 
     /**
-     * 将毫秒值转换成时分秒（时长）
+     * convert milliseconds to hours, minutes and seconds
      *
      * @param l
      * @return
@@ -268,13 +268,13 @@ public class QPOSUtil {
     public static byte[] bcd2asc(byte[] src) {
         byte[] results = new byte[src.length * 2];
         for (int i = 0; i < src.length; i++) {
-            // 高Nibble转换
+            // high Nibble conversion
             if (((src[i] & 0xF0) >> 4) <= 9) {
                 results[2 * i] = (byte) (((src[i] & 0xF0) >> 4) + 0x30);
             } else {
                 results[2 * i] = (byte) (((src[i] & 0xF0) >> 4) + 0x37); // 大写A~F
             }
-            // 低Nibble转换
+            // low Nibble conversion
             if ((src[i] & 0x0F) <= 9) {
                 results[2 * i + 1] = (byte) ((src[i] & 0x0F) + 0x30);
             } else {
@@ -340,7 +340,7 @@ public class QPOSUtil {
         if (str.startsWith("0"))
             return true;
         boolean result = true;
-//        Integer.MAX_VALUE  4个字节
+//        Integer.MAX_VALUE  4 bytes
 //       long MAX_VALUE = 0x7fffffffffffffffL;
         int byteCou = str.length() / 2;
         int count;

@@ -37,17 +37,17 @@ public class ShowGuideView {
 
 
     /**
-     * 定义一个接口
+     * define an interface
      */
     public interface  onGuideViewListener{
         void onGuideListener(Button btn);
     }
     /**
-     *定义一个变量储存数据
+     *define a veriable
      */
     private onGuideViewListener listener;
     /**
-     *提供公共的方法,并且初始化接口类型的数据
+     *provide a public method and init interface type data
      */
     public void setListener(onGuideViewListener listener){
         this.listener = listener;

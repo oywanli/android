@@ -32,11 +32,11 @@ public class KeyboardUtil {
     private PopupWindow mWindow;
     private MyKeyboardView mKeyboardView;
     private boolean needInit;
-    private boolean mScrollTo = false;//是否界面上移，适应键盘
-//    private int mEditTextHeight;//编辑框高度 44dp
-    private int mKeyboardHeight;//键盘高度 260dp
-    private int mHeightPixels;//屏幕高度
-    private int mKeyBoardMarginEditTextTopHeight;//键盘距离编辑框顶部最少距离 （用来计算键盘上推高度）
+    private boolean mScrollTo = false;//whether the interface moves up
+    //    private int mEditTextHeight;//edit text height 44dp
+    private int mKeyboardHeight;//keyboard height 260dp
+    private int mHeightPixels;//screen height
+    private int mKeyBoardMarginEditTextTopHeight;//the minimum distance between the keyboard and the top of the edit text
     private List<String> dataList;
 
     public KeyboardUtil(Activity context, View parent,List<String> dataList) {
@@ -47,10 +47,10 @@ public class KeyboardUtil {
 //        RelativeLayout mKeyboardTopView = (RelativeLayout) mIncludeKeyboardview.findViewById(R.id.keyboard_top_rl);
         mKeyboardView = (MyKeyboardView) mIncludeKeyboardview.findViewById(R.id.keyboard_view);
         mWindow = new PopupWindow(mIncludeKeyboardview, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
-        mWindow.setAnimationStyle(R.style.AnimBottom);   //滑出滑入动画
+        mWindow.setAnimationStyle(R.style.AnimBottom);   //Animation style
         mWindow.setOnDismissListener(mOnDismissListener);
-        mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);//防止被底部工具栏遮挡
-        int mEditTextHeight = dp2px(44);//44dp 编辑框高度
+        mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);//prevent being blocked by the bottom toolbar
+        int mEditTextHeight = dp2px(44);//44dp edit text height
         mKeyboardHeight = dp2px(260);//260dp
         mKeyBoardMarginEditTextTopHeight = mEditTextHeight * 2;
         mHeightPixels = context.getResources().getDisplayMetrics().heightPixels;
@@ -62,10 +62,10 @@ public class KeyboardUtil {
     }
 
     /**
-     * 键盘初始化，设置编辑框监听器
+     * init keyboard
      *
-     * @param keyBoardType 键盘类型
-     * @param editTexts    编辑框
+     * @param keyBoardType keyboard type
+     * @param editTexts    edit text
      */
     @SuppressWarnings("all")
     public void initKeyboard(final int keyBoardType, EditText... editTexts) {
@@ -85,7 +85,7 @@ public class KeyboardUtil {
     }
 
     /**
-     * 设置不需要使用这个键盘的edittext,解决切换问题
+     * Set edittext that does not need to use this keyboard
      *
      * @param edittexts
      */
@@ -96,7 +96,7 @@ public class KeyboardUtil {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
-                        //防止没有隐藏键盘的情况出现    new Handler().postDelayed(new Runnable())
+                        //prevent situations where the keyboard is not hidden    new Handler().postDelayed(new Runnable())
                         hide();
                     }
                     return false;
@@ -106,21 +106,21 @@ public class KeyboardUtil {
     }
 
     public void show(int keyBoardType, EditText editText){
-        //隐藏系统
+        //hide system
         KeyboardTool.hideInputForce(mActivity, editText);
-        //初始化键盘
+        //init keyboard
         mKeyboardView.setHeight(mHeightPixels);
         if (mKeyboardView.getEditText() != editText || needInit) {
             mKeyboardView.init(editText, mWindow, keyBoardType,dataList);
         }
-        //显示自定义键盘
+        //display custom keyboard
         if (mWindow != null && !mWindow.isShowing()) {
             mWindow.showAtLocation(mParent, Gravity.BOTTOM, 0, 0);
         }else {
 //            mWindow = null;
         }
-        //调整父控件位置，键盘不挡住编辑框
-        int nKeyBoardToTopHeight = mHeightPixels - mKeyboardHeight;//屏幕高度-键盘高度
+        //modify the position of the parent control
+        int nKeyBoardToTopHeight = mHeightPixels - mKeyboardHeight;//screen height-keyboard height
         int[] editLocal = new int[2];
         editText.getLocationOnScreen(editLocal);
 
@@ -146,7 +146,7 @@ public class KeyboardUtil {
     }
 
     /**
-     * 隐藏系统键盘
+     * hide system keyboard
      *
      * @param editText
      */
@@ -172,7 +172,7 @@ public class KeyboardUtil {
         return (int) (dpValue * scale + 0.5f);
     }
 
-    //键盘消失，还原父控件位置
+    //keyboard dismiss,recover parent control
     private PopupWindow.OnDismissListener mOnDismissListener = new PopupWindow.OnDismissListener() {
         @Override
         public void onDismiss() {
@@ -190,7 +190,7 @@ public class KeyboardUtil {
         }
     };
 
-    //键盘距离编辑框顶部最少高度
+    //The minimum height of the keyboard from the top of the edit text
     public void setKeyBoardMarginEditTextTopHeight(int mKeyBoardMarginEditTextTopHeight){
         this.mKeyBoardMarginEditTextTopHeight = mKeyBoardMarginEditTextTopHeight;
     }

@@ -103,7 +103,7 @@ public class OtherActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //当窗口为用户可见，保持设备常开，并保持亮度不变
+        //When the window is visible to the user, keep the device normally open and keep the brightness unchanged
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (!isUart) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -114,9 +114,9 @@ public class OtherActivity extends BaseActivity{
         initListener();
         open(QPOSService.CommunicationMode.UART);
         posType = POS_TYPE.UART;
-//                        blueTootchAddress = "/dev/ttyMT0";//同方那边是s1，天波是s3
-        blueTootchAddress = "/dev/ttyS1";//同方那边是s1，天波是s3
-//                        blueTootchAddress = "/dev/ttyHSL1";//同方那边是s1，天波是s3
+//                        blueTootchAddress = "/dev/ttyMT0";//tongfang is s1，tianbo is s3
+        blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
+//                        blueTootchAddress = "/dev/ttyHSL1";//tongfang is s1，tianbo is s3
         pos.setDeviceAddress(blueTootchAddress);
         pos.openUart();
     }
@@ -151,9 +151,9 @@ public class OtherActivity extends BaseActivity{
                         // TODO Auto-generated method stub
                         open(QPOSService.CommunicationMode.UART);
                         posType = POS_TYPE.UART;
-//                        blueTootchAddress = "/dev/ttyMT0";//同方那边是s1，天波是s3
-                        blueTootchAddress = "/dev/ttyS1";//同方那边是s1，天波是s3
-//                        blueTootchAddress = "/dev/ttyHSL1";//同方那边是s1，天波是s3
+//                        blueTootchAddress = "/dev/ttyMT0";//tongfang is s1，tianbo is s3
+                        blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
+//                        blueTootchAddress = "/dev/ttyHSL1";//tongfang is s1，tianbo is s3
                         pos.setDeviceAddress(blueTootchAddress);
                         pos.openUart();
                     }
@@ -164,11 +164,11 @@ public class OtherActivity extends BaseActivity{
     }
 
     private void initView() {
-        doTradeButton = (Button) findViewById(R.id.doTradeButton);//开始交易
+        doTradeButton = (Button) findViewById(R.id.doTradeButton);//start to do trade
         serialBtn = (Button) findViewById(R.id.serialPort);
         statusEditText = (EditText) findViewById(R.id.statusEditText);
-        btnUSB = (Button) findViewById(R.id.btnUSB);//扫描USB设备
-        btnDisconnect = (Button) findViewById(R.id.disconnect);//断开连接
+        btnUSB = (Button) findViewById(R.id.btnUSB);//Scan  USB device
+        btnDisconnect = (Button) findViewById(R.id.disconnect);//disconnect
         mKeyIndex = ((EditText) findViewById(R.id.keyindex));
         mhipStatus = (findViewById(R.id.chipStatus));
         lin = findViewById(R.id.lin);
@@ -176,8 +176,8 @@ public class OtherActivity extends BaseActivity{
 
     private void initListener() {
         MyOnClickListener myOnClickListener = new MyOnClickListener();
-        //以下是按钮的点击事件
-        doTradeButton.setOnClickListener(myOnClickListener);//开始
+        //The following is the click event of the button
+        doTradeButton.setOnClickListener(myOnClickListener);//start
         btnDisconnect.setOnClickListener(myOnClickListener);
         btnUSB.setOnClickListener(myOnClickListener);
     }
@@ -193,7 +193,7 @@ public class OtherActivity extends BaseActivity{
     }
 
     /**
-     * 打开设备，获取类对象，开始监听
+     * open and get the class object,  start listening
      *
      * @param mode
      */
@@ -201,7 +201,7 @@ public class OtherActivity extends BaseActivity{
         TRACE.d("open");
         //pos=null;
         MyPosListener listener = new MyPosListener();
-        //实现类的单例模式
+        //implement singleton mode
         pos = QPOSService.getInstance(mode);
         if (pos == null) {
             statusEditText.setText("CommunicationMode unknow");
@@ -212,7 +212,7 @@ public class OtherActivity extends BaseActivity{
         }
         //pos.setD20Trade(true);
         pos.setConext(this);
-        //通过handler处理，监听MyPosListener，实现QposService的接口，（回调接口）
+        //init handler
         Handler handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
         String sdkVersion = pos.getSdkVersion();
@@ -220,7 +220,7 @@ public class OtherActivity extends BaseActivity{
     }
 
     /**
-     * 关闭设备
+     * close device
      */
     private void close() {
         TRACE.d("close");
@@ -279,7 +279,7 @@ public class OtherActivity extends BaseActivity{
 
 
     /**
-     * 菜单栏的点击事件
+     * Click event of the menu bar
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -295,7 +295,7 @@ public class OtherActivity extends BaseActivity{
             pos.getKsn();
 
         } else if (item.getItemId() == R.id.getEncryptData) {
-            //获得加密数据
+            //get encrypt data
             pos.getEncryptData("70563".getBytes(), "1", "0", 10);
         } else if (item.getItemId() == R.id.addKsn) {
             pos.addKsn("00");
@@ -307,14 +307,14 @@ public class OtherActivity extends BaseActivity{
         } else if (item.getItemId() == R.id.get_device_public_key) {//get the key value
 
             pos.getDevicePublicKey(5);
-        } else if (item.getItemId() == R.id.set_sleepmode_time) {//设置设备睡眠时间
+        } else if (item.getItemId() == R.id.set_sleepmode_time) {//set pos sleep mode time
 //            0~Integer.MAX_VALUE
 
             pos.setSleepModeTime(20);//the time is in 10s and 10000s
         } else if (item.getItemId() == R.id.set_shutdowm_time) {
             pos.setShutDownTime(15 * 60);
         }
-        //更新ipek
+        //update ipek
         else if (item.getItemId() == R.id.updateIPEK) {
             int keyIndex = getKeyIndex();
             String ipekGrop = "0" + keyIndex;
@@ -342,7 +342,7 @@ public class OtherActivity extends BaseActivity{
 
             statusEditText.setText("SDK版本：" + pos.getSdkVersion());
         } else if (item.getItemId() == R.id.setBuzzer) {
-            pos.doSetBuzzerOperation(3);//显示设置蜂鸣器响3次
+            pos.doSetBuzzerOperation(3);//set buzzer
         } else if (item.getItemId() == R.id.menu_get_deivce_info) {
             statusEditText.setText(R.string.getting_info);
             pos.getQposInfo();
@@ -443,7 +443,7 @@ public class OtherActivity extends BaseActivity{
                 }
             });
             keyboardUtil = new KeyboardUtil(OtherActivity.this, lin,dataList);
-            keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, statusEditText);//随机键盘
+            keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, statusEditText);//Random keyboard
         }
 
         @Override
@@ -469,14 +469,14 @@ public class OtherActivity extends BaseActivity{
         }
 
         @Override
-        public void onRequestWaitingUser() {//等待卡片
+        public void onRequestWaitingUser() {//wait for card
             TRACE.d("onRequestWaitingUser()");
             dismissDialog();
             statusEditText.setText(getString(R.string.waiting_for_card));
         }
 
         /**
-         * 返回选择的开始，返回交易的结果
+         * return the result of the transaction
          */
         @Override
         public void onDoTradeResult(QPOSService.DoTradeResult result, Hashtable<String, String> decodeData) {
@@ -493,7 +493,7 @@ public class OtherActivity extends BaseActivity{
                 statusEditText.setText(getString(R.string.card_inserted));
             } else if (result == QPOSService.DoTradeResult.BAD_SWIPE) {
                 statusEditText.setText(getString(R.string.bad_swipe));
-            } else if (result == QPOSService.DoTradeResult.MCR) {//磁条卡
+            } else if (result == QPOSService.DoTradeResult.MCR) {//Magnetic card
                 String content = getString(R.string.card_swiped);
                 String formatID = decodeData.get("formatID");
                 if (formatID.equals("31") || formatID.equals("40") || formatID.equals("37") || formatID.equals("17") || formatID.equals("11") || formatID.equals("10")) {
@@ -546,7 +546,6 @@ public class OtherActivity extends BaseActivity{
                     String encTrack2 = decodeData.get("encTrack2");
                     String encTrack3 = decodeData.get("encTrack3");
                     String partialTrack = decodeData.get("partialTrack");
-                    // TODO
                     String pinKsn = decodeData.get("pinKsn");
                     String trackksn = decodeData.get("trackksn");
                     String pinBlock = decodeData.get("pinBlock");
@@ -648,7 +647,6 @@ public class OtherActivity extends BaseActivity{
                     String encTrack2 = decodeData.get("encTrack2");
                     String encTrack3 = decodeData.get("encTrack3");
                     String partialTrack = decodeData.get("partialTrack");
-                    // TODO
                     String pinKsn = decodeData.get("pinKsn");
                     String trackksn = decodeData.get("trackksn");
                     String pinBlock = decodeData.get("pinBlock");
@@ -744,8 +742,7 @@ public class OtherActivity extends BaseActivity{
         }
 
         /**
-         * 请求交易
-         * TODO 简单描述该方法的实现功能（可选）
+         * Request transaction
          *
          * @see com.dspread.xpos.QPOSService.QPOSServiceListener#onRequestTransactionResult(com.dspread.xpos.QPOSService.TransactionResult)
          */
@@ -1002,8 +999,7 @@ public class OtherActivity extends BaseActivity{
         }
 
         /**
-         * 判断是否请求在线连接请求
-         * TODO 简单描述该方法的实现功能（可选）
+         * judge request server is connected or not
          *
          * @see com.dspread.xpos.QPOSService.QPOSServiceListener#onRequestIsServerConnected()
          */
@@ -1050,7 +1046,7 @@ public class OtherActivity extends BaseActivity{
                                 String str = "8A023030";//Currently the default value,
                                 // should be assigned to the server to return data,
                                 // the data format is TLV
-                                pos.sendOnlineProcessResult(str);//脚本通知/55域/ICCDATA
+                                pos.sendOnlineProcessResult(str);//Script notification/55domain/ICCDATA
 
                             }
                             dismissDialog();
@@ -1281,7 +1277,7 @@ public class OtherActivity extends BaseActivity{
         }
 
         @Override
-        public void onGetCardNoResult(String cardNo) {//获取卡号的回调
+        public void onGetCardNoResult(String cardNo) {//get card number result
             TRACE.d("onGetCardNoResult(String cardNo):" + cardNo);
 
             statusEditText.setText("cardNo: " + cardNo);
@@ -2208,7 +2204,7 @@ public class OtherActivity extends BaseActivity{
             if (selectBTFlag) {
                 statusEditText.setText(R.string.wait);
                 return;
-            } else if (v == doTradeButton) {//开始按钮
+            } else if (v == doTradeButton) {//do trade button
                 mhipStatus.setTextColor(getResources().getColor(R.color.eb_col_34));
                 mhipStatus.setText("");
                 if (pos == null) {
@@ -2219,7 +2215,7 @@ public class OtherActivity extends BaseActivity{
 
                 statusEditText.setText(R.string.starting);
 //                terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
-                if (posType == POS_TYPE.UART) {//通用异步收发报机
+                if (posType == POS_TYPE.UART) {//postype is UART
                     pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
 //                    pos.doTrade(terminalTime, 0, 30);
                     pos.doTrade(20);
@@ -2312,7 +2308,7 @@ public class OtherActivity extends BaseActivity{
         }
     };
 
-	/*---------------------------------------------*/
+    /*---------------------------------------------*/
     private static final String FILENAME = "dsp_axdd";
 
 }

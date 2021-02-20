@@ -107,32 +107,32 @@ public class FileUtils {
 
 
     /**
-     * 获取指定目录内所有文件路径
+     * Get all file paths in the specified directory
      *
-     * @param dirPath 需要查询的文件目录
+     * @param dirPath Directory of files to be queried
      */
     public static List<String> getAllFiles(String dirPath) {
         File f = new File(dirPath);
-        if (!f.exists()) {//判断路径是否存在
+        if (!f.exists()) {//judge whether the path exists
             f.mkdir();
             return null;
         }
 
         File[] files = f.listFiles();
 
-        if (files == null) {//判断权限
+        if (files == null) {//judge permission
             return null;
         }
 
         ArrayList fileList = new ArrayList();
-        for (File _file : files) {//遍历目录
+        for (File _file : files) {//traverse directory
             if (_file.isFile()) {
                 String _name = _file.getName();
-//                String filePath = _file.getAbsolutePath();//获取文件路径
-                String fileName = _file.getName();//获取文件名
+//                String filePath = _file.getAbsolutePath();//get file path
+                String fileName = _file.getName();//get file name
 //                fileList.add(filePath.concat(fileName));
                 fileList.add(fileName);
-            } else if (_file.isDirectory()) {//查询子目录
+            } else if (_file.isDirectory()) {//query subdirectory
                 getAllFiles(_file.getAbsolutePath());
             } else {
             }

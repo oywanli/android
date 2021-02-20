@@ -31,15 +31,15 @@ public class InnerListview extends ListView{
 		this.parentScrollView=parentScrollView;
 	}*/
 	
-	//该方法是让listview自动适应scrollview的高度。随着listview的增加，scrollview也会变长
-	//但是此时的listview需要为wrapcontent。
+	//The method is to let the listview automatically adapt to the height of the scrollview. As the listview increases, the scrollview will become longer
+	//the listview  needs to be wrapcontent
 	 protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 	        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
 	        MeasureSpec.AT_MOST);
 	        super.onMeasure(widthMeasureSpec, expandSpec);
 	    }
 	
-	 //下面的方法是让listview保证一定的高度，从而让listview在某个位置滑动，scrollview也可以滑动
+	 //Let the listview ensure a certain height, so that the listview can slide in a certain position, and the scrollview can also slide
 	/*@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		// TODO Auto-generated method stub
