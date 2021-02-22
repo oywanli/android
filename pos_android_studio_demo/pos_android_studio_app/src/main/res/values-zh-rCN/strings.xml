@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="device_not_connect">设备未连接</string>
+    <string name="end_transaction">ICC交易结束</string>
+    <string name="select_app_start">请选择App -- S，emv卡片的多种配置</string>
+    <string name="select_app_end">请选择App -- 结束 position = </string>
+    <string name="emv_configured">emv已配置</string>
+    <string name="emv_not_configured">emv未配置</string>
     <string name="enter_pin_try">请输入密码(剩余%s次)</string>
     <string name="msg_pls_insert_card">请插卡</string>
     <string name="msg_pls_swipe_card">请刷卡</string>

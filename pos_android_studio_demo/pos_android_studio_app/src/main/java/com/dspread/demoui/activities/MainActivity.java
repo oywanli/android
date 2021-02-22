@@ -251,7 +251,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         }
     }
 
-    //set listview's height
+    /*
+     * set listview's height
+    **/
     public void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
@@ -699,7 +701,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     /**
      * @author qianmengChen
      * @ClassName: MyPosListener
-     * @date: 2016-11-10 下午6:35:06
+     * @date: 2016-11-10 6:35:06pm
      */
     class MyQposClass extends CQPOSService {
 
@@ -781,7 +783,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     String encTrack2 = decodeData.get("encTrack2");
                     String encTrack3 = decodeData.get("encTrack3");
                     String partialTrack = decodeData.get("partialTrack");
-                    // TODO
                     String pinKsn = decodeData.get("pinKsn");
                     String trackksn = decodeData.get("trackksn");
                     String pinBlock = decodeData.get("pinBlock");
@@ -2599,71 +2600,5 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     /*---------------------------------------------*/
 
     private static final String FILENAME = "dsp_axdd";
-
-    /**
-     * desc:save object
-     *
-     * @param context
-     * @param key
-     * @param obj     The object to be saved can only save objects that implement serializable
-     */
-//    public static void saveObject(Context context, String key, Object obj) {
-//        try {
-//            // Save object
-//            SharedPreferences.Editor sharedata = context.getSharedPreferences(FILENAME, 0).edit();
-//            //Write the serialization result to the byte cache，actually allocates a memory space
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            ObjectOutputStream os = new ObjectOutputStream(bos);
-//            //Serialize the object into the byte cache
-//            os.writeObject(obj);
-//            //Convert the serialized data to hexadecimal and save
-//            String bytesToHexString = QPOSUtil.byteArray2Hex(bos.toByteArray());
-//            //Save the hexadecimal array
-//            sharedata.putString(key, bytesToHexString);
-//            sharedata.apply();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Log.e("", "保存obj失败");
-//        }
-//    }
-
-
-    /**
-     * desc:Get saved Object
-     *
-     * @param context
-     * @param key
-     * @return modified:
-     */
-//    public Object readObject(Context context, String key) {
-//        try {
-//            SharedPreferences sharedata = context.getSharedPreferences(FILENAME, 0);
-//            if (sharedata.contains(key)) {
-//                String string = sharedata.getString(key, "");
-//                if (string == null || "".equals(string)) {
-//                    return null;
-//                } else {
-//                    //Convert hexadecimal data into an array, ready to deserialize
-//                    byte[] stringToBytes = QPOSUtil.HexStringToByteArray(string);
-//                    ByteArrayInputStream bis = new ByteArrayInputStream(stringToBytes);
-//                    ObjectInputStream is = new ObjectInputStream(bis);
-//                    //Return the object obtained by deserialization
-//                    Object readObject = is.readObject();
-//                    return readObject;
-//                }
-//            }
-//        } catch (StreamCorruptedException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        //All exceptions return null
-//        return null;
-//    }
 
 }

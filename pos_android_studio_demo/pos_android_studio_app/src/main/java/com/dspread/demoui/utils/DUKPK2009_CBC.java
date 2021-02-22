@@ -214,10 +214,11 @@ public class DUKPK2009_CBC {
         return key;
     }
 
-    /// <summary>
-    /// Non Reversible Key Generatino Procedure
-    /// private function used by GetDUKPTKey
-    /// </summary>
+    /*<summary>
+    Non Reversible Key Generatino Procedure
+    private function used by GetDUKPTKey
+    </summary>
+    **/
     private static void NRKGP(byte[] key, byte[] ksn) {
 
         byte[] temp, key_l, key_r, key_temp;
@@ -258,14 +259,15 @@ public class DUKPK2009_CBC {
         System.arraycopy(key_r, 0, key, 8, 8);
     }
 
-    /// <summary>
-    /// Get current Data Key variant
-    /// Data Key variant is XOR DUKPT Key with 0000 0000 00FF 0000 0000 0000 00FF 0000
-    /// </summary>
-    /// <param name="ksn">Key serial number(KSN). A 10 bytes data. Which use to determine which BDK will be used and calculate IPEK. With different KSN, the DUKPT system will ensure different IPEK will be generated.
-    /// Normally, the first 4 digit of KSN is used to determine which BDK is used. The last 21 bit is a counter which indicate the current key.</param>
-    /// <param name="ipek">IPEK (16 byte).</param>
-    /// <returns>Data Key variant (16 byte)</returns>
+    /*<summary>
+    Get current Data Key variant
+    Data Key variant is XOR DUKPT Key with 0000 0000 00FF 0000 0000 0000 00FF 0000
+    </summary>
+    <param name="ksn">Key serial number(KSN). A 10 bytes data. Which use to determine which BDK will be used and calculate IPEK. With different KSN, the DUKPT system will ensure different IPEK will be generated.
+    Normally, the first 4 digit of KSN is used to determine which BDK is used. The last 21 bit is a counter which indicate the current key.</param>
+    <param name="ipek">IPEK (16 byte).</param>
+    <returns>Data Key variant (16 byte)</returns>
+    **/
     public static byte[] GetDataKeyVariant(byte[] ksn, byte[] ipek) {
         byte[] key;
 
@@ -276,14 +278,15 @@ public class DUKPK2009_CBC {
         return key;
     }
 
-    /// <summary>
-    /// Get current PIN Key variant
-    /// PIN Key variant is XOR DUKPT Key with 0000 0000 0000 00FF 0000 0000 0000 00FF
-    /// </summary>
-    /// <param name="ksn">Key serial number(KSN). A 10 bytes data. Which use to determine which BDK will be used and calculate IPEK. With different KSN, the DUKPT system will ensure different IPEK will be generated.
-    /// Normally, the first 4 digit of KSN is used to determine which BDK is used. The last 21 bit is a counter which indicate the current key.</param>
-    /// <param name="ipek">IPEK (16 byte).</param>
-    /// <returns>PIN Key variant (16 byte)</returns>
+    /*<summary>
+    Get current PIN Key variant
+    PIN Key variant is XOR DUKPT Key with 0000 0000 0000 00FF 0000 0000 0000 00FF
+    </summary>
+    <param name="ksn">Key serial number(KSN). A 10 bytes data. Which use to determine which BDK will be used and calculate IPEK. With different KSN, the DUKPT system will ensure different IPEK will be generated.
+    Normally, the first 4 digit of KSN is used to determine which BDK is used. The last 21 bit is a counter which indicate the current key.</param>
+    <param name="ipek">IPEK (16 byte).</param>
+    <returns>PIN Key variant (16 byte)</returns>
+    **/
     public static byte[] GetPinKeyVariant(byte[] ksn, byte[] ipek) {
         byte[] key;
 
@@ -313,7 +316,9 @@ public class DUKPK2009_CBC {
         return key;
     }
 
-    // 3DES encryption
+    /*
+     * 3DES encryption
+    **/
     public static byte[] TriDesEncryption(byte[] byteKey, byte[] dec) {
 
         try {
@@ -345,7 +350,9 @@ public class DUKPK2009_CBC {
         return null;
     }
 
-    // 3DES decryption CBC
+    /*
+     * 3DES decryption CBC
+    **/
     public static byte[] TriDesDecryptionCBC(byte[] byteKey, byte[] dec) {
         byte[] en_key = new byte[24];
         if (byteKey.length == 16) {
@@ -381,7 +388,9 @@ public class DUKPK2009_CBC {
     }
 
 
-    // 3DES decryption ECB
+    /*
+     * 3DES decryption ECB
+    **/
     public static byte[] TriDesDecryptionECB(byte[] byteKey, byte[] dec) {
         // private String TriDesDecryption(String dnc_key, byte[] dec){
         // byte[] byteKey = parseHexStr2Byte(dnc_key);
@@ -422,7 +431,9 @@ public class DUKPK2009_CBC {
         return null;
     }
 
-    // convert hexadecimal string to byte array
+    /*
+     * convert hexadecimal string to byte array
+    **/
     public static byte[] parseHexStr2Byte(String hexStr) {
         if (hexStr.length() < 1)
             return null;
@@ -436,7 +447,9 @@ public class DUKPK2009_CBC {
         return result;
     }
 
-    // convert byte array to hexadecimal string
+    /*
+    * convert byte array to hexadecimal string
+    **/
     public static String parseByte2HexStr(byte buf[]) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < buf.length; i++) {
@@ -449,7 +462,9 @@ public class DUKPK2009_CBC {
         return sb.toString();
     }
 
-    // data fill
+    /*
+     * data fill
+    **/
     public static String dataFill(String dataStr) {
         int len = dataStr.length();
         if (len % 16 != 0) {

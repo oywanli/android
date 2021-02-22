@@ -15,17 +15,23 @@ public class Utils {
 		return sb.toString();
 	}
 	
-	/* v must be less than 100 and great than -1 */
+	/*
+	 * v must be less than 100 and great than -1
+	**/
 	public static byte int2d2Bcd(int v) {
 		return (byte)(((v / 10) << 4) | ((v % 10) & 0x0F));
 	}
 	
-	/* v must be less than 16 and greater than -1 */
+	/*
+	 * v must be less than 16 and greater than -1
+	**/
 	public static byte int1d2leftbyte(byte b, int v) {
 		return (byte) ((b & 0x0f) | ((v & 0x0f) << 4));
 	}
 	
-	/* v must be less than 16 and greater than -1 */
+	/*
+	 * v must be less than 16 and greater than -1
+	**/
 	public static byte int1d2rightbyte(byte b, int v) {
 		return (byte) ((b & 0xf0) | (v & 0x0f));
 	}
@@ -34,7 +40,9 @@ public class Utils {
 		return b & 0x0f;
 	}
 	
-	/* left aligned, v must be less than 100 and great than -1 */
+	/*
+	 * left aligned, v must be less than 100 and great than -1
+	**/
 	public static byte int2d2Bcdl(int v){
 		if (v < 10) {
 			v *= 10;
@@ -55,7 +63,9 @@ public class Utils {
 		return data;
 	}
 	
-	/* v must be great than 0 */
+	/*
+	 * v must be great than 0
+	**/
 	public static int int2Bcd(int v, byte[] data) {
 		int nb = countBytes(v);
 		if (nb > data.length) {
@@ -77,7 +87,9 @@ public class Utils {
 		return 0;
 	}
 	
-	/* v must be great than 0 */
+	/*
+	 * v must be great than 0
+	**/
 	public static int int2Bcd(int v, byte[] data, int offset, int length) {
 		int nb = countBytes(v);
 		if (nb > length) {
@@ -99,7 +111,9 @@ public class Utils {
 		return 0;
 	}
 	
-	/* v must be great than 0 */
+	/*
+	 * v must be great than 0
+	**/
 	public static int long2Bcd(long v, byte[] data, int offset, int length) {
 		int nb = countBytes(v);
 		if (nb > length) {
@@ -148,7 +162,9 @@ public class Utils {
 		return 0;
 	}
 	
-	/* left aligned, v must be great than 0 */
+	/*
+	 * left aligned, v must be great than 0
+	**/
 	public static byte[] int2Bcdl(int v) {
 		int numbers = countNumbers(v);
 		if ((numbers & 0x01) == 1) {
@@ -160,7 +176,9 @@ public class Utils {
 		return data;
 	}
 	
-	/* left aligned, v must be great than 0 */
+	/*
+	 * left aligned, v must be great than 0
+	**/
 	public static int int2Bcdl(int v, byte[] data) {
 		int numbers = countNumbers(v);
 		if ((numbers & 0x01) == 1) {

@@ -9,11 +9,8 @@ import android.widget.EditText;
 
 /**
  * ****************************************************************
- * 文件名称: KeyboardTool
- * 作    者: Created by gyd
- * 创建时间: 2018/12/24 18:49
- * 文件描述: 键盘隐藏工具
- * 注意事项:
+ * File Name: KeyboardTool
+ * File Description: Keyboard Tool
  * ****************************************************************
  */
 public class KeyboardTool {
@@ -35,7 +32,9 @@ public class KeyboardTool {
         return false;
     }
 
-    //whether touch specified view
+    /*
+     * whether touch specified view
+    **/
     public static boolean isTouchView(View[] views, MotionEvent ev) {
         if (views == null || views.length == 0) return false;
         int[] location = new int[2];

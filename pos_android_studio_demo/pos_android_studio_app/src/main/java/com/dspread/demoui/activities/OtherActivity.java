@@ -267,12 +267,12 @@ public class OtherActivity extends BaseActivity{
         audioitem = menu.findItem(R.id.audio_test);
         if (pos != null) {
             if (pos.getAudioControl()) {
-                audioitem.setTitle("音效控制:打开");
+                audioitem.setTitle(R.string.audio_open);
             } else {
-                audioitem.setTitle("音效控制:关闭");
+                audioitem.setTitle(R.string.audio_close);
             }
         } else {
-            audioitem.setTitle("音效控制:点击查看");
+            audioitem.setTitle(R.string.audio_unknow);
         }
         return true;
     }
@@ -284,7 +284,7 @@ public class OtherActivity extends BaseActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (pos == null) {
-            Toast.makeText(getApplicationContext(), "设备未连接", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.device_not_connect), Toast.LENGTH_LONG).show();
             return true;
         } else if (item.getItemId() == R.id.reset_qpos) {
             boolean a = pos.resetPosStatus();
@@ -333,14 +333,14 @@ public class OtherActivity extends BaseActivity{
         } else if (item.getItemId() == R.id.audio_test) {
             if (pos.getAudioControl()) {
                 pos.setAudioControl(false);
-                item.setTitle("音效控制:关闭");
+                item.setTitle(getString(R.string.audio_close));
             } else {
                 pos.setAudioControl(true);
-                item.setTitle("音效控制:打开");
+                item.setTitle(getString(R.string.audio_open));
             }
         } else if (item.getItemId() == R.id.about) {
 
-            statusEditText.setText("SDK版本：" + pos.getSdkVersion());
+            statusEditText.setText("SDK Version：" + pos.getSdkVersion());
         } else if (item.getItemId() == R.id.setBuzzer) {
             pos.doSetBuzzerOperation(3);//set buzzer
         } else if (item.getItemId() == R.id.menu_get_deivce_info) {
@@ -825,7 +825,7 @@ public class OtherActivity extends BaseActivity{
 
         @Override
         public void onRequestBatchData(String tlv) {
-            TRACE.d("ICC交易结束");
+            TRACE.d(getString(R.string.end_transaction));
             String content = getString(R.string.batch_data);
             TRACE.d("onRequestBatchData(String tlv):" + tlv);
             content += tlv;
@@ -865,7 +865,7 @@ public class OtherActivity extends BaseActivity{
         @Override
         public void onRequestSelectEmvApp(ArrayList<String> appList) {
             TRACE.d("onRequestSelectEmvApp():" + appList.toString());
-            TRACE.d("请选择App -- S，emv卡片的多种配置");
+            TRACE.d(getString(R.string.select_app_start));
             dismissDialog();
             dialog = new Dialog(mContext);
             dialog.setContentView(R.layout.emv_app_dialog);
@@ -885,7 +885,7 @@ public class OtherActivity extends BaseActivity{
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     pos.selectEmvApp(position);
-                    TRACE.d("请选择App -- 结束 position = " + position);
+                    TRACE.d(getString(R.string.select_app_end) + position);
                     dismissDialog();
                 }
 
@@ -904,7 +904,7 @@ public class OtherActivity extends BaseActivity{
 
         @Override
         public void onRequestSetAmount() {
-            TRACE.d("输入金额 -- S");
+            TRACE.d("enter amount -- start");
             TRACE.d("onRequestSetAmount()");
 
 
@@ -978,7 +978,7 @@ public class OtherActivity extends BaseActivity{
 
                     pos.setAmount(amount, cashbackAmount, "156", transactionType);
 
-                    TRACE.d("输入金额  -- 结束");
+                    TRACE.d("enter amount  -- end");
                     dismissDialog();
                 }
 
@@ -1061,7 +1061,7 @@ public class OtherActivity extends BaseActivity{
         @Override
         public void onRequestTime() {
             TRACE.d("onRequestTime");
-            TRACE.d("要求终端时间。已回覆");
+
             dismissDialog();
             String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
             pos.sendTime(terminalTime);
@@ -1079,9 +1079,9 @@ public class OtherActivity extends BaseActivity{
                 msg = "";
             } else if (displayMsg == QPOSService.Display.MSR_DATA_READY) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("音频");
+                builder.setTitle("Audio");
                 builder.setMessage("Success,Contine ready");
-                builder.setPositiveButton("确定", null);
+                builder.setPositiveButton("Confirm", null);
                 builder.show();
             } else if (displayMsg == QPOSService.Display.PLEASE_WAIT) {
                 msg = getString(R.string.wait);
@@ -1109,7 +1109,7 @@ public class OtherActivity extends BaseActivity{
         @Override
         public void onRequestFinalConfirm() {
             TRACE.d("onRequestFinalConfirm() ");
-            TRACE.d("onRequestFinalConfirm+确认金额-- S");
+            TRACE.d("onRequestFinalConfirm+Confirm Amount-- S");
             dismissDialog();
             if (!isPinCanceled) {
                 dialog = new Dialog(mContext);
@@ -1128,7 +1128,7 @@ public class OtherActivity extends BaseActivity{
                     public void onClick(View v) {
                         pos.finalConfirm(true);
                         dialog.dismiss();
-                        TRACE.d("确认金额-- 结束");
+                        TRACE.d("Confirm Amount-- End");
                     }
                 });
 
@@ -1285,8 +1285,6 @@ public class OtherActivity extends BaseActivity{
 
         @Override
         public void onRequestCalculateMac(String calMac) {
-            // statusEditText.setText("calMac: " + calMac);
-            // TRACE.d("calMac_result: calMac=> " + calMac);
             TRACE.d("onRequestCalculateMac(String calMac):" + calMac);
 
             if (calMac != null && !"".equals(calMac)) {
@@ -1716,11 +1714,11 @@ public class OtherActivity extends BaseActivity{
             TRACE.d("onReturnGetQuickEmvResult(boolean arg0):" + arg0);
 
             if (arg0) {
-                statusEditText.setText("emv已配置");
+                statusEditText.setText(getString(R.string.emv_configured));
 //				isQuickEmv=true;
                 pos.setQuickEmv(true);
             } else {
-                statusEditText.setText("emv未配置");
+                statusEditText.setText(getString(R.string.emv_not_configured));
             }
         }
 
@@ -1840,16 +1838,6 @@ public class OtherActivity extends BaseActivity{
 
         }
 
-//        @Override
-//        public void onSetPosBlePinCode(boolean b) {
-//            TRACE.d("onSetPosBlePinCode(b):" + b);
-//
-//            if (b) {
-//                statusEditText.setText("onSetPosBlePinCode success");
-//            } else {
-//                statusEditText.setText("onSetPosBlePinCode fail");
-//            }
-//        }
 
 
         @Override
@@ -2228,7 +2216,7 @@ public class OtherActivity extends BaseActivity{
                 USBClass usb = new USBClass();
                 ArrayList<String> deviceList = usb.GetUSBDevices(getBaseContext());
                 if (deviceList == null) {
-                    Toast.makeText(mContext, "没有权限", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "No Permission", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 final CharSequence[] items = deviceList.toArray(new CharSequence[deviceList.size()]);

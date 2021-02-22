@@ -18,11 +18,8 @@ import java.util.List;
 
 /**
  * ****************************************************************
- * 文件名称: KeyboardUtil
- * 作    者: Created by gyd
- * 创建时间: 2018/11/29 14:03
- * 文件描述: 键盘工具类
- * 注意事项:
+ * File Name: KeyboardUtil
+ * File Description: Keyboard Util
  * ****************************************************************
  */
 public class KeyboardUtil {
@@ -190,7 +187,9 @@ public class KeyboardUtil {
         }
     };
 
-    //The minimum height of the keyboard from the top of the edit text
+    /*
+     * The minimum height of the keyboard from the top of the edit text
+    **/
     public void setKeyBoardMarginEditTextTopHeight(int mKeyBoardMarginEditTextTopHeight){
         this.mKeyBoardMarginEditTextTopHeight = mKeyBoardMarginEditTextTopHeight;
     }

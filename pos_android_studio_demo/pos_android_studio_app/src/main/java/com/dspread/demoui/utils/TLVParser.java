@@ -170,7 +170,9 @@ public class TLVParser {
 
 
 
-    // convert hexadecimal string to byte array
+    /*
+     * convert hexadecimal string to byte array
+    **/
     public static byte[] hexToByteArray(String hexStr) {
         if (hexStr.length() < 1)
             return null;

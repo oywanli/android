@@ -89,18 +89,18 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 		if (ok) {//Location service is on
 			if (ContextCompat.checkSelfPermission(WelcomeActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
 					!= PackageManager.PERMISSION_GRANTED) {
-				Log.e("POS_SDK", "没有权限");
+				Log.e("POS_SDK", "Permission Denied");
 				// Permission denied
 				// Request authorization
 				ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
-//                        Toast.makeText(getActivity(), "没有权限", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
 			} else {
 				// have permission
-				Toast.makeText(WelcomeActivity.this, "有权限", Toast.LENGTH_SHORT).show();
+				Toast.makeText(WelcomeActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
 			}
 		} else {
-			Log.e("BRG", "系统检测到未开启GPS定位服务");
-			Toast.makeText(WelcomeActivity.this, "系统检测到未开启GPS定位服务", Toast.LENGTH_SHORT).show();
+			Log.e("BRG", "System detects that the GPS location service is not turned on");
+			Toast.makeText(WelcomeActivity.this, "System detects that the GPS location service is not turned on", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent();
 			intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 			startActivityForResult(intent, 1315);

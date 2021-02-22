@@ -31,7 +31,9 @@ public class QPOSUtil {
         return hex.toString();
     }
 
-    //Convert hex value to ascii code
+    /*
+     * Convert hex value to ascii code
+    **/
     public static String convertHexToString(String hex) {
 
         StringBuilder sb = new StringBuilder();

@@ -64,11 +64,12 @@ public class USBClass {
 		IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
 		context.registerReceiver(mUsbReceiver, filter);
 
-		// check for existing devices
+		/*
+		 * check for existing devices
+		**/
 		for (UsbDevice device : mManager.getDeviceList().values()) {
 			// judge whether there is permission
 	        if(!mManager.hasPermission(device) && (device.getVendorId() == 2965 || device.getVendorId() == 0x03EB || device.getVendorId() == 1027)) {
-	        	TRACE.d("km  没有权限");
 	            // open device，get UsbDeviceConnection object ，Connect device for subsequent communication
 	        	mManager.requestPermission(device, mPermissionIntent);
 	            return null;
@@ -79,7 +80,6 @@ public class USBClass {
 					|| device.getVendorId() == 1027 || device.getVendorId() == 6790 )
 			{
 				if(!mManager.hasPermission(device)) {
-					TRACE.d("km  还没有权限");
 					mManager.requestPermission(device, mPermissionIntent);
 					return null;
 				}
@@ -97,58 +97,4 @@ public class USBClass {
 		context.unregisterReceiver(mUsbReceiver);
 		return deviceList;
 	}
-
-
-//	public int ResumeUsbPermission(Context mContext,UsbManager mUsbmanager) {
-//
-//		try {
-//			PackageManager packageManager = getmContext().getPackageManager();
-//			PackageInfo packageInfo = packageManager.getPackageInfo(
-//					getmContext().getPackageName(), 0);
-//
-//
-//		mUsbmanager = (UsbManager) mContext
-//				.getSystemService(Context.USB_SERVICE);
-//		PendingIntent mPendingIntent = PendingIntent.getBroadcast(mContext, 0, new Intent(
-//				mString), 0);
-//		HashMap<String, UsbDevice> deviceList = mUsbmanager.getDeviceList();
-//		if (deviceList.isEmpty()) {
-//			Toast.makeText(mContext, "No matching device found",
-//					Toast.LENGTH_SHORT).show();
-//			return -1;
-//		}
-//		Iterator<UsbDevice> localIterator = deviceList.values().iterator();
-//		while (localIterator.hasNext()) {
-//			UsbDevice	localUsbDevice = localIterator.next();
-//			for (int i = 0; i < DeviceCount; ++i) {
-//				if (String
-//						.format("%04x:%04x",
-//								new Object[] {
-//										Integer.valueOf(localUsbDevice
-//												.getVendorId()),
-//										Integer.valueOf(localUsbDevice
-//												.getProductId()) }).equals(
-//								DeviceNum.get(i))) {
-//					//BroadcastFlag = true;
-//					if (!mUsbmanager.hasPermission(localUsbDevice)) {
-///*						Toast.makeText(mContext, "No Perssion!",
-//								Toast.LENGTH_SHORT).show();*/
-//						synchronized (mUsbReceiver) {
-//							mUsbmanager.requestPermission(localUsbDevice,
-//									mPendingIntent);
-//						}
-//						return -2;
-//					}
-//					return 0;
-//				} else {
-//					Log.d(TAG, "String.format not match");
-//				}
-//			}
-//		}
-//		return -1;
-//	}
-
-
-
-	
 }

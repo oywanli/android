@@ -20,11 +20,8 @@ import java.util.List;
 
 /**
  * ****************************************************************
- * 文件名称: MyKeyboardView
- * 作    者: Created by gyd
- * 创建时间: 2018/11/29 17:20
- * 文件描述: 自定义键盘，支持多种键盘切换
- * 注意事项: 密码输入
+ * File Name: MyKeyboardView
+ * File Description: Keyboard View
  * ****************************************************************
  */
 public class MyKeyboardView extends KeyboardView {
