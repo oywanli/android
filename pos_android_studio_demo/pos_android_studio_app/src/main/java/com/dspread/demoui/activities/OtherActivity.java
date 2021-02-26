@@ -115,8 +115,7 @@ public class OtherActivity extends BaseActivity{
         open(QPOSService.CommunicationMode.UART);
         posType = POS_TYPE.UART;
 //                        blueTootchAddress = "/dev/ttyMT0";//tongfang is s1，tianbo is s3
-        blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
-//                        blueTootchAddress = "/dev/ttyHSL1";//tongfang is s1，tianbo is s3
+        blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3，D20 is dev/ttyS1
         pos.setDeviceAddress(blueTootchAddress);
         pos.openUart();
     }
