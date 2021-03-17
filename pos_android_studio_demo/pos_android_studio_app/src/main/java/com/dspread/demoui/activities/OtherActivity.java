@@ -371,7 +371,7 @@ public class OtherActivity extends BaseActivity{
 
 
             int keyIndex = getKeyIndex();
-            pos.udpateWorkKey(
+            pos.updateWorkKey(
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",//PIN KEY
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",  //TRACK KEY
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY

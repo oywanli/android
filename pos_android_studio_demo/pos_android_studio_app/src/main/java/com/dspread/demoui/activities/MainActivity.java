@@ -612,7 +612,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             //key：0123456789ABCDEFFEDCBA9876543210
             //result：0123456789ABCDEFFEDCBA9876543210
             int keyIndex = getKeyIndex();
-            pos.udpateWorkKey(
+            pos.updateWorkKey(
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",//PIN KEY
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",  //TRACK KEY
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
