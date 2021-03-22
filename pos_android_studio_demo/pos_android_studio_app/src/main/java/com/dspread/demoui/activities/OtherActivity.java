@@ -207,7 +207,7 @@ public class OtherActivity extends BaseActivity{
             return;
         }
         if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
-            pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CH34XU);
+            pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
         //pos.setD20Trade(true);
         pos.setConext(this);
