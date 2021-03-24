@@ -2445,7 +2445,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 pos.setKeyValue(startAddr);
                 pos.setBlockaddr(endAddr);
 //                pos.doMifareCard("08", 20);
-                pos.faseReadMifareCardData(startAddr,endAddr,20);
+                pos.fastReadMifareCardData(startAddr,endAddr,20);
             } else if (v == writeULBtn) {
                 String addr = blockAdd.getText().toString();
                 String data = status11.getText().toString();
