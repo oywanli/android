@@ -250,7 +250,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             return convertView;
         }
     }
-
     /*
      * set listview's height
     **/
@@ -400,6 +399,41 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         fastReadUL.setOnClickListener(myOnClickListener);
         writeULBtn.setOnClickListener(myOnClickListener);
         transferBtn.setOnClickListener(myOnClickListener);
+
+        ((Button) findViewById(R.id.updateFirmware)).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pos != null) {
+                    statusEditText.setText("update firmware...");
+                    LogFileConfig.getInstance().setWriteFlag(true);
+                    byte[] data = null;
+                    List<String> allFiles = null;
+//                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
+                    if (allFiles != null) {
+                        for (String fileName : allFiles) {
+                            if (!TextUtils.isEmpty(fileName)) {
+                                if (fileName.toUpperCase().endsWith(".asc".toUpperCase())) {
+                                    data = FileUtils.readLine(fileName);
+                                    Toast.makeText(MainActivity.this, "Upgrade package path:" +
+                                            Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dspread" + File.separator + fileName, Toast.LENGTH_SHORT).show();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (data == null || data.length == 0) {
+                        data = FileUtils.readAssetsLine("NextPay_202103051331.asc", MainActivity.this);
+                    }
+                    int a = pos.updatePosFirmware(data, blueTootchAddress);
+                    if (a == -1) {
+                        Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    updateThread = new UpdateThread();
+                    updateThread.start();
+                }
+            }
+        });
     }
 
     /**
@@ -620,15 +654,12 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         } else if (item.getItemId() == R.id.cusDisplay) {
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
-
             pos.lcdShowCloseDisplay();
-
         } else if (item.getItemId()==R.id.updateEMVByXml){
             pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv.xml",MainActivity.this)));
         }
         return true;
     }
-
 
     @Override
     public void onPause() {
@@ -926,6 +957,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                             + "\n";
                     cardNo = maskedPAN;
                 }
+                // pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,1,"5F20") // get plaintext or ciphertext 5F20 tag
+                // pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,2,"5F205F24") // get plaintext or ciphertext 5F20 and 5F24 tag
                 statusEditText.setText(content);
                 sendMsg(8003);
             } else if ((result == DoTradeResult.NFC_DECLINED)) {
@@ -1240,6 +1273,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             } catch (Exception e) {
                 e.printStackTrace();
             }
+//            pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,0,1,"5F20") // get plaintext or ciphertext tag
+//            pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,0,2,"5F205F24") // get plaintext or ciphertext 5F20 and 5F24 tag
             dialog.findViewById(R.id.confirmButton).setOnClickListener(
                     new OnClickListener() {
 
