@@ -568,6 +568,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        TRACE.d("onOptionsItemSelected");
         if (pos == null) {
             Toast.makeText(getApplicationContext(), "Device Disconnect", Toast.LENGTH_LONG).show();
             return true;
@@ -581,7 +582,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         } else if (item.getItemId() == R.id.get_update_key) {//get the key value
             pos.getUpdateCheckValue();
         } else if (item.getItemId() == R.id.get_device_public_key) {//get the key value
-
             pos.getDevicePublicKey(5);
         } else if (item.getItemId() == R.id.set_sleepmode_time) {//set pos sleep mode time
 //            0~Integer.MAX_VALUE
@@ -614,7 +614,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         } else if (item.getItemId() == R.id.menu_get_deivce_info) {
             statusEditText.setText(R.string.getting_info);
             pos.getQposInfo();
-
         } else if (item.getItemId() == R.id.menu_get_deivce_key_checkvalue) {
             statusEditText.setText("get_deivce_key_checkvalue..............");
             int keyIdex = getKeyIndex();
@@ -633,6 +632,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         } else if (item.getItemId() == R.id.isCardExist) {
             pos.isCardExist(30);
         } else if (item.getItemId() == R.id.menu_operate_mafire) {
+            statusEditText.setText("operate mafire card");
             showSingleChoiceDialog();
         } else if (item.getItemId() == R.id.menu_operate_update) {
             if (updateFwBtn.getVisibility() == View.VISIBLE || btnQuickEMV.getVisibility() == View.VISIBLE  ) {
@@ -2087,7 +2087,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 String cardData = arg0.get("cardData");
                 statusEditText.setText("addr:" + addr + "\ncardDataLen:" + cardDataLen + "\ncardData:" + cardData);
             } else {
-//				statusEditText.setText("onReadWriteMifareCardResult fail"+msg);
+				statusEditText.setText("onReadWriteMifareCardResult fail");
             }
         }
 

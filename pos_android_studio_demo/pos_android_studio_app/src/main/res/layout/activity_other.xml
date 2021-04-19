@@ -94,6 +94,8 @@
 
             </LinearLayout>
 
+            <include android:visibility="visible"
+                layout="@layout/view_mifare"/>
 
         </LinearLayout>
     </ScrollView>

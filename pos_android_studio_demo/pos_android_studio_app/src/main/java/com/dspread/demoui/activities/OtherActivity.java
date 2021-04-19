@@ -65,40 +65,32 @@ import Decoder.BASE64Encoder;
 public class OtherActivity extends BaseActivity{
 
     private Button doTradeButton, serialBtn;
-
     private EditText statusEditText;
     private ListView appListView;
-
     private Dialog dialog;
     private String nfcLog = "";
-
     private Button btnUSB;
-
     private Button btnDisconnect;
-
     private EditText mKeyIndex;
     private EditText mhipStatus;
-
     private QPOSService pos;
-
-
     private String pubModel;
     private String amount = "";
     private String cashbackAmount = "";
     private boolean isPinCanceled = false;
     private String blueTootchAddress = "";
-
     private boolean isUart = true;
     private LinearLayout lin;
-
-
     private int type;
     private UsbDevice usbDevice;
-
     private Context mContext;
     private static final int REQUEST_CODE_QRCODE_PERMISSIONS = 1;
     private boolean autoDoTrade = false;
-
+    private LinearLayout mafireLi, mafireUL;
+    private Button operateCardBtn, pollBtn, pollULbtn, veriftBtn, veriftULBtn, readBtn, writeBtn, finishBtn, finishULBtn, getULBtn, readULBtn, fastReadUL, writeULBtn, transferBtn;
+    private Spinner mafireSpinner;
+    private EditText blockAdd, status,status11;
+    private Spinner cmdSp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,6 +163,33 @@ public class OtherActivity extends BaseActivity{
         mKeyIndex = ((EditText) findViewById(R.id.keyindex));
         mhipStatus = (findViewById(R.id.chipStatus));
         lin = findViewById(R.id.lin);
+        pollBtn = (Button) findViewById(R.id.search_card);
+        pollULbtn = (Button) findViewById(R.id.poll_ulcard);
+        veriftBtn = (Button) findViewById(R.id.verify_card);
+        veriftULBtn = (Button) findViewById(R.id.verify_ulcard);
+        readBtn = (Button) findViewById(R.id.read_card);
+        writeBtn = (Button) findViewById(R.id.write_card);
+        finishBtn = (Button) findViewById(R.id.finish_card);
+        finishULBtn = (Button) findViewById(R.id.finish_ulcard);
+        getULBtn = (Button) findViewById(R.id.get_ul);
+        readULBtn = (Button) findViewById(R.id.read_ulcard);
+        fastReadUL = (Button) findViewById(R.id.fast_read_ul);
+        writeULBtn = (Button) findViewById(R.id.write_ul);
+        transferBtn = (Button) findViewById(R.id.transfer_card);
+        mafireSpinner = (Spinner) findViewById(R.id.verift_spinner);
+        blockAdd = (EditText) findViewById(R.id.block_address);
+        String[] keyClass = new String[]{"Key A", "Key B"};
+        ArrayAdapter<String> spinneradapter = new ArrayAdapter<String>(OtherActivity.this, android.R.layout.simple_spinner_item, keyClass);
+        mafireSpinner.setAdapter(spinneradapter);
+        cmdSp = (Spinner) findViewById(R.id.cmd_spinner);
+        String[] cmdList = new String[]{"add", "reduce", "restore"};
+        ArrayAdapter<String> cmdAdapter = new ArrayAdapter<String>(OtherActivity.this, android.R.layout.simple_spinner_item, cmdList);
+        cmdSp.setAdapter(cmdAdapter);
+        status = (EditText) findViewById(R.id.status);
+        status11 = (EditText) findViewById(R.id.status11);
+        operateCardBtn = (Button) findViewById(R.id.operate_card);
+        mafireLi = (LinearLayout) findViewById(R.id.mifareid);
+        mafireUL = (LinearLayout) findViewById(R.id.ul_ll);
     }
 
     private void initListener() {
@@ -179,6 +198,20 @@ public class OtherActivity extends BaseActivity{
         doTradeButton.setOnClickListener(myOnClickListener);//start
         btnDisconnect.setOnClickListener(myOnClickListener);
         btnUSB.setOnClickListener(myOnClickListener);
+        pollBtn.setOnClickListener(myOnClickListener);
+        pollULbtn.setOnClickListener(myOnClickListener);
+        finishBtn.setOnClickListener(myOnClickListener);
+        finishULBtn.setOnClickListener(myOnClickListener);
+        readBtn.setOnClickListener(myOnClickListener);
+        writeBtn.setOnClickListener(myOnClickListener);
+        veriftBtn.setOnClickListener(myOnClickListener);
+        veriftULBtn.setOnClickListener(myOnClickListener);
+        operateCardBtn.setOnClickListener(myOnClickListener);
+        getULBtn.setOnClickListener(myOnClickListener);
+        readULBtn.setOnClickListener(myOnClickListener);
+        fastReadUL.setOnClickListener(myOnClickListener);
+        writeULBtn.setOnClickListener(myOnClickListener);
+        transferBtn.setOnClickListener(myOnClickListener);
     }
     private POS_TYPE posType = POS_TYPE.BLUETOOTH;
 
@@ -381,12 +414,43 @@ public class OtherActivity extends BaseActivity{
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
             pos.lcdShowCloseDisplay();
+        } else if (item.getItemId() == R.id.menu_operate_mafire) {
+            statusEditText.setText("operate mafire card");
+            showSingleChoiceDialog();
         }
         return true;
     }
 
-
-
+    private int yourChoice = 0;
+    private void showSingleChoiceDialog() {
+        final String[] items = {"Mifare classic 1", "Mifare UL"};
+//	    yourChoice = -1;
+        AlertDialog.Builder singleChoiceDialog =
+                new AlertDialog.Builder(OtherActivity.this);
+        singleChoiceDialog.setTitle("please select one");
+        // The second parameter is default
+        singleChoiceDialog.setSingleChoiceItems(items, 0,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        yourChoice = which;
+                    }
+                });
+        singleChoiceDialog.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (yourChoice == 0) {
+                            mafireLi.setVisibility(View.VISIBLE);//display m1 mafire card
+                            mafireUL.setVisibility(View.GONE);//display ul mafire card
+                        } else if (yourChoice == 1) {
+                            mafireLi.setVisibility(View.GONE);
+                            mafireUL.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+        singleChoiceDialog.show();
+    }
 
     @Override
     public void onPause() {
@@ -1570,21 +1634,36 @@ public class OtherActivity extends BaseActivity{
 
         @Override
         public void onSearchMifareCardResult(Hashtable<String, String> arg0) {
-            if (arg0 != null)
+            if (arg0 != null) {
                 TRACE.d("onSearchMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
-
+                String statuString = arg0.get("status");
+                String cardTypeString = arg0.get("cardType");
+                String cardUidLen = arg0.get("cardUidLen");
+                String cardUid = arg0.get("cardUid");
+                String cardAtsLen = arg0.get("cardAtsLen");
+                String cardAts = arg0.get("cardAts");
+                String ATQA = arg0.get("ATQA");
+                String SAK = arg0.get("SAK");
+                statusEditText.setText("statuString:" + statuString + "\n" + "cardTypeString:" + cardTypeString + "\ncardUidLen:" + cardUidLen
+                        + "\ncardUid:" + cardUid + "\ncardAtsLen:" + cardAtsLen + "\ncardAts:" + cardAts
+                        + "\nATQA:" + ATQA + "\nSAK:" + SAK);
+            } else {
+                statusEditText.setText("poll card failed");
+            }
         }
 
         @Override
         public void onBatchReadMifareCardResult(String msg, Hashtable<String, List<String>> cardData) {
-            if (cardData != null)
+            if (cardData != null) {
                 TRACE.d("onBatchReadMifareCardResult(boolean arg0):" + msg + cardData.toString());
+            }
         }
 
         @Override
         public void onBatchWriteMifareCardResult(String msg, Hashtable<String, List<String>> cardData) {
-            if (cardData != null)
+            if (cardData != null) {
                 TRACE.d("onBatchWriteMifareCardResult(boolean arg0):" + msg + cardData.toString());
+            }
         }
 
         @Override
@@ -1896,9 +1975,7 @@ public class OtherActivity extends BaseActivity{
 //			String msg = pos.getMifareStatusMsg();
             if (arg0) {
                 statusEditText.setText(" onVerifyMifareCardResult success");
-
             } else {
-
                 statusEditText.setText("onVerifyMifareCardResult fail");
             }
         }
@@ -1915,7 +1992,7 @@ public class OtherActivity extends BaseActivity{
                 String cardData = arg0.get("cardData");
                 statusEditText.setText("addr:" + addr + "\ncardDataLen:" + cardDataLen + "\ncardData:" + cardData);
             } else {
-//				statusEditText.setText("onReadWriteMifareCardResult fail"+msg);
+				statusEditText.setText("onReadWriteMifareCardResult fail");
             }
         }
 
@@ -2236,6 +2313,83 @@ public class OtherActivity extends BaseActivity{
                 });
                 AlertDialog alert = builder.create();
                 alert.show();
+            } else if (v == pollBtn) {
+                pos.pollOnMifareCard(20);
+//                pos.doMifareCard("01", 20);
+            } else if (v == pollULbtn) {
+                pos.pollOnMifareCard(20);
+//                pos.doMifareCard("01", 20);
+            } else if (v == finishBtn) {
+                pos.finishMifareCard(20);
+//                pos.doMifareCard("0E", 20);
+            } else if (v == finishULBtn) {
+                pos.finishMifareCard(20);
+//                pos.doMifareCard("0E", 20);
+            } else if (v == veriftBtn) {
+                String keyValue = status.getText().toString();
+                String blockaddr = blockAdd.getText().toString();
+                String keyclass = (String) mafireSpinner.getSelectedItem();
+                pos.setBlockaddr(blockaddr);
+                pos.setKeyValue(keyValue);
+//                pos.doMifareCard("02" + keyclass, 20);
+                pos.authenticateMifareCard(QPOSService.MifareCardType.CLASSIC,keyclass,blockaddr,keyValue,20);
+            } else if (v == veriftULBtn) {
+                String keyValue = status11.getText().toString();
+                pos.setKeyValue(keyValue);
+//                pos.doMifareCard("0D", 20);
+                pos.authenticateMifareCard(QPOSService.MifareCardType.UlTRALIGHT,"","",keyValue,20);
+            } else if (v == readBtn) {
+                String blockaddr = blockAdd.getText().toString();
+                pos.setBlockaddr(blockaddr);
+//                pos.doMifareCard("03", 20);
+                pos.readMifareCard(QPOSService.MifareCardType.CLASSIC,blockaddr,20);
+            } else if (v == writeBtn) {
+                String blockaddr = blockAdd.getText().toString();
+                String cardData = status.getText().toString();
+//				SpannableString s = new SpannableString("please input card data");
+//		        status.setHint(s);
+                pos.setBlockaddr(blockaddr);
+                pos.setKeyValue(cardData);
+//                pos.doMifareCard("04", 20);
+                pos.writeMifareCard(QPOSService.MifareCardType.CLASSIC,blockaddr,cardData,20);
+            } else if (v == operateCardBtn) {
+                String blockaddr = blockAdd.getText().toString();
+                String cardData = status.getText().toString();
+                String cmd = (String) cmdSp.getSelectedItem();
+                pos.setBlockaddr(blockaddr);
+                pos.setKeyValue(cardData);
+                if(cmd.equals("add")){
+                    pos.operateMifareCardData(QPOSService.MifareCardOperationType.ADD,blockaddr,cardData,20);
+                }
+//                pos.doMifareCard("05" + cmd, 20);
+            } else if (v == getULBtn) {
+//                pos.doMifareCard("06", 20);
+                pos.getMifareCardInfo(20);
+            } else if (v == readULBtn) {
+                String blockaddr = blockAdd.getText().toString();
+                pos.setBlockaddr(blockaddr);
+//                pos.doMifareCard("07", 20);
+                pos.readMifareCard(QPOSService.MifareCardType.CLASSIC,blockaddr,20);
+            } else if (v == fastReadUL) {
+                String endAddr = blockAdd.getText().toString();
+                String startAddr = status11.getText().toString();
+                pos.setKeyValue(startAddr);
+                pos.setBlockaddr(endAddr);
+//                pos.doMifareCard("08", 20);
+                pos.fastReadMifareCardData(startAddr,endAddr,20);
+            } else if (v == writeULBtn) {
+                String addr = blockAdd.getText().toString();
+                String data = status11.getText().toString();
+                pos.setKeyValue(data);
+                pos.setBlockaddr(addr);
+//                pos.doMifareCard("0B", 20);
+                pos.writeMifareCard(QPOSService.MifareCardType.UlTRALIGHT,addr,data,20);
+            } else if (v == transferBtn) {
+//                String data = status.getText().toString();
+//                String len = blockAdd.getText().toString();
+//                pos.setMafireLen(Integer.valueOf(len, 16));
+//                pos.setKeyValue(data);
+//                pos.transferMifareData(data,20);
             }
         }
     }
