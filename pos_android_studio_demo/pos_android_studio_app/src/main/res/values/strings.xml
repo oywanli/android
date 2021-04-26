@@ -295,6 +295,7 @@
     <string name="operate_update">operation update</string>
     <string name="get_device_public_key">getDevicePublicKey</string>
     <string name="text_creat_8583">create 8583 MSG</string>
+    <string name="updateFirmware">update Firmware</string>
 
 
 </resources>

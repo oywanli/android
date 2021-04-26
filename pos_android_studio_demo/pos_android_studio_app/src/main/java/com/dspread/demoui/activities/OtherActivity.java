@@ -12,15 +12,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -44,12 +47,15 @@ import com.dspread.demoui.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.keyboard.KeyboardUtil;
 import com.dspread.demoui.keyboard.MyKeyboardView;
 import com.dspread.demoui.utils.DUKPK2009_CBC;
+import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.xpos.CQPOSService;
+import com.dspread.xpos.LogFileConfig;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.QPOSService.TransactionType;
 
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -74,6 +80,8 @@ public class OtherActivity extends BaseActivity{
     private EditText mKeyIndex;
     private EditText mhipStatus;
     private QPOSService pos;
+    private UpdateThread updateThread;
+
     private String pubModel;
     private String amount = "";
     private String cashbackAmount = "";
@@ -91,6 +99,8 @@ public class OtherActivity extends BaseActivity{
     private Spinner mafireSpinner;
     private EditText blockAdd, status,status11;
     private Spinner cmdSp;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -242,7 +252,7 @@ public class OtherActivity extends BaseActivity{
         if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
-        //pos.setD20Trade(true);
+        pos.setD20Trade(true);
         pos.setConext(this);
         //init handler
         Handler handler = new Handler(Looper.myLooper());
@@ -309,6 +319,53 @@ public class OtherActivity extends BaseActivity{
         return true;
     }
 
+    class UpdateThread extends Thread {
+        private boolean concelFlag = false;
+        @Override
+        public void run() {
+
+            while (!concelFlag) {
+                int i = 0;
+                while (!concelFlag && i < 100) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    i++;
+                }
+                if (concelFlag) {
+                    break;
+                }
+                if (pos == null) {
+                    return;
+                }
+                final int progress = pos.getUpdateProgress();
+                if (progress < 100) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            statusEditText.setText(progress + "%");
+                        }
+                    });
+                    continue;
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        statusEditText.setText("Update Finished 100%");
+                    }
+                });
+
+                break;
+            }
+        }
+
+        public void concelSelf() {
+            concelFlag = true;
+        }
+    }
 
     /**
      * Click event of the menu bar
@@ -401,15 +458,49 @@ public class OtherActivity extends BaseActivity{
         } else if (item.getItemId() == R.id.isCardExist) {
             pos.isCardExist(30);
         } else if (item.getItemId() == R.id.resetSessionKey) {
-
-
             int keyIndex = getKeyIndex();
             pos.updateWorkKey(
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",//PIN KEY
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",  //TRACK KEY
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
                     keyIndex, 5);
-        }  else if (item.getItemId() == R.id.cusDisplay) {
+        } else if(item.getItemId() == R.id.updateFirmWare){
+            if (ActivityCompat.checkSelfPermission(OtherActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    //request permission
+                    ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+            } else {
+                    LogFileConfig.getInstance().setWriteFlag(true);
+                    byte[] data = null;
+                    List<String> allFiles = null;
+//                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
+                    if (allFiles != null) {
+                        for (String fileName : allFiles) {
+                            if (!TextUtils.isEmpty(fileName)) {
+                                if (fileName.toUpperCase().endsWith(".asc".toUpperCase())) {
+                                    data = FileUtils.readLine(fileName);
+                                    Toast.makeText(OtherActivity.this, "Upgrade package path:" +
+                                            Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dspread" + File.separator + fileName, Toast.LENGTH_SHORT).show();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (data == null || data.length == 0) {
+                        data = FileUtils.readAssetsLine("D20_master.asc", OtherActivity.this);
+                    }
+                    int a = pos.updatePosFirmware(data, blueTootchAddress);
+                    if (a == -1) {
+                        Toast.makeText(OtherActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+
+                    updateThread = new UpdateThread();
+                    updateThread.start();
+
+            }
+
+        } else if (item.getItemId() == R.id.cusDisplay) {
 
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
@@ -468,7 +559,9 @@ public class OtherActivity extends BaseActivity{
     public void onDestroy() {
         super.onDestroy();
         TRACE.d("onDestroy");
-
+        if (updateThread != null) {
+            updateThread.concelSelf();
+        }
         if (pos != null) {
             close();
             pos = null;
@@ -1238,7 +1331,9 @@ public class OtherActivity extends BaseActivity{
 
         @Override
         public void onError(QPOSService.Error errorState) {
-
+            if (updateThread != null) {
+                updateThread.concelSelf();
+            }
 
             TRACE.d("onError" + errorState.toString());
             dismissDialog();
@@ -1503,7 +1598,10 @@ public class OtherActivity extends BaseActivity{
         @Override
         public void onUpdatePosFirmwareResult(QPOSService.UpdateInformationResult arg0) {
             TRACE.d("onUpdatePosFirmwareResult(UpdateInformationResult arg0):" + arg0.toString());
-
+            if (arg0 != QPOSService.UpdateInformationResult.UPDATE_SUCCESS) {
+                updateThread.concelSelf();
+            }
+            statusEditText.setText("onUpdatePosFirmwareResult" + arg0.toString());
         }
 
         @Override
