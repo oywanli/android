@@ -91,7 +91,10 @@
                 android:id="@+id/resetIpek"
                 android:orderInCategory="100"
                 android:title="resetIpek" />-->
-
+            <item
+                android:id="@+id/updateFirmWare"
+                android:orderInCategory="100"
+                android:title="@string/updateFirmware" />
 
         </menu>
     </item>

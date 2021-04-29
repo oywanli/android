@@ -651,6 +651,39 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",  //TRACK KEY
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
                     keyIndex, 5);
+        } else if(item.getItemId() == R.id.updateFirmWare) {
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                //request permission
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+            } else {
+                LogFileConfig.getInstance().setWriteFlag(true);
+                byte[] data = null;
+                List<String> allFiles = null;
+//                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
+                if (allFiles != null) {
+                    for (String fileName : allFiles) {
+                        if (!TextUtils.isEmpty(fileName)) {
+                            if (fileName.toUpperCase().endsWith(".asc".toUpperCase())) {
+                                data = FileUtils.readLine(fileName);
+                                Toast.makeText(MainActivity.this, "Upgrade package path:" +
+                                        Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dspread" + File.separator + fileName, Toast.LENGTH_SHORT).show();
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (data == null || data.length == 0) {
+                    data = FileUtils.readAssetsLine("upgrader.asc", MainActivity.this);
+                }
+                int a = pos.updatePosFirmware(data, blueTootchAddress);
+                if (a == -1) {
+                    Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                updateThread = new UpdateThread();
+                updateThread.start();
+            }
         } else if (item.getItemId() == R.id.cusDisplay) {
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
@@ -2615,8 +2648,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 //                    } catch (Exception e) {
 //                        e.printStackTrace();
 //                    }
-//                    pos.udpateWorkKey(digEnvelopStr);
-                    break;
+//                    pos.updateWorkKey(digEnvelopStr);
+//                    break;
                 default:
                     break;
             }
