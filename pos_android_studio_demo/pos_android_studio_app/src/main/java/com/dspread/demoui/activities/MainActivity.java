@@ -405,24 +405,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             public void onClick(View v) {
                 if (pos != null) {
                     statusEditText.setText("update firmware...");
-                    LogFileConfig.getInstance().setWriteFlag(true);
                     byte[] data = null;
-                    List<String> allFiles = null;
-//                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
-                    if (allFiles != null) {
-                        for (String fileName : allFiles) {
-                            if (!TextUtils.isEmpty(fileName)) {
-                                if (fileName.toUpperCase().endsWith(".asc".toUpperCase())) {
-                                    data = FileUtils.readLine(fileName);
-                                    Toast.makeText(MainActivity.this, "Upgrade package path:" +
-                                            Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dspread" + File.separator + fileName, Toast.LENGTH_SHORT).show();
-                                    break;
-                                }
-                            }
-                        }
-                    }
                     if (data == null || data.length == 0) {
-                        data = FileUtils.readAssetsLine("NextPay_202103051331.asc", MainActivity.this);
+                        data = FileUtils.readAssetsLine("upgrader.asc", MainActivity.this);
                     }
                     int a = pos.updatePosFirmware(data, blueTootchAddress);
                     if (a == -1) {
