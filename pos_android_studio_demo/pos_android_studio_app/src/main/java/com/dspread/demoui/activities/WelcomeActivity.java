@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.dspread.demoui.R;
 
 public class WelcomeActivity extends BaseActivity implements OnClickListener{
-	private Button audio,serial_port,normal_blu,other_blu;
+	private Button audio,serial_port,normal_blu,other_blu,print;
 	private Intent intent;
 	private static final int LOCATION_CODE = 101;
 	private LocationManager lm;//【Location management】
@@ -32,11 +32,13 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 		serial_port=(Button) findViewById(R.id.serial_port);
 		normal_blu=(Button) findViewById(R.id.normal_bluetooth);
 		other_blu=(Button) findViewById(R.id.other_bluetooth);
+		print = (Button) findViewById(R.id.print);
 		other_blu.setEnabled(false);
 		audio.setOnClickListener(this);
 		serial_port.setOnClickListener(this);
 		normal_blu.setOnClickListener(this);
 		other_blu.setOnClickListener(this);
+		print.setOnClickListener(this);
 		bluetoothRelaPer();
 	}
 
@@ -73,6 +75,11 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 			case R.id.other_bluetooth://Other Bluetooth，such as：BLE，，，
 				intent = new Intent(this,MainActivity.class);
 				intent.putExtra("connect_type", 4);
+				startActivity(intent);
+				break;
+			case R.id.print:
+				Log.d("pos","print");
+				intent = new Intent(this, PrintSettingActivity.class);
 				startActivity(intent);
 				break;
 		}

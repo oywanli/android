@@ -641,6 +641,8 @@ public class OtherActivity extends BaseActivity{
 
             if (result == QPOSService.DoTradeResult.NONE) {
                 statusEditText.setText(getString(R.string.no_card_detected));
+            } else if(result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
+                statusEditText.setText(getString(R.string.try_another_interface));
             } else if (result == QPOSService.DoTradeResult.ICC) {
                 statusEditText.setText(getString(R.string.icc_card_inserted));
                 TRACE.d("EMV ICC Start");

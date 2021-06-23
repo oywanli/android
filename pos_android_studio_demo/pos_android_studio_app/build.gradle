@@ -22,8 +22,8 @@ android {
         minSdkVersion 17
         targetSdkVersion 28
 
-        versionCode 3
-        versionName "3.0.2"
+        versionCode 4
+        versionName "3.0.3"
 
         ndk {
             moduleName "serial_port"
@@ -62,4 +62,7 @@ dependencies {
     implementation 'com.iqiyi.xcrash:xcrash-android-lib:2.4.6'
     implementation 'com.binioter:guideview:1.0.0'
 //    implementation files('libs/dspread_android_pos_sdk_3.1.0.jar')
+    implementation files('libs\\zxing.jar')
+    implementation 'org.jetbrains:annotations-java5:15.0'
+    implementation files('libs\\dspread_android_printer_sdk_1.1.jar')
 }

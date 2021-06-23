@@ -768,6 +768,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             String cardNo = "";
             if (result == DoTradeResult.NONE) {
                 statusEditText.setText(getString(R.string.no_card_detected));
+            } else if(result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
+                statusEditText.setText(getString(R.string.try_another_interface));
             } else if (result == DoTradeResult.ICC) {
                 statusEditText.setText(getString(R.string.icc_card_inserted));
                 TRACE.d("EMV ICC Start");
@@ -776,7 +778,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 statusEditText.setText(getString(R.string.card_inserted));
             } else if (result == DoTradeResult.BAD_SWIPE) {
                 statusEditText.setText(getString(R.string.bad_swipe));
-            }  else if (result == DoTradeResult.CARD_NOT_SUPPORT) {
+            } else if (result == DoTradeResult.CARD_NOT_SUPPORT) {
                 statusEditText.setText("GPO NOT SUPPORT");
             } else if (result == DoTradeResult.PLS_SEE_PHONE) {
                 statusEditText.setText("PLS SEE PHONE");
