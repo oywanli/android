@@ -85,6 +85,7 @@ import java.util.List;
 import java.util.Map;
 import Decoder.BASE64Encoder;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.dspread.xpos.QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP;
 
 public class MainActivity extends BaseActivity implements ShowGuideView.onGuideViewListener {
@@ -1419,6 +1420,11 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 setTitle(title +"("+blueTitle.substring(0,6)+"..."+blueTitle.substring(blueTitle.length()-3)+")");
             } else{
                 setTitle("Device connect");
+            }
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PERMISSION_GRANTED) {
+                //申请权限
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
             }
         }
 

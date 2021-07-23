@@ -68,6 +68,8 @@ import java.util.List;
 
 import Decoder.BASE64Encoder;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 public class OtherActivity extends BaseActivity{
 
     private Button doTradeButton, serialBtn;
@@ -443,7 +445,6 @@ public class OtherActivity extends BaseActivity{
 
 
         } else if (item.getItemId() == R.id.menu_get_pos_id) {
-
             pos.getQposId();
             statusEditText.setText(R.string.getting_pos_id);
         } else if (item.getItemId() == R.id.setMasterkey) {
@@ -466,7 +467,7 @@ public class OtherActivity extends BaseActivity{
                     keyIndex, 5);
         } else if(item.getItemId() == R.id.updateFirmWare){
             if (ActivityCompat.checkSelfPermission(OtherActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
+                        != PERMISSION_GRANTED) {
                     //request permission
                     ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
             } else {
@@ -1319,6 +1320,11 @@ public class OtherActivity extends BaseActivity{
             statusEditText.setText(getString(R.string.device_plugged));
             doTradeButton.setEnabled(true);
             btnDisconnect.setEnabled(true);
+            if (ActivityCompat.checkSelfPermission(OtherActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PERMISSION_GRANTED) {
+                //申请权限
+                ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+            }
         }
 
         @Override
