@@ -675,6 +675,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         } else if (item.getItemId() == R.id.closeDisplay) {
             pos.lcdShowCloseDisplay();
         } else if (item.getItemId()==R.id.updateEMVByXml){
+            statusEditText.setText("updating...");
             pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv.xml",MainActivity.this)));
         }
         return true;

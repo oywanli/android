@@ -509,6 +509,9 @@ public class OtherActivity extends BaseActivity{
         } else if (item.getItemId() == R.id.menu_operate_mafire) {
             statusEditText.setText("operate mafire card");
             showSingleChoiceDialog();
+        } else if (item.getItemId()==R.id.updateEMVByXml){
+            statusEditText.setText("updating...");
+            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv_D20.xml",OtherActivity.this)));
         }
         return true;
     }
