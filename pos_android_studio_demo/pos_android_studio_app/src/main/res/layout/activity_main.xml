@@ -125,6 +125,28 @@
                 android:layout_marginRight="5dip"
                 android:hint="chip data" />
 
+            <Button
+                android:id="@+id/getDeviceCSR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get Device CSR" />
+
+            <Button
+                android:id="@+id/loadCertificates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Load Certificates" />
+
+            <Button
+                android:id="@+id/getDeviceSigningCertificate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Get Device Signing Certificate" />
+
+
         </LinearLayout>
 
         <include android:visibility="visible"

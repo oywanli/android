@@ -437,7 +437,6 @@ public class OtherActivity extends BaseActivity{
         } else if (item.getItemId() == R.id.menu_get_deivce_info) {
             statusEditText.setText(R.string.getting_info);
             pos.getQposInfo();
-
         } else if (item.getItemId() == R.id.menu_get_deivce_key_checkvalue) {
             statusEditText.setText("get_deivce_key_checkvalue..............");
             int keyIdex = getKeyIndex();

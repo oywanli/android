@@ -367,5 +367,23 @@ public class QPOSUtil {
         return result;
     }
 
+    public static String readRSANStream(InputStream in) throws Exception {
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+                sb.append('\r');
+            }
+            return sb.toString();
+        } catch (IOException var5) {
+            throw new Exception("鍏\ue104挜鏁版嵁娴佽\ue1f0鍙栭敊锟�?");
+        } catch (NullPointerException var6) {
+            throw new Exception("鍏\ue104挜杈撳叆娴佷负锟�?");
+        }
+    }
+
 
 }

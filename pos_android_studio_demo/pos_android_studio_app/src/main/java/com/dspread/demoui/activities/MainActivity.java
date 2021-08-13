@@ -72,7 +72,11 @@ import com.dspread.xpos.QPOSService.TransactionResult;
 import com.dspread.xpos.QPOSService.TransactionType;
 import com.dspread.xpos.QPOSService.UpdateInformationResult;
 
+import org.bouncycastle.util.encoders.Encoder;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,6 +87,8 @@ import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import Decoder.BASE64Decoder;
 import Decoder.BASE64Encoder;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -114,6 +120,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private Button btnDisconnect;
     private Button updateFwBtn;
     private EditText mKeyIndex;
+    private Button getDeviceCSR,loadCertificates,getDeviceSigningCertificate;
 
     private String nfcLog = "";
     private String pubModel ="";
@@ -352,6 +359,11 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         fastReadUL = (Button) findViewById(R.id.fast_read_ul);
         writeULBtn = (Button) findViewById(R.id.write_ul);
         transferBtn = (Button) findViewById(R.id.transfer_card);
+
+        getDeviceCSR = (Button) findViewById(R.id.getDeviceCSR);
+        loadCertificates = (Button) findViewById(R.id.loadCertificates);
+        getDeviceSigningCertificate = (Button) findViewById(R.id.getDeviceSigningCertificate);
+
         ScrollView parentScrollView = (ScrollView) findViewById(R.id.parentScrollview);
         parentScrollView.smoothScrollTo(0, 0);
         m_ListView = (InnerListview) findViewById(R.id.lv_indicator_BTPOS);
@@ -400,6 +412,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         fastReadUL.setOnClickListener(myOnClickListener);
         writeULBtn.setOnClickListener(myOnClickListener);
         transferBtn.setOnClickListener(myOnClickListener);
+        getDeviceCSR.setOnClickListener(myOnClickListener);
+        loadCertificates.setOnClickListener(myOnClickListener);
+        getDeviceSigningCertificate.setOnClickListener(myOnClickListener);
+
 
         ((Button) findViewById(R.id.updateFirmware)).setOnClickListener(new OnClickListener() {
             @Override
@@ -2280,6 +2296,41 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             TRACE.d("onRequestNoQposDetectedUnbond()");
         }
 
+        @Override
+        public  void onReturnDeviceCSRResult(String re) {
+            TRACE.d("onReturnDeviceCSRResult:"+re);
+            statusEditText.setText("onReturnDeviceCSRResult:"+re);
+        }
+
+        @Override
+        public  void onReturnStoreCertificatesResult(boolean re) {
+            TRACE.d("onReturnStoreCertificatesResult:"+re);
+            statusEditText.setText("onReturnStoreCertificatesResult:"+re);
+        }
+
+        @Override
+        public  void onReturnDeviceSigningCertResult(String certificates, String certificatesTree) {
+            TRACE.d("onReturnDeviceSigningCertResult:"+certificates+"\n"+certificatesTree);
+//            statusEditText.setText("onReturnDeviceSigningCertResult:"+certificates+"\n"+certificatesTree);
+            try {
+                InputStream serverS =  getAssets().open("FX-Dspread-signed.pem");
+                BASE64Encoder encoder = new BASE64Encoder();
+                String s2 =encoder.encodeBuffer(QPOSUtil.HexStringToByteArray(certificatesTree));
+                s2 =s2.replace("BEGIN/CERTIFICATE","BEGIN CERTIFICATE");
+                s2 =s2.replace("END/CERTIFICATE","END CERTIFICATE");
+                s2 =s2.replace("/////BEGIN CERTIFICATE//////","-----BEGIN CERTIFICATE-----\n");
+                s2 =s2.replace("/////END CERTIFICATE/////","-----END CERTIFICATE-----\n");
+                s2 =s2.replace("/-----BEGIN CERTIFICATE-----","-----BEGIN CERTIFICATE-----");
+                InputStream chain = new ByteArrayInputStream(s2.getBytes());
+
+                boolean result = pos.getServerCertVerifyStatus(chain,serverS);
+                statusEditText.setText("Server Certificates Verify Status:"+result);
+                TRACE.i("result= "+result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     private void deviceShowDisplay(String diplay) {
@@ -2553,6 +2604,37 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     }
                     updateThread = new UpdateThread();
                     updateThread.start();
+                }
+            } else if(v == getDeviceCSR){
+                if(pos!=null) {
+                    statusEditText.setText("waiting...");
+                    pos.getDeviceCSR(15);
+                } else {
+                    statusEditText.setText("No pos connected");
+                }
+            } else if(v == loadCertificates){
+                if(pos!=null) {
+                    statusEditText.setText("waiting...");
+                    String certificates = null;
+                    String certificatesChain = null;
+                    try{
+                        String publicKeyStr = QPOSUtil.readRSANStream(getAssets().open("FX-Dspread-signed.pem"));
+                        BASE64Decoder base64Decoder = new BASE64Decoder();
+                        byte[] buffer = base64Decoder.decodeBuffer(publicKeyStr);
+                        certificates = QPOSUtil.byteArray2Hex(buffer);
+                        certificatesChain = QPOSUtil.byteArray2Hex(base64Decoder.decodeBuffer(QPOSUtil.readRSANStream(getAssets().open("FX-Dspread-CA-Tree.pem"))));
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    pos.loadCertificates(certificates,certificatesChain);
+                } else{
+                    statusEditText.setText("No pos connected");
+                }
+            } else if(v == getDeviceSigningCertificate){
+                if(pos!=null) {
+                    pos.getDeviceSigningCertificate();
+                } else{
+                    statusEditText.setText("No pos connected");
                 }
             }
         }
