@@ -101,14 +101,6 @@
                 android:gravity="center"
                 android:hint="key index" />
 
-            <Button
-                android:id="@+id/updateFirmware"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="updateFirmware"
-               />
-
             <EditText
                 android:id="@+id/statusEditText"
                 android:layout_width="match_parent"
@@ -124,27 +116,6 @@
                 android:layout_marginLeft="5dip"
                 android:layout_marginRight="5dip"
                 android:hint="chip data" />
-
-            <Button
-                android:id="@+id/getDeviceCSR"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Get Device CSR" />
-
-            <Button
-                android:id="@+id/loadCertificates"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Load Certificates" />
-
-            <Button
-                android:id="@+id/getDeviceSigningCertificate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Get Device Signing Certificate" />
 
 
         </LinearLayout>

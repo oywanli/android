@@ -120,8 +120,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private Button btnDisconnect;
     private Button updateFwBtn;
     private EditText mKeyIndex;
-    private Button getDeviceCSR,loadCertificates,getDeviceSigningCertificate;
-
     private String nfcLog = "";
     private String pubModel ="";
     private String amount = "";
@@ -360,10 +358,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         writeULBtn = (Button) findViewById(R.id.write_ul);
         transferBtn = (Button) findViewById(R.id.transfer_card);
 
-        getDeviceCSR = (Button) findViewById(R.id.getDeviceCSR);
-        loadCertificates = (Button) findViewById(R.id.loadCertificates);
-        getDeviceSigningCertificate = (Button) findViewById(R.id.getDeviceSigningCertificate);
-
         ScrollView parentScrollView = (ScrollView) findViewById(R.id.parentScrollview);
         parentScrollView.smoothScrollTo(0, 0);
         m_ListView = (InnerListview) findViewById(R.id.lv_indicator_BTPOS);
@@ -412,30 +406,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         fastReadUL.setOnClickListener(myOnClickListener);
         writeULBtn.setOnClickListener(myOnClickListener);
         transferBtn.setOnClickListener(myOnClickListener);
-        getDeviceCSR.setOnClickListener(myOnClickListener);
-        loadCertificates.setOnClickListener(myOnClickListener);
-        getDeviceSigningCertificate.setOnClickListener(myOnClickListener);
 
-
-        ((Button) findViewById(R.id.updateFirmware)).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pos != null) {
-                    statusEditText.setText("update firmware...");
-                    byte[] data = null;
-                    if (data == null || data.length == 0) {
-                        data = FileUtils.readAssetsLine("upgrader.asc", MainActivity.this);
-                    }
-                    int a = pos.updatePosFirmware(data, blueTootchAddress);
-                    if (a == -1) {
-                        Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    updateThread = new UpdateThread();
-                    updateThread.start();
-                }
-            }
-        });
     }
 
     /**
@@ -2604,37 +2575,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     }
                     updateThread = new UpdateThread();
                     updateThread.start();
-                }
-            } else if(v == getDeviceCSR){
-                if(pos!=null) {
-                    statusEditText.setText("waiting...");
-                    pos.getDeviceCSR(15);
-                } else {
-                    statusEditText.setText("No pos connected");
-                }
-            } else if(v == loadCertificates){
-                if(pos!=null) {
-                    statusEditText.setText("waiting...");
-                    String certificates = null;
-                    String certificatesChain = null;
-                    try{
-                        String publicKeyStr = QPOSUtil.readRSANStream(getAssets().open("FX-Dspread-signed.pem"));
-                        BASE64Decoder base64Decoder = new BASE64Decoder();
-                        byte[] buffer = base64Decoder.decodeBuffer(publicKeyStr);
-                        certificates = QPOSUtil.byteArray2Hex(buffer);
-                        certificatesChain = QPOSUtil.byteArray2Hex(base64Decoder.decodeBuffer(QPOSUtil.readRSANStream(getAssets().open("FX-Dspread-CA-Tree.pem"))));
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    pos.loadCertificates(certificates,certificatesChain);
-                } else{
-                    statusEditText.setText("No pos connected");
-                }
-            } else if(v == getDeviceSigningCertificate){
-                if(pos!=null) {
-                    pos.getDeviceSigningCertificate();
-                } else{
-                    statusEditText.setText("No pos connected");
                 }
             }
         }
