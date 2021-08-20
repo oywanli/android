@@ -382,7 +382,6 @@ public class OtherActivity extends BaseActivity{
             }
         } else if (item.getItemId() == R.id.get_ksn) {
             pos.getKsn();
-
         } else if (item.getItemId() == R.id.getEncryptData) {
             //get encrypt data
             pos.getEncryptData("70563".getBytes(), "1", "0", 10);
@@ -407,8 +406,6 @@ public class OtherActivity extends BaseActivity{
         else if (item.getItemId() == R.id.updateIPEK) {
             int keyIndex = getKeyIndex();
             String ipekGrop = "0" + keyIndex;
-
-
             pos.doUpdateIPEKOperation(
                     ipekGrop, "09118012400705E00000", "C22766F7379DD38AA5E1DA8C6AFA75AC", "B2DE27F60A443944",
                     "09118012400705E00000", "C22766F7379DD38AA5E1DA8C6AFA75AC", "B2DE27F60A443944",
