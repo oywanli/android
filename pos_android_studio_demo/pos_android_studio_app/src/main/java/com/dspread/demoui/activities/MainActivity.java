@@ -1573,7 +1573,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 String IV = ParseASN1Util.getIVStr();
                 String clearData = "A0818e301806092a864886f70d010903310b06092a864886f70d0107033020060a2a864886f70d01091903311204104cdcedd916aaaceeae548a1c5b0a0eaa301f06092a864886f70d0107013112041041303031364b30544e30304530303030302f06092a864886f70d01090431220420a0e06a133da8d4a5ec5a2e51e468b470b19e13834019a0c2563ba39308660a1f";
                 String envelop = getDigitalEnvelopStr(encryptData,encryptDataWith3des,"01",clearData,signData,IV);
-                pos.updateWorkKey(envelop,true);
+                pos.loadSessionKeyByTR_34(envelop);
             }else {
                 statusEditText.setText("PEDK signature verification failed.");
             }
