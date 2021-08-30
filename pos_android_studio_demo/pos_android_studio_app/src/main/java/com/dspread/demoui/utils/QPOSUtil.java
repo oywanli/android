@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.KeyFactory;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.Hashtable;
 
 import com.dspread.demoui.R;
@@ -29,6 +33,24 @@ public class QPOSUtil {
             hex.append(HEXES.charAt((b & 0xF0) >> 4)).append(HEXES.charAt((b & 0x0F)));
         }
         return hex.toString();
+    }
+
+    //根据n和e获取公钥
+    public static RSAPublicKey getPublicKey(String modulus, String publicExponent) {
+        BigInteger m = new BigInteger(modulus, 16);
+        BigInteger e = new BigInteger(publicExponent, 16);
+
+        RSAPublicKeySpec keySpec = new RSAPublicKeySpec(m, e);
+
+        KeyFactory keyFactory;
+        RSAPublicKey publicKey = null;
+        try {
+            keyFactory = KeyFactory.getInstance("RSA");
+            publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return publicKey;
     }
 
     /*
@@ -133,6 +155,32 @@ public class QPOSUtil {
             e.printStackTrace();
         }
         return b;
+    }
+
+    //低位在前
+    public static byte[] intToBytes( int value )
+    {
+        byte[] src = new byte[2];
+        src[1] =  (byte) ((value>>8) & 0xFF);
+        src[0] =  (byte) (value & 0xFF);
+        return src;
+    }
+
+    public static String intToHex2(int i) {
+        String string = null;
+        if (i >= 0 && i < 10) {
+            string = "0" + i;
+        } else {
+            string = Integer.toHexString(i);
+        }
+        if(string.length() == 2){
+            string = "00" + string;
+        }else if (string.length() == 1) {
+            string = "000" + string;
+        }else if(string.length() == 3){
+            string = "0" + string;
+        }
+        return string;
     }
 
     /**
