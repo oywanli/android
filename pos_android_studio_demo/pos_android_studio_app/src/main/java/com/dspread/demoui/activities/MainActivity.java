@@ -597,11 +597,12 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             }
         }else if(item.getItemId() == R.id.menu_confirm_key_type){//inject key remotely
             String deviceNonce = ParseASN1Util.generateNonce();
-            String asn1 = "301802010131133011130a4473707265616442444b0201001300";
-            pedvVerifySignatureCommand = getString(R.string.pedv_command,asn1,deviceNonce,"1");
+            String keyNameASN1 = "301802010131133011130a4473707265616442444b0201001300";
+            pedvVerifySignatureCommand = getString(R.string.pedv_command,keyNameASN1,deviceNonce,"1");
             String rkmsNonce = "04916CCC6289600A55118FC37AF0999E";
-            String requestSignatureData = asn1+deviceNonce+rkmsNonce+"01";
-            //the api calback is onReturnAnalyseDigEnvelop
+            String requestSignatureData = keyNameASN1+deviceNonce+rkmsNonce+"01";
+            //the api calback is onReturnAnalyseDi
+            // gEnvelop
             pos.analyseDigEnvelop(QPOSService.AnalyseDigEnvelopMode.SIGNATURE_ENV,requestSignatureData,20);
 
         }else if(item.getItemId() == R.id.init_device){
