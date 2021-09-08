@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Arrays;
 
 import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
@@ -365,6 +366,24 @@ public class ParseASN1Util {
                     return split[i].substring(2);
                 }
             }
+        }
+        return null;
+    }
+
+    public static String addTagToCommand(String command,String tag,String value){
+        command = command.substring(0,command.length()-2)+";"+tag+value+";]";
+        return command;
+    }
+
+    public static String generateNonce() {
+        try {
+            SecureRandom localSecureRandom = SecureRandom.getInstance("SHA1PRNG");
+            byte[] bytes_key = new byte[16];
+            localSecureRandom.nextBytes(bytes_key);
+            String nonce = QPOSUtil.byteArray2Hex(bytes_key);
+            return nonce;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

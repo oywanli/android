@@ -83,7 +83,8 @@
     <string name="card_is_not_exist">无卡</string>
     <string name="get_pos_id">Get PosID</string>
     <string name="operate_mafire">操作mafire卡</string>
-    <string name="getting_pos_id">Getting POS ID…</string>
+    <string name="inject_key_remote">远程灌密钥</string>
+    <string name="getting_pos_id">获取POS ID…</string>
     <string name="scan_bt_device">扫描设备</string>
     <string name="please_select_bt_name">选择设备</string>
     <string name="open_serial_port">打开串口</string>
@@ -265,6 +266,9 @@
     <string name="minute">分</string>
     <string name="seconds">秒</string>
     <string name="about">关于</string>
+    <string name="init_keys">交换认证</string>
+    <string name="verify_keys">初始化加载密钥</string>
+    <string name="key_loading">确认密钥类型</string>
     <string name="other">其它功能</string>
     <string name="isCardExist">检测卡槽内是否有IC卡</string>
     <string name="list">列表</string>

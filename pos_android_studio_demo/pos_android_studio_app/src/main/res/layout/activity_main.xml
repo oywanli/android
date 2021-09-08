@@ -121,6 +121,7 @@
 
         <include android:visibility="visible"
             layout="@layout/view_mifare"/>
+        <include layout="@layout/layout_key_injection_remotely"/>
 
     </LinearLayout>
     </ScrollView>
