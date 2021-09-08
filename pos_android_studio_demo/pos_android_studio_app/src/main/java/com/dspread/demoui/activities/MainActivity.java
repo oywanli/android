@@ -108,6 +108,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private Button btn_exchange_cert,btn_verify_keys,btn_remote_key_loading;
     private String verifySignatureCommand,pedvVerifySignatureCommand;
     private String KB;
+    private boolean isInitKey;
 
     private Spinner mafireSpinner;
     private Button doTradeButton;
@@ -603,6 +604,20 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             //the api calback is onReturnAnalyseDigEnvelop
             pos.analyseDigEnvelop(QPOSService.AnalyseDigEnvelopMode.SIGNATURE_ENV,requestSignatureData,20);
 
+        }else if(item.getItemId() == R.id.init_device){
+            try {
+                String publicKeyStr = QPOSUtil.readRSANStream(getAssets().open("FX-Dspread-signed.pem"));
+                BASE64Decoder base64Decoder = new BASE64Decoder();
+                byte[] buffer = base64Decoder.decodeBuffer(publicKeyStr);
+                String deviceCert = QPOSUtil.byteArray2Hex(buffer);
+                String scertChain= QPOSUtil.byteArray2Hex(base64Decoder.decodeBuffer(QPOSUtil.readRSANStream(getAssets().open("FX-Dspread-CA-Tree.pem"))));
+                //the api callback is onReturnStoreCertificatesResult
+                isInitKey = true;
+                pos.loadCertificates(deviceCert,scertChain);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            statusEditText.setText("Init key...");
         }
         //update ipek
         else if (item.getItemId() == R.id.updateIPEK) {
@@ -2362,7 +2377,13 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public  void onReturnStoreCertificatesResult(boolean re) {
             TRACE.d("onReturnStoreCertificatesResult:"+re);
-            statusEditText.setText("Exchange Certificates result is :"+re);
+            if(isInitKey){
+                statusEditText.setText("Init key result is :"+re);
+                isInitKey = false;
+            }else {
+                statusEditText.setText("Exchange Certificates result is :"+re);
+            }
+
         }
 
         @Override
