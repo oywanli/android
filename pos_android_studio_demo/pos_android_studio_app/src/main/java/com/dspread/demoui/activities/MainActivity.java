@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private UsbDevice usbDevice;
     private Spinner cmdSp;
     private InnerListview m_ListView;
-    private EditText statusEditText, blockAdd, status,status11;
+    private EditText statusEditText, blockAdd, status,status11,block_address11;
     private MyListViewAdapter m_Adapter = null;
     private ImageView imvAnimScan;
     private AnimationDrawable animScan;
@@ -341,6 +341,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         cmdSp.setAdapter(cmdAdapter);
         mafireSpinner = (Spinner) findViewById(R.id.verift_spinner);
         blockAdd = (EditText) findViewById(R.id.block_address);
+        block_address11 = (EditText) findViewById(R.id.block_address11);
         String[] keyClass = new String[]{"Key A", "Key B"};
         ArrayAdapter<String> spinneradapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, keyClass);
         mafireSpinner.setAdapter(spinneradapter);
@@ -2667,19 +2668,19 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 //                pos.doMifareCard("06", 20);
                 pos.getMifareCardInfo(20);
             } else if (v == readULBtn) {
-                String blockaddr = blockAdd.getText().toString();
+                String blockaddr = block_address11.getText().toString();
                 pos.setBlockaddr(blockaddr);
 //                pos.doMifareCard("07", 20);
-                pos.readMifareCard(QPOSService.MifareCardType.CLASSIC,blockaddr,20);
+                pos.readMifareCard(QPOSService.MifareCardType.UlTRALIGHT,blockaddr,20);
             } else if (v == fastReadUL) {
-                String endAddr = blockAdd.getText().toString();
+                String endAddr = block_address11.getText().toString();
                 String startAddr = status11.getText().toString();
                 pos.setKeyValue(startAddr);
                 pos.setBlockaddr(endAddr);
 //                pos.doMifareCard("08", 20);
                 pos.fastReadMifareCardData(startAddr,endAddr,20);
             } else if (v == writeULBtn) {
-                String addr = blockAdd.getText().toString();
+                String addr = block_address11.getText().toString();
                 String data = status11.getText().toString();
                 pos.setKeyValue(data);
                 pos.setBlockaddr(addr);
