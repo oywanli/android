@@ -1139,6 +1139,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             }else if (transactionResult == TransactionResult.CARD_BLOCKED) {
                 clearDisplay();
                 messageTextView.setText("CARD BLOCKED");
+            }else if (transactionResult == TransactionResult.TRANS_TOKEN_INVALID) {
+                clearDisplay();
+                messageTextView.setText("TOKEN INVALID");
             }
             dialog.findViewById(R.id.confirmButton).setOnClickListener(new OnClickListener() {
 

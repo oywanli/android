@@ -968,6 +968,9 @@ public class OtherActivity extends BaseActivity{
             } else if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
                 clearDisplay();
                 messageTextView.setText("CARD REMOVED");
+            } else if (transactionResult == QPOSService.TransactionResult.TRANS_TOKEN_INVALID) {
+                clearDisplay();
+                messageTextView.setText("TOKEN INVALID");
             }
 
 
