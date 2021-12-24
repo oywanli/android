@@ -183,6 +183,30 @@
     </item>
 
     <!-- 一级菜单 -->
+    <item android:title="@string/inject_key_remote">
+
+        <!-- 二级菜单 -->
+        <menu>
+            <item
+                android:id="@+id/init_device"
+                android:orderInCategory="100"
+                android:title="Init Device" />
+            <item
+                android:id="@+id/menu_exchange_cert"
+                android:orderInCategory="100"
+                android:title="@string/init_keys" />
+            <item
+                android:id="@+id/menu_init_key_loading"
+                android:orderInCategory="100"
+                android:title="@string/verify_keys" />
+            <item
+                android:id="@+id/menu_confirm_key_type"
+                android:orderInCategory="100"
+                android:title="@string/key_loading" />
+        </menu>
+    </item>
+
+    <!-- 一级菜单 -->
     <item android:title="@string/device_other">
 
         <!-- 二级菜单 -->

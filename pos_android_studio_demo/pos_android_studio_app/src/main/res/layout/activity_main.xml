@@ -82,7 +82,6 @@
             android:layout_weight="1"
             android:text="@string/text_quick_emv"
             android:visibility="gone"/>
-
         <LinearLayout
             android:id="@+id/ll"
             android:layout_width="match_parent"
@@ -101,14 +100,6 @@
                 android:gravity="center"
                 android:hint="key index" />
 
-            <Button
-                android:id="@+id/updateFirmware"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="updateFirmware"
-               />
-
             <EditText
                 android:id="@+id/statusEditText"
                 android:layout_width="match_parent"
@@ -125,10 +116,12 @@
                 android:layout_marginRight="5dip"
                 android:hint="chip data" />
 
+
         </LinearLayout>
 
         <include android:visibility="visible"
             layout="@layout/view_mifare"/>
+        <include layout="@layout/layout_key_injection_remotely"/>
 
     </LinearLayout>
     </ScrollView>

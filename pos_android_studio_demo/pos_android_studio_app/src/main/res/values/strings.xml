@@ -49,9 +49,9 @@
     <string name="audio_open">audio control:open</string>
     <string name="audio_close">audio control:close</string>
     <string name="audio_unknow">audio control:unknown</string>
-    <string name="get_pin">get pin</string>
+    <string name="get_pin">Get Pin</string>
     <string name="update">update</string>
-    <string name="do_tradelog_operation">do_tradeLog_operation</string>
+    <string name="do_tradelog_operation">TradeLog Operation</string>
     <string name="get_update_key">get_update_key</string>
     <string name="reset_qpos">qpos reset</string>
     <string name="menu_update">qpos update</string>
@@ -78,7 +78,8 @@
     <string name="pinBlock">pinBlock:</string>
     <string name="posId">posId:</string>
     <string name="get_pos_id">Get PosID</string>
-    <string name="operate_mafire">operate_mafire</string>
+    <string name="operate_mafire">Operate Mafire Cards</string>
+    <string name="inject_key_remote">Remote key Loading API</string>
     <string name="getting_pos_id">Getting POS ID…</string>
     <string name="isCardExist">check card in slot</string>
     <string name="card_is_exist">card is exist</string>
@@ -274,6 +275,9 @@
     <string name="minute">minutes</string>
     <string name="seconds">seconds</string>
     <string name="about">about</string>
+    <string name="init_keys">Exchange Certificates</string>
+    <string name="verify_keys">Initial Key Loading</string>
+    <string name="key_loading">Confirm Key Type</string>
     <string name="other">others</string>
     <string name="list">list</string>
     <string name="mcr_single_mac">magnetic stripe card calculate mac single</string>
@@ -285,6 +289,10 @@
     <string name="updateInjectKeys">update Keys:</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="pedi_command">&#091;AOPEDI&#059;VS2&#059;RF0&#059;TD1&#059;CC%s&#059;RG%s&#059;CE%s&#059;&#093;</string>
+    <string name="pedk_command">&#091;AOPEDK&#059;KN&#059;RD&#059;CE%s&#059;&#093;</string>
+    <string name="pedv_command">&#091;AOPEDV&#059;KV&#059;RD&#059;CE%s&#059;&#093;</string>
+
 
     <string name="scan_over">end the scan</string>
     <string name="failedRead">read failed</string>
