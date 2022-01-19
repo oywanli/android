@@ -21,9 +21,8 @@ android {
         applicationId "com.dspread.demoui"
         minSdkVersion 17
         targetSdkVersion 31
-
-        versionCode 7
-        versionName "3.0.6"
+        versionCode 9
+        versionName "3.0.8"
 
         ndk {
             moduleName "serial_port"
