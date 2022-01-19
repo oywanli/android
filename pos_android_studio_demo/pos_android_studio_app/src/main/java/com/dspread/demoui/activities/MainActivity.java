@@ -97,6 +97,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private Spinner cmdSp;
     private InnerListview m_ListView;
     private EditText statusEditText, blockAdd, status,status11,block_address11;
+    private EditText mhipStatus;
     private MyListViewAdapter m_Adapter = null;
     private ImageView imvAnimScan;
     private AnimationDrawable animScan;
@@ -109,6 +110,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private String verifySignatureCommand,pedvVerifySignatureCommand;
     private String KB;
     private boolean isInitKey;
+    private boolean isUpdateFw = false;
 
     private Spinner mafireSpinner;
     private Button doTradeButton;
@@ -347,6 +349,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         mafireSpinner.setAdapter(spinneradapter);
         doTradeButton = (Button) findViewById(R.id.doTradeButton);//start to do trade
         statusEditText = (EditText) findViewById(R.id.statusEditText);
+        mhipStatus = (findViewById(R.id.chipStatus));
         btnBT = (Button) findViewById(R.id.btnBT);//start to scan bluetooth device
         btnUSB = (Button) findViewById(R.id.btnUSB);//scan USB device
         btnDisconnect = (Button) findViewById(R.id.disconnect);//disconnect
@@ -684,38 +687,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
                     keyIndex, 5);
         } else if(item.getItemId() == R.id.updateFirmWare) {
-            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                //request permission
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
-            } else {
-                LogFileConfig.getInstance().setWriteFlag(true);
-                byte[] data = null;
-                List<String> allFiles = null;
-//                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
-                if (allFiles != null) {
-                    for (String fileName : allFiles) {
-                        if (!TextUtils.isEmpty(fileName)) {
-                            if (fileName.toUpperCase().endsWith(".asc".toUpperCase())) {
-                                data = FileUtils.readLine(fileName);
-                                Toast.makeText(MainActivity.this, "Upgrade package path:" +
-                                        Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dspread" + File.separator + fileName, Toast.LENGTH_SHORT).show();
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (data == null || data.length == 0) {
-                    data = FileUtils.readAssetsLine("upgrader.asc", MainActivity.this);
-                }
-                int a = pos.updatePosFirmware(data, blueTootchAddress);
-                if (a == -1) {
-                    Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                updateThread = new UpdateThread();
-                updateThread.start();
-            }
+            isUpdateFw = true;
+            pos.getUpdateCheckValue();
         } else if (item.getItemId() == R.id.cusDisplay) {
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
@@ -1776,6 +1749,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onUpdatePosFirmwareResult(UpdateInformationResult arg0) {
             TRACE.d("onUpdatePosFirmwareResult(UpdateInformationResult arg0):" + arg0.toString());
+            isUpdateFw = false;
             if (arg0 != UpdateInformationResult.UPDATE_SUCCESS) {
                 updateThread.concelSelf();
             }
@@ -2037,7 +2011,10 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onRequestUpdateKey(String arg0) {
             TRACE.d("onRequestUpdateKey(String arg0):" + arg0);
-            statusEditText.setText("update checkvalue : " + arg0);
+            mhipStatus.setText("update checkvalue : " + arg0);
+            if(isUpdateFw){
+                updateFirmware();
+            }
         }
 
         @Override
@@ -2696,38 +2673,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 //                pos.setKeyValue(data);
 //                pos.transferMifareData(data,20);
             } else if (v == updateFwBtn) {//update firmware
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    //request permission
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
-                } else {
-                    LogFileConfig.getInstance().setWriteFlag(true);
-                    byte[] data = null;
-                    List<String> allFiles = null;
-//                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
-                    if (allFiles != null) {
-                        for (String fileName : allFiles) {
-                            if (!TextUtils.isEmpty(fileName)) {
-                                if (fileName.toUpperCase().endsWith(".asc".toUpperCase())) {
-                                    data = FileUtils.readLine(fileName);
-                                    Toast.makeText(MainActivity.this, "Upgrade package path:" +
-                                            Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dspread" + File.separator + fileName, Toast.LENGTH_SHORT).show();
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (data == null || data.length == 0) {
-                        data = FileUtils.readAssetsLine("upgrader.asc", MainActivity.this);
-                    }
-                    int a = pos.updatePosFirmware(data, blueTootchAddress);
-                    if (a == -1) {
-                        Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    updateThread = new UpdateThread();
-                    updateThread.start();
-                }
+                isUpdateFw = true;
+                pos.getUpdateCheckValue();
             }
         }
     }
@@ -2831,6 +2778,42 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         TRACE.d("emvAppCfg: " + emvAppCfg);
         TRACE.d("emvCapkCfg: " + emvCapkCfg);
         pos.updateEmvConfig(emvAppCfg, emvCapkCfg);
+    }
+
+    public void updateFirmware(){
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //request permission
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+        } else {
+            LogFileConfig.getInstance().setWriteFlag(true);
+            byte[] data = null;
+            List<String> allFiles = null;
+//                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
+            if (allFiles != null) {
+                for (String fileName : allFiles) {
+                    if (!TextUtils.isEmpty(fileName)) {
+                        if (fileName.toUpperCase().endsWith(".asc".toUpperCase())) {
+                            data = FileUtils.readLine(fileName);
+                            Toast.makeText(MainActivity.this, "Upgrade package path:" +
+                                    Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dspread" + File.separator + fileName, Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    }
+                }
+            }
+            if (data == null || data.length == 0) {
+                data = FileUtils.readAssetsLine("upgrader.asc", MainActivity.this);
+            }
+            int a = pos.updatePosFirmware(data, blueTootchAddress);
+            if (a == -1) {
+                isUpdateFw = false;
+                Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+                return;
+            }
+            updateThread = new UpdateThread();
+            updateThread.start();
+        }
     }
 
     /*---------------------------------------------*/

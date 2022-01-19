@@ -102,6 +102,7 @@ public class OtherActivity extends BaseActivity{
     private EditText blockAdd, status,status11,block_address11;
     private Spinner cmdSp;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
+    private boolean isUpdateFw = false;
 
 
     @Override
@@ -463,41 +464,8 @@ public class OtherActivity extends BaseActivity{
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
                     keyIndex, 5);
         } else if(item.getItemId() == R.id.updateFirmWare){
-            if (ActivityCompat.checkSelfPermission(OtherActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PERMISSION_GRANTED) {
-                    //request permission
-                    ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
-            } else {
-                    LogFileConfig.getInstance().setWriteFlag(true);
-                    byte[] data = null;
-                    List<String> allFiles = null;
-//                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
-                    if (allFiles != null) {
-                        for (String fileName : allFiles) {
-                            if (!TextUtils.isEmpty(fileName)) {
-                                if (fileName.toUpperCase().endsWith(".asc".toUpperCase())) {
-                                    data = FileUtils.readLine(fileName);
-                                    Toast.makeText(OtherActivity.this, "Upgrade package path:" +
-                                            Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dspread" + File.separator + fileName, Toast.LENGTH_SHORT).show();
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (data == null || data.length == 0) {
-                        data = FileUtils.readAssetsLine("D20_master.asc", OtherActivity.this);
-                    }
-                    int a = pos.updatePosFirmware(data, blueTootchAddress);
-                    if (a == -1) {
-                        Toast.makeText(OtherActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
-                        return true;
-                    }
-
-                    updateThread = new UpdateThread();
-                    updateThread.start();
-
-            }
-
+            isUpdateFw = true;
+            pos.getUpdateCheckValue();
         } else if (item.getItemId() == R.id.cusDisplay) {
 
             deviceShowDisplay("test info");
@@ -1609,6 +1577,7 @@ public class OtherActivity extends BaseActivity{
         @Override
         public void onUpdatePosFirmwareResult(QPOSService.UpdateInformationResult arg0) {
             TRACE.d("onUpdatePosFirmwareResult(UpdateInformationResult arg0):" + arg0.toString());
+            isUpdateFw = false;
             if (arg0 != QPOSService.UpdateInformationResult.UPDATE_SUCCESS) {
                 updateThread.concelSelf();
             }
@@ -1890,8 +1859,10 @@ public class OtherActivity extends BaseActivity{
         public void onRequestUpdateKey(String arg0) {
             // TODO Auto-generated method stub
             TRACE.d("onRequestUpdateKey(String arg0):" + arg0);
-
-            statusEditText.setText("update checkvalue : " + arg0);
+            mhipStatus.setText("update checkvalue : " + arg0);
+            if(isUpdateFw){
+                updateFirmware();
+            }
 
         }
 
@@ -2557,6 +2528,43 @@ public class OtherActivity extends BaseActivity{
             }
         }
     };
+
+    private void updateFirmware(){
+        if (ActivityCompat.checkSelfPermission(OtherActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PERMISSION_GRANTED) {
+            //request permission
+            ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+        } else {
+            LogFileConfig.getInstance().setWriteFlag(true);
+            byte[] data = null;
+            List<String> allFiles = null;
+//                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
+            if (allFiles != null) {
+                for (String fileName : allFiles) {
+                    if (!TextUtils.isEmpty(fileName)) {
+                        if (fileName.toUpperCase().endsWith(".asc".toUpperCase())) {
+                            data = FileUtils.readLine(fileName);
+                            Toast.makeText(OtherActivity.this, "Upgrade package path:" +
+                                    Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "dspread" + File.separator + fileName, Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    }
+                }
+            }
+            if (data == null || data.length == 0) {
+                data = FileUtils.readAssetsLine("D20_master.asc", OtherActivity.this);
+            }
+            int a = pos.updatePosFirmware(data, blueTootchAddress);
+//            if (a == -1) {
+//                Toast.makeText(OtherActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+
+            updateThread = new UpdateThread();
+            updateThread.start();
+
+        }
+    }
 
     /*---------------------------------------------*/
     private static final String FILENAME = "dsp_axdd";
