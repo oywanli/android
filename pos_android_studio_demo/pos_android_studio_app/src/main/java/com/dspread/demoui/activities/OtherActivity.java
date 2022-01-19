@@ -467,7 +467,6 @@ public class OtherActivity extends BaseActivity{
             isUpdateFw = true;
             pos.getUpdateCheckValue();
         } else if (item.getItemId() == R.id.cusDisplay) {
-
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
             pos.lcdShowCloseDisplay();
@@ -1580,6 +1579,8 @@ public class OtherActivity extends BaseActivity{
             isUpdateFw = false;
             if (arg0 != QPOSService.UpdateInformationResult.UPDATE_SUCCESS) {
                 updateThread.concelSelf();
+            } else {
+                mhipStatus.setText("");
             }
             statusEditText.setText("onUpdatePosFirmwareResult" + arg0.toString());
         }
@@ -2555,10 +2556,12 @@ public class OtherActivity extends BaseActivity{
                 data = FileUtils.readAssetsLine("D20_master.asc", OtherActivity.this);
             }
             int a = pos.updatePosFirmware(data, blueTootchAddress);
-//            if (a == -1) {
-//                Toast.makeText(OtherActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
-//                return;
-//            }
+            //D20 doesn't need to keep charging
+            if (a == -1) {
+                isUpdateFw = false;
+                Toast.makeText(OtherActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             updateThread = new UpdateThread();
             updateThread.start();

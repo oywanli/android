@@ -1752,6 +1752,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             isUpdateFw = false;
             if (arg0 != UpdateInformationResult.UPDATE_SUCCESS) {
                 updateThread.concelSelf();
+            } else {
+                mhipStatus.setText("");
             }
             statusEditText.setText("onUpdatePosFirmwareResult" + arg0.toString());
         }
