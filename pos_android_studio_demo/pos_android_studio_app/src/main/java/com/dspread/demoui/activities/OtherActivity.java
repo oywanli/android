@@ -24,6 +24,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -72,7 +73,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class OtherActivity extends BaseActivity{
 
-    private Button doTradeButton, serialBtn;
+    private Button doTradeButton, serialBtn,audioBtn;
     private EditText statusEditText;
     private ListView appListView;
     private Dialog dialog;
@@ -95,6 +96,7 @@ public class OtherActivity extends BaseActivity{
     private UsbDevice usbDevice;
     private Context mContext;
     private static final int REQUEST_CODE_QRCODE_PERMISSIONS = 1;
+    private static final int REQUEST_CODE_AUDIO_PERMISSIONS = 2;
     private boolean autoDoTrade = false;
     private LinearLayout mafireLi, mafireUL;
     private Button operateCardBtn, pollBtn, pollULbtn, veriftBtn, veriftULBtn, readBtn, writeBtn, finishBtn, finishULBtn, getULBtn, readULBtn, fastReadUL, writeULBtn, transferBtn;
@@ -117,12 +119,6 @@ public class OtherActivity extends BaseActivity{
         initView();
         initIntent();
         initListener();
-        open(QPOSService.CommunicationMode.UART);
-        posType = POS_TYPE.UART;
-//                        blueTootchAddress = "/dev/ttyMT0";//tongfang is s1，tianbo is s3
-        blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3，D20 is dev/ttyS1
-        pos.setDeviceAddress(blueTootchAddress);
-        pos.openUart();
     }
 
     @Override
@@ -141,20 +137,41 @@ public class OtherActivity extends BaseActivity{
         switch (type) {
             case 1:
                 setTitle(getString(R.string.title_audio));
-                open(QPOSService.CommunicationMode.AUDIO);
+                requestPermission();
                 posType = POS_TYPE.AUDIO;
+                open(QPOSService.CommunicationMode.AUDIO);
                 pos.openAudio();
-                break;
-            case 2:
-                setTitle(getString(R.string.serial_port));
-                serialBtn.setVisibility(View.VISIBLE);
+                audioBtn.setVisibility(View.VISIBLE);
+                serialBtn.setVisibility(View.GONE);
                 serialBtn.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
-                        open(QPOSService.CommunicationMode.UART);
+                        posType = POS_TYPE.AUDIO;
+                        open(QPOSService.CommunicationMode.AUDIO);
+                        pos.openAudio();
+                    }
+                });
+                break;
+            case 2:
+                setTitle(getString(R.string.serial_port));
+                posType = POS_TYPE.UART;
+                open(QPOSService.CommunicationMode.UART);
+//                        blueTootchAddress = "/dev/ttyMT0";//tongfang is s1，tianbo is s3
+                blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
+//                        blueTootchAddress = "/dev/ttyHSL1";//tongfang is s1，tianbo is s3
+                pos.setDeviceAddress(blueTootchAddress);
+                pos.openUart();
+                serialBtn.setVisibility(View.VISIBLE);
+                audioBtn.setVisibility(View.GONE);
+                serialBtn.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
                         posType = POS_TYPE.UART;
+                        open(QPOSService.CommunicationMode.UART);
 //                        blueTootchAddress = "/dev/ttyMT0";//tongfang is s1，tianbo is s3
                         blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
 //                        blueTootchAddress = "/dev/ttyHSL1";//tongfang is s1，tianbo is s3
@@ -170,6 +187,7 @@ public class OtherActivity extends BaseActivity{
     private void initView() {
         doTradeButton = (Button) findViewById(R.id.doTradeButton);//start to do trade
         serialBtn = (Button) findViewById(R.id.serialPort);
+        audioBtn = (Button) findViewById(R.id.audioButton) ;
         statusEditText = (EditText) findViewById(R.id.statusEditText);
         btnUSB = (Button) findViewById(R.id.btnUSB);//Scan  USB device
         btnDisconnect = (Button) findViewById(R.id.disconnect);//disconnect
@@ -256,7 +274,11 @@ public class OtherActivity extends BaseActivity{
         if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
-        pos.setD20Trade(true);
+        if(posType == POS_TYPE.UART) {
+            pos.setD20Trade(true);
+        } else {
+            pos.setD20Trade(false);
+        }
         pos.setConext(this);
         //init handler
         Handler handler = new Handler(Looper.myLooper());
@@ -2288,6 +2310,19 @@ public class OtherActivity extends BaseActivity{
         }
         Log.e("execut end:", "deviceShowDisplay");
 
+    }
+
+    private void requestPermission() {
+
+        if (ContextCompat.checkSelfPermission(OtherActivity.this, android.Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED) {
+            Log.e("permisson: ","should open Audio");
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.RECORD_AUDIO},
+                    REQUEST_CODE_AUDIO_PERMISSIONS);
+
+        } else {
+            Log.e("permisson: ","has Audio permission");
+
+        }
     }
 
     private void devicePermissionRequest(UsbManager mManager, UsbDevice usbDevice) {

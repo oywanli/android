@@ -88,6 +88,7 @@
     <string name="scan_bt_device">扫描设备</string>
     <string name="please_select_bt_name">选择设备</string>
     <string name="open_serial_port">打开串口</string>
+    <string name="open_audio">打开音频</string>
     <string name="scan_bt_pos_error">没有绑定的设备\n请先绑定</string>
     <string name="connecting_bt_pos">连接设备中\n请稍等…</string>
     <string name="app_name">pos-android-demo</string>
