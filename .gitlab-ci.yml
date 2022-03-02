@@ -34,6 +34,11 @@ stages:
 #    - ./gradlew assembleDebug
     
 
+include: 
+  - template: Secret-Detection.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  - template: /Jobs/License-Scanning.gitlab-ci.yml
+
 assembleRelease:
   stage: build
   image: jangrewe/gitlab-ci-android
@@ -48,6 +53,13 @@ assembleRelease:
   artifacts:
     paths:
     - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk
+
+sast:
+  stage: test
+  script: 
+    - echo "Running tests..."
+  variables:
+     CI_DEBUG_TRACE: "true"
 
 release_job:
   stage: release
