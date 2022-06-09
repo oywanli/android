@@ -37,12 +37,12 @@ public class DUKPK2009_CBC {
     * Enum_mode
     *
     * */
-    public static String getDate(String ksnV, String datastrV, Enum_key key, Enum_mode mode) {
+    public static String getData(String ksnV, String datastrV, Enum_key key, Enum_mode mode) {
 
-        return getDate(ksnV, datastrV, key, mode, null);
+        return getData(ksnV, datastrV, key, mode, null);
     }
 
-    public static String getDate(String ksnV, String datastrV, Enum_key key, Enum_mode mode, String clearIpek) {
+    public static String getData(String ksnV, String datastrV, Enum_key key, Enum_mode mode, String clearIpek) {
         //		// TODO Auto-generated method stub
         String ksn = ksnV;
         String datastr = datastrV;
