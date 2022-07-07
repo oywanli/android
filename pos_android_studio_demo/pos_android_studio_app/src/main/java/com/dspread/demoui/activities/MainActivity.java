@@ -22,7 +22,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -87,6 +86,7 @@ import java.util.Map;
 
 import Decoder.BASE64Decoder;
 import Decoder.BASE64Encoder;
+import androidx.core.app.ActivityCompat;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 

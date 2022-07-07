@@ -22,9 +22,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -68,6 +65,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import Decoder.BASE64Encoder;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 

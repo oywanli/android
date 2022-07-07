@@ -6,9 +6,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +13,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.dspread.demoui.R;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class WelcomeActivity extends BaseActivity implements OnClickListener{
 	private Button audio,serial_port,normal_blu,other_blu,print;
