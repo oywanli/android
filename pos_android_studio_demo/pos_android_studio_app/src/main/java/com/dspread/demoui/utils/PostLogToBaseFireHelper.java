@@ -7,11 +7,14 @@ import com.google.firebase.database.FirebaseDatabase;
 //Tools for uploading logs
 public class PostLogToBaseFireHelper {
     private static String deviceInfo;
+    private static String childNode;
 
     static {
-        deviceInfo = "DeviceName:" + PhoneDeviceInfoUtil.getManufacturer() + "####DeviceModel:"
-                + PhoneDeviceInfoUtil.getModel() + "####AndroidSystemVersion:"
+        deviceInfo = "DeviceName:" + PhoneDeviceInfoUtil.getManufacturer() + "--DeviceModel:"
+                + PhoneDeviceInfoUtil.getModel() + "--OSVersion:"
                 + PhoneDeviceInfoUtil.getAndroidVersion();
+        childNode = deviceInfo + "--" + "AndroidID:" + PhoneDeviceInfoUtil.getDeviceID(BaseApplication.getApplicationInstance);
+
     }
 
     /**
@@ -23,8 +26,8 @@ public class PostLogToBaseFireHelper {
     public static void postFireBaseLogChild(String appName, String strLog) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("message");
-        myRef.child(PhoneDeviceInfoUtil.getDeviceID(BaseApplication.getApplicationInstance)).setValue(deviceInfo);
-        DatabaseReference refChild = database.getReference(PhoneDeviceInfoUtil.getDeviceID(BaseApplication.getApplicationInstance));
+        myRef.child(childNode).setValue(deviceInfo);
+        DatabaseReference refChild = database.getReference(childNode);
         refChild.child(DateUtils.getNowTime()).setValue(appName + ":" + strLog);
     }
 }
