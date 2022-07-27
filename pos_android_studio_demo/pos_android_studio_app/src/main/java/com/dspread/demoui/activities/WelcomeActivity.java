@@ -1,9 +1,11 @@
 package com.dspread.demoui.activities;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -21,6 +23,7 @@ import androidx.core.content.ContextCompat;
 public class WelcomeActivity extends BaseActivity implements OnClickListener{
 	private Button audio,serial_port,normal_blu,other_blu,print;
 	private Intent intent;
+	private static final int BLUETOOTH_CODE = 100;
 	private static final int LOCATION_CODE = 101;
 	private LocationManager lm;//【Location management】
 
@@ -99,10 +102,28 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener{
 				Log.e("POS_SDK", "Permission Denied");
 				// Permission denied
 				// Request authorization
-				ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
+				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+					if(ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+						||ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+						||ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED){
+						String[] list = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE};
+						ActivityCompat.requestPermissions(WelcomeActivity.this, list, BLUETOOTH_CODE);
+
+					}
+				} else {
+					ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
+				}
 //                        Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
 			} else {
 				// have permission
+				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+					if(ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+							||ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+							||ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+						String[] list = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE};
+						ActivityCompat.requestPermissions(WelcomeActivity.this, list, BLUETOOTH_CODE);
+					}
+				}
 				Toast.makeText(WelcomeActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
 			}
 		} else {
