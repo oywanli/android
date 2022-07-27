@@ -49,7 +49,6 @@ import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.xpos.CQPOSService;
-import com.dspread.xpos.LogFileConfig;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.QPOSService.TransactionType;
 
@@ -2571,7 +2570,7 @@ public class OtherActivity extends BaseActivity{
             //request permission
             ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
-            LogFileConfig.getInstance().setWriteFlag(true);
+//            LogFileConfig.getInstance().setWriteFlag(true);
             byte[] data = null;
             List<String> allFiles = null;
 //                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);

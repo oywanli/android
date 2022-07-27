@@ -58,7 +58,6 @@ import com.dspread.demoui.utils.DUKPK2009_CBC;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.ShowGuideView;
 import com.dspread.xpos.CQPOSService;
-import com.dspread.xpos.LogFileConfig;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.QPOSService.CommunicationMode;
 import com.dspread.xpos.QPOSService.Display;
@@ -2788,7 +2787,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             //request permission
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
-            LogFileConfig.getInstance().setWriteFlag(true);
+//            LogFileConfig.getInstance().setWriteFlag(true);
             byte[] data = null;
             List<String> allFiles = null;
 //                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
