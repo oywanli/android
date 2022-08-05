@@ -997,8 +997,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                             + "\n";
                     cardNo = maskedPAN;
                 }
-                // pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,1,"5F20") // get plaintext or ciphertext 5F20 tag
-                // pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,2,"5F205F24") // get plaintext or ciphertext 5F20 and 5F24 tag
                 statusEditText.setText(content);
                 sendMsg(8003);
             } else if ((result == DoTradeResult.NFC_DECLINED)) {
@@ -1316,8 +1314,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             } catch (Exception e) {
                 e.printStackTrace();
             }
-//            pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,0,1,"5F20") // get plaintext or ciphertext tag
-//            pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,0,2,"5F205F24") // get plaintext or ciphertext 5F20 and 5F24 tag
             dialog.findViewById(R.id.confirmButton).setOnClickListener(
                     new OnClickListener() {
 
