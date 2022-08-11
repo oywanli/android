@@ -22,7 +22,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,7 +58,6 @@ import com.dspread.demoui.utils.DUKPK2009_CBC;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.ShowGuideView;
 import com.dspread.xpos.CQPOSService;
-import com.dspread.xpos.LogFileConfig;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.QPOSService.CommunicationMode;
 import com.dspread.xpos.QPOSService.Display;
@@ -87,6 +85,7 @@ import java.util.Map;
 
 import Decoder.BASE64Decoder;
 import Decoder.BASE64Encoder;
+import androidx.core.app.ActivityCompat;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -998,8 +997,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                             + "\n";
                     cardNo = maskedPAN;
                 }
-                // pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,1,"5F20") // get plaintext or ciphertext 5F20 tag
-                // pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,1,2,"5F205F24") // get plaintext or ciphertext 5F20 and 5F24 tag
                 statusEditText.setText(content);
                 sendMsg(8003);
             } else if ((result == DoTradeResult.NFC_DECLINED)) {
@@ -1317,8 +1314,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             } catch (Exception e) {
                 e.printStackTrace();
             }
-//            pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,0,1,"5F20") // get plaintext or ciphertext tag
-//            pos.getICCTag(QPOSService.EncryptType.PLAINTEXT,0,2,"5F205F24") // get plaintext or ciphertext 5F20 and 5F24 tag
             dialog.findViewById(R.id.confirmButton).setOnClickListener(
                     new OnClickListener() {
 
@@ -2788,7 +2783,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             //request permission
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
-            LogFileConfig.getInstance().setWriteFlag(true);
+//            LogFileConfig.getInstance().setWriteFlag(true);
             byte[] data = null;
             List<String> allFiles = null;
 //                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);

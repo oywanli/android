@@ -22,9 +22,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -52,7 +49,6 @@ import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.xpos.CQPOSService;
-import com.dspread.xpos.LogFileConfig;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.QPOSService.TransactionType;
 
@@ -68,6 +64,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import Decoder.BASE64Encoder;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -2571,7 +2570,7 @@ public class OtherActivity extends BaseActivity{
             //request permission
             ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
-            LogFileConfig.getInstance().setWriteFlag(true);
+//            LogFileConfig.getInstance().setWriteFlag(true);
             byte[] data = null;
             List<String> allFiles = null;
 //                    allFiles = FileUtils.getAllFiles(FileUtils.POS_Storage_Dir);
