@@ -77,4 +77,6 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation files('libs\\actionprinter.jar')
+    implementation files('libs\\actionprinter.jar')
 }
