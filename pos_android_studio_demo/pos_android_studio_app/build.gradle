@@ -17,7 +17,7 @@ android {
         }
     }
     compileSdkVersion 31
-    buildToolsVersion '31.0.0'
+    buildToolsVersion '30.0.0'
     defaultConfig {
         applicationId "com.dspread.demoui"
         minSdkVersion 21
@@ -77,6 +77,5 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
-    implementation files('libs\\actionprinter.jar')
-    implementation files('libs\\actionprinter.jar')
+
 }
