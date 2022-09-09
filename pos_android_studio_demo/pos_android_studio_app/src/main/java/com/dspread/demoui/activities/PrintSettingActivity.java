@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.dspread.demoui.DialogFactory;
 import com.dspread.demoui.R;
+import com.dspread.demoui.activities.serialprint.PrintSerialActivity;
 import com.dspread.helper.printer.BtService;
 import com.dspread.helper.printer.Device;
 import com.dspread.helper.printer.PrintService;
@@ -30,6 +31,7 @@ import com.dspread.helper.printer.PrinterClass;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 //zkc.bluetooth.api扫描蓝牙并连接
@@ -40,6 +42,7 @@ public class PrintSettingActivity extends Activity implements AdapterView.OnItem
 	public static ArrayAdapter<String> mNewDevicesArrayAdapter = null;
 	public static List<Device> deviceList=new ArrayList<Device>();
 	private Button bt_scan;
+	private Button btn_serialPrint;
 	public Handler mhandler;
 	private LinearLayout layoutscan;
 	private ListView deviceListView;
@@ -97,6 +100,14 @@ public class PrintSettingActivity extends Activity implements AdapterView.OnItem
 		mNewDevicesArrayAdapter = new ArrayAdapter<String>(this,
 				R.drawable.device_name);
 		deviceList=new ArrayList<Device>();
+		btn_serialPrint =findViewById(R.id.btn_serialPrint);
+		btn_serialPrint.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+            Intent intent = new Intent(PrintSettingActivity.this, PrintSerialActivity.class);
+			startActivity(intent);
+			}
+		});
 
 		bt_scan = (Button) findViewById(R.id.bt_scan);
 		((Button) findViewById(R.id.bt_con)).setOnClickListener(new OnClickListener() {

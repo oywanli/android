@@ -353,4 +353,35 @@
     <string name="str_connect">connect</string>
     <string name="str_disconnect">disconnect</string>
 
+    <string name="text_alignment">text alignment</string>
+    <string name="bold_text">bold text</string>
+    <string name="text_underline">text underline</string>
+    <string name="Line_spacing">Line spacing</string>
+    <string name="text_spacing">text spacing</string>
+    <string name="font_size">font size</string>
+    <string name="grayscale_values">grayscale values</string>
+    <string name="Pictures_and_black_marks_Grayscale_values">Pictures and black marks Grayscale values</string>
+    <string name="Barcode_Type">Barcode Type</string>
+    <string name="bottom_spacing">Bottom spacing</string>
+    <string name="Barcode_width">Barcode width</string>
+    <string name="Barcode_height">Barcode height</string>
+    <string name="QR_code_error_correction_level">QR code error correction level</string>
+    <string name="QR_code_type">QR code type</string>
+    <string name="QR_code_size">QR code size</string>
+    <string name="print_Test">Print Test</string>
+    <string name="select_dialog_normal">normal</string>
+    <string name="select_dialog_center">center</string>
+    <string name="select_dialog_align_opposite">align opposite</string>
+    <string name="str_initialization">stop</string>
+
+    <string name="select_dialog_text_underline">Add text underline?</string>
+    <string name="select_dialog_bold">Add text bold?</string>
+    <string name="select_dialog_yes">Yes</string>
+    <string name="select_dialog_no">No</string>
+    <string name="select_dialog_confirm">confirm</string>
+    <string name="select_dialog_cancel">cancel</string>
+
+    <string name="select_dialog_true">open</string>
+    <string name="select_dialog_false">power off</string>
+
 </resources>

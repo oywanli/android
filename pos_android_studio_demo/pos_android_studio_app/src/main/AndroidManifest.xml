@@ -63,6 +63,15 @@
         <activity
             android:name=".activities.PrintTextActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.serialprint.PrintSerialActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.serialprint.PrintContentActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.serialprint.PrintSetting"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
     </application>
 
     <uses-feature

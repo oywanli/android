@@ -329,4 +329,35 @@
     <string name="str_autoprint">自动打印</string>
     <string name="str_connect">连接</string>
     <string name="str_disconnect">断开连接</string>
+    <string name="text_alignment">文字对齐</string>
+    <string name="bold_text">文字加粗</string>
+    <string name="text_underline">文字下划线</string>
+    <string name="bottom_spacing">底部间距</string>
+    <string name="Line_spacing">行间距</string>
+    <string name="text_spacing">文字间距</string>
+    <string name="font_size">文字大小</string>
+    <string name="grayscale_values">灰度值</string>
+    <string name="Pictures_and_black_marks_Grayscale_values">图片和黑标灰度值</string>
+    <string name="Barcode_Type">条码类型</string>
+    <string name="Barcode_width">条码宽</string>
+    <string name="Barcode_height">条码高</string>
+    <string name="QR_code_error_correction_level">二维码纠错等级</string>
+    <string name="QR_code_type">二维码类型</string>
+    <string name="QR_code_size">二维码大小</string>
+    <string name="print_Test">打印机测试</string>
+    <string name="select_dialog_normal">正常</string>
+    <string name="select_dialog_center">中心</string>
+    <string name="select_dialog_align_opposite">对面对齐</string>
+    <string name="str_initialization">停止</string>
+
+    <string name="select_dialog_text_underline">是否添加文字下划线?</string>
+    <string name="select_dialog_yes">是</string>
+    <string name="select_dialog_no">否</string>
+    <string name="select_dialog_bold">是否添加文字加粗?</string>
+
+    <string name="select_dialog_confirm">确认</string>
+    <string name="select_dialog_cancel">取消</string>
+
+    <string name="select_dialog_true">打开</string>
+    <string name="select_dialog_false">关闭</string>
 </resources>
