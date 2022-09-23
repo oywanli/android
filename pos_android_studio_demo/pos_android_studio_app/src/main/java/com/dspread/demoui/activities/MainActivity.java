@@ -1025,6 +1025,8 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     : posInfoData.get("PCI_firmwareVersion");
             String pciHardwareVersion = posInfoData.get("PCI_hardwareVersion") == null ? ""
                     : posInfoData.get("PCI_hardwareVersion");
+            String compileTime = posInfoData.get("compileTime") == null ? ""
+                    : posInfoData.get("compileTime");
             String content = "";
             content += getString(R.string.bootloader_version) + bootloaderVersion + "\n";
             content += getString(R.string.firmware_version) + firmwareVersion + "\n";
@@ -1042,6 +1044,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             content += getString(R.string.track_3_supported) + isSupportedTrack3 + "\n";
             content += "PCI FirmwareVresion:" + pciFirmwareVersion + "\n";
             content += "PCI HardwareVersion:" + pciHardwareVersion + "\n";
+            content += "compileTime:" + compileTime + "\n";
             statusEditText.setText(content);
         }
 
