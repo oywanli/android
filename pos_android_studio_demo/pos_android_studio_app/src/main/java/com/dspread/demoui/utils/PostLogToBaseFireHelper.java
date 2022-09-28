@@ -13,8 +13,8 @@ public class PostLogToBaseFireHelper {
         deviceInfo = "DeviceName:" + PhoneDeviceInfoUtil.getManufacturer() + "--DeviceModel:"
                 + PhoneDeviceInfoUtil.getModel() + "--OSVersion:"
                 + PhoneDeviceInfoUtil.getAndroidVersion();
-        childNode = deviceInfo + "--" + "AndroidID:" + PhoneDeviceInfoUtil.getDeviceID(BaseApplication.getApplicationInstance);
-
+        String childNodeStr = deviceInfo + "--" + "AndroidID:" + PhoneDeviceInfoUtil.getDeviceID(BaseApplication.getApplicationInstance);
+        childNode = childNodeStr.replace(".", "-");
     }
 
     /**
