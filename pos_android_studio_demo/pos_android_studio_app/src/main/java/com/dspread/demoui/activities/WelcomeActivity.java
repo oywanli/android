@@ -15,142 +15,151 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.dspread.demoui.R;
+import com.dspread.demoui.activities.mpprint.MPPrintActivity;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-public class WelcomeActivity extends BaseActivity implements OnClickListener{
-	private Button audio,serial_port,normal_blu,other_blu,print;
-	private Intent intent;
-	private static final int BLUETOOTH_CODE = 100;
-	private static final int LOCATION_CODE = 101;
-	private LocationManager lm;//【Location management】
+public class WelcomeActivity extends BaseActivity implements OnClickListener {
+    private Button audio, serial_port, normal_blu, other_blu, print;
+    private Intent intent;
+    private static final int BLUETOOTH_CODE = 100;
+    private static final int LOCATION_CODE = 101;
+    private LocationManager lm;//【Location management】
+    private Button mp600Print;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-		setTitle(getString(R.string.title_welcome));
-		audio=(Button) findViewById(R.id.audio);
-		serial_port=(Button) findViewById(R.id.serial_port);
-		normal_blu=(Button) findViewById(R.id.normal_bluetooth);
-		other_blu=(Button) findViewById(R.id.other_bluetooth);
-		print = (Button) findViewById(R.id.print);
-		audio.setOnClickListener(this);
-		serial_port.setOnClickListener(this);
-		normal_blu.setOnClickListener(this);
-		other_blu.setOnClickListener(this);
-		print.setOnClickListener(this);
-		bluetoothRelaPer();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        setTitle(getString(R.string.title_welcome));
+        audio = (Button) findViewById(R.id.audio);
+        serial_port = (Button) findViewById(R.id.serial_port);
+        normal_blu = (Button) findViewById(R.id.normal_bluetooth);
+        other_blu = (Button) findViewById(R.id.other_bluetooth);
+        print = (Button) findViewById(R.id.print);
+        mp600Print = findViewById(R.id.mp600_print);
 
-	@Override
-	public void onToolbarLinstener() {
+        audio.setOnClickListener(this);
+        serial_port.setOnClickListener(this);
+        normal_blu.setOnClickListener(this);
+        other_blu.setOnClickListener(this);
+        print.setOnClickListener(this);
+        mp600Print.setOnClickListener(this);
+        bluetoothRelaPer();
+    }
 
-	}
+    @Override
+    public void onToolbarLinstener() {
 
-	@Override
-	protected int getLayoutId() {
-		return R.layout.activity_welcome;
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
-		switch(v.getId()){
-			case R.id.audio://Audio
-				intent = new Intent(this,OtherActivity.class);
-				intent.putExtra("connect_type", 1);
-				startActivity(intent);
-				break;
-			case R.id.serial_port://Serial Port
-				intent = new Intent(this, OtherActivity.class);
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_welcome;
+    }
 
-				intent.putExtra("connect_type", 2);
-				startActivity(intent);
-				break;
-			case R.id.normal_bluetooth://Normal Bluetooth
-				intent = new Intent(this, MainActivity.class);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.audio://Audio
+                intent = new Intent(this, OtherActivity.class);
+                intent.putExtra("connect_type", 1);
+                startActivity(intent);
+                break;
+            case R.id.serial_port://Serial Port
+                intent = new Intent(this, OtherActivity.class);
 
-				intent.putExtra("connect_type", 3);
-				startActivity(intent);
-				break;
-			case R.id.other_bluetooth://Other Bluetooth，such as：BLE，，，
-				intent = new Intent(this,MainActivity.class);
-				intent.putExtra("connect_type", 4);
-				startActivity(intent);
-				break;
-			case R.id.print:
-				Log.d("pos","print");
-				intent = new Intent(this, PrintSettingActivity.class);
-				startActivity(intent);
-				break;
-		}
-	}
+                intent.putExtra("connect_type", 2);
+                startActivity(intent);
+                break;
+            case R.id.normal_bluetooth://Normal Bluetooth
+                intent = new Intent(this, MainActivity.class);
 
-	public void bluetoothRelaPer() {
-		BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-		if (adapter != null && !adapter.isEnabled()) {//if bluetooth is disabled, add one fix
-			Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivity(enabler);
-		}
-		lm = (LocationManager) WelcomeActivity.this.getSystemService(WelcomeActivity.this.LOCATION_SERVICE);
-		boolean ok = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		if (ok) {//Location service is on
-			if (ContextCompat.checkSelfPermission(WelcomeActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-					!= PackageManager.PERMISSION_GRANTED) {
-				Log.e("POS_SDK", "Permission Denied");
-				// Permission denied
-				// Request authorization
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-					if(ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
-						||ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
-						||ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED){
-						String[] list = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE};
-						ActivityCompat.requestPermissions(WelcomeActivity.this, list, BLUETOOTH_CODE);
+                intent.putExtra("connect_type", 3);
+                startActivity(intent);
+                break;
+            case R.id.other_bluetooth://Other Bluetooth，such as：BLE，，，
+                intent = new Intent(this, MainActivity.class);
+                intent.putExtra("connect_type", 4);
+                startActivity(intent);
+                break;
+            case R.id.print:
+                Log.d("pos", "print");
+                intent = new Intent(this, PrintSettingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.mp600_print:
+                intent = new Intent(this, MPPrintActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 
-					}
-				} else {
-					ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
-				}
+    public void bluetoothRelaPer() {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter != null && !adapter.isEnabled()) {//if bluetooth is disabled, add one fix
+            Intent enabler = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enabler);
+        }
+        lm = (LocationManager) WelcomeActivity.this.getSystemService(WelcomeActivity.this.LOCATION_SERVICE);
+        boolean ok = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (ok) {//Location service is on
+            if (ContextCompat.checkSelfPermission(WelcomeActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Log.e("POS_SDK", "Permission Denied");
+                // Permission denied
+                // Request authorization
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+                            || ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+                            || ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+                        String[] list = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE};
+                        ActivityCompat.requestPermissions(WelcomeActivity.this, list, BLUETOOTH_CODE);
+
+                    }
+                } else {
+                    ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
+                }
 //                        Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
-			} else {
-				// have permission
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-					if(ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
-							||ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
-							||ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
-						String[] list = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE};
-						ActivityCompat.requestPermissions(WelcomeActivity.this, list, BLUETOOTH_CODE);
-					}
-				}
-				Toast.makeText(WelcomeActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
-			}
-		} else {
-			Log.e("BRG", "System detects that the GPS location service is not turned on");
-			Toast.makeText(WelcomeActivity.this, "System detects that the GPS location service is not turned on", Toast.LENGTH_SHORT).show();
-			Intent intent = new Intent();
-			intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-			startActivityForResult(intent, 1315);
-		}
-	}
+            } else {
+                // have permission
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+                            || ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+                            || ContextCompat.checkSelfPermission(WelcomeActivity.this, Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+                        String[] list = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE};
+                        ActivityCompat.requestPermissions(WelcomeActivity.this, list, BLUETOOTH_CODE);
+                    }
+                }
+                Toast.makeText(WelcomeActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Log.e("BRG", "System detects that the GPS location service is not turned on");
+            Toast.makeText(WelcomeActivity.this, "System detects that the GPS location service is not turned on", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(intent, 1315);
+        }
+    }
 
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		switch (requestCode) {
-			case LOCATION_CODE: {
-				if (grantResults.length > 0
-						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					// Permission is agreed by the user
-					Toast.makeText(WelcomeActivity.this, getString(R.string.msg_allowed_location_permission), Toast.LENGTH_LONG).show();
-				} else {
-					// Permission is denied by the user
-					Toast.makeText(WelcomeActivity.this, getString(R.string.msg_not_allowed_loaction_permission), Toast.LENGTH_LONG).show();
-				}
-			}
-			break;
-		}
-	}
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case LOCATION_CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is agreed by the user
+                    Toast.makeText(WelcomeActivity.this, getString(R.string.msg_allowed_location_permission), Toast.LENGTH_LONG).show();
+                } else {
+                    // Permission is denied by the user
+                    Toast.makeText(WelcomeActivity.this, getString(R.string.msg_not_allowed_loaction_permission), Toast.LENGTH_LONG).show();
+                }
+            }
+            break;
+        }
+    }
 
 }
