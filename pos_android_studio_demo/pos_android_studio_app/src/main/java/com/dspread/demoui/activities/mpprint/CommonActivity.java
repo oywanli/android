@@ -68,28 +68,6 @@ public abstract class CommonActivity extends AppCompatActivity {
     private TextView txt_toolbar_title;
     protected QPOSService pos;
 
-    class CalThread extends Thread {
-        @Override
-        public void run() {
-            super.run();
-            Log.d(TAG, "start");
-            while (!isFinished) {
-                Log.d(TAG, "running");
-                fibonacci(30);
-                SystemClock.sleep(50);
-            }
-            Log.d(TAG, "end");
-
-        }
-    }
-
-    public static long fibonacci(long number) {
-        if ((number == 0) || (number == 1))
-            return number;
-        else
-            return fibonacci(number - 1) + fibonacci(number - 2);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,31 +133,6 @@ public abstract class CommonActivity extends AppCompatActivity {
                 }
             }
         });
-
-        etLoadThreadCount = findViewById(R.id.et_load_thread_count);
-        etLoadThreadCount.setText(mCalThreadCount + "");
-        etLoadThreadCount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(s.toString())) {
-                    mSp.edit().putInt("load_thread_count", Integer.parseInt(s.toString())).apply();
-                    ;
-                }
-            }
-        });
-        for (int i = 0; i < mCalThreadCount; i++) {
-            new CalThread().start();
-        }
 
         initUart(QPOSService.CommunicationMode.UART);//
 

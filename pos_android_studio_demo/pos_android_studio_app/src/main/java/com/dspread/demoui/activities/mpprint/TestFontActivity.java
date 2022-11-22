@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
+import com.dspread.demoui.utils.TRACE;
 
 import java.util.Hashtable;
 
@@ -132,8 +133,6 @@ public class TestFontActivity extends CommonActivity {
     @Override
     int printTest() throws RemoteException {
         pos.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize());
-        pos.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "");
-        pos.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.NORMAL);
         pos.printText(getText());
         return 0;
     }

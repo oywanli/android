@@ -99,7 +99,8 @@ public class MPPrintQRCodeActivity extends CommonActivity {
     @Override
     int printTest() throws RemoteException {
         PrinterLayout printerLayout = new PrinterLayout(MPPrintQRCodeActivity.this);
-        Bitmap qrcodeBM = QRCodeUtil.getQrcodeBM(getText(etQRCode), 300);
+        int size = Integer.parseInt(getText(etSize));
+        Bitmap qrcodeBM = QRCodeUtil.getQrcodeBM(getText(etQRCode), size);
         switch (getPosition()) {
             case 0:
                 bitMapPosition = PrintLine.LEFT;
