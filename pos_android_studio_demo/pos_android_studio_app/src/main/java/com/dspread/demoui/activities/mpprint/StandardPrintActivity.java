@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -18,8 +21,10 @@ import com.dspread.demoui.utils.TRACE;
 
 import java.util.Hashtable;
 
+import androidx.annotation.NonNull;
+
 public class StandardPrintActivity extends CommonActivity {
-    private Spinner mSpGreyLevel,mSpinnerSpAlignment;
+    private Spinner mSpGreyLevel, mSpinnerSpAlignment;
     private Spinner mSpSpeedLevel;
     private TextView message;
     private EditText etText, etFontsize;
@@ -35,7 +40,7 @@ public class StandardPrintActivity extends CommonActivity {
             int arg1 = msg.arg1;
             if (arg1 == 1) {
                 mPrintcount++;
-                if (mPrintcount < 5) {
+                if (mPrintcount < 10) {
                     if (IsPrintPause) {
                         try {
                             Thread.sleep(1000);
@@ -243,6 +248,29 @@ public class StandardPrintActivity extends CommonActivity {
     @Override
     void onPrintError(Hashtable<String, String> result) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_print, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.get_print_density) {
+            pos.getPrintDensity();
+        } else if (item.getItemId() == R.id.get_print_speed) {
+            pos.getPrintSpeed();
+        } else if (item.getItemId() == R.id.get_print_temperature) {
+            pos.getPrintTemperature();
+        } else if (item.getItemId() == R.id.get_print_voltage) {
+            pos.getPrintVoltage();
+        } else if (item.getItemId() == R.id.get_print_status) {
+            pos.getPrinterStatus();
+        }
+        return true;
     }
 
     private String getText() {
