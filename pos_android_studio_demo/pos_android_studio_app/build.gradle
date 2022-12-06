@@ -76,6 +76,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
-    implementation files('libs\\dspread_pos_sdk_4.2.6.jar')
+    //implementation files('libs\\dspread_pos_sdk_4.2.6.jar')
     implementation files('libs\\zxing.jar')
+    implementation files('libs\\dspread_pos_sdk_4.2.7.jar')
 }

@@ -10,11 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
-import android.os.SystemClock;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -135,17 +130,14 @@ public abstract class CommonActivity extends AppCompatActivity {
         });
 
         initUart(QPOSService.CommunicationMode.UART);//
-
     }
 
     private void initUart(QPOSService.CommunicationMode mode) {
         TRACE.d("open");
         //pos=null;
-
         //implement singleton mode
         pos = QPOSService.getInstance(mode);
         if (pos == null) {
-            TRACE.d("CommonActivity pos == null");
             return;
         }
         if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
