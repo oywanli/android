@@ -37,6 +37,36 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.mpprint.MPPrintBitmapActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.mpprint.MPPrintQRCodeActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.mpprint.MPPrintTextActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.mpprint.StandardPrintActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.mpprint.TestFontActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.mpprint.BatteryTestActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.mpprint.CommonActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.mpprint.MPPrintActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.mpprint.MPPrintBarcodeActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".activities.mpprint.MPPrintTicketActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
             android:name=".activities.OtherActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
