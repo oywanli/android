@@ -23,7 +23,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 12
-        versionName "4.0.5"
+        versionName "4.0.6"
 
         ndk {
             moduleName "serial_port"
@@ -76,7 +76,6 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
-    //implementation files('libs\\dspread_pos_sdk_4.2.6.jar')
     implementation files('libs\\zxing.jar')
     implementation files('libs\\dspread_pos_sdk_4.2.7.jar')
 }
