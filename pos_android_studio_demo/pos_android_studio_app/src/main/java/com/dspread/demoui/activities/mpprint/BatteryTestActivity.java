@@ -51,7 +51,7 @@ public class BatteryTestActivity extends CommonActivity {
             int arg1 = msg.arg1;
             if (arg1 == 1) {
                 mPrintcount++;
-                if (mPrintcount < 5) {
+                if (mPrintcount < 10) {
                     if (IsPrintPause) {
                         try {
                             Thread.sleep(1000);
@@ -143,6 +143,8 @@ public class BatteryTestActivity extends CommonActivity {
                     isContinuousPrint = true;
                     mPrintcount = 0;
                     pos.printText(getText());
+                } else {
+                    isContinuousPrint = false;
                 }
                 if (!isChecked) {
                     cbNeedInterval.setChecked(false);
@@ -207,57 +209,29 @@ public class BatteryTestActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintFinished(Hashtable<String, String> result) {
-        TRACE.d("sssssss" + result.toString());
-        String code = (String) result.get("code");
-        if (code.equals("true")) {
-            String type = result.get("type");
-            if (type.equals("03")) {
-                String printDensityFlag = result.get("printDensityFlag") == null ? "" : result.get("printDensityFlag"); //
-                String printDensityValue = result.get("printDensityValue") == null ? "" : result.get("printDensityValue");
-                String printSpeedFlag = result.get("printSpeedFlag") == null ? "" : result.get("printSpeedFlag");
-                String printSpeedValue = result.get("printSpeedValue") == null ? "" : result.get("printSpeedValue");
-                String printTempFlag = result.get("printTempFlag") == null ? "" : result.get("printTempFlag");
-                String printTempValue = result.get("printTempValue") == null ? "" : result.get("printTempValue");
-                String printVoltageFlg = result.get("printVoltageFlg") == null ? "" : result.get("printVoltageFlg");
-                String printVoltageValue = result.get("printVoltageValue") == null ? "" : result.get("printVoltageValue");
-                String printStateFlg = result.get("printStateFlg") == null ? "" : result.get("printStateFlg");
-                String printStateValue = result.get("printStateValue") == null ? "" : result.get("printStateValue");
-                String content = "";
-                content += "printDensityFlag:" + printDensityFlag + "\n";
-                content += "printDensityValue:" + printDensityValue + "\n";
-                content += "printSpeedFlag:" + printSpeedFlag + "\n";
-                content += "printSpeedValue:" + printSpeedValue + "\n";
-                content += "printTempFlag:" + printTempFlag + "\n";
-                content += "printTempValue:" + printTempValue + "\n";
-                content += "printVoltageFlg:" + printVoltageFlg + "\n";
-                content += "printVoltageValue:" + printVoltageValue + "\n";
-                content += "printStateFlg:" + printStateFlg + "\n";
-                content += "printStateValue:" + printStateValue + "\n";
-                // message.setText(code + "==" + content);
-                setMessage(content);
-            } else if (type.equals("01")) {
-                String printStateValue = result.get("printStateValue") == null ? "" : result.get("printStateValue");
-                // message.setText(code + ";" + printStateValue);
-                if (isContinuousPrint) {
-                    Message obtain = Message.obtain();
-                    obtain.arg1 = 1;
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mHandler.sendMessage(obtain);
-                        }
-                    }, getDelayPrintTime());
-                }
-                setMessage(code + ";" + printStateValue);
-            } else {
-                setMessage(code);
+    void onPrintFinished(boolean isSuccess, String status) {
+        if (status != null) {
+            TRACE.d("sssssss" + status);
+        }
+        setMessage(isSuccess + ";" + status);
+        if (isSuccess) {
+            // message.setText(code + ";" + printStateValue);
+            if (isContinuousPrint) {
+                Message obtain = Message.obtain();
+                obtain.arg1 = 1;
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mHandler.sendMessage(obtain);
+                    }
+                }, getDelayPrintTime());
             }
         }
+
     }
 
     @Override
-    void onPrintError(Hashtable<String, String> result) {
+    void onPrintError(boolean isSuccess, String status) {
 
     }
 
@@ -427,28 +401,6 @@ public class BatteryTestActivity extends CommonActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_print, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.get_print_density) {
-            pos.getPrintDensity();
-        } else if (item.getItemId() == R.id.get_print_speed) {
-            pos.getPrintSpeed();
-        } else if (item.getItemId() == R.id.get_print_temperature) {
-            pos.getPrintTemperature();
-        } else if (item.getItemId() == R.id.get_print_voltage) {
-            pos.getPrintVoltage();
-        } else if (item.getItemId() == R.id.get_print_status) {
-            pos.getPrinterStatus();
-        }
-        return true;
-    }
 
     private String getText() {
         if (etText.getText() != null) {

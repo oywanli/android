@@ -189,9 +189,24 @@ public abstract class CommonActivity extends AppCompatActivity {
     void onTestPrintResume(int reason) {
     }
 
-    abstract void onPrintFinished(Hashtable<String, String> result);
+    void onQposPrintDensityResult(boolean isSuccess, String value) {
+    }
 
-    abstract void onPrintError(Hashtable<String, String> result);
+    void onQposPrintSpeedResult(boolean isSuccess, String value) {
+    }
+
+    void onQposPrintVoltageResult(boolean isSuccess, String value) {
+    }
+
+    void onQposPrintTemperatureResult(boolean isSuccess, String value) {
+    }
+
+    void onQposPrintStateResult(boolean isSuccess, String value) {
+    }
+
+    abstract void onPrintFinished(boolean isSuccess, String status);
+
+    abstract void onPrintError(boolean isSuccess, String status);
 
     public void enableButton(Button button, boolean enable) {
         button.post(new Runnable() {
@@ -346,15 +361,45 @@ public abstract class CommonActivity extends AppCompatActivity {
 
     class MyPosListener extends CQPOSService {
         @Override
-        public void onQposPrintOperateResult(Hashtable<String, String> result) {
-            super.onQposPrintOperateResult(result);
+        public void onQposReturnPrintResult(boolean isSuccess, String status) {
+            super.onQposReturnPrintResult(isSuccess, status);
             enableButton(btnPrint, true);
-            String code = (String) result.get("code");
-            if (code.equals("true")) {
-                onPrintFinished(result);
+            if (isSuccess) {
+                onPrintFinished(isSuccess, status);
             } else {
-                onPrintError(result);
+                onPrintError(isSuccess, status);
             }
+        }
+
+        @Override
+        public void onQposReturnPrintDensityResult(boolean isSuccess, String value) {
+            super.onQposReturnPrintDensityResult(isSuccess, value);
+            onQposPrintDensityResult(isSuccess, value);
+        }
+
+        @Override
+        public void onQposReturnPrintSpeedResult(boolean isSuccess, String value) {
+            super.onQposReturnPrintSpeedResult(isSuccess, value);
+            onQposPrintSpeedResult(isSuccess, value);
+        }
+
+        @Override
+        public void onQposReturnPrintVoltageResult(boolean isSuccess, String value) {
+            super.onQposReturnPrintVoltageResult(isSuccess, value);
+            onQposPrintVoltageResult(isSuccess, value);
+        }
+
+        @Override
+        public void onQposReturnPrintTemperatureResult(boolean isSuccess, String value) {
+            super.onQposReturnPrintTemperatureResult(isSuccess, value);
+            onQposPrintTemperatureResult(isSuccess, value);
+        }
+
+
+        @Override
+        public void onQposReturnPrintStateResult(boolean isSuccess, String value) {
+            super.onQposReturnPrintStateResult(isSuccess, value);
+            onQposPrintStateResult(isSuccess, value);
         }
     }
 }

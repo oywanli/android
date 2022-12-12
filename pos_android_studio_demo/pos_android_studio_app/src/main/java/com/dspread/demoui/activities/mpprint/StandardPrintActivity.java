@@ -19,8 +19,6 @@ import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.TRACE;
 
-import java.util.Hashtable;
-
 import androidx.annotation.NonNull;
 
 public class StandardPrintActivity extends CommonActivity {
@@ -94,6 +92,8 @@ public class StandardPrintActivity extends CommonActivity {
                     isContinuousPrint = true;
                     mPrintcount = 0;
                     pos.printText(getText());
+                } else {
+                    isContinuousPrint = false;
                 }
                 if (!isChecked) {
                     cbNeedInterval.setChecked(false);
@@ -117,6 +117,7 @@ public class StandardPrintActivity extends CommonActivity {
                 message.setText("");
                 String item = (String) parent.getAdapter().getItem(position);
                 pos.setPrintDensity(Integer.parseInt(item));
+
             }
 
             @Override
@@ -195,60 +196,65 @@ public class StandardPrintActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintFinished(Hashtable<String, String> result) {
-        TRACE.d("sssssss" + result.toString());
-        String code = (String) result.get("code");
-        if (code.equals("true")) {
-            String type = result.get("type");
-            if (type.equals("03")) {
-                String printDensityFlag = result.get("printDensityFlag") == null ? "" : result.get("printDensityFlag"); //
-                String printDensityValue = result.get("printDensityValue") == null ? "" : result.get("printDensityValue");
-                String printSpeedFlag = result.get("printSpeedFlag") == null ? "" : result.get("printSpeedFlag");
-                String printSpeedValue = result.get("printSpeedValue") == null ? "" : result.get("printSpeedValue");
-                String printTempFlag = result.get("printTempFlag") == null ? "" : result.get("printTempFlag");
-                String printTempValue = result.get("printTempValue") == null ? "" : result.get("printTempValue");
-                String printVoltageFlg = result.get("printVoltageFlg") == null ? "" : result.get("printVoltageFlg");
-                String printVoltageValue = result.get("printVoltageValue") == null ? "" : result.get("printVoltageValue");
-                String printStateFlg = result.get("printStateFlg") == null ? "" : result.get("printStateFlg");
-                String printStateValue = result.get("printStateValue") == null ? "" : result.get("printStateValue");
-                String content = "";
-                content += "printDensityFlag:" + printDensityFlag + "\n";
-                content += "printDensityValue:" + printDensityValue + "\n";
-                content += "printSpeedFlag:" + printSpeedFlag + "\n";
-                content += "printSpeedValue:" + printSpeedValue + "\n";
-                content += "printTempFlag:" + printTempFlag + "\n";
-                content += "printTempValue:" + printTempValue + "\n";
-                content += "printVoltageFlg:" + printVoltageFlg + "\n";
-                content += "printVoltageValue:" + printVoltageValue + "\n";
-                content += "printStateFlg:" + printStateFlg + "\n";
-                content += "printStateValue:" + printStateValue + "\n";
-                message.setText(code + "==" + content);
-            } else if (type.equals("01")) {
-                String printStateValue = result.get("printStateValue") == null ? "" : result.get("printStateValue");
-                message.setText(code + ";" + printStateValue);
-                TRACE.d("SSSSS:isContinuousPrint" + isContinuousPrint);
-
-                if (isContinuousPrint) {
-                    Message obtain = Message.obtain();
-                    obtain.arg1 = 1;
-                    mHandler.sendMessage(obtain);
-                }
-                if (iSAutoPaperOut) {
-                    Message obtain = Message.obtain();
-                    obtain.arg1 = 2;
-                    mHandler.sendMessage(obtain);
-                }
-            } else {
-                message.setText(code);
+    void onPrintFinished(boolean isSuccess, String status) {
+        message.setText(isSuccess + ";" + status);
+        if (isSuccess) {
+            TRACE.d("SSSSS:isContinuousPrint" + isContinuousPrint);
+            if (isContinuousPrint) {
+                Message obtain = Message.obtain();
+                obtain.arg1 = 1;
+                mHandler.sendMessage(obtain);
+            }
+            if (iSAutoPaperOut) {
+                Message obtain = Message.obtain();
+                obtain.arg1 = 2;
+                mHandler.sendMessage(obtain);
             }
         }
         //message.setText(result.toString());
     }
 
     @Override
-    void onPrintError(Hashtable<String, String> result) {
+    void onPrintError(boolean isSuccess, String status) {
 
     }
+
+    @Override
+    void onQposPrintStateResult(boolean isSuccess, String value) {
+        super.onQposPrintStateResult(isSuccess, value);
+        TRACE.d("onQposPrintStateResult" + isSuccess + "---" + value);
+        // message.setText(isSuccess + ";" + value);
+    }
+
+    @Override
+    void onQposPrintDensityResult(boolean isSuccess, String value) {
+        super.onQposPrintDensityResult(isSuccess, value);
+        TRACE.d("onQposPrintDensityResult" + isSuccess + "---" + value);
+        message.setText(isSuccess + ";" + value);
+    }
+
+    @Override
+    void onQposPrintSpeedResult(boolean isSuccess, String value) {
+        super.onQposPrintSpeedResult(isSuccess, value);
+        TRACE.d("onQposPrintSpeedResult" + isSuccess + "---" + value);
+        //message.setText(isSuccess + ";" + value);
+
+    }
+
+    @Override
+    void onQposPrintTemperatureResult(boolean isSuccess, String value) {
+        super.onQposPrintTemperatureResult(isSuccess, value);
+        TRACE.d("onQposPrintTemperatureResult" + isSuccess + "---" + value);
+        //message.setText(isSuccess + ";" + value);
+    }
+
+    @Override
+    void onQposPrintVoltageResult(boolean isSuccess, String value) {
+        super.onQposPrintVoltageResult(isSuccess, value);
+        TRACE.d("onQposPrintVoltageResult" + isSuccess + "---" + value);
+        //message.setText(isSuccess + ";" + value);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
