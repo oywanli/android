@@ -68,7 +68,7 @@ dependencies {
 //    implementation files('libs/dspread_android_pos_sdk_3.1.0.jar')
     //implementation files('libs\\zxing.jar')
     implementation 'org.jetbrains:annotations-java5:15.0'
-    implementation files('libs\\dspread_android_printer_sdk_1.1.jar')
+//    implementation files('libs\\dspread_android_printer_sdk_1.1.jar')
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
 
     implementation 'com.google.firebase:firebase-database'
@@ -76,6 +76,6 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
-    implementation files('libs\\zxing.jar')
-    implementation files('libs\\dspread_pos_sdk_4.2.8.jar')
+//    implementation files('libs\\zxing.jar')
+//    implementation files('libs\\dspread_pos_sdk_4.2.8.jar')
 }
