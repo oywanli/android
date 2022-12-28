@@ -4,24 +4,17 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.action.printerservice.PrintStyle;
-import com.action.printerservice.barcode.Barcode1D;
 import com.dspread.demoui.R;
-import com.dspread.demoui.activities.OtherActivity;
 import com.dspread.demoui.utils.QRCodeUtil;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.view.BitmapPrintLine;
 import com.dspread.demoui.view.PrintLine;
 import com.dspread.demoui.view.PrinterLayout;
 import com.dspread.demoui.view.TextPrintLine;
-import com.dspread.xpos.CQPOSService;
-
-import java.util.Hashtable;
 
 public class MPPrintBarcodeActivity extends CommonActivity {
     private EditText etBarcode, etHeiht, etWidth;
@@ -129,12 +122,15 @@ public class MPPrintBarcodeActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintFinished(Hashtable<String, String> result) {
-        TRACE.d("ssss" + result.toString());
+    void onPrintFinished(boolean isSuccess, String status) {
+        if (status != null) {
+            TRACE.d("ssss" + status);
+        }
+
     }
 
     @Override
-    void onPrintError(Hashtable<String, String> result) {
+    void onPrintError(boolean isSuccess, String status) {
 
     }
 

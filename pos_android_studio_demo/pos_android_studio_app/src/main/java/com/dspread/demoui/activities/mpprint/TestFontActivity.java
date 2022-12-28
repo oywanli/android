@@ -22,8 +22,6 @@ import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.TRACE;
 
-import java.util.Hashtable;
-
 public class TestFontActivity extends CommonActivity {
 
     private static final int PAPER_WIDTH = 384;
@@ -138,12 +136,15 @@ public class TestFontActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintFinished(Hashtable<String, String> result) {
+    void onPrintFinished(boolean isSuccess, String status) {
+        if (status != null) {
+            TRACE.d("ssss" + status);
+        }
 
     }
 
     @Override
-    void onPrintError(Hashtable<String, String> result) {
+    void onPrintError(boolean isSuccess, String status) {
 
     }
 

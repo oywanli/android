@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.QRCodeUtil;
+import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.view.BitmapPrintLine;
 import com.dspread.demoui.view.MidTextPrintLine;
 import com.dspread.demoui.view.PrintLine;
@@ -67,12 +68,15 @@ public class MPPrintTicketActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintFinished(Hashtable<String, String> result) {
+    void onPrintFinished(boolean isSuccess, String status) {
+        if (status != null) {
+            TRACE.d("ssss" + status);
+        }
 
     }
 
     @Override
-    void onPrintError(Hashtable<String, String> result) {
+    void onPrintError(boolean isSuccess, String status) {
 
     }
 

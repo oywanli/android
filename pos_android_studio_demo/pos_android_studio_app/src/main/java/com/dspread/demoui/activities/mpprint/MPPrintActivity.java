@@ -3,7 +3,6 @@ package com.dspread.demoui.activities.mpprint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.activities.BaseActivity;

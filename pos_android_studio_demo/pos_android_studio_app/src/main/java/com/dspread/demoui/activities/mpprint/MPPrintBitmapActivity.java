@@ -6,16 +6,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.TRACE;
-import com.dspread.xpos.CQPOSService;
-
-import java.util.Hashtable;
 
 import androidx.annotation.RequiresApi;
 
@@ -71,14 +67,16 @@ public class MPPrintBitmapActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintFinished(Hashtable<String, String> result) {
-        TRACE.d("ssss" + result.toString());
+    void onPrintFinished(boolean isSuccess, String status) {
+        if (status != null) {
+            TRACE.d("ssss" + status);
+        }
+
     }
 
     @Override
-    void onPrintError(Hashtable<String, String> result) {
+    void onPrintError(boolean isSuccess, String status) {
 
     }
-
 
 }

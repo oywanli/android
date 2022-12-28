@@ -6,9 +6,9 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.TRACE;
+import com.dspread.xpos.PrintStyle;
 
 import java.util.Hashtable;
 
@@ -36,9 +36,9 @@ public class MPPrintTextActivity extends CommonActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getAdapter().getItem(position);
                 if (item.equals("Left")) {
-                    pos.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.NORMAL);
+                    pos.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.LEFT);
                 } else if (item.equals("Right")) {
-                    pos.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.ALIGN_OPPOSITE);
+                    pos.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.RIGHT);
                 } else if (item.equals("Center")) {
                     pos.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.CENTER);
                 }
@@ -85,13 +85,15 @@ public class MPPrintTextActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintFinished(Hashtable<String, String> result) {
-        TRACE.d("ssss:+" + result.toString());
+    void onPrintFinished(boolean isSuccess, String status) {
+        if (status != null) {
+            TRACE.d("ssss" + status);
+        }
 
     }
 
     @Override
-    void onPrintError(Hashtable<String, String> result) {
+    void onPrintError(boolean isSuccess, String status) {
 
     }
 
