@@ -485,8 +485,9 @@ public class OtherActivity extends BaseActivity{
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
                     keyIndex, 5);
         } else if(item.getItemId() == R.id.updateFirmWare){
-            isUpdateFw = true;
-            pos.getUpdateCheckValue();
+//            isUpdateFw = true;
+//            pos.getUpdateCheckValue();
+            updateFirmware();
         } else if (item.getItemId() == R.id.cusDisplay) {
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
@@ -1600,7 +1601,7 @@ public class OtherActivity extends BaseActivity{
         @Override
         public void onUpdatePosFirmwareResult(QPOSService.UpdateInformationResult arg0) {
             TRACE.d("onUpdatePosFirmwareResult(UpdateInformationResult arg0):" + arg0.toString());
-            isUpdateFw = false;
+//            isUpdateFw = false;
             if (arg0 != QPOSService.UpdateInformationResult.UPDATE_SUCCESS) {
                 updateThread.concelSelf();
             } else {
@@ -1885,9 +1886,9 @@ public class OtherActivity extends BaseActivity{
             // TODO Auto-generated method stub
             TRACE.d("onRequestUpdateKey(String arg0):" + arg0);
             mhipStatus.setText("update checkvalue : " + arg0);
-            if(isUpdateFw){
-                updateFirmware();
-            }
+//            if(isUpdateFw){
+//                updateFirmware();
+//            }
 
         }
 
@@ -2595,7 +2596,7 @@ public class OtherActivity extends BaseActivity{
             int a = pos.updatePosFirmware(data, blueTootchAddress);
             //D20 doesn't need to keep charging
             if (a == -1) {
-                isUpdateFw = false;
+//                isUpdateFw = false;
                 Toast.makeText(OtherActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
                 return;
             }
