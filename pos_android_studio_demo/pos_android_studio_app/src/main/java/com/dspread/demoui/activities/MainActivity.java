@@ -686,8 +686,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
                     keyIndex, 5);
         } else if(item.getItemId() == R.id.updateFirmWare) {
-            isUpdateFw = true;
-            pos.getUpdateCheckValue();
+//            isUpdateFw = true;
+//            pos.getUpdateCheckValue();
+            updateFirmware();
         } else if (item.getItemId() == R.id.cusDisplay) {
             deviceShowDisplay("test info");
         } else if (item.getItemId() == R.id.closeDisplay) {
@@ -1747,7 +1748,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         @Override
         public void onUpdatePosFirmwareResult(UpdateInformationResult arg0) {
             TRACE.d("onUpdatePosFirmwareResult(UpdateInformationResult arg0):" + arg0.toString());
-            isUpdateFw = false;
+//            isUpdateFw = false;
             if (arg0 != UpdateInformationResult.UPDATE_SUCCESS) {
                 updateThread.concelSelf();
             } else {
@@ -2012,9 +2013,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         public void onRequestUpdateKey(String arg0) {
             TRACE.d("onRequestUpdateKey(String arg0):" + arg0);
             mhipStatus.setText("update checkvalue : " + arg0);
-            if(isUpdateFw){
-                updateFirmware();
-            }
+//            if(isUpdateFw){
+//                updateFirmware();
+//            }
         }
 
         @Override
@@ -2673,8 +2674,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
 //                pos.setKeyValue(data);
 //                pos.transferMifareData(data,20);
             } else if (v == updateFwBtn) {//update firmware
-                isUpdateFw = true;
-                pos.getUpdateCheckValue();
+//                isUpdateFw = true;
+//                pos.getUpdateCheckValue();
+                updateFirmware();
             }
         }
     }
@@ -2807,7 +2809,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             }
             int a = pos.updatePosFirmware(data, blueTootchAddress);
             if (a == -1) {
-                isUpdateFw = false;
+//                isUpdateFw = false;
                 Toast.makeText(MainActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
                 return;
             }
