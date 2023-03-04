@@ -2585,12 +2585,14 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 }
                 animScan.start();
                 imvAnimScan.setVisibility(View.VISIBLE);
+                refreshAdapter();
                 if (m_Adapter != null) {
                     TRACE.d("+++++=" + m_Adapter);
                     m_Adapter.notifyDataSetChanged();
-                }else{
-                    refreshAdapter();
                 }
+//                else{
+//                    refreshAdapter();
+//                }
             } else if (v == btnDisconnect) {
                 close();
             } else if (v == btnQuickEMV) {
