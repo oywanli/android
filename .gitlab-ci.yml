@@ -55,7 +55,7 @@ assembleRelease:
     - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk
     
 saveCommit:
-  stage: build
+  stage: release
   script:
   - echo "{$CI_COMMIT_MESSAGE}" > ./pos_android_studio_demo/pos_android_studio_app/build/outputs/message.json
 
