@@ -56,7 +56,7 @@ assembleRelease:
 
 
  # - echo "{$CI_COMMIT_MESSAGE}" > ./build/outputs/message.json 
-  - echo "CI_COMMIT_MESSAGE" > pos_android_studio_demo/pos_android_studio_app/build/outputs/message.json 
+  - echo "CI_COMMIT_MESSAGE" > pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/message.json 
   
   artifacts:
     paths:
