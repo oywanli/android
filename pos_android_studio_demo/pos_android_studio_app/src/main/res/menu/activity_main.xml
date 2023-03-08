@@ -215,6 +215,11 @@
                 android:id="@+id/about"
                 android:orderInCategory="100"
                 android:title="@string/about" />
+
+            <item
+                android:id="@+id/app_update"
+                android:orderInCategory="100"
+                android:title="apk update" />
         </menu>
     </item>
 

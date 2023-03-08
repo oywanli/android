@@ -3,7 +3,7 @@
     <color name="app_background_color">#FFF5F4F3</color>
 
     <color name="transparent">#00FFFFFF</color>
-
+    <color name="update_theme_color">#FFFFAC5D</color>
     <!-- added by Luna -->
     <!-- Green -->
     <color name="eb_col_35">#b2eac1</color>

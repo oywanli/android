@@ -1,1 +1,2 @@
 include ':pos_android_studio_app'
+include ':Android_PrintSdk'

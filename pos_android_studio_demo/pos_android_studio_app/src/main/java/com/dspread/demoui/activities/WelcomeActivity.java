@@ -2,8 +2,10 @@ package com.dspread.demoui.activities;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,10 +14,29 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.dspread.demoui.R;
-import com.dspread.demoui.activities.mpprint.MPPrintActivity;
+import com.dspread.demoui.activities.printer.PrintSettingActivity;
+import com.dspread.demoui.beans.VersionEnty;
+import com.dspread.demoui.http.XHttpUpdateHttpService;
+import com.dspread.demoui.utils.TRACE;
+import com.dspread.demoui.utils.UpdateAppHelper;
+import com.dspread.demoui.widget.CustomDialog;
+import com.google.gson.Gson;
+import com.xuexiang.xupdate.XUpdate;
+import com.xuexiang.xupdate.proxy.impl.DefaultUpdateChecker;
+import com.xuexiang.xutil.app.PathUtils;
+import com.xuexiang.xutil.display.CProgressDialogUtils;
+import com.xuexiang.xutil.resource.ResUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -28,6 +49,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
     private static final int LOCATION_CODE = 101;
     private LocationManager lm;//【Location management】
     private Button mp600Print;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +60,12 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
         serial_port = (Button) findViewById(R.id.serial_port);
         normal_blu = (Button) findViewById(R.id.normal_bluetooth);
         other_blu = (Button) findViewById(R.id.other_bluetooth);
+        mProgressBar = findViewById(R.id.pb_loading);
         print = (Button) findViewById(R.id.print);
         mp600Print = findViewById(R.id.mp600_print);
-
+        if (Build.MODEL.equals("D20")) {
+            print.setVisibility(View.GONE);
+        }
         audio.setOnClickListener(this);
         serial_port.setOnClickListener(this);
         normal_blu.setOnClickListener(this);
@@ -48,11 +73,40 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
         print.setOnClickListener(this);
         mp600Print.setOnClickListener(this);
         bluetoothRelaPer();
+        try {
+            checkNewVersion();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    private void checkNewVersion() throws IOException {
+        mProgressBar.setVisibility(View.VISIBLE);
+        String txtPath = PathUtils.getAppExtCachePath() + "/unknown_version/update_forced.json";
+        TRACE.d("txtPath:" + txtPath);
+        String s = readerMethod(new File(txtPath));
+        TRACE.d("Json:" + s);
+        Gson gson = new Gson();
+        VersionEnty versionEnty = gson.fromJson(s, VersionEnty.class);
+        int versionCode = versionEnty.getVersionCode();
+        String versionName = versionEnty.getVersionName();
+        String modifyContent = versionEnty.getModifyContent();
+        int packageVersionCode = UpdateAppHelper.getPackageVersionCode(WelcomeActivity.this, "com.dspread.demoui");
+        if (packageVersionCode < versionCode) {
+            // tip upgrade
+            dialog(versionName, modifyContent);
+            mProgressBar.setVisibility(View.INVISIBLE);
+        } else {
+            mProgressBar.setVisibility(View.INVISIBLE);
+            Toast.makeText(this, "No new version found", Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
+
 
     @Override
     public void onToolbarLinstener() {
-
     }
 
     @Override
@@ -90,8 +144,8 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                 intent = new Intent(this, PrintSettingActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.mp600_print:
-                intent = new Intent(this, MPPrintActivity.class);
+            case R.id.mp600_print: //PrintSerialActivity
+                intent = new Intent(this, PrintSettingActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -161,5 +215,78 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
             break;
         }
     }
+
+
+    private void dialog(String versionName, String modifyContent) {
+        // final String modifyContent1 = "update name#123#fix bug#update name#123#fix bug";
+        //final String content = modifyContent.replaceAll("#", "\n");
+        CustomDialog.Builder builder = new CustomDialog.Builder(WelcomeActivity.this);
+        builder.setTitle("Found New Version");
+        builder.setMessage(
+                "upgrade version：" + versionName + "？" + "\n" +
+                        "\n"
+                        + modifyContent
+        );
+        builder.setPositiveButton("", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Upgrade",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        String downloadUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
+                        UpdateAppHelper.useApkDownLoadFunction(WelcomeActivity.this, downloadUrl);
+                    }
+                });
+        builder.setCloseButton(new CustomDialog.OnCloseClickListener() {
+            @Override
+            public void setCloseOnClick() {
+
+                if (customDialog != null) {
+                    customDialog.dismiss();
+                }
+            }
+        });
+
+        customDialog = builder.create(R.layout.dialog_update_layout);
+        customDialog.setCanceledOnTouchOutside(false);
+        customDialog.show();
+    }
+
+    private CustomDialog customDialog;
+
+    private String byteToMB(long size) {
+        long kb = 1024;
+        long mb = kb * 1024;
+        long gb = mb * 1024;
+        if (size >= gb) {
+            return String.format("%.1f GB", (float) size / gb);
+        } else if (size >= mb) {
+            float f = (float) size / mb;
+            return String.format(f > 100 ? "%.0f MB" : "%.1f MB", f);
+        } else if (size > kb) {
+            float f = (float) size / kb;
+            return String.format(f > 100 ? "%.0f KB" : "%.1f KB", f);
+        } else {
+            return String.format("%d B", size);
+        }
+    }
+
+
+    private static String readerMethod(File file) throws IOException {
+        FileReader fileReader = new FileReader(file);
+        Reader reader = new InputStreamReader(new FileInputStream(file), "Utf-8");
+        int ch = 0;
+        StringBuffer sb = new StringBuffer();
+        while ((ch = reader.read()) != -1) {
+            sb.append((char) ch);
+        }
+        fileReader.close();
+        reader.close();
+        return sb.toString();
+    }
+
 
 }
