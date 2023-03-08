@@ -57,6 +57,8 @@ assembleRelease:
 savaCommit:
   stage: release
   script:
+  - cd  pos_android_studio_demo/pos_android_studio_app/build/outputs
+  - ls
   - echo "{$CI_COMMIT_MESSAGE}" > message.json  
 
     
