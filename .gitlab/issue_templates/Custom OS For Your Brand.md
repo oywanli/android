@@ -33,3 +33,6 @@
 
 ## Launcher App
 ##### (If you want to set your app as launcher app, please share me your app)
+
+## App Install Signature Restrictions
+##### (If you want to restrict customers from installing other apps to keep the device safe, please share me your app，we will get signature from your app and inject into OS)
