@@ -49,18 +49,11 @@ assembleRelease:
     -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
     -Pandroid.injected.signing.key.alias=$KEY_ALIAS
     -Pandroid.injected.signing.key.password=$KEY_PASSWORD
-    
+  - echo "{$CI_COMMIT_MESSAGE}" > ./pos_android_studio_demo/pos_android_studio_app/build/outputs/message.json  
   artifacts:
     paths:
-    - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk
+    - ./pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/*
     
-saveCommit:
-  stage: release
-  script:
-  - echo "{$CI_COMMIT_MESSAGE}" > ./pos_android_studio_demo/pos_android_studio_app/build/outputs/message.json
-  artifacts:
-    paths:
-    - ./pos_android_studio_demo/pos_android_studio_app/build/outputs/*
     
 sast:
   stage: test
