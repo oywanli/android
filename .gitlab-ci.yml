@@ -58,7 +58,10 @@ saveCommit:
   stage: release
   script:
   - echo "{$CI_COMMIT_MESSAGE}" > ./pos_android_studio_demo/pos_android_studio_app/build/outputs/message.json
-
+  artifacts:
+    paths:
+    - ./pos_android_studio_demo/pos_android_studio_app/build/outputs/*
+    
 sast:
   stage: test
   script: 
