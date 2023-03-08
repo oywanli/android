@@ -50,9 +50,16 @@ assembleRelease:
     -Pandroid.injected.signing.key.alias=$KEY_ALIAS
     -Pandroid.injected.signing.key.password=$KEY_PASSWORD
 
-   # -cd pos_android_studio_demo/pos_android_studio_app/build/outputs
+    -cd pos_android_studio_demo/pos_android_studio_app
+
     
-   # -ls
+    
+    -ls
+
+    -cd build/outputs
+    
+    -ls
+   
 
 
  # - echo "{$CI_COMMIT_MESSAGE}" > ./build/outputs/message.json 
