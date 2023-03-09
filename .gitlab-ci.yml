@@ -50,18 +50,34 @@ assembleRelease:
     -Pandroid.injected.signing.key.alias=$KEY_ALIAS
     -Pandroid.injected.signing.key.password=$KEY_PASSWORD
 
-    -cd pos_android_studio_demo/pos_android_studio_app
-    -ls
-    -cd build/outputs
-    -ls
-   
- # - echo "{$CI_COMMIT_MESSAGE}" > ./build/outputs/message.json 
-  - echo "CI_COMMIT_MESSAGE" > pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/message.json 
+  - export VERSION=$(grep -E "versionName" pos_android_studio_app/build.gradle | cut -d "\"" -f2)
+  - export VERSIONCODE=$(grep -E "versionCode" pos_android_studio_app/build.gradle | cut -d "\"" -f2)
+
+  #- echo $VERSION
   
-  
+  - ls 
+  - cd pos_android_studio_app
+  - ls
+  - cd build
+  - ls
+  - cd outputs
+  - ls
+  - cd apk
+  - ls
+  - cd release
+  - ls 
+  #- echo "{$CI_COMMIT_MESSAGE}" > commit.txt
+  #- ls
+  #- echo "{$CI_COMMIT_MESSAGE}" > pos_android_studio_app/build/outputs/apk/release/commit.txt 
+  #- ls
+  - echo "{VersionName:$VERSION,VersionCode:$VERSIONCODE,ModifyContent:$CI_COMMIT_MESSAGE}" > commit.txt
+
   artifacts:
     paths:
-    - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk
+    - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/*
+    #- pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/commit.txt 
+    #pos_android_studio_app-release.apk
+    
 
     
 sast:
