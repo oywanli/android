@@ -4,11 +4,8 @@ public class VersionEnty {
 
     private int VersionCode;
 
-    private String VersionName;
-    private int Code;
-    private String Msg;
-    private int UpdateStatus;
-    private String UploadTime;
+    private Object VersionName;
+
 
     public int getVersionCode() {
         return VersionCode;
@@ -18,45 +15,14 @@ public class VersionEnty {
         VersionCode = versionCode;
     }
 
-    public String getVersionName() {
+    public Object getVersionName() {
         return VersionName;
     }
 
-    public void setVersionName(String versionName) {
+    public void setVersionName(Object versionName) {
         VersionName = versionName;
     }
 
-    public int getCode() {
-        return Code;
-    }
-
-    public void setCode(int code) {
-        Code = code;
-    }
-
-    public String getMsg() {
-        return Msg;
-    }
-
-    public void setMsg(String msg) {
-        Msg = msg;
-    }
-
-    public int getUpdateStatus() {
-        return UpdateStatus;
-    }
-
-    public void setUpdateStatus(int updateStatus) {
-        UpdateStatus = updateStatus;
-    }
-
-    public String getUploadTime() {
-        return UploadTime;
-    }
-
-    public void setUploadTime(String uploadTime) {
-        UploadTime = uploadTime;
-    }
 
     public String getModifyContent() {
         return ModifyContent;
@@ -74,6 +40,10 @@ public class VersionEnty {
         DownloadUrl = downloadUrl;
     }
 
+
+    private String ModifyContent;
+    private String DownloadUrl;
+
     public int getApkSize() {
         return ApkSize;
     }
@@ -82,17 +52,25 @@ public class VersionEnty {
         ApkSize = apkSize;
     }
 
-    public String getApkMd5() {
-        return ApkMd5;
-    }
-
-    public void setApkMd5(String apkMd5) {
-        ApkMd5 = apkMd5;
-    }
-
-    private String ModifyContent;
-    private String DownloadUrl;
     private int ApkSize;
-    private String ApkMd5;
 
+    private int Code;
+
+    public int getCode() {
+        return Code;
+    }
+
+    public void setCode(int code) {
+        Code = code;
+    }
+
+    public int getUpdateStatus() {
+        return UpdateStatus;
+    }
+
+    public void setUpdateStatus(int updateStatus) {
+        UpdateStatus = updateStatus;
+    }
+
+    private int UpdateStatus;
 }

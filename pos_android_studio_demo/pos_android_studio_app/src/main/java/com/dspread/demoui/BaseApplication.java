@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.dspread.demoui.http.OKHttpUpdateHttpService;
+import com.lzy.okgo.OkGo;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.XHttpSDK;
 import com.xuexiang.xupdate.XUpdate;
@@ -28,6 +29,7 @@ public class BaseApplication extends Application {
         super.attachBaseContext(base);
         //  Default init
         XCrash.init(this);
+        OkGo.getInstance().init(this);
         initXHttp();
 
         initOKHttpUtils();
@@ -44,6 +46,7 @@ public class BaseApplication extends Application {
                 .build();
         OkHttpUtils.initClient(okHttpClient);
     }
+
     private void initXHttp() {
         //初始化网络请求框架，必须首先执行
         XHttpSDK.init(this);

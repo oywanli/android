@@ -8,6 +8,7 @@ import com.xuexiang.xaop.annotation.Permission;
 import com.xuexiang.xaop.consts.PermissionConsts;
 import com.xuexiang.xupdate.XUpdate;
 import com.xuexiang.xupdate._XUpdate;
+import com.xuexiang.xupdate.listener.OnUpdateFailureListener;
 import com.xuexiang.xupdate.service.OnFileDownloadListener;
 import com.xuexiang.xutil.app.PathUtils;
 import com.xuexiang.xutil.display.HProgressDialogUtils;
@@ -41,7 +42,6 @@ public class UpdateAppHelper {
                         TRACE.d("下载路径：" + FileUtils.getFileByPath(file.getPath()));
                         HProgressDialogUtils.cancel();
                         _XUpdate.startInstallApk(mContext, FileUtils.getFileByPath(file.getPath()));
-
                         return false;
                     }
 
@@ -53,7 +53,8 @@ public class UpdateAppHelper {
     }
 
 
-    private static Boolean deleteFile(File file) {
+
+    public static Boolean deleteFile(File file) {
         //判断文件不为null或文件目录存在
         if (file == null || !file.exists()) {
             return false;

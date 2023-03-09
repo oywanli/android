@@ -2,8 +2,11 @@ package com.dspread.demoui.activities;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.LocationManager;
@@ -25,10 +28,20 @@ import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.UpdateAppHelper;
 import com.dspread.demoui.widget.CustomDialog;
 import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.FileCallback;
+import com.lzy.okgo.model.Progress;
+import com.lzy.okgo.request.base.Request;
+import com.xuexiang.xaop.annotation.Permission;
+import com.xuexiang.xaop.consts.PermissionConsts;
 import com.xuexiang.xupdate.XUpdate;
+import com.xuexiang.xupdate._XUpdate;
 import com.xuexiang.xupdate.proxy.impl.DefaultUpdateChecker;
+import com.xuexiang.xupdate.service.OnFileDownloadListener;
 import com.xuexiang.xutil.app.PathUtils;
 import com.xuexiang.xutil.display.CProgressDialogUtils;
+import com.xuexiang.xutil.display.HProgressDialogUtils;
+import com.xuexiang.xutil.file.FileUtils;
 import com.xuexiang.xutil.resource.ResUtils;
 
 import java.io.File;
@@ -50,6 +63,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
     private LocationManager lm;//【Location management】
     private Button mp600Print;
     private ProgressBar mProgressBar;
+    private String absolutePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,27 +95,14 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
     }
 
     private void checkNewVersion() throws IOException {
-        mProgressBar.setVisibility(View.VISIBLE);
-        String txtPath = PathUtils.getAppExtCachePath() + "/unknown_version/update_forced.json";
-        TRACE.d("txtPath:" + txtPath);
-        String s = readerMethod(new File(txtPath));
-        TRACE.d("Json:" + s);
-        Gson gson = new Gson();
-        VersionEnty versionEnty = gson.fromJson(s, VersionEnty.class);
-        int versionCode = versionEnty.getVersionCode();
-        String versionName = versionEnty.getVersionName();
-        String modifyContent = versionEnty.getModifyContent();
-        int packageVersionCode = UpdateAppHelper.getPackageVersionCode(WelcomeActivity.this, "com.dspread.demoui");
-        if (packageVersionCode < versionCode) {
-            // tip upgrade
-            dialog(versionName, modifyContent);
-            mProgressBar.setVisibility(View.INVISIBLE);
-        } else {
-            mProgressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(this, "No new version found", Toast.LENGTH_SHORT).show();
 
-        }
+        String commitUrl = "https://gitlab.com/api/v4/projects/44163796/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/commit.json?job=assembleRelease";
 
+       /* // messageDownLoadFunction(WelcomeActivity.this, commitUrl);
+        XUpdate.newBuild(WelcomeActivity.this)
+                .updateUrl(commitUrl)
+                .update();*/
+        downloadFileCourse(WelcomeActivity.this, commitUrl, PathUtils.getAppExtCachePath(), "commit.json");
     }
 
 
@@ -118,9 +119,15 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.audio://Audio
-                intent = new Intent(this, OtherActivity.class);
+               /* intent = new Intent(this, OtherActivity.class);
                 intent.putExtra("connect_type", 1);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                try {
+                    checkNewVersion();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.serial_port://Serial Port
                 intent = new Intent(this, OtherActivity.class);
@@ -236,7 +243,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        String downloadUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
+                        String downloadUrl = "https://gitlab.com/api/v4/projects/44163796/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
                         UpdateAppHelper.useApkDownLoadFunction(WelcomeActivity.this, downloadUrl);
                     }
                 });
@@ -286,6 +293,74 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
         fileReader.close();
         reader.close();
         return sb.toString();
+    }
+
+
+    public void downloadFileCourse(final Context context, String fileUrl, String destFileDir, String destFileName) {
+        try {
+            //String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWxpZHRpbWUiOjAsInVzZXJpZCI6IjJlNmI0YTdmYzQ5NTRmMzNiZjI2ZjhmMjViNGFmNjIwIiwiZGV2aWNlaW5mbyI6ImVjZjA2OTcyMTgxODZhODIifQ.XJsDI1lzKd2_I7aABf-90mXiWgRU5mzDq3pThn2rKj8";
+            OkGo.<File>get(fileUrl).tag(context)
+                    .execute(new FileCallback(destFileDir, destFileName) { //文件下载时指定下载的路径以及下载的文件的名称
+                        @Override
+                        public void onSuccess(com.lzy.okgo.model.Response<File> response) {
+                            mProgressBar.setVisibility(View.INVISIBLE);
+                            absolutePath = response.body().getAbsolutePath();
+                            Log.e("下载完成路径_Success;", absolutePath + "");
+                            try {
+                                String s = readerMethod(new File(absolutePath));
+
+                                Gson gson = new Gson();
+                                Log.e("下载完成路径_Success-JSON;", s);
+                                VersionEnty versionEnty = gson.fromJson(s, VersionEnty.class);
+                                int versionCode = versionEnty.getVersionCode();
+                                Object versionName = versionEnty.getVersionName();
+                                String modifyContent = versionEnty.getModifyContent();
+
+
+                                Log.e("下载完成路径_Success-JSON;", s + "" + "versionCode:" + versionCode);
+                                int packageVersionCode = UpdateAppHelper.getPackageVersionCode(WelcomeActivity.this, "com.dspread.demoui");
+                                if (packageVersionCode < versionCode) {
+                                    dialog(versionName.toString(), modifyContent.toString());
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onStart(Request<File, ? extends Request> request) {
+                            super.onStart(request);
+                            mProgressBar.setVisibility(View.VISIBLE);
+
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            // PromptManager.closeProgressDialog();
+                            mProgressBar.setVisibility(View.INVISIBLE);
+
+                        }
+
+                        @Override
+                        public void onError(com.lzy.okgo.model.Response<File> response) {
+                            super.onError(response);
+                            mProgressBar.setVisibility(View.INVISIBLE);
+
+                        }
+
+                        @Override
+                        public void downloadProgress(Progress progress) {
+                            super.downloadProgress(progress);
+                        }
+                    });
+
+        } catch (Exception e) {
+            Log.e("downLoad fail;", e.toString() + "");
+        }
     }
 
 
