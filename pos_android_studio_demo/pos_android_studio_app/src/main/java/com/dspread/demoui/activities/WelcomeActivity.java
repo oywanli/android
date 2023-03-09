@@ -119,19 +119,12 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.audio://Audio
-               /* intent = new Intent(this, OtherActivity.class);
+                intent = new Intent(this, OtherActivity.class);
                 intent.putExtra("connect_type", 1);
-                startActivity(intent);*/
-
-                try {
-                    checkNewVersion();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                startActivity(intent);
                 break;
             case R.id.serial_port://Serial Port
                 intent = new Intent(this, OtherActivity.class);
-
                 intent.putExtra("connect_type", 2);
                 startActivity(intent);
                 break;
