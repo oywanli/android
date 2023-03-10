@@ -315,18 +315,14 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                             Log.e("download_Success-path", absolutePath + "");
                             try {
                                 String s = readerMethod(new File(absolutePath));
-
                                 Gson gson = new Gson();
                                 Log.e("download_Success-JSON;", s);
                                 VersionEnty versionEnty = gson.fromJson(s, VersionEnty.class);
                                 String versionCode = (String) versionEnty.getVersionCode();
                                 String replace = versionCode.trim().replace(" ", "");
                                 int length = replace.length();
-
                                 String substring = replace.substring(11, length);
-
                                 int versionCodeInt = Integer.parseInt(substring);
-
                                 Object versionName = versionEnty.getVersionName();
                                 String modifyContent = (String) versionEnty.getModifyContent();
                                 Log.e("download_Success-JSON;", s + "" + "versionCode:" + versionCode);
