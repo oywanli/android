@@ -312,12 +312,12 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                         public void onSuccess(com.lzy.okgo.model.Response<File> response) {
                             mProgressBar.setVisibility(View.INVISIBLE);
                             absolutePath = response.body().getAbsolutePath();
-                            Log.e("下载完成路径_Success;", absolutePath + "");
+                            Log.e("download_Success-path", absolutePath + "");
                             try {
                                 String s = readerMethod(new File(absolutePath));
 
                                 Gson gson = new Gson();
-                                Log.e("下载完成路径_Success-JSON;", s);
+                                Log.e("download_Success-JSON;", s);
                                 VersionEnty versionEnty = gson.fromJson(s, VersionEnty.class);
                                 String versionCode = (String) versionEnty.getVersionCode();
                                 String replace = versionCode.trim().replace(" ", "");
@@ -329,7 +329,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
 
                                 Object versionName = versionEnty.getVersionName();
                                 String modifyContent = (String) versionEnty.getModifyContent();
-                                Log.e("下载完成路径_Success-JSON;", s + "" + "versionCode:" + versionCode);
+                                Log.e("download_Success-JSON;", s + "" + "versionCode:" + versionCode);
                                 int packageVersionCode = UpdateAppHelper.getPackageVersionCode(WelcomeActivity.this, "com.dspread.demoui");
                                 if (packageVersionCode < versionCodeInt) {
                                     dialog(versionName.toString(), modifyContent.toString());
