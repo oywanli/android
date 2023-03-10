@@ -24,6 +24,7 @@ import com.dspread.demoui.R;
 import com.dspread.demoui.activities.printer.PrintSettingActivity;
 import com.dspread.demoui.beans.VersionEnty;
 import com.dspread.demoui.http.XHttpUpdateHttpService;
+import com.dspread.demoui.utils.NetCheckHelper;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.UpdateAppHelper;
 import com.dspread.demoui.widget.CustomDialog;
@@ -88,7 +89,16 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
         mp600Print.setOnClickListener(this);
         bluetoothRelaPer();
         try {
-            checkNewVersion();
+            boolean b = NetCheckHelper.checkNetworkAvailable(WelcomeActivity.this);
+            if (b) {
+                checkNewVersion();
+                TRACE.d("network connection");
+            } else {
+                Toast.makeText(this, "No network connection", Toast.LENGTH_SHORT).show();
+                TRACE.d("no network connection");
+
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,7 +106,11 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
 
     private void checkNewVersion() throws IOException {
 
-        String commitUrl = "https://gitlab.com/api/v4/projects/44163796/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/commit.json?job=assembleRelease";
+        // String commitUrl = "https://gitlab.com/api/v4/projects/44163796/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/commit.json?job=assembleRelease";
+
+        //4128550
+        String commitUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/develop_new_demo/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/commit.json?job=assembleRelease";
+
 
        /* // messageDownLoadFunction(WelcomeActivity.this, commitUrl);
         XUpdate.newBuild(WelcomeActivity.this)
@@ -236,7 +250,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        String downloadUrl = "https://gitlab.com/api/v4/projects/44163796/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
+                        String downloadUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/develop_new_demo/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
                         UpdateAppHelper.useApkDownLoadFunction(WelcomeActivity.this, downloadUrl);
                     }
                 });
@@ -305,20 +319,24 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                                 Gson gson = new Gson();
                                 Log.e("下载完成路径_Success-JSON;", s);
                                 VersionEnty versionEnty = gson.fromJson(s, VersionEnty.class);
-                                int versionCode = versionEnty.getVersionCode();
+                                String versionCode = (String) versionEnty.getVersionCode();
+                                String replace = versionCode.trim().replace(" ", "");
+                                int length = replace.length();
+
+                                String substring = replace.substring(11, length);
+
+                                int versionCodeInt = Integer.parseInt(substring);
+
                                 Object versionName = versionEnty.getVersionName();
-                                String modifyContent = versionEnty.getModifyContent();
-
-
+                                String modifyContent = (String) versionEnty.getModifyContent();
                                 Log.e("下载完成路径_Success-JSON;", s + "" + "versionCode:" + versionCode);
                                 int packageVersionCode = UpdateAppHelper.getPackageVersionCode(WelcomeActivity.this, "com.dspread.demoui");
-                                if (packageVersionCode < versionCode) {
+                                if (packageVersionCode < versionCodeInt) {
                                     dialog(versionName.toString(), modifyContent.toString());
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-
 
                         }
 

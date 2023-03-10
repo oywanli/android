@@ -97,6 +97,7 @@
         <activity
             android:name=".activities.mp5801.PrintTextActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
     </application>
 
     <uses-feature
@@ -138,5 +139,4 @@
         android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
 </manifest>

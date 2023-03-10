@@ -2,16 +2,16 @@ package com.dspread.demoui.beans;
 
 public class VersionEnty {
 
-    private int VersionCode;
+    private Object VersionCode;
 
     private Object VersionName;
 
 
-    public int getVersionCode() {
+    public Object getVersionCode() {
         return VersionCode;
     }
 
-    public void setVersionCode(int versionCode) {
+    public void setVersionCode(Object versionCode) {
         VersionCode = versionCode;
     }
 
@@ -24,11 +24,11 @@ public class VersionEnty {
     }
 
 
-    public String getModifyContent() {
+    public Object getModifyContent() {
         return ModifyContent;
     }
 
-    public void setModifyContent(String modifyContent) {
+    public void setModifyContent(Object modifyContent) {
         ModifyContent = modifyContent;
     }
 
@@ -41,7 +41,7 @@ public class VersionEnty {
     }
 
 
-    private String ModifyContent;
+    private Object ModifyContent;
     private String DownloadUrl;
 
     public int getApkSize() {
