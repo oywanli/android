@@ -238,6 +238,10 @@ public abstract class CommonActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         isFinished = true;
+        if (mPrinter != null) {
+            mPrinter.closeUart();
+        }
+
     }
 
 

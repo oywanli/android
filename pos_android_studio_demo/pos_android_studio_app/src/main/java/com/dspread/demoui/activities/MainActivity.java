@@ -614,10 +614,6 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
         } else if (item.getItemId() == R.id.updateEMVByXml) {
             statusEditText.setText("updating...");
             pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv.xml", MainActivity.this)));
-        } else if (item.getItemId() == R.id.app_update) {
-            String downloadUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
-
-            UpdateAppHelper.useApkDownLoadFunction(MainActivity.this, downloadUrl);
         }
         return true;
     }
