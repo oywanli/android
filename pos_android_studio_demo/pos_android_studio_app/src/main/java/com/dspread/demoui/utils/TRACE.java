@@ -11,28 +11,24 @@ public class TRACE {
     public static void i(String string) {
         if (isTesting) {
             Log.i(AppName, string);
-            PostLogToBaseFireHelper.postFireBaseLogChild(AppName, string); //each log
         }
     }
 
     public static void w(String string) {
         if (isTesting) {
             Log.e(AppName, string);
-            PostLogToBaseFireHelper.postFireBaseLogChild(AppName, string); //each log
         }
     }
 
     public static void e(Exception exception) {
         if (isTesting) {
             //Log.e(AppName, exception.toString());
-            PostLogToBaseFireHelper.postFireBaseLogChild(AppName, exception.toString()); //each log
         }
     }
 
     public static void d(String string) {
         if (isTesting) {
             Log.d(AppName, string);
-            PostLogToBaseFireHelper.postFireBaseLogChild(AppName, string); //each log
         }
     }
 

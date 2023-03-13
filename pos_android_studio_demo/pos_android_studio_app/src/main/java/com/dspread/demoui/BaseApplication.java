@@ -33,8 +33,6 @@ public class BaseApplication extends Application {
         initXHttp();
 
         initOKHttpUtils();
-
-
         initAppUpDate();
 
     }
