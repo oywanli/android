@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.dspread.demoui.http.OKHttpUpdateHttpService;
+import com.dspread.demoui.utils.CrashHandler;
 import com.lzy.okgo.OkGo;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.XHttpSDK;
@@ -14,8 +15,10 @@ import com.xuexiang.xupdate.utils.UpdateUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import io.sentry.android.core.SentryAndroid;
 import okhttp3.OkHttpClient;
 import xcrash.XCrash;
 
@@ -23,6 +26,17 @@ import static com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
 
 public class BaseApplication extends Application {
     public static Context getApplicationInstance;
+    private  static  String mPosID;
+
+    public static String getmPosID() {
+        return mPosID;
+    }
+
+    public static void setmPosID(String mPosID) {
+        BaseApplication.mPosID = mPosID;
+    }
+
+
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -36,6 +50,7 @@ public class BaseApplication extends Application {
         initAppUpDate();
 
     }
+
 
     private void initOKHttpUtils() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -80,5 +95,6 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         getApplicationInstance = this;
+        CrashHandler.getInstance().init(this);
     }
 }

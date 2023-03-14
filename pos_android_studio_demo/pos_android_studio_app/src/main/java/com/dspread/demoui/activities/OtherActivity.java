@@ -39,6 +39,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dspread.demoui.BaseApplication;
 import com.dspread.demoui.R;
 import com.dspread.demoui.USBClass;
 import com.dspread.demoui.keyboard.KeyBoardNumInterface;
@@ -58,6 +59,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -68,6 +70,7 @@ import Decoder.BASE64Encoder;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import io.sentry.android.core.SentryAndroid;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -105,6 +108,7 @@ public class OtherActivity extends BaseActivity {
     private Spinner cmdSp;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
     private boolean isUpdateFw = false;
+    private boolean isVisiblePosID;
 
 
     @Override
@@ -1016,7 +1020,19 @@ public class OtherActivity extends BaseActivity {
             content += "conn: " + pos.getBluetoothState() + "\n";
             content += "psamId: " + psamId + "\n";
             content += "NFCId: " + NFCId + "\n";
-            statusEditText.setText(content);
+
+            if (!isVisiblePosID) {
+                statusEditText.setText(content);
+            } else {
+                isVisiblePosID = false;
+                BaseApplication.setmPosID(posId);
+                SentryAndroid.init(BaseApplication.getApplicationInstance, options -> {
+                    options.setBeforeSend((event, hint) -> {
+                        event.setFingerprints(Arrays.asList(posId));
+                        return event;
+                    });
+                });
+            }
 
         }
 
@@ -1324,6 +1340,8 @@ public class OtherActivity extends BaseActivity {
                 //申请权限
                 ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
             }
+            isVisiblePosID = true;
+            pos.getQposId();
         }
 
         @Override

@@ -41,6 +41,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dspread.demoui.BaseApplication;
 import com.dspread.demoui.R;
 import com.dspread.demoui.USBClass;
 import com.dspread.demoui.utils.DUKPK2009_CBC;
@@ -133,6 +134,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
     private String deviceSignCert;
 
     private POS_TYPE posType = POS_TYPE.BLUETOOTH;
+    private boolean isVisiblePosID;
 
     @Override
     public void onGuideListener(Button button) {
@@ -1081,7 +1083,12 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             content += "conn: " + pos.getBluetoothState() + "\n";
             content += "psamId: " + psamId + "\n";
             content += "NFCId: " + NFCId + "\n";
-            statusEditText.setText(content);
+            if (!isVisiblePosID) {
+                statusEditText.setText(content);
+            } else {
+                isVisiblePosID = false;
+                BaseApplication.setmPosID(posId);
+            }
         }
 
         @Override
@@ -1367,6 +1374,9 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
                 //申请权限
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
             }
+            isVisiblePosID = true;
+            pos.getQposId();
+
         }
 
         @Override

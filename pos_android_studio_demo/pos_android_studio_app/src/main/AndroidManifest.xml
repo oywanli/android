@@ -98,6 +98,37 @@
             android:name=".activities.mp5801.PrintTextActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
+        <!-- Required: set your sentry.io project identifier (DSN) -->
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://3577c88a8d8240c6831261f928b5ce4b@o4504830498373632.ingest.sentry.io/4504836100063232" />
+        <!-- enable automatic breadcrumbs for user interactions (clicks, swipes, scrolls) -->
+        <meta-data
+            android:name="io.sentry.traces.user-interaction.enable"
+            android:value="true" />
+        <!-- enable screenshot for crashes -->
+        <meta-data
+            android:name="io.sentry.attach-screenshot"
+            android:value="true" />
+        <!-- enable view hierarchy for crashes -->
+        <meta-data
+            android:name="io.sentry.attach-view-hierarchy"
+            android:value="true" />
+
+        <!-- enable the performance API by setting a sample-rate, adjust in production env -->
+        <meta-data
+            android:name="io.sentry.traces.sample-rate"
+            android:value="1.0" />
+        <!-- enable profiling when starting transactions, adjust in production env -->
+        <meta-data
+            android:name="io.sentry.traces.profiling.sample-rate"
+            android:value="1.0" />
+
+        <meta-data
+            android:name="io.sentry.session-tracking.enable"
+            android:value="true" />
+
+
     </application>
 
     <uses-feature
