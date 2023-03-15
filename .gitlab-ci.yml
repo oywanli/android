@@ -78,7 +78,7 @@ assembleRelease:
   - echo '"VersionCode"':"\"$VERSIONCODE"\", >> commit.json
   - echo '"ApkSize":4096,'>> commit.json
   - echo '"ModifyContent"':"\"$CI_COMMIT_MESSAGE"\", >> commit.json
-  - echo '"DownloadUrl"':'"https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/develop_new_demo/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease"' >> commit.json
+  - echo '"DownloadUrl"':'"https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease"' >> commit.json
   - echo "}" >> commit.json
 
 
