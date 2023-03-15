@@ -25,7 +25,7 @@ android {
         applicationId "com.dspread.demoui"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 15
+        versionCode 16
         versionName "4.2.11"
 
         ndk {
