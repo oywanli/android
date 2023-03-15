@@ -96,7 +96,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
     }
 
     private void checkNewVersion() throws IOException {
-        String commitUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/commit.json?job=assembleRelease";
+        String commitUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/develop_new_demo/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/commit.json?job=assembleRelease";
         downloadFileCourse(WelcomeActivity.this, commitUrl, PathUtils.getAppExtCachePath(), "commit.json");
     }
 
@@ -212,7 +212,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
     }
 
 
-    private void dialog(String versionName, String modifyContent) {
+    private void dialog(String downUrl, String versionName, String modifyContent) {
         // final String modifyContent1 = "update name#123#fix bug#update name#123#fix bug";
         //final String content = modifyContent.replaceAll("#", "\n");
         CustomDialog.Builder builder = new CustomDialog.Builder(WelcomeActivity.this);
@@ -231,8 +231,8 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        String downloadUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
-                        UpdateAppHelper.useApkDownLoadFunction(WelcomeActivity.this, downloadUrl);
+                        //String downloadUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/master/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
+                        UpdateAppHelper.useApkDownLoadFunction(WelcomeActivity.this, downUrl);
                     }
                 });
         builder.setCloseButton(new CustomDialog.OnCloseClickListener() {
@@ -307,9 +307,12 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                                 Object versionName = versionEnty.getVersionName();
                                 String modifyContent = (String) versionEnty.getModifyContent();
                                 Log.e("download_Success-JSON;", s + "" + "versionCode:" + versionCode);
+                                String downloadUrl = versionEnty.getDownloadUrl();
+                                Log.e("download_Success-JSON", "downloadUrl:" + downloadUrl);
+
                                 int packageVersionCode = UpdateAppHelper.getPackageVersionCode(WelcomeActivity.this, "com.dspread.demoui");
                                 if (packageVersionCode < versionCodeInt) {
-                                    dialog(versionName.toString(), modifyContent.toString());
+                                    dialog(versionName.toString(), modifyContent.toString(), downloadUrl);
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();

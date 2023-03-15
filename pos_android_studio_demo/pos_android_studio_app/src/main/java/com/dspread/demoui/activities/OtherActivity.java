@@ -143,7 +143,6 @@ public class OtherActivity extends BaseActivity {
                 audioBtn.setVisibility(View.VISIBLE);
                 serialBtn.setVisibility(View.GONE);
                 serialBtn.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
@@ -176,6 +175,7 @@ public class OtherActivity extends BaseActivity {
 //                        blueTootchAddress = "/dev/ttyHSL1";//tongfang is s1，tianbo is s3
                         pos.setDeviceAddress(blueTootchAddress);
                         pos.openUart();
+
                     }
                 });
                 break;
@@ -1021,12 +1021,6 @@ public class OtherActivity extends BaseActivity {
             } else {
                 isVisiblePosID = false;
                 BaseApplication.setmPosID(posId);
-                SentryAndroid.init(BaseApplication.getApplicationInstance, options -> {
-                    options.setBeforeSend((event, hint) -> {
-                        event.setFingerprints(Arrays.asList(posId));
-                        return event;
-                    });
-                });
             }
 
         }
