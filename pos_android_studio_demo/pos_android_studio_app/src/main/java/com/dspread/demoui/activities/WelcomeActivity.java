@@ -312,7 +312,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
 
                                 int packageVersionCode = UpdateAppHelper.getPackageVersionCode(WelcomeActivity.this, "com.dspread.demoui");
                                 if (packageVersionCode < versionCodeInt) {
-                                    dialog(versionName.toString(), modifyContent.toString(), downloadUrl);
+                                    dialog(downloadUrl, versionName.toString(), modifyContent.toString());
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
