@@ -100,7 +100,6 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
         downloadFileCourse(WelcomeActivity.this, commitUrl, PathUtils.getAppExtCachePath(), "commit.json");
     }
 
-
     @Override
     public void onToolbarLinstener() {
     }
@@ -231,7 +230,7 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                       // String downloadUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/develop_new_demo/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
+                        // String downloadUrl = "https://gitlab.com/api/v4/projects/4128550/jobs/artifacts/develop_new_demo/raw/pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/pos_android_studio_app-release.apk?job=assembleRelease";
                         UpdateAppHelper.useApkDownLoadFunction(WelcomeActivity.this, downUrl);
                     }
                 });

@@ -20,11 +20,11 @@ android {
             storePassword '123789'
         }
     }
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.dspread.demoui"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 18
         versionName "4.2.11"
 
@@ -79,13 +79,12 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.protobuf:protobuf-javalite:3.21.7'
 
-
     //okhttp request apk update and download
     implementation 'com.github.xuexiangjys.XUtil:xutil-core:2.0.0'
     implementation 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0'
-    implementation 'com.github.xuexiangjys.XAOP:xaop-runtime:1.1.0'  //添加依赖
+    implementation 'com.github.xuexiangjys.XAOP:xaop-runtime:1.1.0'
     implementation 'com.zhy:okhttputils:2.6.2'
-    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
+    //implementation 'com.squareup.okhttp3:okhttp:4.2.0'
     implementation 'com.github.xuexiangjys:XHttp2:2.0.4'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
@@ -165,7 +164,6 @@ sentry {
     //
     // Default is enabled.
     includeDependenciesReport = true
-
     ignoredBuildTypes = ["release"]
 
 }

@@ -1022,7 +1022,6 @@ public class OtherActivity extends BaseActivity {
                 isVisiblePosID = false;
                 BaseApplication.setmPosID(posId);
             }
-
         }
 
         @Override
@@ -1036,7 +1035,6 @@ public class OtherActivity extends BaseActivity {
 
             String[] appNameList = new String[appList.size()];
             for (int i = 0; i < appNameList.length; ++i) {
-
                 appNameList[i] = appList.get(i);
             }
 

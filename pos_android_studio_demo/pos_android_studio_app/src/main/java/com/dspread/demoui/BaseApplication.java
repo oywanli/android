@@ -15,10 +15,8 @@ import com.xuexiang.xupdate.utils.UpdateUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import io.sentry.android.core.SentryAndroid;
 import okhttp3.OkHttpClient;
 import xcrash.XCrash;
 
@@ -26,7 +24,7 @@ import static com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
 
 public class BaseApplication extends Application {
     public static Context getApplicationInstance;
-    private  static  String mPosID;
+    private static String mPosID;
 
     public static String getmPosID() {
         return mPosID;
@@ -35,7 +33,6 @@ public class BaseApplication extends Application {
     public static void setmPosID(String mPosID) {
         BaseApplication.mPosID = mPosID;
     }
-
 
 
     @Override
@@ -48,7 +45,6 @@ public class BaseApplication extends Application {
 
         initOKHttpUtils();
         initAppUpDate();
-
     }
 
 

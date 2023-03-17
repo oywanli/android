@@ -1,19 +1,10 @@
 package com.dspread.demoui.utils;
 
-import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.dspread.demoui.BaseApplication;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import io.sentry.Scope;
-import io.sentry.ScopeCallback;
 import io.sentry.Sentry;
-import io.sentry.android.core.SentryAndroid;
 import io.sentry.protocol.User;
 
 public class TRACE {
