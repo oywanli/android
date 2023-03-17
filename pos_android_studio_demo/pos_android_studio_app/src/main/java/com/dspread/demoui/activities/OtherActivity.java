@@ -15,8 +15,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -39,6 +37,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dspread.demoui.BaseApplication;
 import com.dspread.demoui.R;
 import com.dspread.demoui.USBClass;
 import com.dspread.demoui.keyboard.KeyBoardNumInterface;
@@ -53,10 +52,9 @@ import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.QPOSService.TransactionType;
 
 import java.io.File;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -67,12 +65,13 @@ import Decoder.BASE64Encoder;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import io.sentry.android.core.SentryAndroid;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-public class OtherActivity extends BaseActivity{
+public class OtherActivity extends BaseActivity {
 
-    private Button doTradeButton, serialBtn,audioBtn;
+    private Button doTradeButton, serialBtn, audioBtn;
     private EditText statusEditText;
     private ListView appListView;
     private Dialog dialog;
@@ -100,10 +99,11 @@ public class OtherActivity extends BaseActivity{
     private LinearLayout mafireLi, mafireUL;
     private Button operateCardBtn, pollBtn, pollULbtn, veriftBtn, veriftULBtn, readBtn, writeBtn, finishBtn, finishULBtn, getULBtn, readULBtn, fastReadUL, writeULBtn, transferBtn;
     private Spinner mafireSpinner;
-    private EditText blockAdd, status,status11,block_address11;
+    private EditText blockAdd, status, status11, block_address11;
     private Spinner cmdSp;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
     private boolean isUpdateFw = false;
+    private boolean isVisiblePosID;
 
 
     @Override
@@ -143,7 +143,6 @@ public class OtherActivity extends BaseActivity{
                 audioBtn.setVisibility(View.VISIBLE);
                 serialBtn.setVisibility(View.GONE);
                 serialBtn.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
@@ -176,6 +175,7 @@ public class OtherActivity extends BaseActivity{
 //                        blueTootchAddress = "/dev/ttyHSL1";//tongfang is s1，tianbo is s3
                         pos.setDeviceAddress(blueTootchAddress);
                         pos.openUart();
+
                     }
                 });
                 break;
@@ -186,7 +186,7 @@ public class OtherActivity extends BaseActivity{
     private void initView() {
         doTradeButton = (Button) findViewById(R.id.doTradeButton);//start to do trade
         serialBtn = (Button) findViewById(R.id.serialPort);
-        audioBtn = (Button) findViewById(R.id.audioButton) ;
+        audioBtn = (Button) findViewById(R.id.audioButton);
         statusEditText = (EditText) findViewById(R.id.statusEditText);
         btnUSB = (Button) findViewById(R.id.btnUSB);//Scan  USB device
         btnDisconnect = (Button) findViewById(R.id.disconnect);//disconnect
@@ -244,6 +244,7 @@ public class OtherActivity extends BaseActivity{
         writeULBtn.setOnClickListener(myOnClickListener);
         transferBtn.setOnClickListener(myOnClickListener);
     }
+
     private POS_TYPE posType = POS_TYPE.BLUETOOTH;
 
     @Override
@@ -273,7 +274,7 @@ public class OtherActivity extends BaseActivity{
         if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
-        if(posType == POS_TYPE.UART) {
+        if (posType == POS_TYPE.UART) {
             pos.setD20Trade(true);
         } else {
             pos.setD20Trade(false);
@@ -346,6 +347,7 @@ public class OtherActivity extends BaseActivity{
 
     class UpdateThread extends Thread {
         private boolean concelFlag = false;
+
         @Override
         public void run() {
 
@@ -484,7 +486,7 @@ public class OtherActivity extends BaseActivity{
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",  //TRACK KEY
                     "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
                     keyIndex, 5);
-        } else if(item.getItemId() == R.id.updateFirmWare){
+        } else if (item.getItemId() == R.id.updateFirmWare) {
 //            isUpdateFw = true;
 //            pos.getUpdateCheckValue();
             updateFirmware();
@@ -495,14 +497,15 @@ public class OtherActivity extends BaseActivity{
         } else if (item.getItemId() == R.id.menu_operate_mafire) {
             statusEditText.setText("operate mafire card");
             showSingleChoiceDialog();
-        } else if (item.getItemId()==R.id.updateEMVByXml){
+        } else if (item.getItemId() == R.id.updateEMVByXml) {
             statusEditText.setText("updating...");
-            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv_D20.xml",OtherActivity.this)));
+            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv_D20.xml", OtherActivity.this)));
         }
         return true;
     }
 
     private int yourChoice = 0;
+
     private void showSingleChoiceDialog() {
         final String[] items = {"Mifare classic 1", "Mifare UL"};
 //	    yourChoice = -1;
@@ -585,10 +588,10 @@ public class OtherActivity extends BaseActivity{
                 @Override
                 public void getNumberValue(String value) {
 //                    statusEditText.setText("Pls click "+dataList.get(0));
-                    pos.pinMapSync(value,20);
+                    pos.pinMapSync(value, 20);
                 }
             });
-            keyboardUtil = new KeyboardUtil(OtherActivity.this, lin,dataList);
+            keyboardUtil = new KeyboardUtil(OtherActivity.this, lin, dataList);
             keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, statusEditText);//Random keyboard
         }
 
@@ -602,15 +605,15 @@ public class OtherActivity extends BaseActivity{
         public void onReturnGetPinInputResult(int num) {
             super.onReturnGetPinInputResult(num);
             String s = "";
-            if(num == -1){
-                if(keyboardUtil != null) {
+            if (num == -1) {
+                if (keyboardUtil != null) {
                     keyboardUtil.hide();
                 }
-            }else{
-                for(int i = 0 ; i <num ; i ++){
+            } else {
+                for (int i = 0; i < num; i++) {
                     s += "*";
                 }
-                statusEditText.setText("result is ：" +s);
+                statusEditText.setText("result is ：" + s);
             }
         }
 
@@ -631,7 +634,7 @@ public class OtherActivity extends BaseActivity{
 
             if (result == QPOSService.DoTradeResult.NONE) {
                 statusEditText.setText(getString(R.string.no_card_detected));
-            } else if(result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
+            } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
                 statusEditText.setText(getString(R.string.try_another_interface));
             } else if (result == QPOSService.DoTradeResult.ICC) {
                 statusEditText.setText(getString(R.string.icc_card_inserted));
@@ -1012,8 +1015,13 @@ public class OtherActivity extends BaseActivity{
             content += "conn: " + pos.getBluetoothState() + "\n";
             content += "psamId: " + psamId + "\n";
             content += "NFCId: " + NFCId + "\n";
-            statusEditText.setText(content);
 
+            if (!isVisiblePosID) {
+                statusEditText.setText(content);
+            } else {
+                isVisiblePosID = false;
+                BaseApplication.setmPosID(posId);
+            }
         }
 
         @Override
@@ -1027,7 +1035,6 @@ public class OtherActivity extends BaseActivity{
 
             String[] appNameList = new String[appList.size()];
             for (int i = 0; i < appNameList.length; ++i) {
-
                 appNameList[i] = appList.get(i);
             }
 
@@ -1320,6 +1327,8 @@ public class OtherActivity extends BaseActivity{
                 //申请权限
                 ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
             }
+            isVisiblePosID = true;
+            pos.getQposId();
         }
 
         @Override
@@ -2019,9 +2028,7 @@ public class OtherActivity extends BaseActivity{
             pubModel = clearKeys.substring(4, 4 + sum * 2);
 
 
-
         }
-
 
 
         @Override
@@ -2098,7 +2105,7 @@ public class OtherActivity extends BaseActivity{
                 String cardData = arg0.get("cardData");
                 statusEditText.setText("addr:" + addr + "\ncardDataLen:" + cardDataLen + "\ncardData:" + cardData);
             } else {
-				statusEditText.setText("onReadWriteMifareCardResult fail");
+                statusEditText.setText("onReadWriteMifareCardResult fail");
             }
         }
 
@@ -2295,7 +2302,7 @@ public class OtherActivity extends BaseActivity{
     private void sendMsgDelay(int what) {
         Message msg = new Message();
         msg.what = what;
-        mHandler.sendMessageDelayed(msg,500);
+        mHandler.sendMessageDelayed(msg, 500);
     }
 
     private void deviceShowDisplay(String diplay) {
@@ -2317,13 +2324,13 @@ public class OtherActivity extends BaseActivity{
 
     private void requestPermission() {
 
-        if (ContextCompat.checkSelfPermission(OtherActivity.this, android.Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED) {
-            Log.e("permisson: ","should open Audio");
+        if (ContextCompat.checkSelfPermission(OtherActivity.this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("permisson: ", "should open Audio");
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.RECORD_AUDIO},
                     REQUEST_CODE_AUDIO_PERMISSIONS);
 
         } else {
-            Log.e("permisson: ","has Audio permission");
+            Log.e("permisson: ", "has Audio permission");
 
         }
     }
@@ -2378,6 +2385,7 @@ public class OtherActivity extends BaseActivity{
     private void clearDisplay() {
         statusEditText.setText("");
     }
+
     class MyOnClickListener implements View.OnClickListener {
 
         @SuppressLint("NewApi")
@@ -2451,17 +2459,17 @@ public class OtherActivity extends BaseActivity{
                 pos.setBlockaddr(blockaddr);
                 pos.setKeyValue(keyValue);
 //                pos.doMifareCard("02" + keyclass, 20);
-                pos.authenticateMifareCard(QPOSService.MifareCardType.CLASSIC,keyclass,blockaddr,keyValue,20);
+                pos.authenticateMifareCard(QPOSService.MifareCardType.CLASSIC, keyclass, blockaddr, keyValue, 20);
             } else if (v == veriftULBtn) {
                 String keyValue = status11.getText().toString();
                 pos.setKeyValue(keyValue);
 //                pos.doMifareCard("0D", 20);
-                pos.authenticateMifareCard(QPOSService.MifareCardType.UlTRALIGHT,"","",keyValue,20);
+                pos.authenticateMifareCard(QPOSService.MifareCardType.UlTRALIGHT, "", "", keyValue, 20);
             } else if (v == readBtn) {
                 String blockaddr = blockAdd.getText().toString();
                 pos.setBlockaddr(blockaddr);
 //                pos.doMifareCard("03", 20);
-                pos.readMifareCard(QPOSService.MifareCardType.CLASSIC,blockaddr,20);
+                pos.readMifareCard(QPOSService.MifareCardType.CLASSIC, blockaddr, 20);
             } else if (v == writeBtn) {
                 String blockaddr = blockAdd.getText().toString();
                 String cardData = status.getText().toString();
@@ -2470,15 +2478,15 @@ public class OtherActivity extends BaseActivity{
                 pos.setBlockaddr(blockaddr);
                 pos.setKeyValue(cardData);
 //                pos.doMifareCard("04", 20);
-                pos.writeMifareCard(QPOSService.MifareCardType.CLASSIC,blockaddr,cardData,20);
+                pos.writeMifareCard(QPOSService.MifareCardType.CLASSIC, blockaddr, cardData, 20);
             } else if (v == operateCardBtn) {
                 String blockaddr = blockAdd.getText().toString();
                 String cardData = status.getText().toString();
                 String cmd = (String) cmdSp.getSelectedItem();
                 pos.setBlockaddr(blockaddr);
                 pos.setKeyValue(cardData);
-                if(cmd.equals("add")){
-                    pos.operateMifareCardData(QPOSService.MifareCardOperationType.ADD,blockaddr,cardData,20);
+                if (cmd.equals("add")) {
+                    pos.operateMifareCardData(QPOSService.MifareCardOperationType.ADD, blockaddr, cardData, 20);
                 }
 //                pos.doMifareCard("05" + cmd, 20);
             } else if (v == getULBtn) {
@@ -2488,21 +2496,21 @@ public class OtherActivity extends BaseActivity{
                 String blockaddr = block_address11.getText().toString();
                 pos.setBlockaddr(blockaddr);
 //                pos.doMifareCard("07", 20);
-                pos.readMifareCard(QPOSService.MifareCardType.UlTRALIGHT,blockaddr,20);
+                pos.readMifareCard(QPOSService.MifareCardType.UlTRALIGHT, blockaddr, 20);
             } else if (v == fastReadUL) {
                 String endAddr = block_address11.getText().toString();
                 String startAddr = status11.getText().toString();
                 pos.setKeyValue(startAddr);
                 pos.setBlockaddr(endAddr);
 //                pos.doMifareCard("08", 20);
-                pos.fastReadMifareCardData(startAddr,endAddr,20);
+                pos.fastReadMifareCardData(startAddr, endAddr, 20);
             } else if (v == writeULBtn) {
                 String addr = block_address11.getText().toString();
                 String data = status11.getText().toString();
                 pos.setKeyValue(data);
                 pos.setBlockaddr(addr);
 //                pos.doMifareCard("0B", 20);
-                pos.writeMifareCard(QPOSService.MifareCardType.UlTRALIGHT,addr,data,20);
+                pos.writeMifareCard(QPOSService.MifareCardType.UlTRALIGHT, addr, data, 20);
             } else if (v == transferBtn) {
 //                String data = status.getText().toString();
 //                String len = blockAdd.getText().toString();
@@ -2568,7 +2576,7 @@ public class OtherActivity extends BaseActivity{
         }
     };
 
-    private void updateFirmware(){
+    private void updateFirmware() {
         if (ActivityCompat.checkSelfPermission(OtherActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PERMISSION_GRANTED) {
             //request permission

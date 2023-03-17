@@ -2,6 +2,11 @@ package com.dspread.demoui.utils;
 
 import android.util.Log;
 
+import com.dspread.demoui.BaseApplication;
+
+import io.sentry.Sentry;
+import io.sentry.protocol.User;
+
 public class TRACE {
     public static String NEW_LINE = System.getProperty("line.separator");
 
@@ -11,28 +16,32 @@ public class TRACE {
     public static void i(String string) {
         if (isTesting) {
             Log.i(AppName, string);
-            PostLogToBaseFireHelper.postFireBaseLogChild(AppName, string); //each log
+            Sentry.captureMessage(string);
         }
     }
 
     public static void w(String string) {
         if (isTesting) {
             Log.e(AppName, string);
-            PostLogToBaseFireHelper.postFireBaseLogChild(AppName, string); //each log
+            Sentry.captureMessage(string);
         }
     }
 
     public static void e(Exception exception) {
         if (isTesting) {
             //Log.e(AppName, exception.toString());
-            PostLogToBaseFireHelper.postFireBaseLogChild(AppName, exception.toString()); //each log
+
         }
     }
 
     public static void d(String string) {
         if (isTesting) {
             Log.d(AppName, string);
-            PostLogToBaseFireHelper.postFireBaseLogChild(AppName, string); //each log
+            String posID = BaseApplication.getmPosID();
+            User user = new User();
+            user.setId(posID);
+            Sentry.setUser(user);
+            Sentry.captureMessage(string);
         }
     }
 

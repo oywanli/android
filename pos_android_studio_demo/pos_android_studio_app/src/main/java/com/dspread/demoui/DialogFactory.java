@@ -2,7 +2,7 @@ package com.dspread.demoui;
 
 import android.content.Context;
 
-import com.dspread.demoui.activities.LoadingDialog;
+import com.dspread.demoui.activities.mp5801.LoadingDialog;
 
 public class DialogFactory {
 

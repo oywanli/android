@@ -2,7 +2,6 @@
 <resources>
 
 
-
     <string name="hint_text_content">Text Content</string>
     <string name="hint_barcode_content">Barcode Content</string>
     <string name="hint_barcode_height">Barcode Height</string>
@@ -71,7 +70,7 @@
     <string name="device_operate">Device Operate</string>
     <string name="device_other">Other</string>
     <string name="title_audio">Audio</string>
-    <string name="title_print">MP600 Print</string>
+    <string name="title_print">Print</string>
     <string name="mp_text_print">Print Text</string>
     <string name="mp_barcode_print">Print BarCode</string>
     <string name="mp_image_print">Print image</string>
@@ -346,8 +345,8 @@
     <string name="get_device_public_key">getDevicePublicKey</string>
     <string name="text_creat_8583">create 8583 MSG</string>
     <string name="updateFirmware">update Firmware</string>
-    <string name="mp600_print">MP600Print</string>
-    <string name="print">D30Print</string>
+    <string name="mp600_print">D30Print</string>
+    <string name="print">Print</string>
     <string name="please_connect_printer_first">Please Connect Printer First.</string>
     <string name="str_printtext">str_printtext</string>
     <string name="str_printimg">print pictures</string>
