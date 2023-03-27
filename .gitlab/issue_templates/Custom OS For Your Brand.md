@@ -18,17 +18,20 @@
 ## APN list
 ##### (If you want to add new APN, please follow the below template to provide us new APN parameters)
 
-- apn carrier="SKT LTE INTERNET"
-- mcc="450"
-- mnc="05"
-- apn="lte.sktelecom.com"
-- mmsc="http://omms.nate.com:9082/oma_mms"
-- mmsproxy="lteoma.nate.com"
-- mmsport="9093"
-- type="default,supl,mms,dun"
-- protocol="IPV4V6"
-- roaming_protocol="IPV4V6"
-- network_type_bitmask="13|19"
+- name: movistar
+- APN: movistar.com.co
+- MCC: 732
+- MNC: 101
+- MMSC: Empty
+- Type: default, mms, supl, hipri, fota, cbs, wap, xcap, rcs, bip, vsim
+- Protocol: IPv4
+- roaming_protocol: IPv4
+- Proxy: Empty
+- Port: Emtpy
+- server: Empty
+- MMS proxy: Empty
+- MMS port: Empty
+- Authentication Type: Empty
 
 
 ## Launcher App
