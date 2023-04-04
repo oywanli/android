@@ -4,8 +4,6 @@ plugins {
 
 }
 android {
-
-
     signingConfigs {
         debug {
             storeFile file('app.keystore')
@@ -27,7 +25,6 @@ android {
         targetSdkVersion 33
         versionCode 18
         versionName "4.2.11"
-
         ndk {
             moduleName "serial_port"
             // Add necessary ABIs as needed
@@ -62,10 +59,7 @@ android {
 
     configurations {
         cleanedAnnotations
-
     }
-
-
 }
 
 
@@ -99,10 +93,11 @@ dependencies {
     //implementation 'io.sentry:sentry:6.15.0'
     // implementation 'io.sentry:sentry-android:6.15.0'
 
-
     //dspread sdk
-    implementation files('libs\\dspread_pos_sdk_4.2.10.jar')
+    //implementation files('libs\\dspread_pos_sdk_4.2.10.jar')
     implementation files('libs\\dspread_print_sdk_1.0.0.jar')
+    implementation 'com.dspread.library:dspread_pos_sdk:4.3.1'
+
 }
 
 sentry {
