@@ -254,14 +254,14 @@ public class MyKeyboardView extends KeyboardView {
 //        }
         List<Keyboard.Key> pKeyLis = pLatinKeyboard.getKeys();
         int index = 0;
-        int sy = 0;
+        int sy = mHeightPixels - pLatinKeyboard.getHeight();
 //        int sy = mHeightPixels-80*5-8*4;//D20 is 60 and 6，D1000 is 80 and 8
 //        Tip.i("sy = "+sy);
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < pKeyLis.size(); i++) {
-            if(i == 0){
-                sy = mHeightPixels-pKeyLis.get(i).height*5-pKeyLis.get(i).x*6;//calculate interval value
-            }
+//            if(i == 0){
+//                sy = mHeightPixels-pKeyLis.get(i).height*5-pKeyLis.get(i).x*6;//calculate interval value
+//            }
             int code = pKeyLis.get(i).codes[0];
             int y = sy + pKeyLis.get(i).y;
             int x = pKeyLis.get(i).x;
