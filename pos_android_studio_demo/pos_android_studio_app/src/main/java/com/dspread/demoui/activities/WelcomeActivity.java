@@ -124,7 +124,6 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.normal_bluetooth://Normal Bluetooth
                 intent = new Intent(this, MainActivity.class);
-
                 intent.putExtra("connect_type", 3);
                 startActivity(intent);
                 break;
@@ -267,7 +266,6 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
             return String.format("%d B", size);
         }
     }
-
 
     private static String readerMethod(File file) throws IOException {
         FileReader fileReader = new FileReader(file);
