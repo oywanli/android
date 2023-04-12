@@ -3,7 +3,7 @@
 buildscript {
     repositories {
         mavenCentral()
-        jcenter(){ url 'https://jcenter.bintray.com/'}
+        jcenter() { url 'https://jcenter.bintray.com/' }
         google()
 
     }
@@ -19,7 +19,7 @@ allprojects {
     repositories {
         mavenCentral()
         google()
-        jcenter(){ url 'https://jcenter.bintray.com/'}
+        jcenter() { url 'https://jcenter.bintray.com/' }
         maven { url 'https://jitpack.io' }
         maven {
             url 'https://gitlab.com/api/v4/projects/4128550/packages/maven'

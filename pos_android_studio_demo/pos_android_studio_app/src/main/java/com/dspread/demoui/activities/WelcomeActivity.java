@@ -306,7 +306,6 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                                 Log.e("download_Success-JSON;", s + "" + "versionCode:" + versionCode);
                                 String downloadUrl = versionEnty.getDownloadUrl();
                                 Log.e("download_Success-JSON", "downloadUrl:" + downloadUrl);
-
                                 int packageVersionCode = UpdateAppHelper.getPackageVersionCode(WelcomeActivity.this, "com.dspread.demoui");
                                 if (packageVersionCode < versionCodeInt) {
                                     dialog(downloadUrl, versionName.toString(), modifyContent.toString());
@@ -314,7 +313,6 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-
                         }
 
                         @Override
