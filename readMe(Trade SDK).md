@@ -4,7 +4,7 @@ Installation
 
 1、Gradle Groovy DSL install command
 
-    LastestVersion=https://gitlab.com/dspread/android/-/packages
+    LastestVersion = 'https://gitlab.com/dspread/android/-/packages'
 
     implementation 'com.dspread.library:dspread_pos_sdk:4.3.1'
 
