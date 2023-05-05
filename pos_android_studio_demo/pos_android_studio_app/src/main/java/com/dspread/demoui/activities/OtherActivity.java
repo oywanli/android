@@ -499,7 +499,7 @@ public class OtherActivity extends BaseActivity {
             showSingleChoiceDialog();
         } else if (item.getItemId() == R.id.updateEMVByXml) {
             statusEditText.setText("updating...");
-            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("MEXICO-QPOS cute,CR100,D20,D30.xml", OtherActivity.this)));
+            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("QPOS cute,CR100,D20,D30.xml", OtherActivity.this)));
         }
         return true;
     }
