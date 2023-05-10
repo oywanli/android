@@ -29,8 +29,4 @@
         <item>Thai,1B 23 23 53 4C 41 4E 20,CP874</item>
         <item>Central Europe,1B 23 23 53 4C 41 4E 21,CP1250</item>
     </string-array>
-     <string-array name="cmd_bm">
-        <item>Enable black mark detection function,1f 1b 1f 80 04 05 06 44</item>
-        <item>Close black mark detection function, 1f 1b 1f 80 04 05 06 66</item>
-        <item>Go to the black mark,1d 0c</item>
-    </string-array></resources>
+</resources>

@@ -14,7 +14,6 @@
                 android:id="@+id/menu_get_deivce_info"
                 android:orderInCategory="100"
                 android:title="@string/get_info" />
-
             <item
                 android:id="@+id/get_update_key"
                 android:orderInCategory="100"
@@ -23,7 +22,6 @@
                 android:id="@+id/get_device_public_key"
                 android:orderInCategory="100"
                 android:title="@string/get_device_public_key" />
-
             <item
                 android:id="@+id/menu_get_deivce_key_checkvalue"
                 android:orderInCategory="100"

@@ -973,11 +973,9 @@ public class OtherActivity extends BaseActivity {
                     dismissDialog();
                 }
             });
-
             dialog.show();
             amount = "";
             cashbackAmount = "";
-
         }
 
         @Override
@@ -993,7 +991,6 @@ public class OtherActivity extends BaseActivity {
         @Override
         public void onRequestTransactionLog(String tlv) {
             TRACE.d("onRequestTransactionLog(String tlv):" + tlv);
-
             dismissDialog();
             String content = getString(R.string.transaction_log);
             content += tlv;
@@ -1032,19 +1029,16 @@ public class OtherActivity extends BaseActivity {
             dialog = new Dialog(mContext);
             dialog.setContentView(R.layout.emv_app_dialog);
             dialog.setTitle(R.string.please_select_app);
-
             String[] appNameList = new String[appList.size()];
             for (int i = 0; i < appNameList.length; ++i) {
                 appNameList[i] = appList.get(i);
             }
-
             appListView = (ListView) dialog.findViewById(R.id.appList);
             appListView.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, appNameList));
             appListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                     pos.selectEmvApp(position);
                     TRACE.d(getString(R.string.select_app_end) + position);
                     dismissDialog();
@@ -1052,7 +1046,6 @@ public class OtherActivity extends BaseActivity {
 
             });
             dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     pos.cancelSelectEmvApp();
@@ -1060,20 +1053,16 @@ public class OtherActivity extends BaseActivity {
                 }
             });
             dialog.show();
-
         }
 
         @Override
         public void onRequestSetAmount() {
             TRACE.d("enter amount -- start");
             TRACE.d("onRequestSetAmount()");
-
-
             dismissDialog();
             dialog = new Dialog(mContext);
             dialog.setContentView(R.layout.amount_dialog);
             dialog.setTitle(getString(R.string.set_amount));
-
             String[] transactionTypes = new String[]{"GOODS", "SERVICES", "CASH", "CASHBACK", "INQUIRY",
                     "TRANSFER", "ADMIN", "CASHDEPOSIT",
                     "PAYMENT", "PBOCLOG||ECQ_INQUIRE_LOG", "SALE",
@@ -1132,17 +1121,12 @@ public class OtherActivity extends BaseActivity {
                     } else if (transactionTypeString.equals("SALES_NEW")) {
                         transactionType = QPOSService.TransactionType.SALES_NEW;
                     }
-
-
                     OtherActivity.this.amount = amount;
                     OtherActivity.this.cashbackAmount = cashbackAmount;
-
                     pos.setAmount(amount, cashbackAmount, "156", transactionType);
-
                     TRACE.d("enter amount  -- end");
                     dismissDialog();
                 }
-
             });
 
             dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
@@ -1152,7 +1136,6 @@ public class OtherActivity extends BaseActivity {
                     pos.cancelSetAmount();
                     dialog.dismiss();
                 }
-
             });
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
@@ -2599,7 +2582,7 @@ public class OtherActivity extends BaseActivity {
                 }
             }
             if (data == null || data.length == 0) {
-                data = FileUtils.readAssetsLine("D20_master.asc", OtherActivity.this);
+                data = FileUtils.readAssetsLine("upgrader.asc", OtherActivity.this);
             }
             int a = pos.updatePosFirmware(data, blueTootchAddress);
             //D20 doesn't need to keep charging

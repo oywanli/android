@@ -103,7 +103,10 @@
         <!--https://glet_746b6057cd953997609f9c0dc2be1680@observe.gitlab.com:443/errortracking/api/v1/projects/4128550 -->
         <meta-data
             android:name="io.sentry.dsn"
-            android:value="https://3577c88a8d8240c6831261f928b5ce4b@o4504830498373632.ingest.sentry.io/4504836100063232" />
+            android:value="https://31f1c16f03754562afb08b9ab80655ba@o4505157664309248.ingest.sentry.io/4505157666799616" />
+        <!-- android:value="https://3577c88a8d8240c6831261f928b5ce4b@o4504830498373632.ingest.sentry.io/4504836100063232" />-->
+
+
         <!-- enable automatic breadcrumbs for user interactions (clicks, swipes, scrolls) -->
         <meta-data
             android:name="io.sentry.traces.user-interaction.enable"
