@@ -1301,7 +1301,6 @@ public class OtherActivity extends BaseActivity {
             TRACE.d("onRequestQposConnected()");
             Toast.makeText(mContext, "onRequestQposConnected", Toast.LENGTH_LONG).show();
             dismissDialog();
-
             statusEditText.setText(getString(R.string.device_plugged));
             doTradeButton.setEnabled(true);
             btnDisconnect.setEnabled(true);
@@ -1311,7 +1310,6 @@ public class OtherActivity extends BaseActivity {
                 ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
             }
             isVisiblePosID = true;
-            pos.getQposId();
         }
 
         @Override
