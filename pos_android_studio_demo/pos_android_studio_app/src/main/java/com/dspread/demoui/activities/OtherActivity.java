@@ -43,6 +43,7 @@ import com.dspread.demoui.USBClass;
 import com.dspread.demoui.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.keyboard.KeyboardUtil;
 import com.dspread.demoui.keyboard.MyKeyboardView;
+import com.dspread.demoui.utils.ClickUtil;
 import com.dspread.demoui.utils.DUKPK2009_CBC;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.QPOSUtil;
@@ -164,22 +165,21 @@ public class OtherActivity extends BaseActivity {
                 serialBtn.setVisibility(View.VISIBLE);
                 audioBtn.setVisibility(View.GONE);
                 serialBtn.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
-                        posType = POS_TYPE.UART;
-                        open(QPOSService.CommunicationMode.UART);
+                        if (ClickUtil.isFastClick()) { //
+                            posType = POS_TYPE.UART;
+                            open(QPOSService.CommunicationMode.UART);
 //                        blueTootchAddress = "/dev/ttyMT0";//tongfang is s1，tianbo is s3
-                        blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
+                            blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
 //                        blueTootchAddress = "/dev/ttyHSL1";//tongfang is s1，tianbo is s3
-                        pos.setDeviceAddress(blueTootchAddress);
-                        pos.openUart();
-
+                            pos.setDeviceAddress(blueTootchAddress);
+                            pos.openUart();
+                        }
                     }
                 });
                 break;
-
         }
     }
 
@@ -463,7 +463,6 @@ public class OtherActivity extends BaseActivity {
             statusEditText.setText("get_deivce_key_checkvalue..............");
             int keyIdex = getKeyIndex();
             pos.getKeyCheckValue(keyIdex, QPOSService.CHECKVALUE_KEYTYPE.DUKPT_MKSK_ALLTYPE);
-
 
         } else if (item.getItemId() == R.id.menu_get_pos_id) {
             pos.getQposId();
@@ -1012,7 +1011,6 @@ public class OtherActivity extends BaseActivity {
             content += "conn: " + pos.getBluetoothState() + "\n";
             content += "psamId: " + psamId + "\n";
             content += "NFCId: " + NFCId + "\n";
-
             if (!isVisiblePosID) {
                 statusEditText.setText(content);
             } else {
@@ -1309,6 +1307,7 @@ public class OtherActivity extends BaseActivity {
                 //申请权限
                 ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
             }
+            pos.getQposId();
             isVisiblePosID = true;
         }
 
@@ -2404,15 +2403,12 @@ public class OtherActivity extends BaseActivity {
                     return;
                 }
                 final CharSequence[] items = deviceList.toArray(new CharSequence[deviceList.size()]);
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setTitle("Select a Reader");
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         String selectedDevice = (String) items[item];
-
                         dialog.dismiss();
-
                         usbDevice = USBClass.getMdevices().get(selectedDevice);
                         open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
                         posType = POS_TYPE.OTG;
