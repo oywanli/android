@@ -120,13 +120,13 @@ public class MPPrintQRCodeActivity extends CommonActivity {
         textPrintLine.setPosition(PrintLine.CENTER);
         printerLayout.addText(textPrintLine);
         Bitmap bitmap = printerLayout.viewToBitmap();
-        mPrinter.printBitmap(this, bitmap);
-        //mPrinter.printQRCode(this, Barcode2D.ErrorLevel.L.name(), size, getText(etQRCode), bitMapPosition);
+        // mPrinter.printBitmap(this, bitmap);
+        mPrinter.printQRCode(this, Barcode2D.ErrorLevel.L.name(), size, getText(etQRCode), bitMapPosition);
         return 0;
     }
 
     @Override
-    void onPrintFinished(boolean isSuccess, String status,int type) {
+    void onPrintFinished(boolean isSuccess, String status, int type) {
         TRACE.d("onPrintFinished:" + isSuccess + "---" + "status:" + status);
         if (status != null) {
 
@@ -135,7 +135,7 @@ public class MPPrintQRCodeActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintError(boolean isSuccess, String status,int type) {
+    void onPrintError(boolean isSuccess, String status, int type) {
 
     }
 

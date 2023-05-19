@@ -40,7 +40,7 @@ public class StandardPrintActivity extends CommonActivity {
             int arg1 = msg.arg1;
             if (arg1 == 1) {
                 mPrintcount++;
-                if (mPrintcount < 10) {
+                if (mPrintcount < 10000) {
                     if (IsPrintPause) {
                         try {
                             Thread.sleep(1000);
@@ -220,7 +220,6 @@ public class StandardPrintActivity extends CommonActivity {
     @Override
     public void onToolbarLinstener() {
         finish();
-
     }
 
     @Override
@@ -261,50 +260,12 @@ public class StandardPrintActivity extends CommonActivity {
                 mHandler.sendMessage(obtain);
             }
         }
-        //message.setText(result.toString());
     }
 
     @Override
     void onPrintError(boolean isSuccess, String status, int type) {
 
     }
-
-    @Override
-    void onQposPrintStateResult(boolean isSuccess, String value) {
-        super.onQposPrintStateResult(isSuccess, value);
-        TRACE.d("onQposPrintStateResult" + isSuccess + "---" + value);
-        // message.setText(isSuccess + ";" + value);
-    }
-
-    @Override
-    void onQposPrintDensityResult(boolean isSuccess, String value) {
-        super.onQposPrintDensityResult(isSuccess, value);
-        TRACE.d("onQposPrintDensityResult" + isSuccess + "---" + value);
-        message.setText(isSuccess + ";" + value);
-    }
-
-    @Override
-    void onQposPrintSpeedResult(boolean isSuccess, String value) {
-        super.onQposPrintSpeedResult(isSuccess, value);
-        TRACE.d("onQposPrintSpeedResult" + isSuccess + "---" + value);
-        //message.setText(isSuccess + ";" + value);
-
-    }
-
-    @Override
-    void onQposPrintTemperatureResult(boolean isSuccess, String value) {
-        super.onQposPrintTemperatureResult(isSuccess, value);
-        TRACE.d("onQposPrintTemperatureResult" + isSuccess + "---" + value);
-        //message.setText(isSuccess + ";" + value);
-    }
-
-    @Override
-    void onQposPrintVoltageResult(boolean isSuccess, String value) {
-        super.onQposPrintVoltageResult(isSuccess, value);
-        TRACE.d("onQposPrintVoltageResult" + isSuccess + "---" + value);
-        //message.setText(isSuccess + ";" + value);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

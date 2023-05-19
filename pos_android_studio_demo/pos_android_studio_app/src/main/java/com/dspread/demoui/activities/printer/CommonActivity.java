@@ -181,7 +181,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     void onTestPrintResume(int reason) {
     }
 
-    void onQposPrintDensityResult(boolean isSuccess, String value) {
+  /*  void onQposPrintDensityResult(boolean isSuccess, String value) {
     }
 
     void onQposPrintSpeedResult(boolean isSuccess, String value) {
@@ -194,7 +194,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     }
 
     void onQposPrintStateResult(boolean isSuccess, String value) {
-    }
+    }*/
 
     abstract void onPrintFinished(boolean isSuccess, String status, int type);
 

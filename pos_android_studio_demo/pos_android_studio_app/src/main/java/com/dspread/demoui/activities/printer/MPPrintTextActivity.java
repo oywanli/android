@@ -71,12 +71,9 @@ public class MPPrintTextActivity extends CommonActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
-
     }
-
 
     @Override
     public void onToolbarLinstener() {
@@ -94,7 +91,6 @@ public class MPPrintTextActivity extends CommonActivity {
         printLineStyle.setFontSize(getFontSize());
         mPrinter.setPrintStyle(printLineStyle);
         mPrinter.printText(getText());
-
 
        /* PrintLineStyle bean = new PrintLineStyle();
         bean.setFontStyle(PrintStyle.FontStyle.BOLD_ITALIC);
@@ -135,7 +131,7 @@ public class MPPrintTextActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintFinished(boolean isSuccess, String status,int type) {
+    void onPrintFinished(boolean isSuccess, String status, int type) {
         TRACE.d("onPrintFinished:" + isSuccess + "---" + "status:" + status);
         if (status != null) {
         }
@@ -143,7 +139,7 @@ public class MPPrintTextActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintError(boolean isSuccess, String status,int type) {
+    void onPrintError(boolean isSuccess, String status, int type) {
     }
 
     private String getText() {

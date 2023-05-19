@@ -125,13 +125,13 @@ public class MPPrintBarcodeActivity extends CommonActivity {
         textPrintLine.setPosition(PrintLine.CENTER);
         printerLayout.addText(textPrintLine);
         Bitmap bitmap = printerLayout.viewToBitmap();
-        mPrinter.printBitmap(this, bitmap);
-        //mPrinter.printBarCode(this, Barcode1D.CODE_128.name(), width, height, data, bitMapPosition);
+        //mPrinter.printBitmap(this, bitmap);
+        mPrinter.printBarCode(this, Barcode1D.CODE_128.name(), width, height, data, bitMapPosition);
         return 0;
     }
 
     @Override
-    void onPrintFinished(boolean isSuccess, String status,int type) {
+    void onPrintFinished(boolean isSuccess, String status, int type) {
         TRACE.d("onPrintFinished:" + isSuccess + "---" + "status:" + status);
         if (status != null) {
             TRACE.d("ssss" + status);
@@ -140,7 +140,7 @@ public class MPPrintBarcodeActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintError(boolean isSuccess, String status,int type) {
+    void onPrintError(boolean isSuccess, String status, int type) {
 
     }
 
