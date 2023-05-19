@@ -18,13 +18,15 @@ import android.widget.TextView;
 import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.TRACE;
+import com.dspread.demoui.view.PrintLine;
+import com.dspread.print.device.bean.PrintLineStyle;
 
 import androidx.annotation.NonNull;
 
 public class StandardPrintActivity extends CommonActivity {
     private Spinner mSpGreyLevel, mSpinnerSpAlignment;
     private Spinner mSpSpeedLevel;
-    private TextView message;
+    private TextView message, printerSpeed, printerDensity, printerTemp, printerVoltage, printerStatus;
     private EditText etText, etFontsize;
     private boolean isContinuousPrint = false;
     private boolean IsPrintPause = false;
@@ -46,17 +48,26 @@ public class StandardPrintActivity extends CommonActivity {
                             e.printStackTrace();
                         }
                     }
-                    mPrinter.printText(getText());
+                    try {
+                        mPrinter.printText(getText());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
             } else if (arg1 == 2) {
                 mAutoPaperCount++;
                 if (mAutoPaperCount < 30) {
-                    mPrinter.printText("");
+                    try {
+                        mPrinter.printText("");
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             return false;
         }
     });
+    private PrintLineStyle printLineStyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +91,11 @@ public class StandardPrintActivity extends CommonActivity {
         findViewById(R.id.speed_level_area).setVisibility(View.VISIBLE);
         findViewById(R.id.ll_continuous_print).setVisibility(View.VISIBLE);
         message = findViewById(R.id.message);
+        printerSpeed = findViewById(R.id.tv_get_printer_speed);
+        printerDensity = findViewById(R.id.tv_get_printer_density);
+        printerTemp = findViewById(R.id.tv_get_printer_temperature);
+        printerVoltage = findViewById(R.id.tv_get_printer_voltage);
+        printerStatus = findViewById(R.id.tv_get_printer_status);
         cbContuningPrint = findViewById(R.id.cb_contuning_print);
         cbNeedInterval = findViewById(R.id.cb_need_interval);
         cbAutoFeedLine = findViewById(R.id.cb_line_feed);
@@ -87,11 +103,17 @@ public class StandardPrintActivity extends CommonActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 cbNeedInterval.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize());
+                PrintLineStyle printLineStyle = new PrintLineStyle();
+                printLineStyle.setFontSize(getFontSize());
+                mPrinter.setPrintStyle(printLineStyle);
                 if (isChecked) {
                     isContinuousPrint = true;
                     mPrintcount = 0;
-                    mPrinter.printText(getText());
+                    try {
+                        mPrinter.printText(getText());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     isContinuousPrint = false;
                 }
@@ -116,7 +138,11 @@ public class StandardPrintActivity extends CommonActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 message.setText("");
                 String item = (String) parent.getAdapter().getItem(position);
-                mPrinter.setPrintDensity(Integer.parseInt(item));
+                try {
+                    mPrinter.setPrintDensity(Integer.parseInt(item));
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -132,7 +158,11 @@ public class StandardPrintActivity extends CommonActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 message.setText("");
                 String item = (String) parent.getAdapter().getItem(position);
-                mPrinter.setPrintSpeed(Integer.parseInt(item));
+                try {
+                    mPrinter.setPrintSpeed(Integer.parseInt(item));
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -147,7 +177,11 @@ public class StandardPrintActivity extends CommonActivity {
                 if (isChecked) {
                     mAutoPaperCount = 0;
                     iSAutoPaperOut = true;
-                    mPrinter.printText("");
+                    try {
+                        mPrinter.printText("");
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     iSAutoPaperOut = false;
                 }
@@ -159,12 +193,13 @@ public class StandardPrintActivity extends CommonActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getAdapter().getItem(position);
+                printLineStyle = new PrintLineStyle();
                 if (item.equals("Left")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.NORMAL);
+                    printLineStyle.setAlign(PrintLine.LEFT);
                 } else if (item.equals("Right")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.ALIGN_OPPOSITE);
+                    printLineStyle.setAlign(PrintLine.RIGHT);
                 } else if (item.equals("Center")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.CENTER);
+                    printLineStyle.setAlign(PrintLine.CENTER);
                 }
             }
 
@@ -190,16 +225,31 @@ public class StandardPrintActivity extends CommonActivity {
 
     @Override
     int printTest() throws RemoteException {
-        mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize());
+        printLineStyle.setFontSize(getFontSize());
+        mPrinter.setPrintStyle(printLineStyle);
         mPrinter.printText(getText());
         return 0;
     }
 
     @Override
-    void onPrintFinished(boolean isSuccess, String status) {
-        message.setText(isSuccess + ";" + status);
-        if (isSuccess) {
-            TRACE.d("SSSSS:isContinuousPrint" + isContinuousPrint);
+    void onPrintFinished(boolean isSuccess, String status, int type) {
+        TRACE.d("onPrintFinished:" + isSuccess + "---" + "status:" + status + "----" + "type:" + type);
+        if (type == 3) { //get printer density
+            printerDensity.setText(isSuccess + ":get printer density:" + status);
+        }
+        if (type == 5) { //get printer density
+            printerSpeed.setText(isSuccess + ":get printer speed:" + status);
+        }
+        if (type == 6) { //get printer density
+            printerTemp.setText(isSuccess + ":get printer temperature:" + status);
+        }
+        if (type == 7) { //get printer density
+            printerVoltage.setText(isSuccess + ":get printer voltage:" + status);
+        }
+        if (type == 8) { //get printer density
+            printerStatus.setText(isSuccess + ":get printer status:" + status);
+        }
+        if (isSuccess && status.equals("Normal") && type == 1) {
             if (isContinuousPrint) {
                 Message obtain = Message.obtain();
                 obtain.arg1 = 1;
@@ -215,7 +265,7 @@ public class StandardPrintActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintError(boolean isSuccess, String status) {
+    void onPrintError(boolean isSuccess, String status, int type) {
 
     }
 
@@ -266,15 +316,35 @@ public class StandardPrintActivity extends CommonActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.get_print_density) {
-            mPrinter.getPrintDensity();
+            try {
+                mPrinter.getPrintDensity();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         } else if (item.getItemId() == R.id.get_print_speed) {
-            mPrinter.getPrintSpeed();
+            try {
+                mPrinter.getPrintSpeed();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         } else if (item.getItemId() == R.id.get_print_temperature) {
-            mPrinter.getPrintTemperature();
+            try {
+                mPrinter.getPrintTemperature();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         } else if (item.getItemId() == R.id.get_print_voltage) {
-            mPrinter.getPrintVoltage();
+            try {
+                mPrinter.getPrintVoltage();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         } else if (item.getItemId() == R.id.get_print_status) {
-            mPrinter.getPrinterStatus();
+            try {
+                mPrinter.getPrinterStatus();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
         return true;
     }

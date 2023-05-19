@@ -22,6 +22,7 @@ import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.view.PrintLine;
 import com.dspread.demoui.view.PrinterLayout;
 import com.dspread.demoui.view.TextPrintLine;
+import com.dspread.print.device.bean.PrintLineStyle;
 
 import java.text.SimpleDateFormat;
 
@@ -53,7 +54,11 @@ public class BatteryTestActivity extends CommonActivity {
                             e.printStackTrace();
                         }
                     }
-                    mPrinter.printText(getText());
+                    try {
+                        mPrinter.printText(getText());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             return false;
@@ -132,11 +137,17 @@ public class BatteryTestActivity extends CommonActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 cbNeedInterval.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize());
+                PrintLineStyle printLineStyle = new PrintLineStyle();
+                printLineStyle.setFontSize(getFontSize());
+                mPrinter.setPrintStyle(printLineStyle);
                 if (isChecked) {
                     isContinuousPrint = true;
                     mPrintcount = 0;
-                    mPrinter.printText(getText());
+                    try {
+                        mPrinter.printText(getText());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     isContinuousPrint = false;
                 }
@@ -197,13 +208,15 @@ public class BatteryTestActivity extends CommonActivity {
     @Override
     int printTest() throws RemoteException {
         // printMeituanTicket();
-        mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize());
+        PrintLineStyle printLineStyle = new PrintLineStyle();
+        printLineStyle.setFontSize(getFontSize());
+        mPrinter.setPrintStyle(printLineStyle);
         mPrinter.printText(getText());
         return 0;
     }
 
     @Override
-    void onPrintFinished(boolean isSuccess, String status) {
+    void onPrintFinished(boolean isSuccess, String status,int type) {
         if (status != null) {
             TRACE.d("sssssss" + status);
         }
@@ -225,7 +238,7 @@ public class BatteryTestActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintError(boolean isSuccess, String status) {
+    void onPrintError(boolean isSuccess, String status,int type) {
 
     }
 
@@ -390,7 +403,7 @@ public class BatteryTestActivity extends CommonActivity {
         textPrintLine.setPosition(PrintLine.CENTER);
         printerLayout.addText(textPrintLine);
         Bitmap bitmap = printerLayout.viewToBitmap();
-        mPrinter.printBitmap(bitmap);
+        mPrinter.printBitmap(this,bitmap);
 
 
     }

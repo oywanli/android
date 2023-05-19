@@ -1,16 +1,7 @@
 package com.dspread.demoui.activities.printer;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -18,9 +9,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.TRACE;
+import com.dspread.demoui.view.PrintLine;
+import com.dspread.print.device.bean.PrintLineStyle;
+import com.dspread.print.mp600.PrintStyle;
 
 public class TestFontActivity extends CommonActivity {
 
@@ -32,6 +25,7 @@ public class TestFontActivity extends CommonActivity {
     private TextView tvGrayLevel;
     private LinearLayout mFontStyleArea, mFontArea, mGrayLevelArea;
     private TextView mFont;
+    private PrintLineStyle printLineStyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +49,19 @@ public class TestFontActivity extends CommonActivity {
         tvGrayLevel = findViewById(R.id.gray_level);
         mGrayLevelArea.setVisibility(View.GONE);
         mFontStyleArea.setVisibility(View.VISIBLE);
-        mFontArea.setVisibility(View.VISIBLE);
+        mFontArea.setVisibility(View.GONE);
         mSpinnerSpAlignment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getAdapter().getItem(position);
+                printLineStyle = new PrintLineStyle();
                 if (item.equals("Left")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.NORMAL);
+                    printLineStyle.setAlign(PrintLine.LEFT);
                 } else if (item.equals("Right")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.ALIGN_OPPOSITE);
+                    printLineStyle.setAlign(PrintLine.RIGHT);
+
                 } else if (item.equals("Center")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.CENTER);
+                    printLineStyle.setAlign(PrintLine.CENTER);
                 }
             }
 
@@ -78,14 +74,15 @@ public class TestFontActivity extends CommonActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getAdapter().getItem(position);
+                // PrintLineStyle printLineStyle = new PrintLineStyle();
                 if (item.equals("NORMAL")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
+                    printLineStyle.setFontStyle(PrintStyle.FontStyle.NORMAL);
                 } else if (item.equals("BOLD")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
+                    printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD);
                 } else if (item.equals("ITALIC")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.ITALIC);
+                    printLineStyle.setFontStyle(PrintStyle.FontStyle.ITALIC);
                 } else if (item.equals("BOLD_ITALIC")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD_ITALIC);
+                    printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD_ITALIC);
                 }
             }
 
@@ -99,16 +96,16 @@ public class TestFontActivity extends CommonActivity {
         mSpFont.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String item = (String) parent.getAdapter().getItem(position);
+              /*  String item = (String) parent.getAdapter().getItem(position);
                 if (item.equals("系统默认")) {
                     mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "");
                 } else if (item.equals("微软雅黑")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "fonts/msyh.ttc");
+                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "");
                 } else if (item.equals("arial")) {
                     mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "fonts/arial.ttf");
                 } else if (item.equals("宋体")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "fonts/simsun.ttc");
-                }
+                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "");
+                }*/
             }
 
             @Override
@@ -130,24 +127,24 @@ public class TestFontActivity extends CommonActivity {
 
     @Override
     int printTest() throws RemoteException {
-        mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize());
+        printLineStyle.setFontSize(getFontSize());
+        mPrinter.setPrintStyle(printLineStyle);
         mPrinter.printText(getText());
         return 0;
     }
 
     @Override
-    void onPrintFinished(boolean isSuccess, String status) {
+    void onPrintFinished(boolean isSuccess, String status,int type) {
+        TRACE.d("onPrintFinished:" + isSuccess + "---" + "status:" + status);
         if (status != null) {
             TRACE.d("ssss" + status);
         }
-
     }
 
     @Override
-    void onPrintError(boolean isSuccess, String status) {
+    void onPrintError(boolean isSuccess, String status,int type) {
 
     }
-
 
     private String getText() {
         if (etText.getText() != null) {
@@ -163,65 +160,6 @@ public class TestFontActivity extends CommonActivity {
         } else {
             return 14;
         }
-    }
-
-
-    private Bitmap generateFontTestBitmap() {
-        StringBuilder contentTextBuilder = new StringBuilder();
-        contentTextBuilder.append("abcdefghijklmnopqrstuvwxyz\n")
-                .append("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n")
-                .append("1234567890\n")
-                .append(". : , ; ' \\ \" ( ! ? ) + - * / =\n")
-                .append("。：，；“！”‘ ？（）、《》\n")
-                .append("中国智造，惠及全球\n\n");
-
-        TextPaint textPaint = new TextPaint();
-        textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setAlpha(255);
-        textPaint.setTextSize(26);
-//        textPaint.setAntiAlias(true);
-
-        int totalFontTextHeight = 0;
-        //totalFontTextHeight += mesureFontTextHeight("", "系统默认", contentTextBuilder.toString(), textPaint);
-        // totalFontTextHeight += mesureFontTextHeight("fonts/arial.ttf", "arial", contentTextBuilder.toString(), textPaint);
-        totalFontTextHeight += mesureFontTextHeight("fonts/msyh.ttc", "微软雅黑", contentTextBuilder.toString(), textPaint);
-        // totalFontTextHeight += mesureFontTextHeight("fonts/simsun.ttc", "宋体", contentTextBuilder.toString(), textPaint);
-
-        Bitmap bitmap = Bitmap.createBitmap(PAPER_WIDTH, totalFontTextHeight, Bitmap.Config.ALPHA_8);
-        Canvas canvas = new Canvas(bitmap);
-        Paint bgPaint = new Paint();
-        bgPaint.setAlpha(0);
-        bgPaint.setStyle(Paint.Style.FILL);
-        RectF rectF = new RectF(0, 0, PAPER_WIDTH, totalFontTextHeight);
-        canvas.drawRect(rectF, bgPaint);
-
-        //drawFontText("", "系统默认", contentTextBuilder.toString(), canvas, textPaint);
-        // drawFontText("fonts/arial.ttf", "arial", contentTextBuilder.toString(), canvas, textPaint);
-        drawFontText("fonts/msyh.ttc", "微软雅黑", contentTextBuilder.toString(), canvas, textPaint);
-        //drawFontText("fonts/simsun.ttc", "宋体", contentTextBuilder.toString(), canvas, textPaint);
-
-        return bitmap;
-    }
-
-    private void drawFontText(String fontpath, String fontName, String text, Canvas canvas, TextPaint textPaint) {
-        if (TextUtils.isEmpty(fontpath)) {
-            textPaint.setTypeface(Typeface.DEFAULT);
-        } else {
-            textPaint.setTypeface(Typeface.createFromAsset(getAssets(), fontpath));
-        }
-        StaticLayout layout = new StaticLayout(fontName + ": \n" + text, textPaint, 384, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, false);
-        layout.draw(canvas);
-        canvas.translate(0, layout.getHeight());
-    }
-
-    private int mesureFontTextHeight(String fontpath, String fontName, String text, TextPaint textPaint) {
-        if (TextUtils.isEmpty(fontpath)) {
-            textPaint.setTypeface(Typeface.DEFAULT);
-        } else {
-            textPaint.setTypeface(Typeface.createFromAsset(getAssets(), fontpath));
-        }
-        StaticLayout layout = new StaticLayout(fontName + ": \n" + text, textPaint, 384, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, false);
-        return layout.getHeight();
     }
 
 }

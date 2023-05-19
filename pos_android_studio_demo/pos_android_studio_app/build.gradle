@@ -38,7 +38,6 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
         }
     }
     sourceSets.main {
@@ -59,6 +58,12 @@ android {
     configurations {
         cleanedAnnotations
     }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 
@@ -71,7 +76,6 @@ dependencies {
     implementation 'com.binioter:guideview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.protobuf:protobuf-javalite:3.21.7'
-
     //okhttp request apk update and download
     implementation 'com.github.xuexiangjys.XUtil:xutil-core:2.0.0'
     implementation 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0'
@@ -86,8 +90,12 @@ dependencies {
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.google.zxing:core:3.3.3'
     //dspread sdk
-    implementation files('libs\\dspread_print_sdk_1.0.0.jar')
-    implementation 'com.dspread.library:dspread_pos_sdk:4.3.1'
+    //implementation files('libs\\dspread_print_sdk_1.0.0.jar')
+    implementation 'com.dspread.library:dspread_pos_sdk:4.3.2'
+
+    implementation 'com.dspread.print:dspread_print_sdk:1.2.0'
+
+   //implementation(name: 'android_printsdk-release', ext: 'aar')
 }
 
 sentry {
