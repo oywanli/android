@@ -85,7 +85,7 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.3'
     //dspread sdk
     implementation files('libs\\dspread_print_sdk_1.0.0.jar')
-    implementation 'com.dspread.library:dspread_pos_sdk:4.3.2'
+    implementation 'com.dspread.library:dspread_pos_sdk:4.3.5'
 }
 
 sentry {

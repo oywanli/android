@@ -266,7 +266,7 @@ public class OtherActivity extends BaseActivity {
         //pos=null;
         MyPosListener listener = new MyPosListener();
         //implement singleton mode
-        pos = QPOSService.getInstance(mode);
+        pos = QPOSService.getInstance(OtherActivity.this,mode);
         if (pos == null) {
             statusEditText.setText("CommunicationMode unknow");
             return;
@@ -2316,8 +2316,14 @@ public class OtherActivity extends BaseActivity {
     }
 
     private void devicePermissionRequest(UsbManager mManager, UsbDevice usbDevice) {
-        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
-                "com.android.example.USB_PERMISSION"), 0);
+        PendingIntent mPermissionIntent;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            mPermissionIntent = PendingIntent.getBroadcast(OtherActivity.this, 0, new Intent(
+                    "com.android.example.USB_PERMISSION"),  PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            mPermissionIntent = PendingIntent.getBroadcast(OtherActivity.this, 0, new Intent(
+                    "com.android.example.USB_PERMISSION"), 0);
+        }
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         registerReceiver(mUsbReceiver, filter);
         mManager.requestPermission(usbDevice, mPermissionIntent);
