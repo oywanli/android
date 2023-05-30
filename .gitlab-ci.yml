@@ -104,9 +104,11 @@ release_job:
     - if: $CI_COMMIT_TAG && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
     - echo "Running the release job."
+    - curr_date='date +%Y%m%d%H%M%S'
+    - echo $curr_date
     
   release:
-    name: 'Release $CI_COMMIT_TAG'
-    tag_name: '$CI_COMMIT_TAG'
+    name: 'Release ${V4.3_}${curr_date}'
+    tag_name: '${V4.3_}${curr_date}'
     description: 'Release created using the release-cli.'
 
