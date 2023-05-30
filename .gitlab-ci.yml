@@ -108,7 +108,7 @@ release_job:
     - echo $curr_date
     
   release:
-    name: 'Release ${V4.3_}${curr_date}'
-    tag_name: '${V4.3_}${curr_date}'
+    name: 'Release $curr_date'
+    tag_name: '$curr_date'
     description: 'Release created using the release-cli.'
 
