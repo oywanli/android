@@ -36,7 +36,11 @@ public class MPPrintBitmapActivity extends CommonActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getAdapter().getItem(position);
-                mPrinter.setPrintDensity(Integer.parseInt(item));
+                try {
+                    mPrinter.setPrintDensity(Integer.parseInt(item));
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -62,42 +66,20 @@ public class MPPrintBitmapActivity extends CommonActivity {
     @Override
     int printTest() throws RemoteException {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-        //pos.printBitmap(bitmap);
-        if (model.equalsIgnoreCase("MP600") || model.equalsIgnoreCase("D60")) {
-            mPrinter.printBitmap(bitmap);
-        } else if (model.equalsIgnoreCase("D30")) {
-            mPrinter.printBitmap(bitmap, 50);
-            mPrinter.setLineFeed(5);
-            mPrinter.setReturnPrintState(new QPOSPrintService.OnReturnPrintResultState() {
-                @Override
-                public void onPrintStart() {
-
-                }
-
-                @Override
-                public void onPrintFinish(int height) {
-
-                }
-
-                @Override
-                public void onPrintError(int error, String message) {
-
-                }
-            });
-        }
+        mPrinter.printBitmap(this, bitmap);
         return 0;
     }
 
     @Override
-    void onPrintFinished(boolean isSuccess, String status) {
+    void onPrintFinished(boolean isSuccess, String status,int type) {
+        TRACE.d("onPrintFinished:" + isSuccess + "---" + "status:" + status);
         if (status != null) {
-            TRACE.d("ssss" + status);
         }
 
     }
 
     @Override
-    void onPrintError(boolean isSuccess, String status) {
+    void onPrintError(boolean isSuccess, String status,int type) {
 
     }
 
