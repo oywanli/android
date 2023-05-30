@@ -43,6 +43,7 @@ import com.dspread.demoui.USBClass;
 import com.dspread.demoui.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.keyboard.KeyboardUtil;
 import com.dspread.demoui.keyboard.MyKeyboardView;
+import com.dspread.demoui.utils.ClickUtil;
 import com.dspread.demoui.utils.DUKPK2009_CBC;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.QPOSUtil;
@@ -164,22 +165,21 @@ public class OtherActivity extends BaseActivity {
                 serialBtn.setVisibility(View.VISIBLE);
                 audioBtn.setVisibility(View.GONE);
                 serialBtn.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
-                        posType = POS_TYPE.UART;
-                        open(QPOSService.CommunicationMode.UART);
+                        if (ClickUtil.isFastClick()) { //
+                            posType = POS_TYPE.UART;
+                            open(QPOSService.CommunicationMode.UART);
 //                        blueTootchAddress = "/dev/ttyMT0";//tongfang is s1，tianbo is s3
-                        blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
+                            blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
 //                        blueTootchAddress = "/dev/ttyHSL1";//tongfang is s1，tianbo is s3
-                        pos.setDeviceAddress(blueTootchAddress);
-                        pos.openUart();
-
+                            pos.setDeviceAddress(blueTootchAddress);
+                            pos.openUart();
+                        }
                     }
                 });
                 break;
-
         }
     }
 
@@ -266,7 +266,7 @@ public class OtherActivity extends BaseActivity {
         //pos=null;
         MyPosListener listener = new MyPosListener();
         //implement singleton mode
-        pos = QPOSService.getInstance(mode);
+        pos = QPOSService.getInstance(OtherActivity.this,mode);
         if (pos == null) {
             statusEditText.setText("CommunicationMode unknow");
             return;
@@ -463,7 +463,6 @@ public class OtherActivity extends BaseActivity {
             statusEditText.setText("get_deivce_key_checkvalue..............");
             int keyIdex = getKeyIndex();
             pos.getKeyCheckValue(keyIdex, QPOSService.CHECKVALUE_KEYTYPE.DUKPT_MKSK_ALLTYPE);
-
 
         } else if (item.getItemId() == R.id.menu_get_pos_id) {
             pos.getQposId();
@@ -973,11 +972,9 @@ public class OtherActivity extends BaseActivity {
                     dismissDialog();
                 }
             });
-
             dialog.show();
             amount = "";
             cashbackAmount = "";
-
         }
 
         @Override
@@ -993,7 +990,6 @@ public class OtherActivity extends BaseActivity {
         @Override
         public void onRequestTransactionLog(String tlv) {
             TRACE.d("onRequestTransactionLog(String tlv):" + tlv);
-
             dismissDialog();
             String content = getString(R.string.transaction_log);
             content += tlv;
@@ -1015,7 +1011,6 @@ public class OtherActivity extends BaseActivity {
             content += "conn: " + pos.getBluetoothState() + "\n";
             content += "psamId: " + psamId + "\n";
             content += "NFCId: " + NFCId + "\n";
-
             if (!isVisiblePosID) {
                 statusEditText.setText(content);
             } else {
@@ -1032,19 +1027,16 @@ public class OtherActivity extends BaseActivity {
             dialog = new Dialog(mContext);
             dialog.setContentView(R.layout.emv_app_dialog);
             dialog.setTitle(R.string.please_select_app);
-
             String[] appNameList = new String[appList.size()];
             for (int i = 0; i < appNameList.length; ++i) {
                 appNameList[i] = appList.get(i);
             }
-
             appListView = (ListView) dialog.findViewById(R.id.appList);
             appListView.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, appNameList));
             appListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                     pos.selectEmvApp(position);
                     TRACE.d(getString(R.string.select_app_end) + position);
                     dismissDialog();
@@ -1052,7 +1044,6 @@ public class OtherActivity extends BaseActivity {
 
             });
             dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     pos.cancelSelectEmvApp();
@@ -1060,20 +1051,16 @@ public class OtherActivity extends BaseActivity {
                 }
             });
             dialog.show();
-
         }
 
         @Override
         public void onRequestSetAmount() {
             TRACE.d("enter amount -- start");
             TRACE.d("onRequestSetAmount()");
-
-
             dismissDialog();
             dialog = new Dialog(mContext);
             dialog.setContentView(R.layout.amount_dialog);
             dialog.setTitle(getString(R.string.set_amount));
-
             String[] transactionTypes = new String[]{"GOODS", "SERVICES", "CASH", "CASHBACK", "INQUIRY",
                     "TRANSFER", "ADMIN", "CASHDEPOSIT",
                     "PAYMENT", "PBOCLOG||ECQ_INQUIRE_LOG", "SALE",
@@ -1132,17 +1119,12 @@ public class OtherActivity extends BaseActivity {
                     } else if (transactionTypeString.equals("SALES_NEW")) {
                         transactionType = QPOSService.TransactionType.SALES_NEW;
                     }
-
-
                     OtherActivity.this.amount = amount;
                     OtherActivity.this.cashbackAmount = cashbackAmount;
-
                     pos.setAmount(amount, cashbackAmount, "156", transactionType);
-
                     TRACE.d("enter amount  -- end");
                     dismissDialog();
                 }
-
             });
 
             dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
@@ -1152,7 +1134,6 @@ public class OtherActivity extends BaseActivity {
                     pos.cancelSetAmount();
                     dialog.dismiss();
                 }
-
             });
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
@@ -1318,7 +1299,6 @@ public class OtherActivity extends BaseActivity {
             TRACE.d("onRequestQposConnected()");
             Toast.makeText(mContext, "onRequestQposConnected", Toast.LENGTH_LONG).show();
             dismissDialog();
-
             statusEditText.setText(getString(R.string.device_plugged));
             doTradeButton.setEnabled(true);
             btnDisconnect.setEnabled(true);
@@ -1327,8 +1307,8 @@ public class OtherActivity extends BaseActivity {
                 //申请权限
                 ActivityCompat.requestPermissions(OtherActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
             }
-            isVisiblePosID = true;
             pos.getQposId();
+            isVisiblePosID = true;
         }
 
         @Override
@@ -2336,8 +2316,14 @@ public class OtherActivity extends BaseActivity {
     }
 
     private void devicePermissionRequest(UsbManager mManager, UsbDevice usbDevice) {
-        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
-                "com.android.example.USB_PERMISSION"), 0);
+        PendingIntent mPermissionIntent;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            mPermissionIntent = PendingIntent.getBroadcast(OtherActivity.this, 0, new Intent(
+                    "com.android.example.USB_PERMISSION"),  PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            mPermissionIntent = PendingIntent.getBroadcast(OtherActivity.this, 0, new Intent(
+                    "com.android.example.USB_PERMISSION"), 0);
+        }
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         registerReceiver(mUsbReceiver, filter);
         mManager.requestPermission(usbDevice, mPermissionIntent);
@@ -2423,15 +2409,12 @@ public class OtherActivity extends BaseActivity {
                     return;
                 }
                 final CharSequence[] items = deviceList.toArray(new CharSequence[deviceList.size()]);
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setTitle("Select a Reader");
                 builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         String selectedDevice = (String) items[item];
-
                         dialog.dismiss();
-
                         usbDevice = USBClass.getMdevices().get(selectedDevice);
                         open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
                         posType = POS_TYPE.OTG;
@@ -2599,7 +2582,7 @@ public class OtherActivity extends BaseActivity {
                 }
             }
             if (data == null || data.length == 0) {
-                data = FileUtils.readAssetsLine("D20_master.asc", OtherActivity.this);
+                data = FileUtils.readAssetsLine("upgrader.asc", OtherActivity.this);
             }
             int a = pos.updatePosFirmware(data, blueTootchAddress);
             //D20 doesn't need to keep charging

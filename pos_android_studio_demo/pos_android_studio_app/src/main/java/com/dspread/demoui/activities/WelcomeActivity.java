@@ -303,6 +303,9 @@ public class WelcomeActivity extends BaseActivity implements OnClickListener {
                                 int versionCodeInt = Integer.parseInt(substring);
                                 Object versionName = versionEnty.getVersionName();
                                 String modifyContent = (String) versionEnty.getModifyContent();
+                                if (modifyContent.length() > 300) {
+                                    modifyContent = modifyContent.substring(0, 300) + "......";
+                                }
                                 Log.e("download_Success-JSON;", s + "" + "versionCode:" + versionCode);
                                 String downloadUrl = versionEnty.getDownloadUrl();
                                 Log.e("download_Success-JSON", "downloadUrl:" + downloadUrl);

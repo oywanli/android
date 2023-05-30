@@ -103,11 +103,11 @@ public class TestFontActivity extends CommonActivity {
                 if (item.equals("系统默认")) {
                     mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "");
                 } else if (item.equals("微软雅黑")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "fonts/msyh.ttc");
+                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "");
                 } else if (item.equals("arial")) {
                     mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "fonts/arial.ttf");
                 } else if (item.equals("宋体")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "fonts/simsun.ttc");
+                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "");
                 }
             }
 
@@ -148,7 +148,6 @@ public class TestFontActivity extends CommonActivity {
 
     }
 
-
     private String getText() {
         if (etText.getText() != null) {
             return etText.getText().toString();
@@ -163,65 +162,6 @@ public class TestFontActivity extends CommonActivity {
         } else {
             return 14;
         }
-    }
-
-
-    private Bitmap generateFontTestBitmap() {
-        StringBuilder contentTextBuilder = new StringBuilder();
-        contentTextBuilder.append("abcdefghijklmnopqrstuvwxyz\n")
-                .append("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n")
-                .append("1234567890\n")
-                .append(". : , ; ' \\ \" ( ! ? ) + - * / =\n")
-                .append("。：，；“！”‘ ？（）、《》\n")
-                .append("中国智造，惠及全球\n\n");
-
-        TextPaint textPaint = new TextPaint();
-        textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setAlpha(255);
-        textPaint.setTextSize(26);
-//        textPaint.setAntiAlias(true);
-
-        int totalFontTextHeight = 0;
-        //totalFontTextHeight += mesureFontTextHeight("", "系统默认", contentTextBuilder.toString(), textPaint);
-        // totalFontTextHeight += mesureFontTextHeight("fonts/arial.ttf", "arial", contentTextBuilder.toString(), textPaint);
-        totalFontTextHeight += mesureFontTextHeight("fonts/msyh.ttc", "微软雅黑", contentTextBuilder.toString(), textPaint);
-        // totalFontTextHeight += mesureFontTextHeight("fonts/simsun.ttc", "宋体", contentTextBuilder.toString(), textPaint);
-
-        Bitmap bitmap = Bitmap.createBitmap(PAPER_WIDTH, totalFontTextHeight, Bitmap.Config.ALPHA_8);
-        Canvas canvas = new Canvas(bitmap);
-        Paint bgPaint = new Paint();
-        bgPaint.setAlpha(0);
-        bgPaint.setStyle(Paint.Style.FILL);
-        RectF rectF = new RectF(0, 0, PAPER_WIDTH, totalFontTextHeight);
-        canvas.drawRect(rectF, bgPaint);
-
-        //drawFontText("", "系统默认", contentTextBuilder.toString(), canvas, textPaint);
-        // drawFontText("fonts/arial.ttf", "arial", contentTextBuilder.toString(), canvas, textPaint);
-        drawFontText("fonts/msyh.ttc", "微软雅黑", contentTextBuilder.toString(), canvas, textPaint);
-        //drawFontText("fonts/simsun.ttc", "宋体", contentTextBuilder.toString(), canvas, textPaint);
-
-        return bitmap;
-    }
-
-    private void drawFontText(String fontpath, String fontName, String text, Canvas canvas, TextPaint textPaint) {
-        if (TextUtils.isEmpty(fontpath)) {
-            textPaint.setTypeface(Typeface.DEFAULT);
-        } else {
-            textPaint.setTypeface(Typeface.createFromAsset(getAssets(), fontpath));
-        }
-        StaticLayout layout = new StaticLayout(fontName + ": \n" + text, textPaint, 384, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, false);
-        layout.draw(canvas);
-        canvas.translate(0, layout.getHeight());
-    }
-
-    private int mesureFontTextHeight(String fontpath, String fontName, String text, TextPaint textPaint) {
-        if (TextUtils.isEmpty(fontpath)) {
-            textPaint.setTypeface(Typeface.DEFAULT);
-        } else {
-            textPaint.setTypeface(Typeface.createFromAsset(getAssets(), fontpath));
-        }
-        StaticLayout layout = new StaticLayout(fontName + ": \n" + text, textPaint, 384, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, false);
-        return layout.getHeight();
     }
 
 }
