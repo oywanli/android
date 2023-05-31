@@ -87,9 +87,7 @@ assembleRelease:
     - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/*
     #- pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/commit.txt 
     #pos_android_studio_app-release.apk
-    
-
-    
+        
 sast:
   stage: test
   script: 
@@ -97,18 +95,22 @@ sast:
   variables:
      CI_DEBUG_TRACE: "true"
 
+variables:
+  COMMIT_TIME: '$(date "+%Y%m%d%H%M%S")' 
+
 release_job:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      description: 'Release created using the release-cli.'
   script:
     - echo "Running the release job."
-    - curr_date=$(date "+%Y%m%d%H%M%S")
-    - echo $curr_date
-    
+    #- export curr_date=$(date "+%Y%m%d%H%M%S")
+    #- echo $curr_date
+    #- echo $CI_COMMIT_TIMESTAMP
   release:
-    name: 'Release $curr_date'
-    tag_name: '$curr_date'
+    name: 'Release ${COMMIT_TIME}'
+    tag_name: 'V4.3_$COMMIT_TIME'
     description: 'Release created using the release-cli.'
 
