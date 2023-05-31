@@ -97,13 +97,13 @@ sast:
 
 variables:
   COMMIT_TIME: '$(date "+%Y%m%d%H%M%S")' 
+  VERSIONAME: '$(grep -E "versionName" pos_android_studio_app/build.gradle | cut -d "\"" -f2)'
 
 release_job:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      description: 'Release created using the release-cli.'
+    - if: $COMMIT_TIME && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
     - echo "Running the release job."
     #- export curr_date=$(date "+%Y%m%d%H%M%S")
@@ -111,6 +111,6 @@ release_job:
     #- echo $CI_COMMIT_TIMESTAMP
   release:
     name: 'Release ${COMMIT_TIME}'
-    tag_name: 'V4.3_$COMMIT_TIME'
+    tag_name: '${VERSIONAME}_${COMMIT_TIME}'
     description: 'Release created using the release-cli.'
 
