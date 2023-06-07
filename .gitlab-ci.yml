@@ -38,6 +38,9 @@ include:
   - template: Secret-Detection.gitlab-ci.yml
   - template: Jobs/Dependency-Scanning.gitlab-ci.yml
   - template: /Jobs/License-Scanning.gitlab-ci.yml
+variables:
+  COMMIT_TIME: '$(date "+%Y%m%d%H%M%S")' 
+  VERSIONAME: '4.2.11'
 
 assembleRelease:
   stage: build
@@ -52,6 +55,7 @@ assembleRelease:
 
   - export VERSION=$(grep -E "versionName" pos_android_studio_app/build.gradle | cut -d "\"" -f2)
   - export VERSIONCODE=$(grep -E "versionCode" pos_android_studio_app/build.gradle)
+  - VERSIONAME=$VERSION
 
   #- echo $VERSION
   
@@ -87,9 +91,7 @@ assembleRelease:
     - pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/*
     #- pos_android_studio_demo/pos_android_studio_app/build/outputs/apk/release/commit.txt 
     #pos_android_studio_app-release.apk
-    
-
-    
+        
 sast:
   stage: test
   script: 
@@ -97,18 +99,19 @@ sast:
   variables:
      CI_DEBUG_TRACE: "true"
 
+
 release_job:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   rules:
-    - if: $CI_COMMIT_TAG && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $COMMIT_TIME && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   script:
     - echo "Running the release job."
-    - curr_date='date +%Y%m%d%H%M%S'
-    - echo $curr_date
-    
+    #- export curr_date=$(date "+%Y%m%d%H%M%S")
+    #- echo $curr_date
+    #- echo $CI_COMMIT_TIMESTAMP
   release:
-    name: 'Release ${V}${curr_date}'
-    tag_name: '${V}${curr_date}'
+    name: 'Release ${COMMIT_TIME}'
+    tag_name: '${VERSIONAME}_${COMMIT_TIME}'
     description: 'Release created using the release-cli.'
 
