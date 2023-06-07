@@ -266,7 +266,7 @@ public class OtherActivity extends BaseActivity {
         //pos=null;
         MyPosListener listener = new MyPosListener();
         //implement singleton mode
-        pos = QPOSService.getInstance(OtherActivity.this,mode);
+        pos = QPOSService.getInstance(OtherActivity.this, mode);
         if (pos == null) {
             statusEditText.setText("CommunicationMode unknow");
             return;
@@ -1316,6 +1316,12 @@ public class OtherActivity extends BaseActivity {
             dismissDialog();
             TRACE.d("onRequestQposDisconnected()");
             statusEditText.setText(getString(R.string.device_unplugged));
+            if (pos != null) {
+                String occupyPackName = pos.getOccupyPackName();
+                if (!TextUtils.isEmpty(occupyPackName)) {
+                    Toast.makeText(mContext, "The port is occupied:" + occupyPackName, Toast.LENGTH_SHORT).show();
+                }
+            }
             btnDisconnect.setEnabled(false);
             doTradeButton.setEnabled(false);
 
@@ -2319,7 +2325,7 @@ public class OtherActivity extends BaseActivity {
         PendingIntent mPermissionIntent;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             mPermissionIntent = PendingIntent.getBroadcast(OtherActivity.this, 0, new Intent(
-                    "com.android.example.USB_PERMISSION"),  PendingIntent.FLAG_IMMUTABLE);
+                    "com.android.example.USB_PERMISSION"), PendingIntent.FLAG_IMMUTABLE);
         } else {
             mPermissionIntent = PendingIntent.getBroadcast(OtherActivity.this, 0, new Intent(
                     "com.android.example.USB_PERMISSION"), 0);
