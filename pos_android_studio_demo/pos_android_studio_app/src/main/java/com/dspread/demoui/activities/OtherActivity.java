@@ -1071,7 +1071,6 @@ public class OtherActivity extends BaseActivity {
 
             dialog.findViewById(R.id.setButton).setOnClickListener(new View.OnClickListener() {
 
-
                 @Override
                 public void onClick(View v) {
 
@@ -1196,14 +1195,11 @@ public class OtherActivity extends BaseActivity {
                     });
 
             dialog.show();
-
         }
-
 
         @Override
         public void onRequestTime() {
             TRACE.d("onRequestTime");
-
             dismissDialog();
             String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
             pos.sendTime(terminalTime);
@@ -1315,6 +1311,7 @@ public class OtherActivity extends BaseActivity {
         public void onRequestQposDisconnected() {
             dismissDialog();
             TRACE.d("onRequestQposDisconnected()");
+            
             statusEditText.setText(getString(R.string.device_unplugged));
             if (pos != null) {
                 String occupyPackName = pos.getOccupyPackName();
@@ -1322,9 +1319,9 @@ public class OtherActivity extends BaseActivity {
                     Toast.makeText(mContext, "The port is occupied:" + occupyPackName, Toast.LENGTH_SHORT).show();
                 }
             }
+
             btnDisconnect.setEnabled(false);
             doTradeButton.setEnabled(false);
-
         }
 
         @Override
