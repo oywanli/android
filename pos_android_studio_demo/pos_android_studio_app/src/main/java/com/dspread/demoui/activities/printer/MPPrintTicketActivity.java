@@ -2,7 +2,6 @@ package com.dspread.demoui.activities.printer;
 
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.action.printerservice.barcode.Barcode1D;
+import com.action.printerservice.barcode.Barcode2D;
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.QRCodeUtil;
 import com.dspread.demoui.utils.TRACE;
@@ -19,7 +20,8 @@ import com.dspread.demoui.view.MidTextPrintLine;
 import com.dspread.demoui.view.PrintLine;
 import com.dspread.demoui.view.PrinterLayout;
 import com.dspread.demoui.view.TextPrintLine;
-import com.dspread.print.QPOSPrintService;
+import com.dspread.print.device.bean.PrintLineStyle;
+import com.dspread.print.mp600.PrintStyle;
 
 public class MPPrintTicketActivity extends CommonActivity {
     private EditText etText, etFontsize;
@@ -68,72 +70,41 @@ public class MPPrintTicketActivity extends CommonActivity {
     }
 
     @Override
-    void onPrintFinished(boolean isSuccess, String status) {
+    void onPrintFinished(boolean isSuccess, String status, int type) {
+        TRACE.d("onPrintFinished:" + isSuccess + "---" + "status:" + status);
         if (status != null) {
-            TRACE.d("ssss" + status);
         }
-
     }
 
     @Override
-    void onPrintError(boolean isSuccess, String status) {
-
+    void onPrintError(boolean isSuccess, String status, int type) {
     }
 
     private void printMeituanTicket() throws RemoteException {
         Bitmap bitmap = getBitmap();
-        if (model.equalsIgnoreCase("MP600") || model.equalsIgnoreCase("D60")) {
-            mPrinter.printBitmap(bitmap);
-        }
-        if (Build.MODEL.equalsIgnoreCase("D30")) {
-            mPrinter.printBitmap(bitmap, 50);
-            mPrinter.setLineFeed(5);
-            mPrinter.setReturnPrintState(new QPOSPrintService.OnReturnPrintResultState() {
-                @Override
-                public void onPrintStart() {
-
-                }
-
-                @Override
-                public void onPrintFinish(int height) {
-
-                }
-
-                @Override
-                public void onPrintError(int error, String message) {
-
-                }
-            });
-        }
+        mPrinter.printBitmap(this, bitmap);
     }
 
     private Bitmap getBitmap() {
         PrinterLayout printerLayout = new PrinterLayout(this);
-
-
         TextPrintLine headTPL = new TextPrintLine();
         headTPL.setBold(true);
         headTPL.setPosition(PrintLine.CENTER);
         headTPL.setContent("Testing");
         headTPL.setSize(14);
         printerLayout.addText(headTPL);
-
-
         TextPrintLine headTwo = new TextPrintLine();
         headTwo.setBold(true);
         headTwo.setPosition(PrintLine.CENTER);
         headTwo.setContent("POS Signing of purchase orders");
         headTwo.setSize(14);
         printerLayout.addText(headTwo);
-
         TextPrintLine headThree = new TextPrintLine();
         headThree.setBold(true);
         headThree.setPosition(PrintLine.CENTER);
         headThree.setContent("MERCHANT COPY");
         headThree.setSize(14);
         printerLayout.addText(headThree);
-
-
         TextPrintLine toolLineTOP = new TextPrintLine();
         toolLineTOP.setContent("- - - - - - - - - - - - - -");
         toolLineTOP.setPosition(PrintLine.CENTER);

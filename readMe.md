@@ -18,6 +18,22 @@ Version | Author        | Date       | Description
 1.0     | Austin Wang   | 2016-09-01 | Added EMV related function
 1.1     | Ausitn Wang   | 2017-03-01 | Merge QPOS standard and EMV Card reader together
 1.2     | Austin Wang   | 2017-10-20 | Added UART interface support for GES device
+2.8.0   | Zhengwei Fang   | 2018-05-14 | Change Maximum length of transaction amount to 12
+2.9.0   | Zhengwei Fang   | 2020-03-18 | Add CQPOSService to implement listener callback
+3.0.0   | Zhengwei Fang   | 2020-06-04 | Update CVM pin and fix usb otg bug
+3.1.0   | Zhengwei Fang   | 2020-07-27 | Add getRandomeNumByLen() and BLE ClearBluetooth function
+3.2.0   | Zhengwei Fang   | 2020-12-17 | Add update TR31 keys，fix the "cashback is 0" issue
+3.3.0   | Zhengwei Fang   | 2021-03-08 | Comment createInsecureRfcommSocketToServiceRecord function and add updateIPEKOperationByKeyType function
+3.4.0   | Zhengwei Fang   | 2021-04-11 | Add doFelicaOp,generateTransportKey and updateIPEKByTransportKey function
+3.5.0   | Zhengwei Fang   | 2021-05-08 | Add the sync sendapdu,sendNfcapdu function and multiple cards prompt for CR100, 
+3.6.0   | Zhengwei Fang   | 2021-06-15 | Add getPin function for CR100 & D20 and boardcastReceiver to detect the bluetooth if open or close
+3.7.0   | Zhengwei Fang   | 2021-08-11 | Add clearD20Device,getD20SpLog function to pos log for D20&D30
+3.8.0   | Zhengwei Fang   | 2021-08-11 | Fix offline pin bug and change sdk android gradle veision to 30
+3.9.0   | Zhengwei Fang   | 2021-11-22 | Add modelInfo and change compile time format in the getQposInfo function
+4.0.0   | Zhengwei Fang   | 2022-03-24 | Add the new method isBootMode to check the device boot status and update the multi-application selection for contactless
+4.1.0   | Zhengwei Fang   | 2022-07-04 | Add playBuzzerByType(),operateLEDByType() function
+4.2.0   | Zhengwei Fang   | 2022-08-25 | Add getEncryptedTrack2Data method to get ksn and EncryptedTrack2data.
+4.3.0   | Zhengwei Fang   | 2023-03-02 | Fix the app crash bug caused by disconnecting Bluetooth during Bluetooth scanning
 
 # Introduction
 

@@ -28,6 +28,9 @@ import com.dspread.demoui.R;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.print.CQPOSPrintService;
 import com.dspread.print.QPOSPrintService;
+import com.dspread.print.device.PrintListener;
+import com.dspread.print.device.PrinterDevice;
+import com.dspread.print.device.PrinterManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,7 +63,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     private SimpleDateFormat mFileNameDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
     protected Toolbar toolbar;
     private TextView txt_toolbar_title;
-    protected QPOSPrintService mPrinter;
+    protected PrinterDevice mPrinter;
     protected String model;
 
     @Override
@@ -131,37 +134,18 @@ public abstract class CommonActivity extends AppCompatActivity {
             }
         });
 
-
-        //根据设备类型，初始化相应的设备打印服务
-        // D30 / MP600 // MP5801
-        if (model.equalsIgnoreCase("MP600") || model.equalsIgnoreCase("D60")) {
-            initUart(QPOSPrintService.CommunicationMode.UART);//
-
-        } else if (model.equalsIgnoreCase("D30")) {
+        if (model.equalsIgnoreCase("D30")) {
             findViewById(R.id.gray_level_area).setVisibility(View.GONE);
             findViewById(R.id.speed_level_area).setVisibility(View.GONE);
-
-            ActionPrinter.getInstance(getApplicationContext()).bind();
-            ActionPrinter instance = ActionPrinter.getInstance(getApplicationContext());
-            mPrinter = QPOSPrintService.getInstance();
-            mPrinter.setActionPrinter(instance);
         }
+
+        PrinterManager instance = PrinterManager.getInstance();
+        mPrinter = instance.getPrinter();
+        mPrinter.initPrinter(this);
+        MyPrinterListener myPrinterListener = new MyPrinterListener();
+        mPrinter.setPrintListener(myPrinterListener);
     }
 
-    private void initUart(QPOSPrintService.CommunicationMode mode) {
-        TRACE.d("open");
-        mPrinter = QPOSPrintService.getInstance(mode);
-        if (mPrinter == null) {
-            return;
-        }
-        mPrinter.setPrintFlag(true);
-        mPrinter.setConext(this);
-        MyPosListener listener = new MyPosListener();
-        Handler handler = new Handler(Looper.myLooper());
-        mPrinter.initListener(handler, listener);
-    }
-
-    // public abstract CQPOSService setMyPosListener();
     public abstract void onToolbarLinstener();
 
     int getLayoutId() {
@@ -197,7 +181,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     void onTestPrintResume(int reason) {
     }
 
-    void onQposPrintDensityResult(boolean isSuccess, String value) {
+  /*  void onQposPrintDensityResult(boolean isSuccess, String value) {
     }
 
     void onQposPrintSpeedResult(boolean isSuccess, String value) {
@@ -210,11 +194,11 @@ public abstract class CommonActivity extends AppCompatActivity {
     }
 
     void onQposPrintStateResult(boolean isSuccess, String value) {
-    }
+    }*/
 
-    abstract void onPrintFinished(boolean isSuccess, String status);
+    abstract void onPrintFinished(boolean isSuccess, String status, int type);
 
-    abstract void onPrintError(boolean isSuccess, String status);
+    abstract void onPrintError(boolean isSuccess, String status, int type);
 
     public void enableButton(Button button, boolean enable) {
         button.post(new Runnable() {
@@ -239,9 +223,8 @@ public abstract class CommonActivity extends AppCompatActivity {
         super.onDestroy();
         isFinished = true;
         if (mPrinter != null) {
-            mPrinter.closeUart();
+            mPrinter.close();
         }
-
     }
 
 
@@ -371,48 +354,18 @@ public abstract class CommonActivity extends AppCompatActivity {
         }
     }
 
-    class MyPosListener extends CQPOSPrintService {
+    class MyPrinterListener implements PrintListener {
+
         @Override
-        public void onQposReturnPrintResult(boolean isSuccess, String status) {
-            super.onQposReturnPrintResult(isSuccess, status);
+        public void printResult(boolean b, String status, int type) {
             enableButton(btnPrint, true);
-            if (isSuccess) {
-                onPrintFinished(isSuccess, status);
+            if (b) {
+                onPrintFinished(b, status, type);
             } else {
-                onPrintError(isSuccess, status);
+                onPrintError(b, status, type);
             }
         }
-
-        @Override
-        public void onQposReturnPrintDensityResult(boolean isSuccess, String value) {
-            super.onQposReturnPrintDensityResult(isSuccess, value);
-            onQposPrintDensityResult(isSuccess, value);
-        }
-
-        @Override
-        public void onQposReturnPrintSpeedResult(boolean isSuccess, String value) {
-            super.onQposReturnPrintSpeedResult(isSuccess, value);
-            onQposPrintSpeedResult(isSuccess, value);
-        }
-
-        @Override
-        public void onQposReturnPrintVoltageResult(boolean isSuccess, String value) {
-            super.onQposReturnPrintVoltageResult(isSuccess, value);
-            onQposPrintVoltageResult(isSuccess, value);
-        }
-
-        @Override
-        public void onQposReturnPrintTemperatureResult(boolean isSuccess, String value) {
-            super.onQposReturnPrintTemperatureResult(isSuccess, value);
-            onQposPrintTemperatureResult(isSuccess, value);
-        }
-
-
-        @Override
-        public void onQposReturnPrintStateResult(boolean isSuccess, String value) {
-            super.onQposReturnPrintStateResult(isSuccess, value);
-            onQposPrintStateResult(isSuccess, value);
-        }
     }
+
 }
 

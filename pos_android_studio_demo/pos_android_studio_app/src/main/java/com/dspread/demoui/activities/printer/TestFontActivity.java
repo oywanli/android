@@ -1,16 +1,7 @@
 package com.dspread.demoui.activities.printer;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -18,9 +9,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.TRACE;
+import com.dspread.demoui.view.PrintLine;
+import com.dspread.print.device.bean.PrintLineStyle;
+import com.dspread.print.mp600.PrintStyle;
 
 public class TestFontActivity extends CommonActivity {
 
@@ -32,6 +25,7 @@ public class TestFontActivity extends CommonActivity {
     private TextView tvGrayLevel;
     private LinearLayout mFontStyleArea, mFontArea, mGrayLevelArea;
     private TextView mFont;
+    private PrintLineStyle printLineStyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +49,19 @@ public class TestFontActivity extends CommonActivity {
         tvGrayLevel = findViewById(R.id.gray_level);
         mGrayLevelArea.setVisibility(View.GONE);
         mFontStyleArea.setVisibility(View.VISIBLE);
-        mFontArea.setVisibility(View.VISIBLE);
+        mFontArea.setVisibility(View.GONE);
         mSpinnerSpAlignment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getAdapter().getItem(position);
+                printLineStyle = new PrintLineStyle();
                 if (item.equals("Left")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.NORMAL);
+                    printLineStyle.setAlign(PrintLine.LEFT);
                 } else if (item.equals("Right")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.ALIGN_OPPOSITE);
+                    printLineStyle.setAlign(PrintLine.RIGHT);
+
                 } else if (item.equals("Center")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.ALIGNMENT, PrintStyle.Alignment.CENTER);
+                    printLineStyle.setAlign(PrintLine.CENTER);
                 }
             }
 
@@ -78,14 +74,15 @@ public class TestFontActivity extends CommonActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = (String) parent.getAdapter().getItem(position);
+                // PrintLineStyle printLineStyle = new PrintLineStyle();
                 if (item.equals("NORMAL")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.NORMAL);
+                    printLineStyle.setFontStyle(PrintStyle.FontStyle.NORMAL);
                 } else if (item.equals("BOLD")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD);
+                    printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD);
                 } else if (item.equals("ITALIC")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.ITALIC);
+                    printLineStyle.setFontStyle(PrintStyle.FontStyle.ITALIC);
                 } else if (item.equals("BOLD_ITALIC")) {
-                    mPrinter.setPrintStyle(PrintStyle.Key.FONT_STYLE, PrintStyle.FontStyle.BOLD_ITALIC);
+                    printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD_ITALIC);
                 }
             }
 
@@ -99,7 +96,7 @@ public class TestFontActivity extends CommonActivity {
         mSpFont.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String item = (String) parent.getAdapter().getItem(position);
+              /*  String item = (String) parent.getAdapter().getItem(position);
                 if (item.equals("系统默认")) {
                     mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "");
                 } else if (item.equals("微软雅黑")) {
@@ -108,7 +105,7 @@ public class TestFontActivity extends CommonActivity {
                     mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "fonts/arial.ttf");
                 } else if (item.equals("宋体")) {
                     mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize(), "");
-                }
+                }*/
             }
 
             @Override
@@ -130,21 +127,22 @@ public class TestFontActivity extends CommonActivity {
 
     @Override
     int printTest() throws RemoteException {
-        mPrinter.setPrintStyle(PrintStyle.Key.FONT_SIZE, getFontSize());
+        printLineStyle.setFontSize(getFontSize());
+        mPrinter.setPrintStyle(printLineStyle);
         mPrinter.printText(getText());
         return 0;
     }
 
     @Override
-    void onPrintFinished(boolean isSuccess, String status) {
+    void onPrintFinished(boolean isSuccess, String status,int type) {
+        TRACE.d("onPrintFinished:" + isSuccess + "---" + "status:" + status);
         if (status != null) {
             TRACE.d("ssss" + status);
         }
-
     }
 
     @Override
-    void onPrintError(boolean isSuccess, String status) {
+    void onPrintError(boolean isSuccess, String status,int type) {
 
     }
 

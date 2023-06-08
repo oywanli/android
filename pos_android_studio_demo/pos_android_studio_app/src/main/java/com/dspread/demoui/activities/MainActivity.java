@@ -615,7 +615,7 @@ public class MainActivity extends BaseActivity implements ShowGuideView.onGuideV
             pos.lcdShowCloseDisplay();
         } else if (item.getItemId() == R.id.updateEMVByXml) {
             statusEditText.setText("updating...");
-            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("MEXICO-QPOS cute,CR100,D20,D30.xml", MainActivity.this)));
+            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("QPOS cute,CR100,D20,D30.xml", MainActivity.this)));
         }
         return true;
     }
