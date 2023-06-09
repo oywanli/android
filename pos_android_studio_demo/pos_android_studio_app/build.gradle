@@ -22,8 +22,8 @@ android {
         applicationId "com.dspread.demoui"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 18
-        versionName "4.2.11"
+        versionCode 19
+        versionName "4.2.12"
         ndk {
             moduleName "serial_port"
             // Add necessary ABIs as needed
@@ -66,7 +66,6 @@ android {
     }
 }
 
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:33'
@@ -90,12 +89,9 @@ dependencies {
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.google.zxing:core:3.3.3'
     //dspread sdk
-    //implementation files('libs\\dspread_print_sdk_1.0.0.jar')
-    implementation 'com.dspread.library:dspread_pos_sdk:4.3.2'
-
     implementation 'com.dspread.print:dspread_print_sdk:1.2.0'
+    implementation 'com.dspread.library:dspread_pos_sdk:4.3.8'
 
-   //implementation(name: 'android_printsdk-release', ext: 'aar')
 }
 sentry {
     includeProguardMapping = true
@@ -107,6 +103,7 @@ sentry {
         enabled = true
         sentryVersion = '6.15.0'
     }
+
     includeDependenciesReport = true
     ignoredBuildTypes = ["release"]
 }
