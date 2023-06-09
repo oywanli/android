@@ -266,7 +266,7 @@ public class OtherActivity extends BaseActivity {
         //pos=null;
         MyPosListener listener = new MyPosListener();
         //implement singleton mode
-        pos = QPOSService.getInstance(OtherActivity.this,mode);
+        pos = QPOSService.getInstance(OtherActivity.this, mode);
         if (pos == null) {
             statusEditText.setText("CommunicationMode unknow");
             return;
@@ -1071,7 +1071,6 @@ public class OtherActivity extends BaseActivity {
 
             dialog.findViewById(R.id.setButton).setOnClickListener(new View.OnClickListener() {
 
-
                 @Override
                 public void onClick(View v) {
 
@@ -1196,14 +1195,11 @@ public class OtherActivity extends BaseActivity {
                     });
 
             dialog.show();
-
         }
-
 
         @Override
         public void onRequestTime() {
             TRACE.d("onRequestTime");
-
             dismissDialog();
             String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
             pos.sendTime(terminalTime);
@@ -1315,10 +1311,17 @@ public class OtherActivity extends BaseActivity {
         public void onRequestQposDisconnected() {
             dismissDialog();
             TRACE.d("onRequestQposDisconnected()");
+            
             statusEditText.setText(getString(R.string.device_unplugged));
+            if (pos != null) {
+                String occupyPackName = pos.getOccupyPackName();
+                if (!TextUtils.isEmpty(occupyPackName)) {
+                    Toast.makeText(mContext, "The port is occupied:" + occupyPackName, Toast.LENGTH_SHORT).show();
+                }
+            }
+
             btnDisconnect.setEnabled(false);
             doTradeButton.setEnabled(false);
-
         }
 
         @Override
@@ -2319,7 +2322,7 @@ public class OtherActivity extends BaseActivity {
         PendingIntent mPermissionIntent;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             mPermissionIntent = PendingIntent.getBroadcast(OtherActivity.this, 0, new Intent(
-                    "com.android.example.USB_PERMISSION"),  PendingIntent.FLAG_IMMUTABLE);
+                    "com.android.example.USB_PERMISSION"), PendingIntent.FLAG_IMMUTABLE);
         } else {
             mPermissionIntent = PendingIntent.getBroadcast(OtherActivity.this, 0, new Intent(
                     "com.android.example.USB_PERMISSION"), 0);
