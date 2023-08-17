@@ -34,7 +34,7 @@ To test QPOS mpos directly, you can download and install the demo APK provided a
 |4.0.0  |Zhengwei Fang|2022-03-24|Add the new method isBootMode to check the device boot status and update the multi-application selection for contactless|
 |4.1.0  |Zhengwei Fang|2022-07-04|Add playBuzzerByType(),operateLEDByType() function                                                                      |
 |4.2.0  |Zhengwei Fang|2022-08-25|Add getEncryptedTrack2Data method to get ksn and EncryptedTrack2data.                                                   |
-|4.3.0  |Zhengwei Fang|2023-03-02|Fix the app crash bug caused by disconnecting Bluetooth during Bluetooth scanning                                       |
+|4.3.0  |Zhengwei Fang|2023-03-02|Fix the app crash bug caused by disconnecting Bluetooth during Bluetooth scanning.                                      |
 
 <br/>
 
@@ -50,13 +50,13 @@ This document aims to help readers for using the Android SDK of QPOS.
 
 All methods the SDK provided can be devided into three types:
 
-1.  Init methods；
+1.  Init methods.
 
-2.  Interactive methods；
+2.  Interactive methods.
 
 3.  Listener methods.
 
-The application use the init method to init the EMV card reader hardware and get an instance of the Card Reader. It then can use the interactive methods to start the communication with the card reader. During the communication process, if any message returned from the Card reader, a listener method will be invoked by the SDK package.
+The application utilizes the init method to initialize the EMV card reader hardware and obtain an instance of the Card Reader. It can then utilize the interactive methods to initiate communication with the card reader. Throughout the communication process, if the Card reader returns any messages, a listener method will be invoked by the SDK package.
 
 To avoid the application block and improve the speed of data interaction between the smart terminal and QPOS, the SDK framework is designed to work under asynchronous mode.
 
@@ -94,7 +94,7 @@ The `QPOSService`<swm-token data-swm-token=":pos_android_studio_demo/pos_android
 
 <br/>
 
-The `CommunicationMode`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:2481:3:3:`                        open(CommunicationMode.BLUETOOTH);`"/>can be below
+The `CommunicationMode`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:2481:3:3:`                        open(CommunicationMode.BLUETOOTH);`"/>can be below.
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
 ```java
@@ -107,7 +107,7 @@ The `CommunicationMode`<swm-token data-swm-token=":pos_android_studio_demo/pos_a
 
 <br/>
 
-This code snippet opens the `QPOSService` communication mode using the `AUDIO` method.
+This code snippet opens the `QPOSService`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:58:8:8:`import com.dspread.xpos.QPOSService.Display;`"/> communication mode using the `AUDIO`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:155:4:4:`        BLUETOOTH, AUDIO, UART, USB, OTG, BLUETOOTH_BLE`"/> method.
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/OtherActivity.java
 ```java
@@ -116,7 +116,7 @@ This code snippet opens the `QPOSService` communication mode using the `AUDIO` m
 
 <br/>
 
-This code snippet opens the communication mode of a QPOSService object using UART.
+This code snippet opens the communication mode of a `QPOSService`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:56:8:8:`import com.dspread.xpos.QPOSService;`"/> object using UART.
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/OtherActivity.java
 ```java
@@ -140,7 +140,7 @@ To obtain the device information, users can issue the following command:
 
 <br/>
 
-_Note the pos is the instance of QPOSService, the app get it during the initialization process._
+_Note the pos is the instance of QPOSService, the app gets it during the initialization process._
 
 <br/>
 
@@ -199,7 +199,7 @@ The device information will be returned on the improved call back
 
 <br/>
 
-The device ID is use to indentifying one paticular EMV card reader. The app use below method to get the device ID:
+The device ID is used to indentifying one paticular EMV card reader. The app use below method to get the device ID:
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
 ```java
@@ -264,7 +264,7 @@ The transaction amount can be set by:
 
 <br/>
 
-the setAmount method can be called before start a transaction. If it was not called, a below call back \`will be invoked by the SDK, giving app another chance to enter the transaction amount.
+the `setAmount`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:1198:3:3:`                    pos.setAmount(amount, cashbackAmount, &quot;156&quot;, transactionType);`"/> method can be called before starting a transaction. If it was not called, a below call back \`will be invoked by the SDK, giving app another chance to enter the transaction amount.
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
 ```java
@@ -275,13 +275,13 @@ the setAmount method can be called before start a transaction. If it was not cal
 
 The `setAmount`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/OtherActivity.java:1123:3:3:`                    pos.setAmount(amount, cashbackAmount, &quot;156&quot;, transactionType);`"/>method has below parameters:
 
-1.  amount : how much money in cents
+1.  amount: how much money in cents
 
 2.  cashbackAmount : reserved for future use
 
-3.  currency code : US Dollar, CNY, etc
+3.  currency code: US Dollar, CNY, etc
 
-4.  transactionType : which kind of transaction to be started. The transaction type can be:
+4.  `transactionType`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:1158:1:1:`                        transactionType = TransactionType.GOODS;`"/> : which kind of transaction to be started. The transaction type can be:
 
 <br/>
 
@@ -337,7 +337,7 @@ Transaction type is used mainly by the EMV Chip card transaction, for magnetic c
 <br/>
 
 Magstripe card transaction is pretty simple.<br/>
-After the app start a transaction, if the user use a magnatic card, the callback `onDoTradeResult`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/OtherActivity.java:630:5:5:`        public void onDoTradeResult(QPOSService.DoTradeResult result, Hashtable&lt;String, String&gt; decodeData) {`"/> will be called feeding the app magnatic card related information. The app then use the information returned for further processing.
+After the app start a transaction, if the user uses a magnetic card, the callback `onDoTradeResult`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/OtherActivity.java:630:5:5:`        public void onDoTradeResult(QPOSService.DoTradeResult result, Hashtable&lt;String, String&gt; decodeData) {`"/> will be called feeding the app magnetic card related information. The app then uses the information returned for further processing.
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
 ```java
@@ -700,7 +700,7 @@ The app start the EMV transaction by calling below method
 
 <br/>
 
-This is usually happens inside the call back of `onDoTradeResult`<swm-token data-swm-token=":pos_android_studio_demo\pos_android_studio_app\src\main\java\com\dspread\demoui\activities\MainActivity.java:707:5:5:`        public void onDoTradeResult(DoTradeResult result, Hashtable&lt;String, String&gt; decodeData) {`"/>, as below demo code shows:
+This is usually happening inside the call back of `onDoTradeResult`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:707:5:5:`        public void onDoTradeResult(DoTradeResult result, Hashtable&lt;String, String&gt; decodeData) {`"/>, as below demo code shows:
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
 ```java
@@ -768,7 +768,7 @@ The current time information can be sent to the EMV kernel by:
 
 <br/>
 
-If there is multiple EMV applications inside one Chip card, the SDK will ask the user to choose one application from a list:
+If there are multiple EMV applications inside one Chip card, the SDK will prompt the user to select one application from a list.
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
 ```java
@@ -777,7 +777,7 @@ If there is multiple EMV applications inside one Chip card, the SDK will ask the
 
 <br/>
 
-Then chosen application is sending to the EMV kernel by below method in the callback `onRequestSelectEmvApp`<swm-token data-swm-token=":pos_android_studio_demo\pos_android_studio_app\src\main\java\com\dspread\demoui\activities\MainActivity.java:1095:5:5:`        public void onRequestSelectEmvApp(ArrayList&lt;String&gt; appList) {`"/>
+Then chosen application is sending to the EMV kernel by below method in the callback `onRequestSelectEmvApp`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:1095:5:5:`        public void onRequestSelectEmvApp(ArrayList&lt;String&gt; appList) {`"/>
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
 ```java
@@ -799,7 +799,7 @@ If the EMV kernel found the transaction need to go online, below call back will 
 
 <br/>
 
-Then users can send the authorization code returned from issuer bank according calling the below api.
+Then users can send the authorization code returned from issuer bank according calling the below Api.
 <!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
 ### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
 ```java
@@ -808,7 +808,7 @@ Then users can send the authorization code returned from issuer bank according c
 
 <br/>
 
-Below is an exmple of tlv data received by onRequestOnlineProcess:
+Below is an example of tlv data received by `onRequestOnlineProcess`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:1226:5:5:`        public void onRequestOnlineProcess(final String tlv) {`"/>:
 
 ```objectivec
 2014-08-27 17:52:21.210 qpos-ios-demo[391:60b] alertView.title = Online process requested.
@@ -846,22 +846,22 @@ Inside the table, there are:
 
 1.  Some EMV TAGs (5F20,4F,5F24 ...) with plain text value.
 
-2.  Some Proprietary tags starting with 0xC, in our case C4,C1,C7,C0 and C2.
+2.  Some Proprietary tags starting with 0xC, in our case C4, C1, C7, C0 and C2.
 
-The defination of proprietary tags can be found below:
+The definition of proprietary tags can be found below:
 
 <br/>
 
-|Tag|Name                      |Length(Bytes)|
-|---|--------------------------|-------------|
-|C0 |KSN of Online Msg         |10           |
-|C1 |KSN of PIN                |10           |
-|C2 |Online Message(E)         |var          |
-|C3 |KSN of Batch/Reversal Data|10           |
-|C4 |Masked PAN                |0~10         |
-|C5 |Batch Data                |var          |
-|C6 |Reversal Data             |var          |
-|C7 |PINBLOCK                  |8            |
+|Tag|Name                      |Length (Bytes)|
+|---|--------------------------|--------------|
+|C0 |KSN of Online Msg         |10            |
+|C1 |KSN of PIN                |10            |
+|C2 |Online Message(E)         |var           |
+|C3 |KSN of Batch/Reversal Data|10            |
+|C4 |Masked PAN                |0~10          |
+|C5 |Batch Data                |var           |
+|C6 |Reversal Data             |var           |
+|C7 |PINBLOCK                  |8             |
 
 <br/>
 
@@ -899,6 +899,104 @@ The decoded icc online message looks like:
 All the online message in embedded inside tag 0x70, the ending 00 are paddings for 3DES encryption.
 
 ## Get Transaction Result
+
+<br/>
+
+The application will be notified by the SDK regarding the transaction result by:
+<!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
+### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
+```java
+977            public void onRequestTransactionResult(TransactionResult transactionResult) {
+```
+
+<br/>
+
+## Batch Data Handling
+
+<br/>
+
+After the transaction is completed, the batch data will be returned to the application through the callback below.
+<!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
+### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
+```java
+1054           public void onRequestBatchData(String tlv) {
+```
+
+<br/>
+
+Note, if there is issuer's script result inside the tlv, the mobile app need to feedback it to the bank. Decoding the tlv inside `onRequestBatchData`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:1054:5:5:`        public void onRequestBatchData(String tlv) {`"/> is similar to decoding `onRequestOnlineProcess`<swm-token data-swm-token=":pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java:1226:5:5:`        public void onRequestOnlineProcess(final String tlv) {`"/>.
+
+## Reversal Handling
+
+<br/>
+
+If the EMV chip card refuses the transaction, but the transaction was approved by the issuer, the mobile app should initiate a reversal procedure. The required data for performing the reversal can be obtained through the following callback.
+<!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
+### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
+```java
+1440           public void onReturnReversalData(String tlv) {
+```
+
+<br/>
+
+## Error Notification
+
+<br/>
+
+During the transaction, if anything abnormal occurs, the callback will be invoked.
+<!-- NOTE-swimm-snippet: the lines below link your snippet to Swimm -->
+### 📄 pos_android_studio_demo/pos_android_studio_app/src/main/java/com/dspread/demoui/activities/MainActivity.java
+```java
+1393           @Override
+1394           public void onError(Error errorState) {
+1395               if (updateThread != null) {
+1396                   updateThread.concelSelf();
+1397               }
+1398               TRACE.d("onError" + errorState.toString());
+1399               dismissDialog();
+1400               if (errorState == Error.CMD_NOT_AVAILABLE) {
+1401                   statusEditText.setText(getString(R.string.command_not_available));
+1402               } else if (errorState == Error.TIMEOUT) {
+1403                   statusEditText.setText(getString(R.string.device_no_response));
+1404               } else if (errorState == Error.DEVICE_RESET) {
+1405                   statusEditText.setText(getString(R.string.device_reset));
+1406               } else if (errorState == Error.UNKNOWN) {
+1407                   statusEditText.setText(getString(R.string.unknown_error));
+1408               } else if (errorState == Error.DEVICE_BUSY) {
+1409                   statusEditText.setText(getString(R.string.device_busy));
+1410               } else if (errorState == Error.INPUT_OUT_OF_RANGE) {
+1411                   statusEditText.setText(getString(R.string.out_of_range));
+1412               } else if (errorState == Error.INPUT_INVALID_FORMAT) {
+1413                   statusEditText.setText(getString(R.string.invalid_format));
+1414               } else if (errorState == Error.INPUT_ZERO_VALUES) {
+1415                   statusEditText.setText(getString(R.string.zero_values));
+1416               } else if (errorState == Error.INPUT_INVALID) {
+1417                   statusEditText.setText(getString(R.string.input_invalid));
+1418               } else if (errorState == Error.CASHBACK_NOT_SUPPORTED) {
+1419                   statusEditText.setText(getString(R.string.cashback_not_supported));
+1420               } else if (errorState == Error.CRC_ERROR) {
+1421                   statusEditText.setText(getString(R.string.crc_error));
+1422               } else if (errorState == Error.COMM_ERROR) {
+1423                   statusEditText.setText(getString(R.string.comm_error));
+1424               } else if (errorState == Error.MAC_ERROR) {
+1425                   statusEditText.setText(getString(R.string.mac_error));
+1426               } else if (errorState == Error.APP_SELECT_TIMEOUT) {
+1427                   statusEditText.setText(getString(R.string.app_select_timeout_error));
+1428               } else if (errorState == Error.CMD_TIMEOUT) {
+1429                   statusEditText.setText(getString(R.string.cmd_timeout));
+1430               } else if (errorState == Error.ICC_ONLINE_TIMEOUT) {
+1431                   if (pos == null) {
+1432                       return;
+1433                   }
+1434                   pos.resetPosStatus();
+1435                   statusEditText.setText(getString(R.string.device_reset));
+1436               }
+1437           }
+```
+
+<br/>
+
+<br/>
 
 <br/>
 
