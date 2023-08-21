@@ -292,7 +292,6 @@
     <string name="str_printtext">打印文字</string>
     <string name="str_printimg">打印图片</string>
     <string name="str_printbarcode">一维码打印</string>
-    <string name="print_setting">打印设置</string>
     <string name="code_transformation">黑标设置</string>
     <string name="str_scan">扫描设备</string>
     <string name="str_device">设备</string>
