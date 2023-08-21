@@ -40,7 +40,6 @@
     <string name="content_density">印字率</string>
     <string name="height_factor">高度( x 48mm)</string>
 
-    <string name="batt_level_skip_error">"Wrong! Power jump, current power%d%%，Last power%d%%"</string>
     <string name="batt_level_test_sleep">"Do not print the next time in %d minutes"</string>
 
     <string name="device_not_connect">device not connect</string>
@@ -344,7 +343,7 @@
     <string name="updateInjectKeys">update Keys:</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="hello_world">Hello world!</string>
-    <string name="pedi_command">&#091;AOPEDI&#059;VS2&#059;RF0&#059;TD1&#059;CC%s&#059;RG%s&#059;CE%s&#059;&#093;</string>
+    <string name="pedi_command">&#091;AOPEDI&#059;VS2&#059;RF0&#059;TD1&#059;CC%1%s&#059;RG%2%s&#059;CE%3%s&#059;&#093;</string>
     <string name="pedk_command">&#091;AOPEDK&#059;KN&#059;RD&#059;CE%s&#059;&#093;</string>
     <string name="pedv_command">&#091;AOPEDV&#059;KV&#059;RD&#059;CE%s&#059;&#093;</string>
 
@@ -366,7 +365,6 @@
     <string name="str_printimg">print pictures</string>
     <string name="str_printbarcode">BARcode printing </string>
     <string name="str_printqrcode">QRcode printing </string>
-    <string name="print_setting">Printer Setting</string>
     <string name="code_transformation">Black Mark</string>
     <string name="str_scan">scanning equipment</string>
     <string name="str_device">device</string>
