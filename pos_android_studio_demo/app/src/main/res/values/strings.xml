@@ -343,7 +343,7 @@
     <string name="updateInjectKeys">update Keys:</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="hello_world">Hello world!</string>
-    <string name="pedi_command">&#091;AOPEDI&#059;VS2&#059;RF0&#059;TD1&#059;CC%1%s&#059;RG%2%s&#059;CE%3%s&#059;&#093;</string>
+<!--    <string name="pedi_command">&#091;AOPEDI&#059;VS2&#059;RF0&#059;TD1&#059;CC%1%s&#059;RG%2%s&#059;CE%3%s&#059;&#093;</string>-->
     <string name="pedk_command">&#091;AOPEDK&#059;KN&#059;RD&#059;CE%s&#059;&#093;</string>
     <string name="pedv_command">&#091;AOPEDV&#059;KV&#059;RD&#059;CE%s&#059;&#093;</string>
 
@@ -449,10 +449,6 @@
     <string name="setting_connectiontype">Connection Type</string>
 
     <string name="transaction_type">transaction type</string>
-    <string name="sample_text">abcdefghijklmnopqrstuvwxyz\nABCDEFGHIJKLMNOPQRSTUVWXYZ\n12345678901234567890\n打印效果测试打印效果测试\n打印效果测试打印效果测试\n</string>
-    <string name="printer_overheating">打印机过热，稍后将会恢复打印</string>
-    <string name="printer_no_papaer">打印机缺纸</string>
-    <string name="dismiss_dialog">DISMISS</string>
     <string name="about_app">about App</string>
     <string name="version">version: </string>
     <string name="setting_disusb">USB Not Connected</string>
@@ -460,7 +456,6 @@
     <string name="msg_exit">Are you sure to exit the application?</string>
     <string name="msg_continue_connect">Do you want to continue with the previous connection?</string>
 
-    <string name="get_print_density">get printer density</string>
 
     <string name="get_print_speed">get printer speed</string>
 
