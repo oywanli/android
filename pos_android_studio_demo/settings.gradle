@@ -25,5 +25,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "despreaddemo"
-include ':app'
+include ':pos_android_studio_app'
 include ':pos_sdk4.3.0'
