@@ -1,3 +1,20 @@
+# [4.3.0](https://gitlab.com/[secure]/android/compare/v4.2.12...v4.3.0) (2023-08-22)
+
+
+### Bug Fixes
+
+* implement unified modification of project names with existing project file names ([b93000a](https://gitlab.com/[secure]/android/commit/b93000aaa4e77a181efe733b34606bb1083201b9))
+* implement unified modification of project names with existing project file names ([a2ff052](https://gitlab.com/[secure]/android/commit/a2ff052583db957a539011db4c058912b84d5567))
+* modify files that failed compilation ([f6da7f8](https://gitlab.com/[secure]/android/commit/f6da7f8fc9efe437651b57d3edfd70674f63d532))
+* problems during the compilation process of modifying strings files ([e727282](https://gitlab.com/[secure]/android/commit/e7272820a82630a35fda67c97779f766c3f81d49))
+* problems during the compilation process of modifying strings files ([37af695](https://gitlab.com/[secure]/android/commit/37af695e09b9febd6dd97b886c90f6495c19b467))
+* removed the jniLibs file to address the issue of failed introduction of so files ([1f3e482](https://gitlab.com/[secure]/android/commit/1f3e482162a2c707af9a3eca1fc7477ecae62155))
+
+
+### Features
+
+* update the latest android demo ([cdb061d](https://gitlab.com/[secure]/android/commit/cdb061d17446175f42f6b758d7da33392c66fa4d))
+
 ## [4.2.12](https://gitlab.com/[secure]/android/compare/v4.2.11...v4.2.12) (2023-08-04)
 
 
