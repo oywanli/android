@@ -13,14 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dspread.demoui.R;
-import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.MoneyUtil;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
 
-public class InputCashBack extends AppCompatActivity implements View.OnClickListener {
+public class CashBackPaymentActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView inputMoneyYuanText, inputMoneyFenText;
     private long cashbackAmounts = 0;
-    private Bundle bundle;
     private Button mConfirm;
     private TextView mAmount;
     private RelativeLayout mRLayouttitle;
@@ -127,10 +125,10 @@ public class InputCashBack extends AppCompatActivity implements View.OnClickList
                     String amount = getIntent().getStringExtra("amount");
                     String inputMoney = getIntent().getStringExtra("inputMoney");
                     SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
-                    String conType = (String) connectType.get(InputCashBack.this, "conType", "");
+                    String conType = (String) connectType.get(CashBackPaymentActivity.this, "conType", "");
 
-                    if (conType != null && conType.equals("uart")) {
-                        Intent intent = new Intent(InputCashBack.this, PaymentActivity.class);
+                    if (conType != null && "uart".equals(conType)) {
+                        Intent intent = new Intent(CashBackPaymentActivity.this, PaymentActivity.class);
                         intent.putExtra("amount", amount);
                         String inputMoneyString = String.valueOf(inputMoney);
                         intent.putExtra("inputMoney", inputMoneyString);
@@ -140,8 +138,8 @@ public class InputCashBack extends AppCompatActivity implements View.OnClickList
                         intent.putExtra("connect_type", 2);
                         startActivity(intent);
                         finish();
-                    } else if (conType != null && conType.equals("usb")) {
-                        Intent intent = new Intent(InputCashBack.this, PaymentActivity.class);
+                    } else if (conType != null && "usb".equals(conType)) {
+                        Intent intent = new Intent(CashBackPaymentActivity.this, PaymentActivity.class);
                         intent.putExtra("amount", amount);
                         String inputMoneyString = String.valueOf(inputMoney);
                         intent.putExtra("inputMoney", inputMoneyString);
@@ -152,8 +150,8 @@ public class InputCashBack extends AppCompatActivity implements View.OnClickList
                         intent.putExtra("connect_type", 3);
                         startActivity(intent);
                         finish();
-                    } else if (conType != null && conType.equals("blue")) {//blue
-                        Intent intent = new Intent(InputCashBack.this, PaymentActivity.class);
+                    } else if (conType != null && "blue".equals(conType)) {//blue
+                        Intent intent = new Intent(CashBackPaymentActivity.this, PaymentActivity.class);
                         intent.putExtra("amount", amount);
                         String inputMoneyString = String.valueOf(inputMoney);
                         intent.putExtra("inputMoney", inputMoneyString);
@@ -167,7 +165,7 @@ public class InputCashBack extends AppCompatActivity implements View.OnClickList
 
 
                 } else {
-                    Toast.makeText(InputCashBack.this, getString(R.string.set_amount), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CashBackPaymentActivity.this, getString(R.string.set_amount), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.iv_back_title:

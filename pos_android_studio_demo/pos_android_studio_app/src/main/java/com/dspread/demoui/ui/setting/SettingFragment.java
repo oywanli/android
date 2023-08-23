@@ -74,18 +74,18 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                     case R.id.rbtn_blue:
                         conType.put(getActivity(), "conType", "blue");
                         tvConnectType.setText(getString(R.string.setting_blu));
-                        disbuart();
+                        closeUart();
                         break;
                     case R.id.rbtn_serialport:
                         conType.put(getActivity(), "conType", "uart");
                         tvConnectType.setText(getString(R.string.setting_uart));
-                        disbluetooth();
+                        disconnectbluetooth();
                         break;
                     case R.id.rbtn_usb:
                         conType.put(getActivity(), "conType", "usb");
                         tvConnectType.setText(getString(R.string.setting_usb));
-                        disbluetooth();
-                        disbuart();
+                        disconnectbluetooth();
+                        closeUart();
                         break;
                     default:
                         break;
@@ -93,35 +93,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-
-//
-//        //根据ID获取到开关按钮
-//        Switch swtTest = view.findViewById(R.id.swtTest);
-//
-//        //给开关按钮设置监听状态改变事件
-//        swtTest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean flag) {
-//
-//                if (flag){
-//                    System.out.println("开关按钮的状态  开= " + flag);
-//                }else{
-//                    System.out.println("开关按钮的状态  关= " + flag);
-//                }
-//            }
-//        });
-
-
     }
 
 
-    public void disbluetooth() {
+    public void disconnectbluetooth() {
         Intent intent = new Intent(getActivity(), PaymentActivity.class);
         intent.putExtra("connect_type", 1);
         intent.putExtra("disblue", "disblue");
         startActivityForResult(intent, REQUEST_CODE);
     }
-    public void disbuart() {
+    public void closeUart() {
         Intent intent = new Intent(getActivity(), PaymentActivity.class);
         intent.putExtra("connect_type", 1);
         intent.putExtra("disbuart", "disbuart");

@@ -68,27 +68,18 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
         deviceConnectType = headerView.findViewById(R.id.device_connect_type);
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
         DrawerStateChanged();
-        /**
-         * 实现侧边菜单栏
-         */
+
         setSupportActionBar(toolbar);
 
 
-        navigationView.bringToFront();  //触发点击效果
+        navigationView.bringToFront();
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();  //同步drawerlayout的状态
+        toggle.syncState();
 
-        /**
-         * 实现侧边菜单栏的点击事件
-         */
-        navigationView.setNavigationItemSelectedListener(this);  //设置点击监听事件
-//        setDrawerListener
+
+        navigationView.setNavigationItemSelectedListener(this);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -129,13 +120,13 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
         SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
         String conType = (String) connectType.get(MainActivity.this, "conType", "");
 
-        if (conType.equals("blue")) {
+        if ("blue".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_blu));
-        } else if (conType.equals("uart")) {
+        } else if ("uart".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_uart));
-        } else if (conType.equals("usb")) {
+        } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
-        } else if (deviceManufacturer.equals("Dspread")) {
+        } else if ("Dspread".equals(deviceManufacturer)) {
             connectType.put(MainActivity.this, "conType", "uart");
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
@@ -202,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
     private void setSelect(int i) {
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        //隐藏Fragment
         hideFragemts();
         switch (i) {
             case 0:
@@ -276,18 +266,15 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
             Intent enabler = new Intent(android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivity(enabler);
         }
-        lm = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
+        lm = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         boolean ok = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (ok) {//Location service is on
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 Log.e("POS_SDK", "Permission Denied");
                 // Permission denied
                 // Request authorization
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
-                            || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
-                            || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
                         String[] list = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_ADVERTISE};
                         ActivityCompat.requestPermissions(this, list, BLUETOOTH_CODE);
 
@@ -299,9 +286,7 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
             } else {
                 // have permission
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
-                            || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
-                            || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
                         String[] list = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE};
                         ActivityCompat.requestPermissions(this, list, BLUETOOTH_CODE);
                     }
@@ -313,14 +298,13 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
             Toast.makeText(this, "System detects that the GPS location service is not turned on", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                    new ActivityResultCallback<ActivityResult>() {
-                        @Override
-                        public void onActivityResult(ActivityResult result) {
-                            Log.w("result", "result==" + result.getResultCode());
+            ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    Log.w("result", "result==" + result.getResultCode());
 
-                        }
-                    });
+                }
+            });
             launcher.launch(intent);
 
 

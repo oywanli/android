@@ -162,7 +162,7 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
                                 Log.e("download_Success-JSON;", s + "" + "versionCode:" + versionCode);
                                 String downloadUrl = versionEnty.getDownloadUrl();
                                 Log.e("download_Success-JSON", "downloadUrl:" + downloadUrl);
-                                int packageVersionCode = UpdateAppHelper.getPackageVersionCode(getContext(), "com.example.com.dspread.demoui");
+                                int packageVersionCode = UpdateAppHelper.getPackageVersionCode(getContext(), "com.dspread.demoui");
                                 if (packageVersionCode < versionCodeInt) {
                                     ivRedDot.setVisibility(View.VISIBLE);
                                     if (isCheckUpgrade) {

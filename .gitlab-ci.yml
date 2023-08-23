@@ -107,8 +107,7 @@ commitlint:
     fi
 
   dependencies: []
-  only:
-    - master
+
         
 sast:
   stage: test

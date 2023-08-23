@@ -27,7 +27,6 @@ public class BaseApplication extends Application {
     public static Context getApplicationInstance;
 
 
-
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -49,9 +48,7 @@ public class BaseApplication extends Application {
     }
 
     private void initXHttp() {
-        //初始化网络请求框架，必须首先执行
         XHttpSDK.init(this);
-        //需要调试的时候执行
         XHttpSDK.debug("XHttp");
         XHttp.getInstance().setTimeout(20000);
     }

@@ -1,33 +1,25 @@
 package com.dspread.demoui.ui.dialog;
 
-import static com.xuexiang.xutil.resource.ResUtils.getString;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dspread.demoui.R;
-import com.dspread.demoui.activity.InputCashBack;
+import com.dspread.demoui.activity.CashBackPaymentActivity;
 import com.dspread.demoui.activity.PaymentActivity;
-import com.dspread.demoui.utils.MoneyUtil;
-import com.dspread.demoui.utils.MyListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
 import com.dspread.demoui.utils.Utils;
 import com.dspread.demoui.widget.MyAdapter;
@@ -43,7 +35,7 @@ public class Mydialog {
     }
 
     /**
-     * 加载框
+     * loading
      */
     public static Dialog Ldialog;
 
@@ -67,7 +59,7 @@ public class Mydialog {
     }
 
     /*
-     *错误信息提示框
+     *Error message prompt box
      */
     public static AlertDialog ErrorDialog;
 
@@ -92,7 +84,7 @@ public class Mydialog {
             }
         });
 
-        ErrorDialog = new AlertDialog.Builder(mContext).create();      //创建AlertDialog对象
+        ErrorDialog = new AlertDialog.Builder(mContext).create();
         ErrorDialog.setCanceledOnTouchOutside(false);
         ErrorDialog.setCancelable(false);
         if (!mContext.isFinishing()) {
@@ -101,23 +93,21 @@ public class Mydialog {
         //显示对话框
         Window window = ErrorDialog.getWindow();
         window.setWindowAnimations(R.style.popupAnimation);
-        window.setBackgroundDrawable(null); // 重设background
+        window.setBackgroundDrawable(null);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.BOTTOM;
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        //设置正面按钮
-        Display d = wm.getDefaultDisplay(); //为获取屏幕宽、高
-        android.view.WindowManager.LayoutParams p = ErrorDialog.getWindow().getAttributes(); //获取对话框当前的参数值
+
+        Display d = wm.getDefaultDisplay();
+        android.view.WindowManager.LayoutParams p = ErrorDialog.getWindow().getAttributes();
         p.height = WindowManager.LayoutParams.WRAP_CONTENT;
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
-        ErrorDialog.getWindow().setAttributes(p); //设置生效
+        ErrorDialog.getWindow().setAttributes(p);
         window.setContentView(view);
 
     }
 
-    /**
-     * 提示对话框
-     */
+
     public static AlertDialog TalertDialog;
 
     public static void TalertDialog(Activity mContext, String msg, OnMyClickListener listener) {
@@ -143,20 +133,20 @@ public class Mydialog {
             }
         });
 
-        TalertDialog = builder.create();      //
+        TalertDialog = builder.create();
         if (!mContext.isFinishing()) {
             TalertDialog.show();
         }
         Window window = TalertDialog.getWindow();
         window.setWindowAnimations(R.style.popupAnimation);
-        window.setBackgroundDrawable(null); // 重设background
+        window.setBackgroundDrawable(null);
         window.setGravity(Gravity.BOTTOM);
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        Display d = wm.getDefaultDisplay(); //为获取屏幕宽、高
-        android.view.WindowManager.LayoutParams p = TalertDialog.getWindow().getAttributes(); //获取对话框当前的参数值
+        Display d = wm.getDefaultDisplay();
+        android.view.WindowManager.LayoutParams p = TalertDialog.getWindow().getAttributes();
         p.height = WindowManager.LayoutParams.WRAP_CONTENT;
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
-        TalertDialog.getWindow().setAttributes(p); //设置生效
+        TalertDialog.getWindow().setAttributes(p);
         TalertDialog.setCanceledOnTouchOutside(true);
         window.setContentView(view);
     }
@@ -175,15 +165,15 @@ public class Mydialog {
         }
         Window window = PalertDialog.getWindow();
         window.setWindowAnimations(R.style.popupAnimation);
-        window.setBackgroundDrawable(null); // 重设background
+        window.setBackgroundDrawable(null);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.BOTTOM;
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        Display d = wm.getDefaultDisplay(); //为获取屏幕宽、高
-        WindowManager.LayoutParams p = PalertDialog.getWindow().getAttributes(); //获取对话框当前的参数值
-        p.height = (int) (d.getHeight() * 0.6); //高度设置为屏幕的0.6
+        Display d = wm.getDefaultDisplay();
+        WindowManager.LayoutParams p = PalertDialog.getWindow().getAttributes();
+        p.height = (int) (d.getHeight() * 0.6);
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
-        PalertDialog.getWindow().setAttributes(p); //设置生效
+        PalertDialog.getWindow().setAttributes(p);
         View view = View.inflate(mContext, R.layout.paytype_dialog_view, null);
         rvlist = view.findViewById(R.id.rv_list);
         rvlist.setLayoutManager(new LinearLayoutManager(mContext.getApplicationContext()));
@@ -195,8 +185,8 @@ public class Mydialog {
                 if (Utils.islistFastClick()) {
                     SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
                     String conType = (String) connectType.get(mContext, "conType", "");
-                    if (content.equals("CASHBACK")) {
-                        Intent intent = new Intent(mContext, InputCashBack.class);
+                    if ("CASHBACK".equals(content)) {
+                        Intent intent = new Intent(mContext, CashBackPaymentActivity.class);
                         intent.putExtra("amount", amount);
                         String inputMoneyString = String.valueOf(inputMoney);
                         intent.putExtra("inputMoney", inputMoneyString);
@@ -204,7 +194,7 @@ public class Mydialog {
                         intent.putExtra("connect_type", 2);
                         mContext.startActivity(intent);
                     } else {
-                        if (conType != null && conType.equals("uart")) {
+                        if (conType != null && "uart".equals(conType)) {
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
                             intent.putExtra("amount", amount);
@@ -213,7 +203,7 @@ public class Mydialog {
                             intent.putExtra("paytype", transactionTypeString);
                             intent.putExtra("connect_type", 2);
                             mContext.startActivity(intent);
-                        } else if (conType != null && conType.equals("usb")) {
+                        } else if (conType != null && "usb".equals(conType)) {
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
                             intent.putExtra("amount", amount);
@@ -223,7 +213,7 @@ public class Mydialog {
                             intent.putExtra("conType", conType);
                             intent.putExtra("connect_type", 3);
                             mContext.startActivity(intent);
-                        } else if (conType != null && conType.equals("blue")) {//blue
+                        } else if (conType != null && "blue".equals(conType)) {//blue
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
                             intent.putExtra("amount", amount);
@@ -252,7 +242,7 @@ public class Mydialog {
         return dataList;
     }
 
-    //交易确认信息
+    //Transaction confirmation information
     public static AlertDialog onlingDialog;
 
     public static void onlingDialog(Activity mContext, boolean isPinCanceled, OnMyClickListener listener) {
@@ -288,7 +278,7 @@ public class Mydialog {
 
                     }
                 });
-        onlingDialog = new AlertDialog.Builder(mContext).create();      //创建AlertDialog对象
+        onlingDialog = new AlertDialog.Builder(mContext).create();
         onlingDialog.setCanceledOnTouchOutside(false);
         onlingDialog.setCancelable(false);
         if (!mContext.isFinishing()) {
@@ -296,15 +286,15 @@ public class Mydialog {
         }
         Window window = onlingDialog.getWindow();
         window.setWindowAnimations(R.style.popupAnimation);
-        window.setBackgroundDrawable(null); // 重设background
+        window.setBackgroundDrawable(null);
         window.setGravity(Gravity.BOTTOM);
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        Display d = wm.getDefaultDisplay(); //为获取屏幕宽、高
-        android.view.WindowManager.LayoutParams p = onlingDialog.getWindow().getAttributes(); //获取对话框当前的参数值
-//        p.height = (int) (d.getHeight() * 0.3); //高度设置为屏幕的0.3
-        p.width = (int) (d.getWidth() * 1); //宽度设置为屏幕的1
+        Display d = wm.getDefaultDisplay();
+        android.view.WindowManager.LayoutParams p = onlingDialog.getWindow().getAttributes();
+//        p.height = (int) (d.getHeight() * 0.3);
+        p.width = (int) (d.getWidth() * 1);
 
-        onlingDialog.getWindow().setAttributes(p); //设置生效
+        onlingDialog.getWindow().setAttributes(p);
         window.setContentView(view);
     }
 
