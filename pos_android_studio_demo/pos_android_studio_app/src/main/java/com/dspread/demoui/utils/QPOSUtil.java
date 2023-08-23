@@ -1,5 +1,10 @@
 package com.dspread.demoui.utils;
 
+import android.content.Context;
+import android.media.AudioManager;
+
+import com.dspread.demoui.R;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,16 +14,6 @@ import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
-import java.util.Hashtable;
-
-import com.dspread.demoui.R;
-
-import android.content.Context;
-import android.media.AudioManager;
-import android.os.Build;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 
 
 public class QPOSUtil {

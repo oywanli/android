@@ -16,8 +16,6 @@
 
 package com.dspread.demoui.http;
 
-import androidx.annotation.NonNull;
-
 import com.xuexiang.xupdate.proxy.IUpdateHttpService;
 import com.xuexiang.xutil.net.JsonUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -29,6 +27,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
 
+import androidx.annotation.NonNull;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.Request;
