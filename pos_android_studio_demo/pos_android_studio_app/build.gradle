@@ -103,9 +103,9 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.3'
     //dspread sdk
 
+
     implementation 'com.dspread.print:dspread_print_sdk:1.2.0'
     implementation 'com.dspread.library:dspread_pos_sdk:4.3.9'
-
 }
 //sentry {
 //    includeProguardMapping = true
@@ -122,3 +122,5 @@ dependencies {
 //    ignoredBuildTypes = ["release"]
 //
 //}
+
+
