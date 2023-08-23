@@ -383,6 +383,7 @@
     <string name="setting_exit">退出</string>
     <string name="msg_exit">确定退出应用吗?</string>
     <string name="msg_continue_connect">是否继续之前的连接?</string>
+    <string name="input_cashback">输入返还金额</string>
 
 
 

@@ -7,7 +7,6 @@
         android:name="android.software.leanback"
         android:required="true" />
 
-
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
@@ -21,7 +20,6 @@
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.INSTALL_PACKAGES"
@@ -42,25 +40,23 @@
         tools:replace="android:theme"
         tools:targetApi="31">
         <activity
-            android:name=".activity.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/Theme.Despreaddemo.NoActionBar"></activity>
+            android:name=".activity.InputCashBack"
+            android:configChanges="orientation|keyboardHidden|screenSize"></activity> />
+
         <activity
             android:name=".activity.PaymentActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize">
-
-        </activity>
+            android:configChanges="orientation|keyboardHidden|screenSize"></activity>
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
-            android:theme="@style/AppTheme.Splash">
+            android:theme="@style/Theme.Despreaddemo.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
-    <!--    android:configChanges="orientation"-->
+
 </manifest>
