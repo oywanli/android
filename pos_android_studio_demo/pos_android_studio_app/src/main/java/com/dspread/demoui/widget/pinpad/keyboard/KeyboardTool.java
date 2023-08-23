@@ -34,16 +34,17 @@ public class KeyboardTool {
 
     /*
      * whether touch specified view
-    **/
+     **/
     public static boolean isTouchView(View[] views, MotionEvent ev) {
-        if (views == null || views.length == 0) return false;
+        if (views == null || views.length == 0) {
+            return false;
+        }
         int[] location = new int[2];
         for (View view : views) {
             view.getLocationOnScreen(location);
             int x = location[0];
             int y = location[1];
-            if (ev.getX() > x && ev.getX() < (x + view.getWidth())
-                    && ev.getY() > y && ev.getY() < (y + view.getHeight())) {
+            if (ev.getX() > x && ev.getX() < (x + view.getWidth()) && ev.getY() > y && ev.getY() < (y + view.getHeight())) {
                 return true;
             }
         }
@@ -54,10 +55,12 @@ public class KeyboardTool {
      * hide soft keyboard
      */
     public static void hideInputForce(Activity activity, View currentFocusView) {
-        if (activity == null || currentFocusView == null)
+        if (activity == null || currentFocusView == null) {
             return;
+        }
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null)
+        if (imm != null) {
             imm.hideSoftInputFromWindow(currentFocusView.getWindowToken(), 0);
+        }
     }
 }

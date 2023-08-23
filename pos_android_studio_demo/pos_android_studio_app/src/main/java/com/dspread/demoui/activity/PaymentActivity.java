@@ -553,7 +553,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         //init handler
         Handler handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
-        String sdkVersion = pos.getSdkVersion();
+//        String sdkVersion = pos.getSdkVersion();
 //        Toast.makeText(this, "sdkVersion--" + sdkVersion, Toast.LENGTH_SHORT).show();
 
 
@@ -1508,7 +1508,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onRequestQposConnected() {
             TRACE.d("onRequestQposConnected()");
             dismissDialog();
-            long use_time = new Date().getTime() - start_time;
             if (type == 1) {
                 mrllayout.setVisibility(View.GONE);
                 ivBlue.setVisibility(View.GONE);

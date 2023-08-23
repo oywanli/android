@@ -23,8 +23,6 @@ import com.dspread.demoui.utils.MyListener;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
-
-    //    private FragmentHomeBinding binding;
     private TextView inputMoneyYuanText, inputMoneyFenText;
     private long inputMoney = 0;
     private Bundle bundle;
@@ -46,7 +44,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_input_money, null);
         myListener = (MyListener) getActivity();
-//        myListener.sendValue(getString(R.string.menu_payment));
         getActivity().setTitle(getString(R.string.menu_payment));
         initView(view);
         initData();
@@ -183,34 +180,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private static int LOG_MAXLENGTH = 2000;
-
-    public static void logshow(String TAG, String msg) {
-        int strLength = msg.length();
-        int start = 0;
-
-        int end = LOG_MAXLENGTH;
-        for (int i = 0; i < 100; i++) { // 剩下的文本还是大于规定长度则继续重复截取并输出
-            if (strLength > end) {
-                Log.e(TAG + i, msg.substring(start, end));
-                start = end;
-                end = end + LOG_MAXLENGTH;
-            } else {
-                Log.e(TAG, msg.substring(start, strLength));
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     private String[] data = {"GOODS", "SERVICES", "CASH", "CASHBACK", "INQUIRY",
             "TRANSFER", "ADMIN", "CASHDEPOSIT",

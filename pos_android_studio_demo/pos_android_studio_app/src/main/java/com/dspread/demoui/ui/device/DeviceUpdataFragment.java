@@ -91,21 +91,19 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
 
         SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
         String conType = (String) connectType.get(getActivity(), "conType", "");
-        if (conType.equals("blue")) {
-            Intent blueintent = new Intent(getActivity(), PaymentActivity.class);
-            blueintent.putExtra("deviceUpdate", updatedevice);
-            blueintent.putExtra("connect_type", 1);
-            startActivity(blueintent);
-        } else if (conType.equals("uart")) {
-            Intent uartintent = new Intent(getActivity(), PaymentActivity.class);
-            uartintent.putExtra("deviceUpdate", updatedevice);
-            uartintent.putExtra("connect_type", 2);
-            startActivity(uartintent);
-        } else if (conType.equals("usb")) {
-            Intent usbintent = new Intent(getActivity(), PaymentActivity.class);
-            usbintent.putExtra("deviceUpdate", updatedevice);
-            usbintent.putExtra("connect_type", 3);
-            startActivity(usbintent);
+        Intent intent = new Intent(getActivity(), PaymentActivity.class);
+        if ("blue".equals(conType)) {
+            intent.putExtra("deviceUpdate", updatedevice);
+            intent.putExtra("connect_type", 1);
+            startActivity(intent);
+        } else if ("uart".equals(conType)) {
+            intent.putExtra("deviceUpdate", updatedevice);
+            intent.putExtra("connect_type", 2);
+            startActivity(intent);
+        } else if ("usb".equals(conType)) {
+            intent.putExtra("deviceUpdate", updatedevice);
+            intent.putExtra("connect_type", 3);
+            startActivity(intent);
         }
     }
 

@@ -11,8 +11,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.QPOSUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,15 +57,15 @@ public class MyKeyboardView extends KeyboardView {
         super(context, attrs, defStyle);
     }
 
-    public void setHeight(int mHeightPixels){
+    public void setHeight(int mHeightPixels) {
         this.mHeightPixels = mHeightPixels;
     }
 
-    public void setContext(Activity mActivity){
+    public void setContext(Activity mActivity) {
         this.mActivity = mActivity;
     }
 
-    public void init(EditText editText, PopupWindow window, int keyBoardType,List<String> dataList) {
+    public void init(EditText editText, PopupWindow window, int keyBoardType, List<String> dataList) {
         this.dataList = dataList;
         this.mEditText = editText;
         this.mWindow = window;
@@ -93,24 +95,28 @@ public class MyKeyboardView extends KeyboardView {
                 setKeyboard(keyboardNum);
                 break;
             case KEYBOARDTYPE_ABC:
-                if (keyboardABC == null)
+                if (keyboardABC == null) {
                     keyboardABC = new Keyboard(getContext(), R.xml.keyboard_abc);
+                }
                 setKeyboard(keyboardABC);
                 break;
             case KEYBOARDTYPE_Num_Pwd:
-                if (keyboardNumPwd == null)
+                if (keyboardNumPwd == null) {
                     keyboardNumPwd = new Keyboard(getContext(), R.xml.keyboard_number);
+                }
                 randomKey(keyboardNumPwd);
                 setKeyboard(keyboardNumPwd);
                 break;
             case KEYBOARDTYPE_Symbol:
-                if (keyboardSymbol == null)
+                if (keyboardSymbol == null) {
                     keyboardSymbol = new Keyboard(getContext(), R.xml.keyboard_symbol);
+                }
                 setKeyboard(keyboardSymbol);
                 break;
             case KEYBOARDTYPE_Only_Num_Pwd:
-                if (keyboardOnlyNumPwd == null)
+                if (keyboardOnlyNumPwd == null) {
                     keyboardOnlyNumPwd = new Keyboard(getContext(), R.xml.keyboard_only_number);
+                }
                 randomKey(keyboardOnlyNumPwd);
                 setKeyboard(keyboardOnlyNumPwd);
                 break;
@@ -233,14 +239,15 @@ public class MyKeyboardView extends KeyboardView {
     }
 
     public static KeyBoardNumInterface keyBoardNumInterface;
+
     /**
      * random number keyboard
      * code 48-57 (0-9)
      */
     public void randomKey(Keyboard pLatinKeyboard) {
         int[] ayRandomKey = new int[13];
-        for(int i = 0; i < dataList.size() ; i ++){
-            ayRandomKey[i]=Integer.valueOf(dataList.get(i),16);
+        for (int i = 0; i < dataList.size(); i++) {
+            ayRandomKey[i] = Integer.valueOf(dataList.get(i), 16);
         }
 //        int[] ayRandomKey = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 //        Random random = new Random();
@@ -269,19 +276,19 @@ public class MyKeyboardView extends KeyboardView {
             if (code >= 0) {//number value
                 pKeyLis.get(i).label = ayRandomKey[index] + "";
                 pKeyLis.get(i).codes[0] = 48 + ayRandomKey[index];
-                String locationStr = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(ayRandomKey[index]))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(x))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(y))
+                String locationStr = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(ayRandomKey[index])) + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(x)) + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(y))
                         + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(rit)) + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(riby));
                 s.append(locationStr);
                 index++;
-            }else{
-                if(code == -3){
+            } else {
+                if (code == -3) {
                     label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(13));
-                }else if(code == -4){
+                } else if (code == -4) {
                     label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(15));
-                }else{
+                } else {
                     label = QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(14));
                 }
-                String locationStr = label + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(x))+ QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(y))
+                String locationStr = label + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(x)) + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(y))
                         + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(rit)) + QPOSUtil.byteArray2Hex(QPOSUtil.intToByteArray(riby));
                 s.append(locationStr);
             }
@@ -289,7 +296,7 @@ public class MyKeyboardView extends KeyboardView {
         keyBoardNumInterface.getNumberValue(s.toString());
     }
 
-    public static void setKeyBoardListener(KeyBoardNumInterface mkeyBoardNumInterface){
+    public static void setKeyBoardListener(KeyBoardNumInterface mkeyBoardNumInterface) {
         keyBoardNumInterface = mkeyBoardNumInterface;
     }
 
@@ -309,7 +316,7 @@ public class MyKeyboardView extends KeyboardView {
                     key.icon.setBounds(drawableX, drawableY, drawableX + key.icon
                             .getIntrinsicWidth(), drawableY + key.icon.getIntrinsicHeight());
                     key.icon.draw(canvas);
-                    Log.i("test","drawableX: " +drawableX+" drawableY: "+drawableY);
+                    Log.i("test", "drawableX: " + drawableX + " drawableY: " + drawableY);
                 }
 //                Log.i("test","x: " +key.x+" y: "+key.y+" wi:"+key.width+" he:"+key.height);
 

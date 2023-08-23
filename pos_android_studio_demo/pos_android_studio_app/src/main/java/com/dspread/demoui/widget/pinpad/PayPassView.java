@@ -22,26 +22,21 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 自定义支付密码组件
+ * Custom payment password component件
  */
 
 public class PayPassView extends RelativeLayout {
-    private Activity mContext;//上下文
-    private GridView mGridView; //支付键盘
-    private String strPass = "";//保存密码
-    private TextView[] mTvPass;//密码数字控件
+    private Activity mContext;
+    private GridView mGridView;
+    private String savePwd = "";
     private List<Integer> listNumber;//1,2,3---0
-    private View mPassLayout;//布局
+    private View mPassLayout;
     private boolean isRandom;
     private EditText mEtinputpin;
 
-    /**
-     * 按钮对外接口
-     */
+
     public static interface OnPayClickListener {
-        //        void onPassFinish(String password);
-//        void onPayClose();
-//        void onPayForget();
+
         void onCencel();
 
         void onPaypass();
@@ -59,36 +54,32 @@ public class PayPassView extends RelativeLayout {
         super(context);
     }
 
-    //在布局文件中使用的时候调用,多个样式文件
+
     public PayPassView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    //在布局文件中使用的时候调用
+
     public PayPassView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.mContext = (Activity) context;
 
-        initView();//初始化
-        this.addView(mPassLayout); //将子布局添加到父容器,才显示控件
+        initView();
+        this.addView(mPassLayout);
     }
 
-    /**
-     * 初始化
-     */
+
     private void initView() {
         mPassLayout = LayoutInflater.from(mContext).inflate(R.layout.view_paypass_layout, null);
 
         mEtinputpin = mPassLayout.findViewById(R.id.et_inputpin);
         mGridView = mPassLayout.findViewById(R.id.gv_pass);
 
-
-        //初始化数据
         initData();
     }
 
     /**
-     * isRandom是否开启随机数
+     * Is isRandom enabled for random numbers
      */
     private void initData() {
         if (isRandom) {
@@ -97,7 +88,7 @@ public class PayPassView extends RelativeLayout {
             for (int i = 0; i <= 10; i++) {
                 listNumber.add(i);
             }
-            //此方法是打乱顺序
+            //This method is to disrupt the order
             Collections.shuffle(listNumber);
             for (int i = 0; i <= 10; i++) {
                 if (listNumber.get(i) == 10) {
@@ -125,7 +116,7 @@ public class PayPassView extends RelativeLayout {
 
 
     /**
-     * GridView的适配器
+     * Adapters for GridView
      */
 
     BaseAdapter adapter = new BaseAdapter() {
@@ -155,7 +146,6 @@ public class PayPassView extends RelativeLayout {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            //-------------设置数据----------------
             holder.btnNumber.setText(listNumber.get(position) + "");
             if (position == 10) {
                 holder.btnNumber.setBackgroundColor(mContext.getResources().getColor(R.color.graye3));
@@ -188,7 +178,6 @@ public class PayPassView extends RelativeLayout {
                 holder.btnNumber.setBackgroundColor(mContext.getResources().getColor(R.color.graye3));
             }
 
-            //监听事件----------------------------
             if (position == 11) {
                 holder.btnNumber.setOnTouchListener(new OnTouchListener() {
 
@@ -214,22 +203,22 @@ public class PayPassView extends RelativeLayout {
             holder.btnNumber.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (position < 11 && position != 9) {//0-9按钮
-                        if (strPass.length() == 12) {
+                    if (position < 11 && position != 9) {
+                        if (savePwd.length() == 12) {
                             return;
                         } else {
-                            strPass = strPass + listNumber.get(position);//得到当前数字并累加
-                            mEtinputpin.setText(strPass);
+                            savePwd = savePwd + listNumber.get(position);
+                            mEtinputpin.setText(savePwd);
                         }
-                    } else if (position == 11) {//删除
-                        if (strPass.length() > 0) {
-                            strPass = strPass.substring(0, strPass.length() - 1);//删除一位
-                            mEtinputpin.setText(strPass);
+                    } else if (position == 11) {
+                        if (savePwd.length() > 0) {
+                            savePwd = savePwd.substring(0, savePwd.length() - 1);
+                            mEtinputpin.setText(savePwd);
                         }
                     }
-                    if (position == 9) {//删除所有
-                        if (strPass.length() > 0) {
-                            strPass = "";//删除所有
+                    if (position == 9) {
+                        if (savePwd.length() > 0) {
+                            savePwd = "";
                             mEtinputpin.setText("");
                         }
                     } else if (position == 12) {//paypass
@@ -237,7 +226,7 @@ public class PayPassView extends RelativeLayout {
                     } else if (position == 13) {//cancel
                         mPayClickListener.onCencel();
                     } else if (position == 14) {//confirm
-                        mPayClickListener.onConfirm(strPass);
+                        mPayClickListener.onConfirm(savePwd);
                     }
                 }
             });

@@ -78,24 +78,21 @@ public class DeviceInfoFragment extends Fragment implements View.OnClickListener
     }
 
     public void getposInfo(String posInfo) {
-        TRACE.d("get pos info :"+posInfo);
         SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
         String conType = (String) connectType.get(getActivity(), "conType", "");
-        if (conType.equals("blue")) {
-            Intent blueintent = new Intent(getActivity(), PaymentActivity.class);
-            blueintent.putExtra("posinfo", posInfo);
-            blueintent.putExtra("connect_type", 1);
-            startActivity(blueintent);
-        } else if (conType.equals("uart")) {
-            Intent uartintent = new Intent(getActivity(), PaymentActivity.class);
-            uartintent.putExtra("posinfo", posInfo);
-            uartintent.putExtra("connect_type", 2);
-            startActivity(uartintent);
-        } else if (conType.equals("usb")) {
-            Intent usbintent = new Intent(getActivity(), PaymentActivity.class);
-            usbintent.putExtra("posinfo", posInfo);
-            usbintent.putExtra("connect_type", 3);
-            startActivity(usbintent);
+        Intent intent = new Intent(getActivity(), PaymentActivity.class);
+        if ("blue".equals(conType)) {
+            intent.putExtra("posinfo", posInfo);
+            intent.putExtra("connect_type", 1);
+            startActivity(intent);
+        } else if ("uart".equals(conType)) {
+            intent.putExtra("posinfo", posInfo);
+            intent.putExtra("connect_type", 2);
+            startActivity(intent);
+        } else if ("usb".equals(conType)) {
+            intent.putExtra("posinfo", posInfo);
+            intent.putExtra("connect_type", 3);
+            startActivity(intent);
         }
 
 
