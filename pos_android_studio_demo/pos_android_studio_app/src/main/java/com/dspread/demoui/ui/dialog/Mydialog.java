@@ -192,16 +192,8 @@ public class Mydialog {
                     SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
                     String conType = (String) connectType.get(mContext, "conType", "");
                     if ("CASHBACK".equals(content)) {
-//                        Intent intent = new Intent(mContext, CashBackPaymentActivity.class);
-//                        intent.putExtra("amount", amount);
-//                        String inputMoneyString = String.valueOf(inputMoney);
-//                        intent.putExtra("inputMoney", inputMoneyString);
-//                        intent.putExtra("paytype", "CASHBACK");
-//                        intent.putExtra("connect_type", 2);
-//                        mContext.startActivity(intent);
                         String inputMoneyString = String.valueOf(inputMoney);
                         cashBackPaymentDialog(mContext,inputMoneyString);
-
                     } else {
                         if (!"".equals(conType) && "uart".equals(conType)) {
                             transactionTypeString = content;
