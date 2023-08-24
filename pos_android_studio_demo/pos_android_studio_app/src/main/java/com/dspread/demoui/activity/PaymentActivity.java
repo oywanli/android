@@ -1394,6 +1394,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onConfirm() {
                     if (isPinCanceled) {
+                        Log.w("lll","isPinCanceled=="+isPinCanceled);
                         pos.sendOnlineProcessResult(null);
                     } else {
 //									String str = "5A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F009505088004E0009A031406179C01009F02060000000000019F03060000000000009F0702AB009F080200209F0902008C9F0D05D86004A8009F0E0500109800009F0F05D86804F8009F101307010103A02000010A010000000000CE0BCE899F1A0201569F1E0838333230314943439F21031826509F2608881E2E4151E527899F2701809F3303E0F8C89F34030203009F3501229F3602008E9F37042120A7189F4104000000015A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F00";
@@ -1401,6 +1402,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         String str = "8A023030";//Currently the default value,
                         // should be assigned to the server to return data,
                         // the data format is TLV
+                        Log.w("lll","isPinCanceled=22="+isPinCanceled);
                         pos.sendOnlineProcessResult(str);//Script notification/55domain/ICCDATA
                     }
                     Mydialog.onlingDialog.dismiss();
