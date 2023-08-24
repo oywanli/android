@@ -146,7 +146,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     }
                     canshow=false;
                     showTimer.start();
-                    Mydialog.showDialog(getActivity(), amount, inputMoney, data);
+                    Mydialog.payTypeDialog(getActivity(), amount, inputMoney, data);
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.set_amount), Toast.LENGTH_SHORT).show();
                 }

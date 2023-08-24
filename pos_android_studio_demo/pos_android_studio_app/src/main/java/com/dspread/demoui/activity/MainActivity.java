@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
 
             }
         });
-        setSelect(0);
+        switchFragment(0);
         bluetoothRelaPer();
 
     }
@@ -146,40 +146,40 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
 
             case R.id.nav_home:
                 toolbar.setTitle(getString(R.string.menu_payment));
-                setSelect(0);
+                switchFragment(0);
                 drawerLayout.close();
                 break;
             case R.id.nav_setting:
                 toolbar.setTitle(getString(R.string.menu_setting));
-                setSelect(1);
+                switchFragment(1);
                 drawerLayout.close();
                 break;
             case R.id.nav_deviceinfo:
                 toolbar.setTitle(getString(R.string.device_info));
-                setSelect(2);
+                switchFragment(2);
                 drawerLayout.close();
                 break;
             case R.id.nav_deviceupdate:
                 toolbar.setTitle(getString(R.string.device_update));
-                setSelect(3);
+                switchFragment(3);
                 drawerLayout.close();
                 break;
             case R.id.nav_about:
                 toolbar.setTitle(getString(R.string.about));
-                setSelect(4);
+                switchFragment(4);
                 drawerLayout.close();
                 break;
             case R.id.nav_exit:
-                Mydialog.TalertDialog(MainActivity.this, getString(R.string.msg_exit), new Mydialog.OnMyClickListener() {
+                Mydialog.manualExitDialog(MainActivity.this, getString(R.string.msg_exit), new Mydialog.OnMyClickListener() {
                     @Override
-                    public void onCencel() {
-                        Mydialog.TalertDialog.dismiss();
+                    public void onCancel() {
+                        Mydialog.manualExitDialog.dismiss();
                     }
 
                     @Override
                     public void onConfirm() {
                         finish();
-                        Mydialog.TalertDialog.dismiss();
+                        Mydialog.manualExitDialog.dismiss();
                     }
                 });
                 break;
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
     }
 
 
-    private void setSelect(int i) {
+    private void switchFragment(int i) {
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         hideFragemts();
@@ -270,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
         boolean ok = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (ok) {//Location service is on
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                Log.e("POS_SDK", "Permission Denied");
                 // Permission denied
                 // Request authorization
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -284,25 +283,15 @@ public class MainActivity extends AppCompatActivity implements MyListener, Navig
                 }
 //                        Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
             } else {
-                // have permission
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
-                        String[] list = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE};
-                        ActivityCompat.requestPermissions(this, list, BLUETOOTH_CODE);
-                    }
-                }
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Log.e("BRG", "System detects that the GPS location service is not turned on");
             Toast.makeText(this, "System detects that the GPS location service is not turned on", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    Log.w("result", "result==" + result.getResultCode());
-
                 }
             });
             launcher.launch(intent);

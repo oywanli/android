@@ -244,7 +244,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                Toast.makeText(PaymentActivity.this, "please keep the device charging", Toast.LENGTH_LONG).show();
                     Mydialog.ErrorDialog(PaymentActivity.this, "please keep the device charging", new Mydialog.OnMyClickListener() {
                         @Override
-                        public void onCencel() {
+                        public void onCancel() {
 
                         }
 
@@ -260,7 +260,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 Mydialog.ErrorDialog(PaymentActivity.this, "Please add firmware version file", new Mydialog.OnMyClickListener() {
                     @Override
-                    public void onCencel() {
+                    public void onCancel() {
 
                     }
 
@@ -378,9 +378,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 scanBlue();
                 open(QPOSService.CommunicationMode.BLUETOOTH);
                 if (pos.getBluetoothState()) {
-                    Mydialog.TalertDialog(PaymentActivity.this, getString(R.string.msg_continue_connect), new Mydialog.OnMyClickListener() {
+                    Mydialog.manualExitDialog(PaymentActivity.this, getString(R.string.msg_continue_connect), new Mydialog.OnMyClickListener() {
                         @Override
-                        public void onCencel() {
+                        public void onCancel() {
                             pos.disconnectBT();
                             deviceType(1);
                             refreshAdapter();
@@ -393,7 +393,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             ivBlue.setVisibility(View.VISIBLE);
                             mllinfo.setVisibility(View.GONE);
                             statusEditText.setText("");
-                            Mydialog.TalertDialog.dismiss();
+                            Mydialog.manualExitDialog.dismiss();
                         }
 
                         @Override
@@ -415,7 +415,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             }
                             mrllayout.setVisibility(View.GONE);
                             mllinfo.setVisibility(View.GONE);
-                            Mydialog.TalertDialog.dismiss();
+                            Mydialog.manualExitDialog.dismiss();
                         }
                     });
 
@@ -654,10 +654,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.tv_title:
                 if (pos.getBluetoothState()) {
-                    Mydialog.TalertDialog(PaymentActivity.this, getString(R.string.disconnect), new Mydialog.OnMyClickListener() {
+                    Mydialog.manualExitDialog(PaymentActivity.this, getString(R.string.disconnect), new Mydialog.OnMyClickListener() {
                         @Override
-                        public void onCencel() {
-                            Mydialog.TalertDialog.dismiss();
+                        public void onCancel() {
+                            Mydialog.manualExitDialog.dismiss();
                         }
 
                         @Override
@@ -666,7 +666,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                                 pos.disconnectBT();
                             }
                             finish();
-                            Mydialog.TalertDialog.dismiss();
+                            Mydialog.manualExitDialog.dismiss();
                         }
                     });
                 }
@@ -805,8 +805,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             Log.w("dismissDialog", "ErrorDialog");
             Mydialog.ErrorDialog.dismiss();
         }
-        if (Mydialog.TalertDialog != null) {
-            Mydialog.TalertDialog.dismiss();
+        if (Mydialog.manualExitDialog != null) {
+            Mydialog.manualExitDialog.dismiss();
         }
         if (Mydialog.Ldialog != null) {
             Mydialog.Ldialog.dismiss();
@@ -1155,7 +1155,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if (!"".equals(msg)) {
                 Mydialog.ErrorDialog(PaymentActivity.this, msg, new Mydialog.OnMyClickListener() {
                     @Override
-                    public void onCencel() {
+                    public void onCancel() {
 
                     }
 
@@ -1381,7 +1381,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
             Mydialog.onlingDialog(PaymentActivity.this, isPinCanceled, new Mydialog.OnMyClickListener() {
                 @Override
-                public void onCencel() {
+                public void onCancel() {
                     mllinfo.setVisibility(View.VISIBLE);
                     mtvinfo.setText(decodeData.toString());
                     mllchrccard.setVisibility(View.GONE);
@@ -1616,7 +1616,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
             Mydialog.ErrorDialog(PaymentActivity.this, msg, new Mydialog.OnMyClickListener() {
                 @Override
-                public void onCencel() {
+                public void onCancel() {
 
                 }
 

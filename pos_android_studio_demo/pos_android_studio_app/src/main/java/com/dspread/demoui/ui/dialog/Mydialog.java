@@ -29,7 +29,7 @@ import java.util.List;
 
 public class Mydialog {
     public interface OnMyClickListener {
-        void onCencel();
+        void onCancel();
 
         void onConfirm();
     }
@@ -108,9 +108,9 @@ public class Mydialog {
     }
 
 
-    public static AlertDialog TalertDialog;
+    public static AlertDialog manualExitDialog;
 
-    public static void TalertDialog(Activity mContext, String msg, OnMyClickListener listener) {
+    public static void manualExitDialog(Activity mContext, String msg, OnMyClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         View view = View.inflate(mContext, R.layout.alert_dialog, null);
         View viewv = view.findViewById(R.id.view_v);
@@ -129,51 +129,51 @@ public class Mydialog {
         mbtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onCencel();
+                listener.onCancel();
             }
         });
 
-        TalertDialog = builder.create();
+        manualExitDialog = builder.create();
         if (!mContext.isFinishing()) {
-            TalertDialog.show();
+            manualExitDialog.show();
         }
-        Window window = TalertDialog.getWindow();
+        Window window = manualExitDialog.getWindow();
         window.setWindowAnimations(R.style.popupAnimation);
         window.setBackgroundDrawable(null);
         window.setGravity(Gravity.BOTTOM);
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
-        android.view.WindowManager.LayoutParams p = TalertDialog.getWindow().getAttributes();
+        android.view.WindowManager.LayoutParams p = manualExitDialog.getWindow().getAttributes();
         p.height = WindowManager.LayoutParams.WRAP_CONTENT;
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
-        TalertDialog.getWindow().setAttributes(p);
-        TalertDialog.setCanceledOnTouchOutside(true);
+        manualExitDialog.getWindow().setAttributes(p);
+        manualExitDialog.setCanceledOnTouchOutside(true);
         window.setContentView(view);
     }
 
 
-    public static AlertDialog PalertDialog;
+    public static AlertDialog payTypeDialog;
     private static RecyclerView rvlist;
     private static String transactionTypeString = "GOODS";
     private static MyAdapter myAdapter;
 
-    public static void showDialog(Activity mContext, String amount, long inputMoney, String[] data) {
+    public static void payTypeDialog(Activity mContext, String amount, long inputMoney, String[] data) {
 
-        PalertDialog = new AlertDialog.Builder(mContext).create();
+        payTypeDialog = new AlertDialog.Builder(mContext).create();
         if (!mContext.isFinishing()) {
-            PalertDialog.show();
+            payTypeDialog.show();
         }
-        Window window = PalertDialog.getWindow();
+        Window window = payTypeDialog.getWindow();
         window.setWindowAnimations(R.style.popupAnimation);
         window.setBackgroundDrawable(null);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.BOTTOM;
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
-        WindowManager.LayoutParams p = PalertDialog.getWindow().getAttributes();
+        WindowManager.LayoutParams p = payTypeDialog.getWindow().getAttributes();
         p.height = (int) (d.getHeight() * 0.6);
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
-        PalertDialog.getWindow().setAttributes(p);
+        payTypeDialog.getWindow().setAttributes(p);
         View view = View.inflate(mContext, R.layout.paytype_dialog_view, null);
         rvlist = view.findViewById(R.id.rv_list);
         rvlist.setLayoutManager(new LinearLayoutManager(mContext.getApplicationContext()));
@@ -194,7 +194,7 @@ public class Mydialog {
                         intent.putExtra("connect_type", 2);
                         mContext.startActivity(intent);
                     } else {
-                        if (conType != null && "uart".equals(conType)) {
+                        if (!"".equals(conType) && "uart".equals(conType)) {
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
                             intent.putExtra("amount", amount);
@@ -203,7 +203,7 @@ public class Mydialog {
                             intent.putExtra("paytype", transactionTypeString);
                             intent.putExtra("connect_type", 2);
                             mContext.startActivity(intent);
-                        } else if (conType != null && "usb".equals(conType)) {
+                        } else if (!"".equals(conType) && "usb".equals(conType)) {
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
                             intent.putExtra("amount", amount);
@@ -213,7 +213,7 @@ public class Mydialog {
                             intent.putExtra("conType", conType);
                             intent.putExtra("connect_type", 3);
                             mContext.startActivity(intent);
-                        } else if (conType != null && "blue".equals(conType)) {//blue
+                        } else if (!"".equals(conType) && "blue".equals(conType)) {//blue
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
                             intent.putExtra("amount", amount);
@@ -224,14 +224,14 @@ public class Mydialog {
                             mContext.startActivity(intent);
                         }
                     }
-                    PalertDialog.dismiss();
+                    payTypeDialog.dismiss();
 
                 }
             }
         });
         window.setContentView(view);
-        PalertDialog.setCanceledOnTouchOutside(true);
-        PalertDialog.setCancelable(true);
+        payTypeDialog.setCanceledOnTouchOutside(true);
+        payTypeDialog.setCancelable(true);
     }
 
     private static List<String> getArrayList(String[] data) {
@@ -274,7 +274,7 @@ public class Mydialog {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        listener.onCencel();
+                        listener.onCancel();
 
                     }
                 });
