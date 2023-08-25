@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.despreaddemo'
+    namespace 'com.dspread.demoui'
     compileSdk 33
 
     signingConfigs {
@@ -26,11 +26,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.despreaddemo"
+        applicationId "com.dspread.demoui"
         minSdk 28
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 20
+        versionName "4.2.13"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {

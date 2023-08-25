@@ -5,21 +5,23 @@
 
 <!--    <group android:checkableBehavior="single">-->
     <group android:checkableBehavior="none"
-        android:checked="true"
         >
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/payment_icon"
-            android:title="@string/menu_payment" />
+            android:title="@string/menu_payment"
+            />
 
         <item
             android:id="@+id/nav_deviceinfo"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/device_info" />
+            android:title="@string/device_info"
+            />
         <item
             android:id="@+id/nav_deviceupdate"
             android:icon="@drawable/device_update_icon"
-            android:title="@string/device_update" />
+            android:title="@string/device_update"
+            />
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/setting_icon"

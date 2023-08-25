@@ -48,16 +48,16 @@
     <string name="scan_usb_device">扫描USB设备</string>
     <string name="audio_open">音效控制:开</string>
     <string name="audio_close">音效控制:关</string>
-     <string name="poll_card">寻mifare卡</string>
+    <string name="poll_card">寻mifare卡</string>
     <string name="verify_card">验证卡片</string>
     <string name="read_card">读卡</string>
     <string name="operate_card">操作卡片（增值/减值/存储）</string>
     <string name="write_card">写卡</string>
     <string name="finish_card">完成卡通讯</string>
     <string name="audio_unknow">音效控制:未知</string>
-    <string name="get_pin">get pin</string>
+    <string name="get_pin">获取pin</string>
     <string name="set_sleepMode_time">set sleep mode time</string>
-     <string name="getId">getPosId</string>
+    <string name="getId">获取PosId</string>
     <string name="update">升级</string>
     <string name="input_pin">请输入密码</string>
     <string name="setBuzzer">设置蜂鸣器</string>
@@ -65,8 +65,8 @@
     <string name="set_Masterkey">设置主密钥</string>
     <string name="update_WorkKey">更新工作密钥</string>
     <string name="updateEMV">更新EMV</string>
-    <string name="getQuickEmvStatus">get Quick Emv Status</string>
- 	<string name="setQuickEmvStatus">set Quick Emv Status</string>
+    <string name="getQuickEmvStatus">获取 Quick Emv Status</string>
+    <string name="setQuickEmvStatus">设置 Quick Emv Status</string>
     <string name="updateEMVByXml">用xml更新EMV</string>
     <string name="updateEMVRID">更新RID的EMV</string>
     <string name="swipe_card">请刷卡</string>
@@ -93,8 +93,12 @@
     <string name="open_audio">打开音频</string>
     <string name="scan_bt_pos_error">没有绑定的设备\n请先绑定</string>
     <string name="connecting_bt_pos">连接设备中\n请稍等…</string>
-    <string name="app_name">pos-android-demo</string>
-    <string name="action_settings" >Settings</string>
+    <string name="app_name">鼎和Demo</string>
+    <string name="action_settings">设置</string>
+    <string name="nav_header_desc">导航标题</string>
+    <string name="navigation_drawer_open">打开导航栏</string>
+    <string name="navigation_drawer_close">关闭导航栏</string>
+    <string name="app_select_timeout_error">应用选择超时</string>
     <string name="waiting_for_card">请拍卡或刷卡或插入ICC卡</string>
     <string name="no_card_detected">刷卡或插卡已超时\n请按开始再试一次</string>
     <string name="icc_card_inserted">ICC卡已插入</string>
@@ -383,9 +387,7 @@
     <string name="setting_exit">退出</string>
     <string name="msg_exit">确定退出应用吗?</string>
     <string name="msg_continue_connect">是否继续之前的连接?</string>
-
-
-
+    <string name="input_cashback">输入返还金额</string>
 
 
 </resources>

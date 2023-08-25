@@ -2,46 +2,10 @@
     <string name="app_name">pos-android-demo</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">dspreadDemo</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
     <string name="menu_payment">Payment</string>
     <string name="menu_setting">Setting</string>
-
-
-    <string name="hint_text_content">Text Content</string>
-    <string name="hint_barcode_content">Barcode Content</string>
-    <string name="hint_barcode_height">Barcode Height</string>
-    <string name="hint_barcode_width">Barcode Width</string>
-    <string name="hint_qrcode_content">QRCode Content</string>
-    <string name="hint_qrcode_size">QRCode Size</string>
-
-
-    <!-- <string name="app_name">打印机测试</string>-->
-    <string name="hint_font_size">Font Size</string>
-    <string name="start_print">Start Print</string>
-    <string name="stop_print">Stop Print</string>
-    <string name="standard_test">Standard Test</string>
-    <string name="text_print">Print Text</string>
-    <string name="qrcode_print">Print QR code</string>
-    <string name="bitmap_print">Print Pictures</string>
-    <string name="barcode_print">Print Barcode</string>
-    <string name="receipt_print">Print Tickets</string>
-    <string name="battery_test">Battery Jump Test</string>
-    <string name="font_test">Font Effect</string>
-
-    <string name="print_performence">距离%.2f mm, 耗时%.2f s, 速度%.2f mm/s</string>
-    <string name="statistics_of_dot">点行统计</string>
-    <string name="content_density">印字率</string>
-    <string name="height_factor">高度( x 48mm)</string>
-
-    <string name="batt_level_test_sleep">"Do not print the next time in %d minutes"</string>
-
     <string name="device_not_connect">device not connect</string>
     <string name="end_transaction">ICC transaction end</string>
     <string name="select_app_start">please select app</string>
@@ -50,7 +14,6 @@
     <string name="emv_not_configured">emv is not configured</string>
     <string name="communicate_test">Communication Command Test</string>
     <string name="result">Result is :</string>
-    <string name="test_led">LED Test</string>
     <string name="test_led_start">LED Test Start</string>
     <string name="test_led_end">LED Test End</string>
     <string name="test_led_red">Red LED Test</string>
@@ -81,15 +44,6 @@
     <string name="device_operate">Device Operate</string>
     <string name="device_other">Other</string>
     <string name="title_audio">Audio</string>
-    <string name="title_print">Print</string>
-    <string name="mp_text_print">Print Text</string>
-    <string name="mp_barcode_print">Print BarCode</string>
-    <string name="mp_image_print">Print image</string>
-    <string name="mp_qrcode_print">Print QRCode</string>
-    <string name="mp_tickets_print">Print Tickets</string>
-    <string name="mp_standard_print">Standard Print Test</string>
-    <string name="mp_battery_test">Battery  Test</string>
-    <string name="mp_font_test">Font  Test</string>
     <string name="title_uart">Uart</string>
     <string name="title_blu">Bluetooth</string>
     <string name="title_ble">Ble Bluetooth</string>
@@ -114,7 +68,6 @@
     <string name="getQuickEmvStatus">get Quick Emv Status</string>
     <string name="setQuickEmvStatus">set Quick Emv Status</string>
     <string name="updateEMVByXml">update EMVByXml</string>
-    <string name="audio">Audio</string>
     <string name="serial_port">Serial port</string>
     <string name="normal_bluetooth">Normal Blutooth</string>
     <string name="other_blu">BLE Blutooth</string>
@@ -140,9 +93,7 @@
     <string name="card_is_not_exist">card is not exist</string>
     <string name="scan_bt_device">scan device</string>
     <string name="scan_usb_device">usb device</string>
-    <string name="text_quick_emv">update quick emv config</string>
     <string name="getId">getPosId</string>
-    <string name="text_quick_emv_trade">do quick emv transaction</string>
     <string name="poll_card">poll card</string>
     <string name="verify_card">verify card</string>
     <string name="read_card">read card</string>
@@ -340,30 +291,15 @@
     <string name="tap_card">Tap Card: </string>
     <string name="battery_percentage">battery percentage: </string>
     <string name="updateInjectKeys">update Keys:</string>
-    <string name="title_activity_welcome">WelcomeActivity</string>
-    <string name="hello_world">Hello world!</string>
-<!--    <string name="pedi_command">&#091;AOPEDI&#059;VS2&#059;RF0&#059;TD1&#059;CC%1%s&#059;RG%2%s&#059;CE%3%s&#059;&#093;</string>-->
-    <string name="pedk_command">&#091;AOPEDK&#059;KN&#059;RD&#059;CE%s&#059;&#093;</string>
-    <string name="pedv_command">&#091;AOPEDV&#059;KV&#059;RD&#059;CE%s&#059;&#093;</string>
-
-
-    <string name="scan_over">end the scan</string>
-    <string name="failedRead">read failed</string>
-    <string name="updateEMVAppStatus">AID\'s EMV update is complete</string>
-    <string name="updateEMVCapkStatus">RID\'s EMV update is complete</string>
 
     <string name="app_select_timeout_error">APP select time out</string>
     <string name="operate_update">operation update</string>
-    <string name="get_device_public_key">get DevicePublicKey</string>
-    <string name="text_creat_8583">create 8583 MSG</string>
     <string name="updateFirmware">update Firmware</string>
-    <string name="mp600_print">D30Print</string>
     <string name="print">Print</string>
     <string name="please_connect_printer_first">Please Connect Printer First.</string>
     <string name="str_printtext">str_printtext</string>
     <string name="str_printimg">print pictures</string>
     <string name="str_printbarcode">BARcode printing </string>
-    <string name="str_printqrcode">QRcode printing </string>
     <string name="code_transformation">Black Mark</string>
     <string name="str_scan">scanning equipment</string>
     <string name="str_device">device</string>
@@ -454,87 +390,8 @@
     <string name="setting_exit">Exit</string>
     <string name="msg_exit">Are you sure to exit the application?</string>
     <string name="msg_continue_connect">Do you want to continue with the previous connection?</string>
+    <string name="input_cashback">InputCashBack</string>
 
-
-    <string name="get_print_speed">get printer speed</string>
-
-    <string name="get_print_temperature">get printer temperature</string>
-
-    <string name="get_print_voltage">get printer voltage</string>
-
-    <string name="get_print_status">get printer status</string>
-    <string-array name="font_style_array">
-        <item>NORMAL</item>
-        <item>BOLD</item>
-        <item>ITALIC</item>
-        <item>BOLD_ITALIC</item>
-    </string-array>
-
-
-    <string-array name="font_array">
-        <item>系统默认</item>
-        <item>arial</item>
-        <item>微软雅黑</item>
-        <item>宋体</item>
-    </string-array>
-
-
-    <string-array name="alignment_array">
-        <item>Left</item>
-        <item>Center</item>
-        <item>Right</item>
-    </string-array>
-    <string-array name="grey_level_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-    </string-array>
-
-
-    <string-array name="speed_level_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-    </string-array>
-
-
-    <string-array name="err_level_array">
-        <item>L</item>
-        <item>M</item>
-        <item>Q</item>
-        <item>H</item>
-    </string-array>
-
-    <string-array name="height_factor_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-    </string-array>
-
-    <string-array name="content_density_array">
-        <item>0/8</item>
-        <item>1/8</item>
-        <item>2/8</item>
-        <item>3/8</item>
-        <item>4/8</item>
-        <item>5/8</item>
-        <item>6/8</item>
-        <item>7/8</item>
-        <item>8/8</item>
-    </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
