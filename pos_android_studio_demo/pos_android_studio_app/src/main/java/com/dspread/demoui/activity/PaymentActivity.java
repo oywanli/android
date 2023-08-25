@@ -2651,9 +2651,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (updateThread != null) {
             updateThread.concelSelf();
         }
-//        if (pos != null) {
-//            pos.cancelTrade();
-//        }
+        if (pos != null) {
+            pos.cancelTrade();
+        }
 
         if (type == 2) {
             if (pos != null) {
