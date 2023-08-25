@@ -3,6 +3,7 @@ package com.dspread.demoui.ui.setting;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,15 +40,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         initView(view);
         SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
         String conType = (String) connectType.get(getActivity(), "conType", "");
-        if (conType.equals("blue")) {
+        Log.w("setting","contyep=="+conType);
+        if (!"".equals(conType) && "blue".equals(conType)) {
             rBtnBlue.setEnabled(true);
             rgType.check(R.id.rbtn_blue);
 
-        } else if (conType.equals("uart")) {
+        } else if (!"".equals(conType) && "uart".equals(conType)) {
             rBtnSerialPort.setEnabled(true);
             rgType.check(R.id.rbtn_serialport);
 
-        } else if (conType.equals("usb")) {
+        } else if (!"".equals(conType) && "usb".equals(conType)) {
             rBtnUsb.setEnabled(true);
             rgType.check(R.id.rbtn_usb);
 

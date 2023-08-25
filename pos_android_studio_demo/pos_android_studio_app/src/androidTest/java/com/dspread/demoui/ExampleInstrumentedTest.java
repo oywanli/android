@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.com.dspread.demoui", appContext.getPackageName());
+        assertEquals("com.dspread.demoui", appContext.getPackageName());
     }
 }

@@ -4,22 +4,28 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dspread.demoui.R;
-import com.dspread.demoui.activity.CashBackPaymentActivity;
 import com.dspread.demoui.activity.PaymentActivity;
+import com.dspread.demoui.utils.MoneyUtil;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
 import com.dspread.demoui.utils.Utils;
 import com.dspread.demoui.widget.MyAdapter;
@@ -29,7 +35,7 @@ import java.util.List;
 
 public class Mydialog {
     public interface OnMyClickListener {
-        void onCencel();
+        void onCancel();
 
         void onConfirm();
     }
@@ -108,9 +114,9 @@ public class Mydialog {
     }
 
 
-    public static AlertDialog TalertDialog;
+    public static AlertDialog manualExitDialog;
 
-    public static void TalertDialog(Activity mContext, String msg, OnMyClickListener listener) {
+    public static void manualExitDialog(Activity mContext, String msg, OnMyClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         View view = View.inflate(mContext, R.layout.alert_dialog, null);
         View viewv = view.findViewById(R.id.view_v);
@@ -129,51 +135,51 @@ public class Mydialog {
         mbtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onCencel();
+                listener.onCancel();
             }
         });
 
-        TalertDialog = builder.create();
+        manualExitDialog = builder.create();
         if (!mContext.isFinishing()) {
-            TalertDialog.show();
+            manualExitDialog.show();
         }
-        Window window = TalertDialog.getWindow();
+        Window window = manualExitDialog.getWindow();
         window.setWindowAnimations(R.style.popupAnimation);
         window.setBackgroundDrawable(null);
         window.setGravity(Gravity.BOTTOM);
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
-        android.view.WindowManager.LayoutParams p = TalertDialog.getWindow().getAttributes();
+        android.view.WindowManager.LayoutParams p = manualExitDialog.getWindow().getAttributes();
         p.height = WindowManager.LayoutParams.WRAP_CONTENT;
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
-        TalertDialog.getWindow().setAttributes(p);
-        TalertDialog.setCanceledOnTouchOutside(true);
+        manualExitDialog.getWindow().setAttributes(p);
+        manualExitDialog.setCanceledOnTouchOutside(true);
         window.setContentView(view);
     }
 
 
-    public static AlertDialog PalertDialog;
+    public static AlertDialog payTypeDialog;
     private static RecyclerView rvlist;
     private static String transactionTypeString = "GOODS";
     private static MyAdapter myAdapter;
 
-    public static void showDialog(Activity mContext, String amount, long inputMoney, String[] data) {
+    public static void payTypeDialog(Activity mContext, String amount, long inputMoney, String[] data) {
 
-        PalertDialog = new AlertDialog.Builder(mContext).create();
+        payTypeDialog = new AlertDialog.Builder(mContext).create();
         if (!mContext.isFinishing()) {
-            PalertDialog.show();
+            payTypeDialog.show();
         }
-        Window window = PalertDialog.getWindow();
+        Window window = payTypeDialog.getWindow();
         window.setWindowAnimations(R.style.popupAnimation);
         window.setBackgroundDrawable(null);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.BOTTOM;
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
-        WindowManager.LayoutParams p = PalertDialog.getWindow().getAttributes();
+        WindowManager.LayoutParams p = payTypeDialog.getWindow().getAttributes();
         p.height = (int) (d.getHeight() * 0.6);
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
-        PalertDialog.getWindow().setAttributes(p);
+        payTypeDialog.getWindow().setAttributes(p);
         View view = View.inflate(mContext, R.layout.paytype_dialog_view, null);
         rvlist = view.findViewById(R.id.rv_list);
         rvlist.setLayoutManager(new LinearLayoutManager(mContext.getApplicationContext()));
@@ -186,24 +192,18 @@ public class Mydialog {
                     SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
                     String conType = (String) connectType.get(mContext, "conType", "");
                     if ("CASHBACK".equals(content)) {
-                        Intent intent = new Intent(mContext, CashBackPaymentActivity.class);
-                        intent.putExtra("amount", amount);
                         String inputMoneyString = String.valueOf(inputMoney);
-                        intent.putExtra("inputMoney", inputMoneyString);
-                        intent.putExtra("paytype", "CASHBACK");
-                        intent.putExtra("connect_type", 2);
-                        mContext.startActivity(intent);
+                        cashBackPaymentDialog(mContext,inputMoneyString);
                     } else {
-                        if (conType != null && "uart".equals(conType)) {
+                        if (!"".equals(conType) && "uart".equals(conType)) {
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
-                            intent.putExtra("amount", amount);
                             String inputMoneyString = String.valueOf(inputMoney);
                             intent.putExtra("inputMoney", inputMoneyString);
                             intent.putExtra("paytype", transactionTypeString);
                             intent.putExtra("connect_type", 2);
                             mContext.startActivity(intent);
-                        } else if (conType != null && "usb".equals(conType)) {
+                        } else if (!"".equals(conType) && "usb".equals(conType)) {
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
                             intent.putExtra("amount", amount);
@@ -213,7 +213,7 @@ public class Mydialog {
                             intent.putExtra("conType", conType);
                             intent.putExtra("connect_type", 3);
                             mContext.startActivity(intent);
-                        } else if (conType != null && "blue".equals(conType)) {//blue
+                        } else if (!"".equals(conType) && "blue".equals(conType)) {//blue
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
                             intent.putExtra("amount", amount);
@@ -224,14 +224,14 @@ public class Mydialog {
                             mContext.startActivity(intent);
                         }
                     }
-                    PalertDialog.dismiss();
+                    payTypeDialog.dismiss();
 
                 }
             }
         });
         window.setContentView(view);
-        PalertDialog.setCanceledOnTouchOutside(true);
-        PalertDialog.setCancelable(true);
+        payTypeDialog.setCanceledOnTouchOutside(true);
+        payTypeDialog.setCancelable(true);
     }
 
     private static List<String> getArrayList(String[] data) {
@@ -256,10 +256,7 @@ public class Mydialog {
         } else {
             textView.setText(R.string.replied_success);
         }
-        try {
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         Button cancelButton = view.findViewById(R.id.cancelButton);
         view.findViewById(R.id.confirmButton).setOnClickListener(
                 new View.OnClickListener() {
@@ -274,7 +271,7 @@ public class Mydialog {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        listener.onCencel();
+                        listener.onCancel();
 
                     }
                 });
@@ -297,5 +294,131 @@ public class Mydialog {
         onlingDialog.getWindow().setAttributes(p);
         window.setContentView(view);
     }
+
+
+    public static Dialog cashBackPaymentDialog;
+
+    public static void cashBackPaymentDialog(Activity mContext, String inputMoney) {
+        View view = View.inflate(mContext, R.layout.cashback_dialog, null);
+        TextView textView = view.findViewById(R.id.messageTextView);
+        textView.setTextSize(20);
+
+        EditText etInputMoney = view.findViewById(R.id.et_inputMoney);
+        etInputMoney.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+        etInputMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str = s.toString();
+                if (s.length() == 1 && s.toString().equals(".")) {
+                    etInputMoney.setText("");
+                }
+                if (str.contains(".")) {
+                    String[] strArr = str.split("\\.");
+                    if (strArr.length > 1 && strArr[1].length() > 2) {
+                        s.delete(str.length() - 1, str.length());
+                    }
+                }
+                if (str.length() > 10 && !str.contains(".")) {
+                    s.delete(str.length() - 1, str.length());
+                }
+
+            }
+        });
+
+        view.findViewById(R.id.confirmButton).setOnClickListener(
+                new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        String cashbackAmounts = etInputMoney.getText().toString().trim();
+                        if (!"".equals(cashbackAmounts) && !"0".equals(cashbackAmounts)) {
+                            Double inputCashbackAmount = Double.valueOf(cashbackAmounts);
+                            Long inputCashbackAmounts=MoneyUtil.yuan2fen(inputCashbackAmount);
+                            String inputcashbackMoney = String.valueOf(inputCashbackAmounts);
+                            SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
+                            String conType = (String) connectType.get(mContext, "conType", "");
+
+                            if (conType != null && "uart".equals(conType)) {
+                                Intent intent = new Intent(mContext, PaymentActivity.class);
+                                String inputMoneyString = String.valueOf(inputMoney);
+                                intent.putExtra("inputMoney", inputMoneyString);
+                                intent.putExtra("paytype", "CASHBACK");
+                                intent.putExtra("cashbackAmounts", inputcashbackMoney);
+                                intent.putExtra("connect_type", 2);
+                                mContext.startActivity(intent);
+                                cashBackPaymentDialog.dismiss();
+                            } else if (conType != null && "usb".equals(conType)) {
+                                Intent intent = new Intent(mContext, PaymentActivity.class);
+                                String inputMoneyString = String.valueOf(inputMoney);
+                                intent.putExtra("inputMoney", inputMoneyString);
+                                intent.putExtra("paytype", "CASHBACK");
+                                intent.putExtra("cashbackAmounts", inputcashbackMoney);
+                                intent.putExtra("conType", conType);
+                                intent.putExtra("connect_type", 3);
+                                mContext.startActivity(intent);
+                                cashBackPaymentDialog.dismiss();
+                            } else if (conType != null && "blue".equals(conType)) {//blue
+                                Intent intent = new Intent(mContext, PaymentActivity.class);
+                                String inputMoneyString = String.valueOf(inputMoney);
+                                intent.putExtra("inputMoney", inputMoneyString);
+                                intent.putExtra("paytype", "CASHBACK");
+                                intent.putExtra("cashbackAmounts", inputcashbackMoney);
+                                intent.putExtra("connect_type", 1);
+                                mContext.startActivity(intent);
+                                cashBackPaymentDialog.dismiss();
+                            }
+
+
+                        } else {
+                            Toast.makeText(mContext, mContext.getString(R.string.set_amount), Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+                });
+
+
+        cashBackPaymentDialog = new Dialog(mContext);
+        cashBackPaymentDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        cashBackPaymentDialog.setCanceledOnTouchOutside(false);
+        if (!mContext.isFinishing()) {
+            cashBackPaymentDialog.show();
+        }
+
+        etInputMoney.setFocusable(true);
+        etInputMoney.setFocusableInTouchMode(true);
+        etInputMoney.requestFocus();
+        etInputMoney.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(etInputMoney, 0);
+            }
+        }, 100);
+
+        Window window = cashBackPaymentDialog.getWindow();
+        window.setWindowAnimations(R.style.popupAnimation);
+        window.setBackgroundDrawable(null);
+        window.setGravity(Gravity.BOTTOM);
+        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display d = wm.getDefaultDisplay();
+        android.view.WindowManager.LayoutParams p = cashBackPaymentDialog.getWindow().getAttributes();
+
+        p.width = (int) (d.getWidth() * 1);
+
+        cashBackPaymentDialog.getWindow().setAttributes(p);
+        cashBackPaymentDialog.setContentView(view);
+    }
+
 
 }
