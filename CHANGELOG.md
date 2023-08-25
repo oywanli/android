@@ -1,3 +1,26 @@
+# [4.3.0](https://gitlab.com/[secure]/android/compare/v4.2.12...v4.3.0) (2023-08-25)
+
+
+### Bug Fixes
+
+* implement unified modification of project names with existing project file names ([b93000a](https://gitlab.com/[secure]/android/commit/b93000aaa4e77a181efe733b34606bb1083201b9))
+* implement unified modification of project names with existing project file names ([a2ff052](https://gitlab.com/[secure]/android/commit/a2ff052583db957a539011db4c058912b84d5567))
+* modify code according to method naming rules ([b1c0a44](https://gitlab.com/[secure]/android/commit/b1c0a444d4a80076bc4763d80152bb516031842c))
+* modify files that failed compilation ([f6da7f8](https://gitlab.com/[secure]/android/commit/f6da7f8fc9efe437651b57d3edfd70674f63d532))
+* modify the application package name and remove the welcome interface ([ded8caf](https://gitlab.com/[secure]/android/commit/ded8cafb619ec4c22286f3dd3442bbb0ceecbf88))
+* modify the cashback amount input method ([546d8e0](https://gitlab.com/[secure]/android/commit/546d8e0581df2b7e2edd0af62d480ea2ac4af3b1))
+* modify the cashback amount input method ([d431a26](https://gitlab.com/[secure]/android/commit/d431a266dc5188c7a366b40f15853032ef077370))
+* modify the cashback amount input method ([f9802e7](https://gitlab.com/[secure]/android/commit/f9802e75bd8a819a4ca6cd845ce299ac439b6975))
+* modify the class name to optimize the code ([17f2cd7](https://gitlab.com/[secure]/android/commit/17f2cd73c3d1ce1c5c1cdd68d856441f3f8bbf09))
+* problems during the compilation process of modifying strings files ([e727282](https://gitlab.com/[secure]/android/commit/e7272820a82630a35fda67c97779f766c3f81d49))
+* problems during the compilation process of modifying strings files ([37af695](https://gitlab.com/[secure]/android/commit/37af695e09b9febd6dd97b886c90f6495c19b467))
+* removed the jniLibs file to address the issue of failed introduction of so files ([1f3e482](https://gitlab.com/[secure]/android/commit/1f3e482162a2c707af9a3eca1fc7477ecae62155))
+
+
+### Features
+
+* update the latest android demo ([cdb061d](https://gitlab.com/[secure]/android/commit/cdb061d17446175f42f6b758d7da33392c66fa4d))
+
 # [4.3.0](https://gitlab.com/[secure]/android/compare/v4.2.12...v4.3.0) (2023-08-22)
 
 
