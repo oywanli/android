@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:orientation="vertical"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.fragment.HomeFragment">
 
     <include
         android:id="@+id/il_title"

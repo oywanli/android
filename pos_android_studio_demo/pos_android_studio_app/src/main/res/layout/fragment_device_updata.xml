@@ -52,8 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                 />
+                android:layout_marginRight="20dp" />
 
 
             <RelativeLayout
@@ -86,8 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                 />
+                android:layout_marginRight="20dp" />
 
 
             <RelativeLayout
@@ -120,8 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                />
+                android:layout_marginRight="20dp" />
 
             <RelativeLayout
                 android:id="@+id/update_firmware"
@@ -152,8 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                />
+                android:layout_marginRight="20dp" />
 
             <RelativeLayout
                 android:id="@+id/update_emvByXml"
@@ -169,6 +165,7 @@
                     android:layout_centerVertical="true"
                     android:text="@string/updateEMVByXml"
                     android:textSize="20sp" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -181,8 +178,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-               />
+                android:layout_marginRight="20dp" />
         </LinearLayout>
     </ScrollView>
 

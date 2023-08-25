@@ -26,8 +26,8 @@ public class SharedPreferencesUtil {
         return mInstance;
     }
     /**
-     *存入相应的key对应的数据
-     *value可以是String、boolean、float、int、long等基本数据类型的值
+     *Deposit the data corresponding to the corresponding key
+     *value can be a value of basic data types such as String, boolean, float, int, long, etc
      */
     public void put(Context context,String key,Object value){
 
@@ -51,7 +51,7 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     *获取SharedPreferences数据里指定key对应的value。如果key不存在，则返回默认值defValue
+     *Gets the value corresponding to the specified key in the SharedPreferences data. If the key does not exist, the default value defValue is returned
      */
     @Nullable
     public Object get(Context context, String key, Object defValue){

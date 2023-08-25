@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Custom payment password component件
+ * Custom payment password component
  */
 
 public class PayPassView extends RelativeLayout {

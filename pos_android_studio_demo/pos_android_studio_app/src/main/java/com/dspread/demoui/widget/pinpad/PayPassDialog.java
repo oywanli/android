@@ -48,7 +48,7 @@ public class PayPassDialog {
     public void dismiss() {
         if (mDialog != null && mDialog.isShowing()) {
             mDialog.dismiss();
-            mDialog = null;//清空对象
+            mDialog = null;
             window = null;
         }
     }

@@ -1,10 +1,9 @@
-package com.dspread.demoui.ui.home;
+package com.dspread.demoui.ui.fragment;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.dspread.demoui.R;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.MoneyUtil;
-import com.dspread.demoui.utils.MyListener;
+import com.dspread.demoui.utils.TitleUpdateListener;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -31,7 +30,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private String amount = "";
 
     View view;
-    MyListener myListener;
+    TitleUpdateListener myListener;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -43,7 +42,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_input_money, null);
-        myListener = (MyListener) getActivity();
+        myListener = (TitleUpdateListener) getActivity();
         getActivity().setTitle(getString(R.string.menu_payment));
         initView(view);
         initData();
@@ -86,7 +85,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Button btn_num9 = view.findViewById(R.id.btn_num9);
 
         btn_num9.setOnClickListener(this);
-        // 清除
         ImageView btn_num_clear = view.findViewById(R.id.btn_num_clear);
         btn_num_clear.setOnClickListener(this);
         mConfirm = view.findViewById(R.id.btn_confirm);
