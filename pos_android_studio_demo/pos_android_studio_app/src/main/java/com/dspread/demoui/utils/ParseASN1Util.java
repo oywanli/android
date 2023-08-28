@@ -218,7 +218,7 @@ public class ParseASN1Util {
 //                        System.out.println("prop33->"+re2);
 
                     }
-                }else if(primitive instanceof DLSet){//得出公钥加密的数据
+                }else if(primitive instanceof DLSet){//Derive the data encrypted by the public key
                     DLSet dlSet = (DLSet) primitive;
                     System.out.println("DLSet:"+dlSet.toString());
                     int size = dlSet.size();

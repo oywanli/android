@@ -1,4 +1,4 @@
-package com.dspread.demoui.ui.device;
+package com.dspread.demoui.ui.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dspread.demoui.R;
-import com.dspread.demoui.utils.MyListener;
+import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.NetCheckHelper;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.UpdateAppHelper;
@@ -48,7 +48,7 @@ import java.io.Reader;
  * @author user
  */
 public class AboutFragment extends Fragment implements View.OnClickListener {
-    private MyListener myListener;
+    private TitleUpdateListener myListener;
     private RelativeLayout btnVersionUpdate;
     private TextView tvVersionCode;
 
@@ -60,7 +60,7 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        myListener = (MyListener) getActivity();
+        myListener = (TitleUpdateListener) getActivity();
         myListener.sendValue(getString(R.string.about));
     }
 
@@ -101,7 +101,7 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.version_update:
-                //版本更新
+                //Version updates
                 isCheckUpgrade = true;
                 checkVersionUpdate();
 

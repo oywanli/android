@@ -8,27 +8,27 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.dspread.demoui.ui.home.HomeFragment"
+        android:name="com.dspread.demoui.ui.fragment.HomeFragment"
         tools:layout="@layout/fragment_input_money" />
 
 
     <fragment
         android:id="@+id/nav_deviceinfo"
-        android:name="com.dspread.demoui.ui.device.DeviceInfoFragment"
+        android:name="com.dspread.demoui.ui.fragment.DeviceInfoFragment"
         tools:layout="@layout/fragment_device_info"
         />
     <fragment
         android:id="@+id/nav_deviceupdate"
-        android:name="com.dspread.demoui.ui.device.DeviceUpdataFragment"
+        android:name="com.dspread.demoui.ui.fragment.DeviceUpdataFragment"
         tools:layout="@layout/fragment_device_updata"
          />
     <fragment
         android:id="@+id/nav_setting"
-        android:name="com.dspread.demoui.ui.setting.SettingFragment"
+        android:name="com.dspread.demoui.ui.fragment.SettingFragment"
         tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/nav_about"
-        android:name="com.dspread.demoui.ui.device.DeviceUpdataFragment"
+        android:name="com.dspread.demoui.ui.fragment.DeviceUpdataFragment"
         tools:layout="@layout/fragment_device_updata"
          />
 

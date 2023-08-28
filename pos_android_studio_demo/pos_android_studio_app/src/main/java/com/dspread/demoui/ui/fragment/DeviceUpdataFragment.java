@@ -1,4 +1,4 @@
-package com.dspread.demoui.ui.device;
+package com.dspread.demoui.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,14 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.activity.PaymentActivity;
-import com.dspread.demoui.utils.MyListener;
+import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
 
 /**
@@ -22,7 +21,7 @@ import com.dspread.demoui.utils.SharedPreferencesUtil;
  * create an instance of this fragment.
  */
 public class DeviceUpdataFragment extends Fragment implements View.OnClickListener {
-    MyListener myListener;
+    TitleUpdateListener myListener;
     private RelativeLayout updateIpek;
     //    private RelativeLayout updateGetsleeptime;
 //    private RelativeLayout updateEmvapp;
@@ -36,7 +35,7 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        myListener = (MyListener) getActivity();
+        myListener = (TitleUpdateListener) getActivity();
         myListener.sendValue(getString(R.string.device_update));
     }
 

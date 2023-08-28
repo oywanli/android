@@ -1,7 +1,7 @@
-package com.dspread.demoui.utils;
+package com.dspread.demoui.beans;
 
 
-public class bluebean {
+public class BluetoothToolsBean {
 
     private static String conected_state;
     private static String bulueName;
@@ -11,7 +11,7 @@ public class bluebean {
     }
 
     public static void setBulueName(String bulueName) {
-        bluebean.bulueName = bulueName;
+        BluetoothToolsBean.bulueName = bulueName;
     }
 
     public static String getConected_state() {
@@ -19,7 +19,7 @@ public class bluebean {
     }
 
     public static void setConected_state(String conected_state) {
-        bluebean.conected_state = conected_state;
+        BluetoothToolsBean.conected_state = conected_state;
     }
 //    private static BluetoothTools.BluetoothConnectState connected_states = BluetoothTools.BluetoothConnectState.NOCONNECT;
 //

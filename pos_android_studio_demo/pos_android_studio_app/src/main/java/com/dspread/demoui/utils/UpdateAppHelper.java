@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.dspread.demoui.ui.dialog.HDownloadProgressDialogUtils;
 import com.xuexiang.xaop.annotation.Permission;
 import com.xuexiang.xaop.consts.PermissionConsts;
 import com.xuexiang.xupdate.XUpdate;
@@ -73,9 +74,9 @@ public class UpdateAppHelper {
     }
 
     /**
-     * 获取版本号
+     * Gets the version number
      *
-     * @return 当前应用的版本号
+     * @return The version number of the current app
      */
     public static String getPackageVersionName(Context context, String pkgName) {
         try {
