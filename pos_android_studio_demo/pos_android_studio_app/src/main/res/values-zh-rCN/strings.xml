@@ -388,6 +388,16 @@
     <string name="msg_exit">确定退出应用吗?</string>
     <string name="msg_continue_connect">是否继续之前的连接?</string>
     <string name="input_cashback">输入返还金额</string>
-
+    <string name="charging_warning">请保持设备充电</string>
+    <string name="does_the_file_exist">请添加固件版本文件</string>
+    <string name="get_shutdown_time_fail">获取关闭时间失败！</string>
+    <string name="update_finished">更新已完成100%</string>
+    <string name="updateworkkey_success">更新工作密钥成功</string>
+    <string name="updateworkkey_fail">更新工作密钥失败</string>
+    <string name="workkey_vefiry_error">更新工作密钥包验证错误</string>
+    <string name="workkey_packet_Len_error">更新工作密钥包长度错误</string>
+    <string name="communicationMode_unknow">通信模式未知</string>
+    <string name="updateIPEK_success">更新IPEK成功</string>
+    <string name="updateIPEK_fail">更新IPEK文件</string>
 
 </resources>

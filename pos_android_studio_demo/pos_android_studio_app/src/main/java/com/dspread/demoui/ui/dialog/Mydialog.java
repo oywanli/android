@@ -58,7 +58,7 @@ public class Mydialog {
         lp.dimAmount = 0.4f;
         dialogWindow.setAttributes(lp);
         Ldialog.setCanceledOnTouchOutside(false);
-        Ldialog.setCancelable(false);
+//        Ldialog.setCancelable(false);
         if (!mContext.isFinishing()) {
             Ldialog.show();
         }
