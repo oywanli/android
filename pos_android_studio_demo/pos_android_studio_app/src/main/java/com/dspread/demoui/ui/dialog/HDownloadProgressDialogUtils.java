@@ -1,4 +1,4 @@
-package com.dspread.demoui.utils;
+package com.dspread.demoui.ui.dialog;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,11 +18,11 @@ public class HDownloadProgressDialogUtils {
     }
 
     /**
-     * 显示水平进度条弹窗
+     * Displays a horizontal progress bar pop-up
      *
      * @param context
      * @param msg
-     * @param isShowSize 是否显示进度大小
+     * @param isShowSize Whether to display the progress size
      */
     public static void showHorizontalProgressDialog(Context context, String msg, boolean isShowSize) {
         cancel();
@@ -50,9 +50,7 @@ public class HDownloadProgressDialogUtils {
         }
     }
 
-    /**
-     * 消失
-     */
+
     public static void cancel() {
         if (sHorizontalProgressDialog != null) {
             sHorizontalProgressDialog.dismiss();
@@ -61,9 +59,9 @@ public class HDownloadProgressDialogUtils {
     }
 
     /**
-     * 设置加载进度
+     * Set the loading progress
      *
-     * @param current 进度
+     * @param current Progress
      */
     public static void setProgress(int current) {
         if (sHorizontalProgressDialog == null) {
@@ -77,16 +75,16 @@ public class HDownloadProgressDialogUtils {
     }
 
     /**
-     * 设置当前文件大小
+     * Sets the current file size
      *
-     * @param current 大小【单位:B】
+     * @param current
      */
     public static void setProgress(long current) {
         if (sHorizontalProgressDialog == null) {
             return;
         }
         sHorizontalProgressDialog.setProgress(((int) current) / (1024 * 1024));
-        //因为单位是MB
+        //Because the unit is MB
         if (sHorizontalProgressDialog.getProgress() >= sHorizontalProgressDialog.getMax()) {
             sHorizontalProgressDialog.dismiss();
             sHorizontalProgressDialog = null;
@@ -94,10 +92,10 @@ public class HDownloadProgressDialogUtils {
     }
 
     /**
-     * 加载中
+     * Loading
      *
-     * @param total   总大小
-     * @param current 当前的大小
+     * @param total   Total size
+     * @param current The current size
      */
     public static void onLoading(long total, long current) {
         if (sHorizontalProgressDialog == null) {

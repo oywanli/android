@@ -223,8 +223,8 @@ public class TLVParser {
     *
     * Verify the tlv format
     * take the first tlv for judgment, once it encounters 0, it means the end
-    * tlv 为true
-    * tv 为false
+    * tlv is true
+    * tv  is false
     * */
     public static boolean VerifyTLV(String emvCfg) {
 

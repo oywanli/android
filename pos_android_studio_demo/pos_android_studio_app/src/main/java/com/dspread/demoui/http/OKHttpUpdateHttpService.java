@@ -35,8 +35,6 @@ import okhttp3.Request;
 /**
  * 使用okhttp
  *
- * @author xuexiang
- * @since 2018/7/10 下午4:04
  */
 public class OKHttpUpdateHttpService implements IUpdateHttpService {
 
@@ -72,7 +70,7 @@ public class OKHttpUpdateHttpService implements IUpdateHttpService {
 
     @Override
     public void asyncPost(@NonNull String url, @NonNull Map<String, Object> params, final @NonNull Callback callBack) {
-        //这里默认post的是Form格式，使用json格式的请修改 post -> postString
+        //The default post here is the Form format, please modify post -> postString for json format
         RequestCall requestCall;
         if (mIsPostJson) {
             requestCall = OkHttpUtils.postString()

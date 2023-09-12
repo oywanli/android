@@ -1,5 +1,5 @@
 package com.dspread.demoui.utils;
 
-public interface MyListener {
+public interface TitleUpdateListener {
     void sendValue(String value);
 }

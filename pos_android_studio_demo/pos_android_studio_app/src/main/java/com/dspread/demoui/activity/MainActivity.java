@@ -1,6 +1,5 @@
 package com.dspread.demoui.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -30,18 +29,18 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.dspread.demoui.R;
-import com.dspread.demoui.ui.device.AboutFragment;
-import com.dspread.demoui.ui.device.DeviceInfoFragment;
-import com.dspread.demoui.ui.device.DeviceUpdataFragment;
+import com.dspread.demoui.ui.fragment.AboutFragment;
+import com.dspread.demoui.ui.fragment.DeviceInfoFragment;
+import com.dspread.demoui.ui.fragment.DeviceUpdataFragment;
 import com.dspread.demoui.ui.dialog.Mydialog;
-import com.dspread.demoui.ui.home.HomeFragment;
-import com.dspread.demoui.ui.setting.SettingFragment;
-import com.dspread.demoui.utils.MyListener;
+import com.dspread.demoui.ui.fragment.HomeFragment;
+import com.dspread.demoui.ui.fragment.SettingFragment;
+import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
 import com.dspread.demoui.utils.UpdateAppHelper;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements MyListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements TitleUpdateListener, NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;

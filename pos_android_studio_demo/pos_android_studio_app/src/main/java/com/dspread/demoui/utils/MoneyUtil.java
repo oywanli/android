@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 /**
- * 金额处理类
+ * Amount processing class
  */
 public class MoneyUtil {
 
@@ -36,7 +36,7 @@ public class MoneyUtil {
     }
 
     /**
-     * 将元为单位的转换为分 （乘100）
+     * Convert a unit of a yuan to a minute (x100)
      *
      * @param amount
      * @return
