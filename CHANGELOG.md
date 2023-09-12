@@ -1,3 +1,12 @@
+## [4.3.1](https://gitlab.com/[secure]/android/compare/v4.3.0...v4.3.1) (2023-09-12)
+
+
+### Bug Fixes
+
+* improve the code logic and delete some unused code ([f6278b8](https://gitlab.com/[secure]/android/commit/f6278b8da47820611d854ff5e94b6e5d8972fddd))
+* modify bluetooth search image ([305b4a0](https://gitlab.com/[secure]/android/commit/305b4a03ee681daafc82df536788014f1fd928e7))
+* remove ambiguity in serial connection ([ee9326c](https://gitlab.com/[secure]/android/commit/ee9326caa5b98aaab320e236cacf37a381c93353))
+
 # [4.3.0](https://gitlab.com/[secure]/android/compare/v4.2.12...v4.3.0) (2023-08-28)
 
 
