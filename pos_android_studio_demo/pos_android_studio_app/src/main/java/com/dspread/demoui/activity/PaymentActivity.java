@@ -424,24 +424,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case 2:
                 tvTitle.setText(getText(R.string.device_connect));
                 mrllayout.setVisibility(View.GONE);
-
                 open(QPOSService.CommunicationMode.UART);
-                Log.w("pos.getBluetoothState()","pos.getBluetoothState()=="+pos.getBluetoothState());
-//                if (pos.getBluetoothState()) {
-//                    if (posinfo != null) {
-//                        getPosInfo(posinfo);
-//                    } else if (posUpdate != null) {
-//                        updatePosInfo(posUpdate);
-//                    }else{
-//                        blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
-//                        pos.setDeviceAddress(blueTootchAddress);
-//                        pos.openUart();
-//                    }
-//                }else {
-                    blueTootchAddress = "/dev/ttyS1";//tongfang is s1，tianbo is s3
-                    pos.setDeviceAddress(blueTootchAddress);
+                    pos.setDeviceAddress("/dev/ttyS1");
                     pos.openUart();
-//                }
                 break;
             default:
                 break;
