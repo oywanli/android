@@ -391,6 +391,23 @@
     <string name="msg_exit">Are you sure to exit the application?</string>
     <string name="msg_continue_connect">Do you want to continue with the previous connection?</string>
     <string name="input_cashback">InputCashBack</string>
+    <string name="charging_warning">Please keep the device charging</string>
+    <string name="does_the_file_exist">Please add firmware version file</string>
+    <string name="get_shutdown_time_fail">get the shut down time is fail!</string>
+    <string name="update_finished">Update Finished 100%</string>
+
+
+    <string name="updateworkkey_success">update work key success</string>
+    <string name="updateworkkey_fail">update work key fail</string>
+    <string name="workkey_vefiry_error">update work key packet vefiry error</string>
+    <string name="workkey_packet_Len_error">update work key packet len error</string>
+    <string name="communicationMode_unknow">CommunicationMode unknow</string>
+    <string name="updateIPEK_success">update IPEK success</string>
+    <string name="updateIPEK_fail">update IPEK fail</string>
+
+
+
+
 
 
 
