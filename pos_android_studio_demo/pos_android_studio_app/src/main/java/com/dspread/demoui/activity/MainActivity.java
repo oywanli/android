@@ -73,26 +73,18 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         deviceConnectType = headerView.findViewById(R.id.device_connect_type);
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
         DrawerStateChanged();
-
         setSupportActionBar(toolbar);
-
-
         navigationView.bringToFront();
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-
         navigationView.setNavigationItemSelectedListener(this);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
                 String packageVersionName = UpdateAppHelper.getPackageVersionName(MainActivity.this, "com.dspread.demoui");
                 tvAppVersion.setText(getString(R.string.app_version) + packageVersionName);
-
                 DrawerStateChanged();
-
             }
 
             @Override
