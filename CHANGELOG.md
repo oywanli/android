@@ -1,3 +1,10 @@
+# [4.4.0](https://gitlab.com/[secure]/android/compare/v4.3.2...v4.4.0) (2023-09-21)
+
+
+### Features
+
+* add the log storation and uploading to web features ([68df216](https://gitlab.com/[secure]/android/commit/68df2162da6eec864c1e280dc836c516371825d9))
+
 ## [4.3.2](https://gitlab.com/[secure]/android/compare/v4.3.1...v4.3.2) (2023-09-21)
 
 
