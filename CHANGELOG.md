@@ -1,3 +1,10 @@
+## [4.3.2](https://gitlab.com/[secure]/android/compare/v4.3.1...v4.3.2) (2023-09-21)
+
+
+### Bug Fixes
+
+* prompt for modifying transaction title ([93072f0](https://gitlab.com/[secure]/android/commit/93072f00fcdf93ce6c9fabba7ed7cba4e715192e))
+
 ## [4.3.1](https://gitlab.com/[secure]/android/compare/v4.3.0...v4.3.1) (2023-09-12)
 
 
