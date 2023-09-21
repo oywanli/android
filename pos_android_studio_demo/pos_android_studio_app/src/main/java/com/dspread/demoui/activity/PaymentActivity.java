@@ -153,6 +153,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         cashbackAmounts = getIntent().getStringExtra("cashbackAmounts");
         initView();
         initIntent();
+        TRACE.setContext(this);
     }
 
     public void sendInfo(String receipt) {

@@ -29,8 +29,8 @@ android {
         applicationId "com.dspread.demoui"
         minSdk 28
         targetSdk 33
-        versionCode 20
-        versionName "4.2.13"
+        versionCode 21
+        versionName "4.4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {

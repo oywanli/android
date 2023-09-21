@@ -10,16 +10,20 @@ public class SharedPreferencesUtil {
     private static final String FILE_NAME="data";
 
     private static SharedPreferencesUtil mInstance;
+    private static SharedPreferences sharedPreferences;
+    private static SharedPreferences.Editor editor;
 
     private SharedPreferencesUtil(){
 
     }
 
-    public static SharedPreferencesUtil getmInstance(){
+    public static SharedPreferencesUtil getmInstance(Context context){
         if (mInstance == null){
             synchronized (SharedPreferencesUtil.class){
                 if (mInstance == null){
                     mInstance =new SharedPreferencesUtil();
+                    sharedPreferences =context.getSharedPreferences(FILE_NAME,Context.MODE_PRIVATE);
+                    editor = sharedPreferences.edit();
                 }
             }
         }
@@ -29,10 +33,7 @@ public class SharedPreferencesUtil {
      *Deposit the data corresponding to the corresponding key
      *value can be a value of basic data types such as String, boolean, float, int, long, etc
      */
-    public void put(Context context,String key,Object value){
-
-        SharedPreferences sharedPreferences=context.getSharedPreferences(FILE_NAME,Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
+    public void put(String key,Object value){
 
         String type=value.getClass().getSimpleName();
 
@@ -54,8 +55,7 @@ public class SharedPreferencesUtil {
      *Gets the value corresponding to the specified key in the SharedPreferences data. If the key does not exist, the default value defValue is returned
      */
     @Nullable
-    public Object get(Context context, String key, Object defValue){
-        SharedPreferences sharedPreferences=context.getSharedPreferences(FILE_NAME,Context.MODE_PRIVATE);
+    public Object get( String key, Object defValue){
         String type=defValue.getClass().getSimpleName();
 
         if ("Integer".equals(type)){

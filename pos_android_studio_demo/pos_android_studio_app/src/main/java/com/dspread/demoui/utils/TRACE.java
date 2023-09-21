@@ -1,5 +1,7 @@
 package com.dspread.demoui.utils;
 
+import android.content.Context;
+import android.media.tv.TvView;
 import android.util.Log;
 
 //import com.dspread.demoui.BaseApplication;
@@ -12,11 +14,24 @@ public class TRACE {
 
     private static String AppName = "POS_LOG";
     private static Boolean isTesting = true;
+    private static Context mContext;
+    private static SharedPreferencesUtil sharedPreferencesUtil;
+    private static LogFileConfig logFileConfig;
+
+    public static void setContext(Context context){
+        mContext = context;
+        logFileConfig = LogFileConfig.getInstance(context);
+        sharedPreferencesUtil = SharedPreferencesUtil.getmInstance(mContext);
+    }
 
     public static void i(String string) {
         if (isTesting) {
             Log.i(AppName, string);
 //            Sentry.captureMessage(string);
+            if(logFileConfig != null){
+                logFileConfig.writeLog(string);
+            }
+
         }
     }
 
@@ -24,13 +39,19 @@ public class TRACE {
         if (isTesting) {
             Log.e(AppName, string);
 //            Sentry.captureMessage(string);
+            if(logFileConfig != null){
+                logFileConfig.writeLog(string);
+            }
+
         }
     }
 
     public static void e(Exception exception) {
         if (isTesting) {
             //Log.e(AppName, exception.toString());
-
+            if(logFileConfig != null){
+                logFileConfig.writeLog(exception.toString());
+            }
         }
     }
 
@@ -42,12 +63,18 @@ public class TRACE {
 //            user.setId(posID);
 //            Sentry.setUser(user);
 //            Sentry.captureMessage(string);
+            if(logFileConfig != null){
+                logFileConfig.writeLog(string);
+            }
         }
     }
 
     public static void a(int num) {
         if (isTesting) {
             Log.d(AppName, Integer.toString(num));
+            if(logFileConfig != null){
+                logFileConfig.writeLog(String.valueOf(num));
+            }
         }
     }
 }

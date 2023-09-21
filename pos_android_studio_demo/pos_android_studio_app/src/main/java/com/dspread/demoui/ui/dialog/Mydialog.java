@@ -189,8 +189,8 @@ public class Mydialog {
             @Override
             public void onItemClick(View view, int position, String content) {
                 if (Utils.islistFastClick()) {
-                    SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
-                    String conType = (String) connectType.get(mContext, "conType", "");
+                    SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(mContext);
+                    String conType = (String) connectType.get( "conType", "");
                     if ("CASHBACK".equals(content)) {
                         String inputMoneyString = String.valueOf(inputMoney);
                         cashBackPaymentDialog(mContext,inputMoneyString);
@@ -345,8 +345,8 @@ public class Mydialog {
                             Double inputCashbackAmount = Double.valueOf(cashbackAmounts);
                             Long inputCashbackAmounts=MoneyUtil.yuan2fen(inputCashbackAmount);
                             String inputcashbackMoney = String.valueOf(inputCashbackAmounts);
-                            SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
-                            String conType = (String) connectType.get(mContext, "conType", "");
+                            SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(mContext);
+                            String conType = (String) connectType.get( "conType", "");
 
                             if (conType != null && "uart".equals(conType)) {
                                 Intent intent = new Intent(mContext, PaymentActivity.class);
