@@ -136,6 +136,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private int type;
     private ProgressBar progressBar;
     private TextView tvProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -221,7 +222,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            updateThread = new UpdateThread();
 //            updateThread.start();
             byte[] data = null;
-                data = FileUtils.readAssetsLine("D20(PVT Xflash)_master.asc", PaymentActivity.this);
+            data = FileUtils.readAssetsLine("D20(PVT Xflash)_master.asc", PaymentActivity.this);
             if (data != null) {
                 int a = pos.updatePosFirmware(data, blueTootchAddress);
 //                Mydialog.loading(PaymentActivity.this, progres + "%");
@@ -346,8 +347,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mllchrccard.setVisibility(View.GONE);
         statusEditText = findViewById(R.id.statusEditText);
         pinpadEditText = findViewById(R.id.pinpadEditText);
-        progressBar=findViewById(R.id.progressBar);
-        tvProgress=findViewById(R.id.tv_progress);
+        progressBar = findViewById(R.id.progressBar);
+        tvProgress = findViewById(R.id.tv_progress);
         mllgif.setOnClickListener(this);
         ivBackTitle.setOnClickListener(this);
         ivBlue.setOnClickListener(this);
@@ -425,8 +426,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 tvTitle.setText(getText(R.string.device_connect));
                 mrllayout.setVisibility(View.GONE);
                 open(QPOSService.CommunicationMode.UART);
-                    pos.setDeviceAddress("/dev/ttyS1");
-                    pos.openUart();
+                pos.setDeviceAddress("/dev/ttyS1");
+                pos.openUart();
                 break;
             default:
                 break;
@@ -651,9 +652,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private enum POS_TYPE {
         BLUETOOTH, AUDIO, UART, USB, OTG, BLUETOOTH_BLE
     }
+
     class UpdateThread extends Thread {
         private boolean concelFlag = false;
-        int progress  =0;
+        int progress = 0;
+
         @Override
         public void run() {
 
@@ -674,7 +677,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 if (pos == null) {
                     return;
                 }
-                 progress = pos.getUpdateProgress();
+                progress = pos.getUpdateProgress();
                 if (progress < 100) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -682,11 +685,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                            statusEditText.set
 //                            Text(progress + "%");
                             progress++;
-                    Log.w("updatefirmware",""+progress + "%");
-                    Message msg = new Message();
-                    msg.what = 1003;
-                    msg.arg1=progress;
-                    mHandler.sendMessage(msg);
+                            Log.w("updatefirmware", "" + progress + "%");
+                            Message msg = new Message();
+                            msg.what = 1003;
+                            msg.arg1 = progress;
+                            mHandler.sendMessage(msg);
 
                         }
                     });
@@ -733,12 +736,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.connectBluetoothDevice(true, 25, blueTootchAddress);
                     break;
                 case 1003:
-                    int progress= msg.arg1;
+                    int progress = msg.arg1;
                     tvProgress.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
-                    tvProgress.setText(progress+" %");
+                    tvProgress.setText(progress + " %");
                     progressBar.setProgress(progress);
-                    Log.w("handlermessage","progress---"+progress);
+                    Log.w("handlermessage", "progress---" + progress);
                     break;
                 case 8003:
                     try {
@@ -1181,7 +1184,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onQposIdResult(Hashtable<String, String> posIdTable) {
-            tvTitle.setText(getString(R.string.get_pos_id));
             dismissDialog();
             TRACE.w("onQposIdResult():" + posIdTable.toString());
             String posId = posIdTable.get("posId") == null ? "" : posIdTable.get("posId");
@@ -1195,11 +1197,28 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             content += "psamId: " + psamId + "\n";
             content += "NFCId: " + NFCId + "\n";
             if (!isVisiblePosID) {
-                tradeSuccess.setVisibility(View.GONE);
-                mbtnNewpay.setVisibility(View.GONE);
-                mllinfo.setVisibility(View.VISIBLE);
-                mtvinfo.setText(content);
-                mllchrccard.setVisibility(View.GONE);
+                if (posinfo != null) {
+                    tvTitle.setText(getString(R.string.get_pos_id));
+                    tradeSuccess.setVisibility(View.GONE);
+                    mbtnNewpay.setVisibility(View.GONE);
+                    mllinfo.setVisibility(View.VISIBLE);
+                    mtvinfo.setText(content);
+                    mllchrccard.setVisibility(View.GONE);
+                } else {
+                     if (type == 2) {
+                            tvTitle.setText("SN:" + posId);
+                            isVisiblePosID = true;
+                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+                            pos.doTrade(20);
+
+                    } else if (type == 3) {
+                            tvTitle.setText("SN:" + posId);
+                            isVisiblePosID = true;
+                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+                            pos.doTrade(20);
+                        }
+                }
+
             } else {
                 isVisiblePosID = false;
             }
@@ -1380,7 +1399,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onConfirm() {
                     if (isPinCanceled) {
-                        Log.w("lll","isPinCanceled=="+isPinCanceled);
+                        Log.w("lll", "isPinCanceled==" + isPinCanceled);
                         pos.sendOnlineProcessResult(null);
                     } else {
 //									String str = "5A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F009505088004E0009A031406179C01009F02060000000000019F03060000000000009F0702AB009F080200209F0902008C9F0D05D86004A8009F0E0500109800009F0F05D86804F8009F101307010103A02000010A010000000000CE0BCE899F1A0201569F1E0838333230314943439F21031826509F2608881E2E4151E527899F2701809F3303E0F8C89F34030203009F3501229F3602008E9F37042120A7189F4104000000015A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F00";
@@ -1511,27 +1530,21 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
             } else if (type == 2) {
-                tvTitle.setText(getString(R.string.setting_uart));
                 if (posinfo != null) {
                     getPosInfo(posinfo);
                 } else if (posUpdate != null) {
                     updatePosInfo(posUpdate);
                 } else {
-                    isVisiblePosID = true;
-                    pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-                    pos.doTrade(20);
+                    pos.getQposId();
                 }
 
             } else if (type == 3) {
-                tvTitle.setText(getString(R.string.setting_usb));
                 if (posinfo != null) {
                     getPosInfo(posinfo);
                 } else if (posUpdate != null) {
                     updatePosInfo(posUpdate);
                 } else {
-                    isVisiblePosID = true;
-                    pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-                    pos.doTrade(20);
+                    pos.getQposId();
                 }
             } else {
                 tvTitle.setText(getString(R.string.device_connect));
@@ -1540,8 +1553,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 //申请权限
                 ActivityCompat.requestPermissions(PaymentActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
             }
-//                isVisiblePosID = true;
-//                pos.getQposId();
 
         }
 

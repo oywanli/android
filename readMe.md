@@ -43,6 +43,24 @@ QPOS standard, QPOS mini, QPOS Plus, EMV06, EMV08, GEA and GES are all QPOS prod
 
 This document aims to help readers for using the Android SDK of QPOS.
 
+# Implement SDK Method
+
+Please access the below path to view the latest SDK version.
+ 
+ https://gitlab.com/dspread/android/-/packages
+
+1. Gradle Groovy DSL install command
+
+ implementation 'com.dspread.library:dspread_pos_sdk:4.4.5'
+
+2. Add Gradle Groovy DSL repository command
+
+maven {
+
+ url 'https://gitlab.com/api/v4/projects/4128550/packages/maven'
+ 
+}
+
 # Programming Model
 
 All methods the SDK provided can be devided into three types:
