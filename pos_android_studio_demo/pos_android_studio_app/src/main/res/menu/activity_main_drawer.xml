@@ -27,6 +27,10 @@
             android:icon="@drawable/setting_icon"
             android:title="@string/menu_setting" />
         <item
+            android:id="@+id/nav_log"
+            android:icon="@drawable/nav_log"
+            android:title="@string/show_log" />
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/version_upgrade_icon"
             android:title="@string/about" />

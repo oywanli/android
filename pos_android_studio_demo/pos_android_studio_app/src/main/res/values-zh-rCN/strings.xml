@@ -213,6 +213,7 @@
     <string name="get_key_checkvalue">获取PosKeyCheckValue</string>
     <string name="get_update_key">获取UpdateKey</string>
     <string name="reset_qpos">pos复位</string>
+    <string name="upload_logs">上传logs</string>
     <string name="menu_update">更新</string>
     <string name="get_ksn">获取ksn</string>
     <string name="get_encrypt_data">获取加密后的数据</string>
@@ -274,6 +275,8 @@
     <string name="minute">分</string>
     <string name="seconds">秒</string>
     <string name="about">关于</string>
+    <string name="show_log">日志输出</string>
+    <string name="input_email">请输入你的邮箱</string>
     <string name="init_keys">交换认证</string>
     <string name="verify_keys">初始化加载密钥</string>
     <string name="key_loading">确认密钥类型</string>

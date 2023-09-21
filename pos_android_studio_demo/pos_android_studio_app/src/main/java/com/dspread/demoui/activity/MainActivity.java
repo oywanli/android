@@ -34,10 +34,12 @@ import com.dspread.demoui.ui.fragment.DeviceInfoFragment;
 import com.dspread.demoui.ui.fragment.DeviceUpdataFragment;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.ui.fragment.HomeFragment;
+import com.dspread.demoui.ui.fragment.LogsFragment;
 import com.dspread.demoui.ui.fragment.SettingFragment;
 import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
 import com.dspread.demoui.utils.UpdateAppHelper;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements TitleUpdateListener, NavigationView.OnNavigationItemSelectedListener {
@@ -51,9 +53,12 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     private AboutFragment aboutFragment;
 
+    private LogsFragment logsFragment;
+
     private FragmentTransaction transaction;
     private TextView deviceConnectType;
     private TextView tvAppVersion;
+    private ExtendedFloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        floatingActionButton = findViewById(R.id.fab);
         View headerView = navigationView.getHeaderView(0);
         deviceConnectType = headerView.findViewById(R.id.device_connect_type);
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
@@ -107,8 +113,13 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             }
         });
         switchFragment(0);
-        bluetoothRelaPer();
 
+        bluetoothRelaPer();
+        floatingActionButton.setOnClickListener(view -> {
+            toolbar.setTitle(getString(R.string.show_log));
+            switchFragment(5);
+            drawerLayout.close();
+        });
     }
 
 
@@ -116,8 +127,8 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     String deviceManufacturer = Build.MANUFACTURER;
 
     public void DrawerStateChanged() {
-        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
-        String conType = (String) connectType.get(MainActivity.this, "conType", "");
+        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(this);
+        String conType = (String) connectType.get("conType", "");
 
         if ("blue".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_blu));
@@ -126,10 +137,10 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
         } else if ("Dspread".equals(deviceManufacturer)) {
-            connectType.put(MainActivity.this, "conType", "uart");
+            connectType.put( "conType", "uart");
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
-            connectType.put(MainActivity.this, "conType", "blue");
+            connectType.put("conType", "blue");
             deviceConnectType.setText(getString(R.string.setting_blu));
         }
     }
@@ -166,6 +177,11 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             case R.id.nav_about:
                 toolbar.setTitle(getString(R.string.about));
                 switchFragment(4);
+                drawerLayout.close();
+                break;
+            case R.id.nav_log:
+                toolbar.setTitle(getString(R.string.show_log));
+                switchFragment(5);
                 drawerLayout.close();
                 break;
             case R.id.nav_exit:
@@ -229,6 +245,13 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 }
                 transaction.show(aboutFragment);
                 break;
+            case 5:
+                if (logsFragment == null) {
+                    logsFragment = new LogsFragment();
+                    transaction.add(R.id.nav_host_fragment_content_main, logsFragment);
+                }
+                transaction.show(logsFragment);
+                break;
             default:
                 break;
         }
@@ -251,6 +274,9 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
         if (aboutFragment != null) {
             transaction.hide(aboutFragment);
+        }
+        if (logsFragment != null) {
+            transaction.hide(logsFragment);
         }
 
     }
