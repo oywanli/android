@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     public void DrawerStateChanged() {
         SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(this);
         String conType = (String) connectType.get("conType", "");
-
         if ("blue".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_blu));
         } else if ("uart".equals(conType)) {
