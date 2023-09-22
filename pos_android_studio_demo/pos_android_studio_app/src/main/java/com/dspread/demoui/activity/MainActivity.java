@@ -35,6 +35,7 @@ import com.dspread.demoui.ui.fragment.DeviceUpdataFragment;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.ui.fragment.HomeFragment;
 import com.dspread.demoui.ui.fragment.LogsFragment;
+import com.dspread.demoui.ui.fragment.PrinterHelperFragment;
 import com.dspread.demoui.ui.fragment.SettingFragment;
 import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     private DeviceUpdataFragment deviceUpdataFragment;
 
     private AboutFragment aboutFragment;
+    private PrinterHelperFragment printerHelperFragment;
 
     private LogsFragment logsFragment;
 
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     private TextView deviceConnectType;
     private TextView tvAppVersion;
     private ExtendedFloatingActionButton floatingActionButton;
+    private MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,13 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         View headerView = navigationView.getHeaderView(0);
         deviceConnectType = headerView.findViewById(R.id.device_connect_type);
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
+        menuItem = navigationView.getMenu().findItem(R.id.nav_printer);
+            if (deviceModel != "D20") {
+                menuItem.setVisible(true);
+            } else {
+                menuItem.setVisible(false);
+            }
+
         DrawerStateChanged();
         setSupportActionBar(toolbar);
         navigationView.bringToFront();
@@ -127,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
-        } else if ("Dspread".equals(deviceManufacturer)) {
+        } else if ("Dspread".equals(deviceManufacturer)||"D20".equals(deviceModel)||"D30".equals(deviceModel)||"mp600".equals(deviceModel)||"D60".equals(deviceModel)) {
             connectType.put( "conType", "uart");
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
@@ -175,6 +185,11 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 switchFragment(5);
                 drawerLayout.close();
                 break;
+            case R.id.nav_printer:
+                toolbar.setTitle(getString(R.string.printer));
+                switchFragment(6);
+                drawerLayout.close();
+                break;
             case R.id.nav_exit:
                 Mydialog.manualExitDialog(MainActivity.this, getString(R.string.msg_exit), new Mydialog.OnMyClickListener() {
                     @Override
@@ -189,6 +204,8 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                     }
                 });
                 break;
+
+
             default:
                 break;
         }
@@ -242,6 +259,14 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                     transaction.add(R.id.nav_host_fragment_content_main, logsFragment);
                 }
                 transaction.show(logsFragment);
+
+                break;
+            case 6:
+                if (printerHelperFragment == null) {
+                    printerHelperFragment = new PrinterHelperFragment();
+                    transaction.add(R.id.nav_host_fragment_content_main, printerHelperFragment);
+                }
+                transaction.show(printerHelperFragment);
                 break;
             default:
                 break;
@@ -268,6 +293,9 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
         if (logsFragment != null) {
             transaction.hide(logsFragment);
+        }
+        if (printerHelperFragment != null) {
+            transaction.hide(printerHelperFragment);
         }
 
     }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/text_all"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/activity_title" />
+
+    <LinearLayout
+        android:id="@+id/text_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/account_line"
+        android:dividerPadding="1dp"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:showDividers="middle|end|beginning">
+
+        <LinearLayout
+            android:id="@+id/layout_setAlign"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/set_align"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/text_text_align"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/lift_arrow"
+                android:gravity="right|center_vertical"
+                android:text="@string/set_align"
+                android:textSize="14sp"
+                tools:ignore="RtlHardcoded,UseCompatTextViewDrawableXml" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_setFontStyle"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/set_font_style"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/text_setFontStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/lift_arrow"
+                android:gravity="right|center_vertical"
+                android:text="@string/set_font_style"
+                android:textSize="14sp"
+                tools:ignore="RtlHardcoded,UseCompatTextViewDrawableXml" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/Layout_textSize"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/set_font_size"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/text_text_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/lift_arrow"
+                android:gravity="right|center_vertical"
+                android:text="24"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText,RtlHardcoded,UseCompatTextViewDrawableXml" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:padding="20dp">
+
+            <EditText
+                android:id="@+id/edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_print"
+                android:importantForAutofill="no"
+                tools:ignore="LabelFor,TextFields,VisualLintTextFieldSize" />
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btn_Print"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:background="@drawable/rounded_button"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="@string/print"
+            android:textSize="18sp"
+            tools:ignore="ObsoleteLayoutParam,VisualLintButtonSize" />
+    </LinearLayout>
+</LinearLayout>

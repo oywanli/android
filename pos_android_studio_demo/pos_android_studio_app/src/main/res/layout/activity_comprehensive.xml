@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@drawable/account_line"
+    android:dividerPadding="1dp"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:showDividers="middle|end|beginning">
+
+    <include layout="@layout/activity_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/btn_multi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/gray"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/function_multi"
+            android:textSize="18sp"
+            tools:ignore="VisualLintButtonSize" />
+
+        <Button
+            android:id="@+id/btn_composite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/gray"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/print_composite"
+            android:textSize="18sp"
+            tools:ignore="VisualLintButtonSize" />
+        <Button
+            android:id="@+id/btn_stopprint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/gray"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/stop_print"
+            android:textSize="18sp"
+            tools:ignore="VisualLintButtonSize" />
+
+
+
+    </LinearLayout>
+</LinearLayout>
