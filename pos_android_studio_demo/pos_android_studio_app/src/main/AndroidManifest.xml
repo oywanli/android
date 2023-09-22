@@ -43,7 +43,7 @@
             android:name=".activity.printer.PrinterStatusActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.printer.ComprehensiveActivity"
+            android:name=".activity.printer.PrintTicketActivity"
             android:exported="false" />
         <activity
             android:name=".activity.printer.BitmapActivity"
@@ -55,7 +55,7 @@
             android:name=".activity.printer.BarCodeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.printer.PringTextActivity"
+            android:name=".activity.printer.PrintTextActivity"
             android:exported="false" />
         <activity
             android:name=".activity.PaymentActivity"

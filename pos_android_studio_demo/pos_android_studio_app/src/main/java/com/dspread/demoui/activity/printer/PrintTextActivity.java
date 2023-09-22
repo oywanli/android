@@ -22,7 +22,7 @@ import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
 
-public class PringTextActivity extends AppCompatActivity implements View.OnClickListener {
+public class PrintTextActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private ImageView ivBackTitle;

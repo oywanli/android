@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +21,8 @@ import android.widget.TextView;
 import com.dspread.demoui.R;
 import com.dspread.demoui.activity.printer.BarCodeActivity;
 import com.dspread.demoui.activity.printer.BitmapActivity;
-import com.dspread.demoui.activity.printer.ComprehensiveActivity;
-import com.dspread.demoui.activity.printer.PringTextActivity;
+import com.dspread.demoui.activity.printer.PrintTicketActivity;
+import com.dspread.demoui.activity.printer.PrintTextActivity;
 import com.dspread.demoui.activity.printer.PrinterStatusActivity;
 import com.dspread.demoui.activity.printer.QRCodeActivity;
 
@@ -33,7 +32,7 @@ public class PrinterHelperFragment extends Fragment {
     private final DemoDetails[] demos = {
 
             new DemoDetails(R.string.function_text, R.drawable.function_text,
-                    PringTextActivity.class),
+                    PrintTextActivity.class),
             new DemoDetails(R.string.function_qrcode, R.drawable.function_qr,
                     QRCodeActivity.class),
             new DemoDetails(R.string.function_barcode, R.drawable.function_barcode,
@@ -41,7 +40,7 @@ public class PrinterHelperFragment extends Fragment {
             new DemoDetails(R.string.function_pic, R.drawable.function_pic,
                     BitmapActivity.class),
             new DemoDetails(R.string.print_ticket, R.drawable.function_all,
-                    ComprehensiveActivity.class),
+                    PrintTicketActivity.class),
             new DemoDetails(R.string.get_printer_status, R.drawable.function_status,
                     PrinterStatusActivity.class),
 //            new DemoDetails(R.string.fill_name, R.drawable.fill,

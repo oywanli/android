@@ -24,7 +24,7 @@ import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
 
-public class ComprehensiveActivity extends AppCompatActivity implements View.OnClickListener {
+public class PrintTicketActivity extends AppCompatActivity implements View.OnClickListener {
     private PrinterDevice mPrinter;
     private PrintLineStyle printLineStyle;
     private ImageView ivBackTitle;
@@ -38,7 +38,7 @@ public class ComprehensiveActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        setContentView(R.layout.activity_comprehensive);
+        setContentView(R.layout.activity_print_ticket);
         PrinterManager instance = PrinterManager.getInstance();
         mPrinter = instance.getPrinter();
         mPrinter.initPrinter(this);
