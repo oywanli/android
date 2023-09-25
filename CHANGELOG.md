@@ -1,3 +1,10 @@
+## [4.4.1](https://gitlab.com/[secure]/android/compare/v4.4.0...v4.4.1) (2023-09-25)
+
+
+### Bug Fixes
+
+* improve the code logic which optimized printing class name ([3569956](https://gitlab.com/[secure]/android/commit/3569956d644baa291766d1d683048e83ba21a765))
+
 # [4.4.0](https://gitlab.com/[secure]/android/compare/v4.3.2...v4.4.0) (2023-09-21)
 
 
