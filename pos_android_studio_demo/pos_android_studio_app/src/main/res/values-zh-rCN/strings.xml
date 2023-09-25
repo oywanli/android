@@ -347,8 +347,8 @@
     <string name="grayscale_values">灰度值</string>
     <string name="Pictures_and_black_marks_Grayscale_values">图片和黑标灰度值</string>
     <string name="Barcode_Type">条码类型</string>
-    <string name="Barcode_width">条码宽</string>
-    <string name="Barcode_height">条码高</string>
+    <string name="Barcode_width">条码宽度</string>
+    <string name="Barcode_height">条码高度</string>
     <string name="QR_code_error_correction_level">二维码纠错等级</string>
     <string name="QR_code_type">二维码类型</string>
     <string name="QR_code_size">二维码大小</string>
@@ -403,4 +403,50 @@
     <string name="updateIPEK_success">更新IPEK成功</string>
     <string name="updateIPEK_fail">更新IPEK文件</string>
 
+    <string name="printer">打印</string>
+    <string name="comprehensive_Test">综合测试</string>
+    <string name="function_qrcode">二维码</string>
+    <string name="function_barcode">条形码</string>
+    <string name="function_text">文字</string>
+    <string name="function_pic">图片</string>
+    <string name="function_threeline">空打三行</string>
+    <string name="set_align">设置对齐</string>
+    <string name="set_font_style">设置字体样式</string>
+    <string name="set_font_size">设置字体大小</string>
+    <string name="print_text">打印文字</string>
+    <string name="function_multi">打印多行多列</string>
+
+    <!--print content-->
+    <string name="text_print">欢迎光临(简体中文)\n歡迎光臨(繁体中文)\nWelcome(英文)\n어서 오세요.(韩文)\nいらっしゃいませ(日文)\nWillkommen in der(德文)\nSouhaits de bienvenue(法文)\nยินดีต้อนรับสู่(泰文)\nДобро пожаловать(俄文)\nBenvenuti a(意大利语)\nvítejte v(捷克文)\nBEM - vindo Ao(葡萄牙文)\nمرحبا بكم في(阿拉伯语)\n</string>
+    PrintLine.LEFT、PrintLine.CENTER、PrintLine.RIGHT
+    <string name="at_the_left">居左</string>
+    <string name="at_the_right">居右</string>
+    <string name="at_the_center">居中</string>
+
+    <string name="fontStyle_normal">正常</string>
+    <string name="fontStyle_bold">粗体</string>
+    <string name="fontStyle_italic">斜体</string>
+    <string name="fontStyle_bold_italic">斜体加粗</string>
+    <string name="content_barcode">条码内容</string>
+    <string name="barcode_height">条码高度</string>
+    <string name="barcode_width">条码宽度</string>
+    <string name="grayLevel">灰度</string>
+    <string name="speedlevel">速度</string>
+    <string name="print_brcode">打印条形码</string>
+    <string name="input_barcode">请输入条形码内容</string>
+    <string name="print_qrcode">打印二维码</string>
+    <string name="content_qrcode">二维码内容</string>
+    <string name="input_qrcode">请输入二维码内容</string>
+    <string name="size_qrcode">二维码块大小</string>
+    <string name="print_bitmap">打印图片</string>
+    <string name="print_composite">综合打印</string>
+    <string name="print_ticket">打印小票</string>
+    <string name="get_printer_status">获取打印机状态</string>
+    <string name="get_printer_density">获取打印密度</string>
+    <string name="get_printer_speed">获取打印速度</string>
+    <string name="get_printer_temperature">获取打印温度</string>
+    <string name="get_printer_voltage">获取打印电压</string>
+    <string name="stop_print">停止打印</string>
+    <string name="density_level">速度</string>
+    <string name="fill_name"></string>
 </resources>
