@@ -103,6 +103,6 @@ dependencies {
 
 
     implementation 'com.dspread.print:dspread_print_sdk:1.2.0'
-    implementation 'com.dspread.library:dspread_pos_sdk:4.3.9'
+    implementation 'com.dspread.library:dspread_pos_sdk:4.4.8'
 
 }

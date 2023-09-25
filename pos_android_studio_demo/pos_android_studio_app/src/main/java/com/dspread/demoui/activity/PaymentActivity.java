@@ -2,6 +2,8 @@ package com.dspread.demoui.activity;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.dspread.print.Utils.HexStringToByteArray;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -60,6 +62,8 @@ import com.dspread.demoui.beans.BluetoothToolsBean;
 import com.dspread.demoui.widget.BluetoothAdapter;
 import com.dspread.demoui.widget.pinpad.PayPassDialog;
 import com.dspread.demoui.widget.pinpad.PayPassView;
+import com.dspread.xpos.Util;
+import com.dspread.xpos.utils.AESUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -1770,16 +1774,31 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onPaypass() {
 //                pos.bypassPin();
-                    {
                         pos.sendPin("");
                         Paydialog.dismiss();
-                    }
                 }
 
                 @Override
                 public void onConfirm(String password) {
                     if (password.length() >= 4 && password.length() <= 12) {
-                        pos.sendPin(password);
+                        Log.w("password","password=="+password);
+//                        pos.sendPin(password);
+                        String newPin = "";
+                        //this part is used to enctypt the plaintext pin with random seed
+                        if (pos.getCvmKeyList() != null && !("").equals(pos.getCvmKeyList())) {
+                            String keyList = Util.convertHexToString(pos.getCvmKeyList());
+                            for (int i = 0; i < password.length(); i++) {
+                                for (int j = 0; j < keyList.length(); j++) {
+                                    if (keyList.charAt(j) == password.charAt(i)) {
+                                        newPin = newPin + Integer.toHexString(j) + "";
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        String pinBlock = buildCvmPinBlock(pos.getEncryptData(), newPin);// build the ISO format4 pin block
+                        Log.w("password","pinBlock=="+pinBlock);
+                        pos.sendCvmPin(pinBlock, true);
                         Paydialog.dismiss();
                     } else {
                         Toast.makeText(PaymentActivity.this, "The length just can input 4 - 12 digits", Toast.LENGTH_SHORT).show();
@@ -2584,6 +2603,40 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 statusEditText.setText("signature verification failed.");
             }
+        }
+        private String buildCvmPinBlock(Hashtable<String, String> value, String pin) {
+            String randomData = value.get("RandomData") == null ? "" : value.get("RandomData");
+            String pan = value.get("PAN") == null ? "" : value.get("PAN");
+            String AESKey = value.get("AESKey") == null ? "" : value.get("AESKey");
+            String isOnline = value.get("isOnlinePin") == null ? "" : value.get("isOnlinePin");
+            String pinTryLimit = value.get("pinTryLimit") == null ? "" : value.get("pinTryLimit");
+            //iso-format4 pinblock
+            int pinLen = pin.length();
+            pin = "4" + Integer.toHexString(pinLen) + pin;
+            for (int i = 0; i < 14 - pinLen; i++) {
+                pin = pin + "A";
+            }
+            pin += randomData.substring(0, 16);
+            String panBlock = "";
+            int panLen = pan.length();
+            int m = 0;
+            if (panLen < 12) {
+                panBlock = "0";
+                for (int i = 0; i < 12 - panLen; i++) {
+                    panBlock += "0";
+                }
+                panBlock = panBlock + pan + "0000000000000000000";
+            } else {
+                m = pan.length() - 12;
+                panBlock = m + pan;
+                for (int i = 0; i < 31 - panLen; i++) {
+                    panBlock += "0";
+                }
+            }
+            String pinBlock1 = AESUtil.encrypt(AESKey, pin);
+            pin = Util.xor16(HexStringToByteArray(pinBlock1), HexStringToByteArray(panBlock));
+            String pinBlock2 = AESUtil.encrypt(AESKey, pin);
+            return pinBlock2;
         }
     }
 
