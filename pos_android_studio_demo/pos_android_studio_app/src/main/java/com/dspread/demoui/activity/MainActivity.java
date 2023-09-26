@@ -27,7 +27,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import com.dspread.demoui.R;
 import com.dspread.demoui.ui.fragment.AboutFragment;
 import com.dspread.demoui.ui.fragment.DeviceInfoFragment;
@@ -52,15 +51,10 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     private HomeFragment homeFragment;
     private DeviceInfoFragment deviceInfoFragment;
     private DeviceUpdataFragment deviceUpdataFragment;
-
     private AboutFragment aboutFragment;
     private PrinterHelperFragment printerHelperFragment;
-
     private ScanFragment scanFragment;
-
-
     private LogsFragment logsFragment;
-
     private FragmentTransaction transaction;
     private TextView deviceConnectType;
     private TextView tvAppVersion;
@@ -141,8 +135,8 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
-        } else if ("Dspread".equals(deviceManufacturer)||"D20".equals(deviceModel)||"D30".equals(deviceModel)||"mp600".equals(deviceModel)||"D60".equals(deviceModel)) {
-            connectType.put( "conType", "uart");
+        } else if ("Dspread".equals(deviceManufacturer) || "D20".equals(deviceModel) || "D30".equals(deviceModel) || "mp600".equals(deviceModel) || "D60".equals(deviceModel)) {
+            connectType.put("conType", "uart");
 
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
