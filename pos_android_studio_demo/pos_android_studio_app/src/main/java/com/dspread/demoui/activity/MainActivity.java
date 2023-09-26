@@ -55,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     private AboutFragment aboutFragment;
     private PrinterHelperFragment printerHelperFragment;
+
     private ScanFragment scanFragment;
+
 
     private LogsFragment logsFragment;
 
@@ -78,11 +80,13 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         deviceConnectType = headerView.findViewById(R.id.device_connect_type);
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
         menuItem = navigationView.getMenu().findItem(R.id.nav_printer);
+
         if (!"D20".equals(deviceModel)) {
             menuItem.setVisible(true);
         } else {
             menuItem.setVisible(false);
         }
+
 
         DrawerStateChanged();
         setSupportActionBar(toolbar);
@@ -137,8 +141,9 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
-        } else if ("Dspread".equals(deviceManufacturer) || "D20".equals(deviceModel) || "D30".equals(deviceModel) || "mp600".equals(deviceModel) || "D60".equals(deviceModel)) {
-            connectType.put("conType", "uart");
+        } else if ("Dspread".equals(deviceManufacturer)||"D20".equals(deviceModel)||"D30".equals(deviceModel)||"mp600".equals(deviceModel)||"D60".equals(deviceModel)) {
+            connectType.put( "conType", "uart");
+
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
             connectType.put("conType", "blue");
