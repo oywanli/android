@@ -12,6 +12,10 @@
 
 
     <fragment
+        android:id="@+id/nav_scan"
+        android:name="com.dspread.demoui.ui.fragment.ScanFragment"
+        tools:layout="@layout/fragment_scan" />
+    <fragment
         android:id="@+id/nav_deviceinfo"
         android:name="com.dspread.demoui.ui.fragment.DeviceInfoFragment"
         tools:layout="@layout/fragment_device_info" />

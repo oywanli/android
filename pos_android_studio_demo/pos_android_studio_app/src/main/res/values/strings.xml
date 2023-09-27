@@ -454,6 +454,9 @@
     <string name="get_printer_voltage">Get Print Voltage</string>
     <string name="stop_print">Stop Print</string>
     <string name="density_level">Density Level</string>
-
     <string name="fill_name"></string>
+    <string name="scan">Scan</string>
+    <string name="scan_toast">This function has not been activated yet!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
 </resources>

@@ -27,7 +27,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import com.dspread.demoui.R;
 import com.dspread.demoui.ui.fragment.AboutFragment;
 import com.dspread.demoui.ui.fragment.DeviceInfoFragment;
@@ -36,6 +35,7 @@ import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.ui.fragment.HomeFragment;
 import com.dspread.demoui.ui.fragment.LogsFragment;
 import com.dspread.demoui.ui.fragment.PrinterHelperFragment;
+import com.dspread.demoui.ui.fragment.ScanFragment;
 import com.dspread.demoui.ui.fragment.SettingFragment;
 import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
@@ -51,12 +51,10 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     private HomeFragment homeFragment;
     private DeviceInfoFragment deviceInfoFragment;
     private DeviceUpdataFragment deviceUpdataFragment;
-
     private AboutFragment aboutFragment;
     private PrinterHelperFragment printerHelperFragment;
-
+    private ScanFragment scanFragment;
     private LogsFragment logsFragment;
-
     private FragmentTransaction transaction;
     private TextView deviceConnectType;
     private TextView tvAppVersion;
@@ -76,11 +74,13 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         deviceConnectType = headerView.findViewById(R.id.device_connect_type);
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
         menuItem = navigationView.getMenu().findItem(R.id.nav_printer);
-            if (deviceModel != "D20") {
-                menuItem.setVisible(true);
-            } else {
-                menuItem.setVisible(false);
-            }
+
+        if (!"D20".equals(deviceModel)) {
+            menuItem.setVisible(true);
+        } else {
+            menuItem.setVisible(false);
+        }
+
 
         DrawerStateChanged();
         setSupportActionBar(toolbar);
@@ -110,8 +110,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             @Override
             public void onDrawerStateChanged(int newState) {
                 Log.w("onDrawerStateChanged", "onDrawerStateChanged");
-
-
             }
         });
         switchFragment(0);
@@ -137,8 +135,9 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
-        } else if ("Dspread".equals(deviceManufacturer)||"D20".equals(deviceModel)||"D30".equals(deviceModel)||"mp600".equals(deviceModel)||"D60".equals(deviceModel)) {
-            connectType.put( "conType", "uart");
+        } else if ("Dspread".equals(deviceManufacturer) || "D20".equals(deviceModel) || "D30".equals(deviceModel) || "mp600".equals(deviceModel) || "D60".equals(deviceModel)) {
+            connectType.put("conType", "uart");
+
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
             connectType.put("conType", "blue");
@@ -188,6 +187,11 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             case R.id.nav_printer:
                 toolbar.setTitle(getString(R.string.printer));
                 switchFragment(6);
+                drawerLayout.close();
+                break;
+            case R.id.nav_scan:
+                toolbar.setTitle(getString(R.string.scan));
+                switchFragment(7);
                 drawerLayout.close();
                 break;
             case R.id.nav_exit:
@@ -268,6 +272,13 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 }
                 transaction.show(printerHelperFragment);
                 break;
+            case 7:
+                if (scanFragment == null) {
+                    scanFragment = new ScanFragment();
+                    transaction.add(R.id.nav_host_fragment_content_main, scanFragment);
+                }
+                transaction.show(scanFragment);
+                break;
             default:
                 break;
         }
@@ -296,6 +307,9 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
         if (printerHelperFragment != null) {
             transaction.hide(printerHelperFragment);
+        }
+        if (scanFragment != null) {
+            transaction.hide(scanFragment);
         }
 
     }
