@@ -449,4 +449,6 @@
     <string name="stop_print">停止打印</string>
     <string name="density_level">速度</string>
     <string name="fill_name"></string>
+    <string name="scan">扫码</string>
+    <string name="scan_toast">此功能尚未激活!</string>
 </resources>
