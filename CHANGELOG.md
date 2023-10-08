@@ -1,3 +1,10 @@
+# [4.5.0](https://gitlab.com/[secure]/android/compare/v4.4.1...v4.5.0) (2023-09-27)
+
+
+### Features
+
+* add the scan functions and fix some bugs ([608f260](https://gitlab.com/[secure]/android/commit/608f2605f4bc1de1a7e84f3f5af3434d43c6ac93))
+
 ## [4.4.1](https://gitlab.com/[secure]/android/compare/v4.4.0...v4.4.1) (2023-09-25)
 
 
