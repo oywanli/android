@@ -88,8 +88,8 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
 
     public void updateDevice(String updatedevice) {
 
-        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
-        String conType = (String) connectType.get(getActivity(), "conType", "");
+        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(getActivity());
+        String conType = (String) connectType.get( "conType", "");
         Intent intent = new Intent(getActivity(), PaymentActivity.class);
         if ("blue".equals(conType)) {
             intent.putExtra("deviceUpdate", updatedevice);

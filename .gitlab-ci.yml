@@ -38,7 +38,7 @@ stages:
 include: 
   - template: Secret-Detection.gitlab-ci.yml
   - template: Jobs/Dependency-Scanning.gitlab-ci.yml
-  - template: /Jobs/License-Scanning.gitlab-ci.yml
+  
 variables:
   COMMIT_TIME: '$(date "+%Y%m%d%H%M%S")' 
   VERSIONAME: '4.2.11'

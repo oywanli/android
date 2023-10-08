@@ -59,6 +59,7 @@
     <string name="do_tradelog_operation">TradeLog Operation</string>
     <string name="get_update_key">get UpdateKey</string>
     <string name="reset_qpos">qpos reset</string>
+    <string name="upload_logs">Upload logs</string>
     <string name="menu_update">qpos update</string>
     <string name="set_sleepMode_time">set sleep mode time</string>
     <string name="input_pin">Please input pin now</string>
@@ -279,6 +280,8 @@
     <string name="minute">minutes</string>
     <string name="seconds">seconds</string>
     <string name="about">About</string>
+    <string name="show_log">Logs</string>
+    <string name="input_email">Please input your email</string>
     <string name="init_keys">Exchange Certificates</string>
     <string name="verify_keys">Initial Key Loading</string>
     <string name="key_loading">Confirm Key Type</string>
@@ -404,11 +407,56 @@
     <string name="communicationMode_unknow">CommunicationMode unknow</string>
     <string name="updateIPEK_success">update IPEK success</string>
     <string name="updateIPEK_fail">update IPEK fail</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="printer">Print</string>
+    <string name="comprehensive_Test">Comprehensive Test</string>
+    <string name="function_qrcode">QR Code</string>
+    <string name="function_barcode">Bar Code</string>
+    <string name="function_text">Text</string>
+    <string name="function_pic">Picture</string>
+    <string name="function_threeline">Paper Feed</string>
+    <string name="set_align">Set Align</string>
+    <string name="set_font_style">Set Font Style</string>
+    <string name="set_font_size">Set Font Size</string>
+    <string name="print_text">Print Text</string>
+    <string name="function_multi">Print Multiple Columns</string>
 
 
+    <!--print content-->
+    <string name="text_print">欢迎光临(Simplified Chinese)\n歡迎光臨（traditional chinese）\nWelcome(English)\n어서 오세요.(Korean)\nいらっしゃいませ(Japanese)\nWillkommen in der(Germany)\nSouhaits de bienvenue(France)\nยินดีต้อนรับสู่(Thai)\nДобро пожаловать(Russian)\nBenvenuti a(Italian)\nvítejte v(Czech)\nBEM - vindo Ao(Portutuese)\nمرحبا بكم في(Arabic)\n</string>
+    <string name="at_the_left">LEFT</string>
+    <string name="at_the_right">RIGHT</string>
+    <string name="at_the_center">CENTER</string>
 
+    <string name="fontStyle_normal">NORMAL</string>
+    <string name="fontStyle_bold">BOLD</string>
+    <string name="fontStyle_italic">ITALIC</string>
+    <string name="fontStyle_bold_italic">BOLD_ITALIC</string>
+    <string name="content_barcode">BarCode</string>
 
-
-
+    <string name="barcode_height">BarCodeHeight</string>
+    <string name="barcode_width">BarCodeWidth</string>
+    <string name="grayLevel">GrayLevel</string>
+    <string name="speedlevel">SpeedLevel</string>
+    <string name="print_brcode">Print BarCode</string>
+    <string name="input_barcode">Please input barcode content</string>
+    <string name="print_qrcode">Print QrCode</string>
+    <string name="content_qrcode">QRCode</string>
+    <string name="input_qrcode">Please input QrCode content</string>
+    <string name="size_qrcode">QR-Code size</string>
+    <string name="print_bitmap">Print Bitmap</string>
+    <string name="print_composite">Print Comprehensive</string>
+    <string name="print_ticket">Print Ticket</string>
+    <string name="get_printer_status">Get Printer Status</string>
+    <string name="get_printer_density">Get Print Density</string>
+    <string name="get_printer_speed">Get Print Speed</string>
+    <string name="get_printer_temperature">Get Print Temperature</string>
+    <string name="get_printer_voltage">Get Print Voltage</string>
+    <string name="stop_print">Stop Print</string>
+    <string name="density_level">Density Level</string>
+    <string name="fill_name"></string>
+    <string name="scan">Scan</string>
+    <string name="scan_toast">This function has not been activated yet!</string>
+    <!-- TODO: Remove or change this placeholder text -->
 
 </resources>

@@ -76,8 +76,8 @@ public class DeviceInfoFragment extends Fragment implements View.OnClickListener
     }
 
     public void getposInfo(String posInfo) {
-        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
-        String conType = (String) connectType.get(getActivity(), "conType", "");
+        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(getActivity());
+        String conType = (String) connectType.get("conType", "");
         Intent intent = new Intent(getActivity(), PaymentActivity.class);
         if ("blue".equals(conType)) {
             intent.putExtra("posinfo", posInfo);

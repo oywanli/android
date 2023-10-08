@@ -38,8 +38,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_setting, null);
         myListener.sendValue(getString(R.string.menu_setting));
         initView(view);
-        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
-        String conType = (String) connectType.get(getActivity(), "conType", "");
+        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(getActivity());
+        String conType = (String) connectType.get( "conType", "");
         Log.w("setting","contyep=="+conType);
         if (!"".equals(conType) && "blue".equals(conType)) {
             rBtnBlue.setEnabled(true);
@@ -71,20 +71,20 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                SharedPreferencesUtil conType = SharedPreferencesUtil.getmInstance();
+                SharedPreferencesUtil conType = SharedPreferencesUtil.getmInstance(getActivity());
                 switch (checkedId) {
                     case R.id.rbtn_blue:
-                        conType.put(getActivity(), "conType", "blue");
+                        conType.put( "conType", "blue");
                         tvConnectType.setText(getString(R.string.setting_blu));
                         closeUart();
                         break;
                     case R.id.rbtn_serialport:
-                        conType.put(getActivity(), "conType", "uart");
+                        conType.put( "conType", "uart");
                         tvConnectType.setText(getString(R.string.setting_uart));
                         disconnectbluetooth();
                         break;
                     case R.id.rbtn_usb:
-                        conType.put(getActivity(), "conType", "usb");
+                        conType.put( "conType", "usb");
                         tvConnectType.setText(getString(R.string.setting_usb));
                         disconnectbluetooth();
                         closeUart();

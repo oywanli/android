@@ -27,17 +27,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import com.dspread.demoui.R;
 import com.dspread.demoui.ui.fragment.AboutFragment;
 import com.dspread.demoui.ui.fragment.DeviceInfoFragment;
 import com.dspread.demoui.ui.fragment.DeviceUpdataFragment;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.ui.fragment.HomeFragment;
+import com.dspread.demoui.ui.fragment.LogsFragment;
+import com.dspread.demoui.ui.fragment.PrinterHelperFragment;
+import com.dspread.demoui.ui.fragment.ScanFragment;
 import com.dspread.demoui.ui.fragment.SettingFragment;
 import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
 import com.dspread.demoui.utils.UpdateAppHelper;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements TitleUpdateListener, NavigationView.OnNavigationItemSelectedListener {
@@ -48,12 +51,15 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     private HomeFragment homeFragment;
     private DeviceInfoFragment deviceInfoFragment;
     private DeviceUpdataFragment deviceUpdataFragment;
-
     private AboutFragment aboutFragment;
-
+    private PrinterHelperFragment printerHelperFragment;
+    private ScanFragment scanFragment;
+    private LogsFragment logsFragment;
     private FragmentTransaction transaction;
     private TextView deviceConnectType;
     private TextView tvAppVersion;
+    private ExtendedFloatingActionButton floatingActionButton;
+    private MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,30 +69,32 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        floatingActionButton = findViewById(R.id.fab);
         View headerView = navigationView.getHeaderView(0);
         deviceConnectType = headerView.findViewById(R.id.device_connect_type);
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
+        menuItem = navigationView.getMenu().findItem(R.id.nav_printer);
+
+        if (!"D20".equals(deviceModel)) {
+            menuItem.setVisible(true);
+        } else {
+            menuItem.setVisible(false);
+        }
+
+
         DrawerStateChanged();
-
         setSupportActionBar(toolbar);
-
-
         navigationView.bringToFront();
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-
         navigationView.setNavigationItemSelectedListener(this);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
                 String packageVersionName = UpdateAppHelper.getPackageVersionName(MainActivity.this, "com.dspread.demoui");
                 tvAppVersion.setText(getString(R.string.app_version) + packageVersionName);
-
                 DrawerStateChanged();
-
             }
 
             @Override
@@ -102,13 +110,16 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             @Override
             public void onDrawerStateChanged(int newState) {
                 Log.w("onDrawerStateChanged", "onDrawerStateChanged");
-
-
             }
         });
         switchFragment(0);
-        bluetoothRelaPer();
 
+        bluetoothRelaPer();
+        floatingActionButton.setOnClickListener(view -> {
+            toolbar.setTitle(getString(R.string.show_log));
+            switchFragment(5);
+            drawerLayout.close();
+        });
     }
 
 
@@ -116,20 +127,20 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     String deviceManufacturer = Build.MANUFACTURER;
 
     public void DrawerStateChanged() {
-        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance();
-        String conType = (String) connectType.get(MainActivity.this, "conType", "");
-
+        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(this);
+        String conType = (String) connectType.get("conType", "");
         if ("blue".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_blu));
         } else if ("uart".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
-        } else if ("Dspread".equals(deviceManufacturer)) {
-            connectType.put(MainActivity.this, "conType", "uart");
+        } else if ("Dspread".equals(deviceManufacturer) || "D20".equals(deviceModel) || "D30".equals(deviceModel) || "mp600".equals(deviceModel) || "D60".equals(deviceModel)) {
+            connectType.put("conType", "uart");
+
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
-            connectType.put(MainActivity.this, "conType", "blue");
+            connectType.put("conType", "blue");
             deviceConnectType.setText(getString(R.string.setting_blu));
         }
     }
@@ -168,6 +179,21 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 switchFragment(4);
                 drawerLayout.close();
                 break;
+            case R.id.nav_log:
+                toolbar.setTitle(getString(R.string.show_log));
+                switchFragment(5);
+                drawerLayout.close();
+                break;
+            case R.id.nav_printer:
+                toolbar.setTitle(getString(R.string.printer));
+                switchFragment(6);
+                drawerLayout.close();
+                break;
+            case R.id.nav_scan:
+                toolbar.setTitle(getString(R.string.scan));
+                switchFragment(7);
+                drawerLayout.close();
+                break;
             case R.id.nav_exit:
                 Mydialog.manualExitDialog(MainActivity.this, getString(R.string.msg_exit), new Mydialog.OnMyClickListener() {
                     @Override
@@ -182,6 +208,8 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                     }
                 });
                 break;
+
+
             default:
                 break;
         }
@@ -229,6 +257,28 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 }
                 transaction.show(aboutFragment);
                 break;
+            case 5:
+                if (logsFragment == null) {
+                    logsFragment = new LogsFragment();
+                    transaction.add(R.id.nav_host_fragment_content_main, logsFragment);
+                }
+                transaction.show(logsFragment);
+
+                break;
+            case 6:
+                if (printerHelperFragment == null) {
+                    printerHelperFragment = new PrinterHelperFragment();
+                    transaction.add(R.id.nav_host_fragment_content_main, printerHelperFragment);
+                }
+                transaction.show(printerHelperFragment);
+                break;
+            case 7:
+                if (scanFragment == null) {
+                    scanFragment = new ScanFragment();
+                    transaction.add(R.id.nav_host_fragment_content_main, scanFragment);
+                }
+                transaction.show(scanFragment);
+                break;
             default:
                 break;
         }
@@ -251,6 +301,15 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
         if (aboutFragment != null) {
             transaction.hide(aboutFragment);
+        }
+        if (logsFragment != null) {
+            transaction.hide(logsFragment);
+        }
+        if (printerHelperFragment != null) {
+            transaction.hide(printerHelperFragment);
+        }
+        if (scanFragment != null) {
+            transaction.hide(scanFragment);
         }
 
     }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:divider="@null"
+    android:background="@drawable/print_boder"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/workTView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56px"
+        android:layout_marginBottom="56px"
+        android:drawableTop="@drawable/function_all"
+        android:drawablePadding="12px"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:text="@string/comprehensive_Test"
+        android:textColor="@color/darkRed"
+        android:textSize="24px"
+        tools:ignore="PxUsage,UseCompatTextViewDrawableXml" />
+</LinearLayout>

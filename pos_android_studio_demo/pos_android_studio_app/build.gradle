@@ -29,8 +29,8 @@ android {
         applicationId "com.dspread.demoui"
         minSdk 28
         targetSdk 33
-        versionCode 20
-        versionName "4.2.13"
+        versionCode 21
+        versionName "4.4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
@@ -79,48 +79,14 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.zhy:okhttputils:2.6.2'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
-    implementation 'com.github.xuexiangjys:XHttp2:2.0.4'
     implementation 'com.github.xuexiangjys:XUpdate:2.1.3'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
 
-    implementation 'com.github.xuexiangjys.XUtil:xutil-core:2.0.0'
-    implementation 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0'
-    implementation 'com.github.xuexiangjys.XAOP:xaop-runtime:1.1.0'
-    implementation 'com.zhy:okhttputils:2.6.2'
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     implementation 'com.github.xuexiangjys:XHttp2:2.0.4'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'com.github.xuexiangjys:XUpdate:2.1.4'
-    implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'com.lzy.net:okgo:3.0.4'
-    implementation 'com.google.zxing:core:3.3.3'
-    //dspread sdk
-
 
     implementation 'com.dspread.print:dspread_print_sdk:1.2.0'
-    implementation 'com.dspread.library:dspread_pos_sdk:4.3.9'
-}
-//sentry {
-//    includeProguardMapping = true
-//    autoUploadProguardMapping = true
-//    experimentalGuardsquareSupport = false
-//    uploadNativeSymbols = false
-//    includeNativeSources = false
-//    autoInstallation {
-//        enabled = true
-//        sentryVersion = '6.15.0'
-//    }
-//
-//    includeDependenciesReport = true
-//    ignoredBuildTypes = ["release"]
-//
-//}
-
+    implementation 'com.dspread.library:dspread_pos_sdk:4.4.8'
 
