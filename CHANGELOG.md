@@ -1,3 +1,10 @@
+## [4.5.1](https://gitlab.com/[secure]/android/compare/v4.5.0...v4.5.1) (2023-10-13)
+
+
+### Bug Fixes
+
+* update the upload logs feature to upload logs to dingding reboot ([a6f9bfa](https://gitlab.com/[secure]/android/commit/a6f9bfa93848995871baab221df54aa697220929))
+
 # [4.5.0](https://gitlab.com/[secure]/android/compare/v4.4.1...v4.5.0) (2023-09-27)
 
 
