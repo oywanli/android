@@ -2,12 +2,9 @@ package com.dspread.demoui.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,14 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.dspread.demoui.R;
+import com.dspread.demoui.utils.DingTalkTest;
 import com.dspread.demoui.utils.LogFileConfig;
-import com.dspread.demoui.utils.SharedPreferencesUtil;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.TitleUpdateListener;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.AbsCallback;
-import com.lzy.okgo.model.Response;
-import com.lzy.okgo.request.base.Request;
 
 /**
  * [一句话描述该类的功能]
@@ -108,7 +100,8 @@ public class LogsFragment extends Fragment {
                     if("Empty logs".equals(tv_log.getText().toString())){
                         Toast.makeText(getContext(),"Empty logs",Toast.LENGTH_SHORT).show();
                     }else {
-                        uploadLogs(email + " " + tv_log.getText().toString());
+                        log = email+": "+tv_log.getText().toString();
+                        new Thread(runnable).start();
                     }
                 }
             });
@@ -117,29 +110,26 @@ public class LogsFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+    private String log;
+    Runnable runnable = () -> {
+        try {
+            String dingUrl = "https://oapi.dingtalk.com/robot/send?access_token=83e8afc691a1199c70bb471ec46d50099e6dd078ce10223bbcc56c0485cb5cc3";
+            boolean isAtAll = false;
 
-    private void uploadLogs(String logs){
-        OkGo.post("https://gitlab.com/api/v4/projects/4128550/issues?title=Issues%20with%20android%20logs&labels=bug")
-                .tag(this)
-                .headers("PRIVATE-TOKEN","glpat-DvHTwzDMSBNwhEHbjxuz")
-                .params("description",logs)
-                .execute(new AbsCallback<Object>() {
-                    @Override
-                    public void onSuccess(Response<Object> response) {
-                        progress_loading.setVisibility(View.GONE);
-                        Toast.makeText(getContext(),"Upload logs successful!",Toast.LENGTH_SHORT).show();
-                    }
+//            List mobileList = Lists.newArrayList();
+            String content = "issues: "+log;
 
-                    @Override
-                    public Object convertResponse(okhttp3.Response response) throws Throwable {
-                        return null;
-                    }
+            String reqStr = DingTalkTest.buildReqStr(content, isAtAll);
 
-                    @Override
-                    public void onStart(Request<Object, ? extends Request> request) {
-                        super.onStart(request);
-                        progress_loading.setVisibility(View.VISIBLE);
-                    }
-                });
-    }
+            String result =DingTalkTest.postJson(dingUrl, reqStr);
+
+            System.out.println("result == " + result);
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+    };
+
 }
