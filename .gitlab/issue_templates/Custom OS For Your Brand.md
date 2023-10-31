@@ -1,6 +1,26 @@
-## BOOT Animation
-##### (If you want to display your brand boot animation,please convert the boot animation to 480*800 BMP format picture and share us)
+## BOOT Logo
+##### (If you want to display your brand boot logo,please provide us with picture in the following format)
+###### D20
+- format：BMP
+- size：480x800
+###### D30
+- format：PNG
+- size: 720x1280
+###### D60
+- format：BMP
+- size：720x1600
 
+## BOOT Animation
+##### (If you want to display your brand boot animation,the animation is composed of multiple pictures, please provide us with multiple pictures in the following format)
+###### D20
+- format：BMP/PNG 
+- size：480x800
+###### D30
+- format：PNG
+- size: 720x1280
+###### D60
+- format：BMP/PNG
+- size：720x1600 
 
 ## Preinstall Apps
 ##### (If you want to preinstall your app,please share us your app)
