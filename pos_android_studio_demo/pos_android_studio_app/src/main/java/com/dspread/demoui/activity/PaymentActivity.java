@@ -2,7 +2,8 @@ package com.dspread.demoui.activity;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-import static com.dspread.print.Utils.HexStringToByteArray;
+
+import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,13 +17,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -45,10 +50,20 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.action.printerservice.PrintStyle;
+import com.action.printerservice.barcode.Barcode1D;
+import com.action.printerservice.barcode.Barcode2D;
 import com.dspread.demoui.R;
+import com.dspread.demoui.activity.printer.PrintTextActivity;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
+import com.dspread.print.device.PrintListener;
+import com.dspread.print.device.PrinterDevice;
+import com.dspread.print.device.PrinterInitListener;
+import com.dspread.print.device.PrinterManager;
+import com.dspread.print.device.bean.PrintLineStyle;
+import com.dspread.print.widget.PrintLine;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
 import com.dspread.demoui.ui.dialog.Mydialog;
@@ -140,6 +155,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private int type;
     private ProgressBar progressBar;
     private TextView tvProgress;
+    private PrinterDevice mPrinter;
+    private PrintLineStyle printLineStyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +174,84 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         cashbackAmounts = getIntent().getStringExtra("cashbackAmounts");
         initView();
         initIntent();
+        initprint();
         TRACE.setContext(this);
+    }
+
+    public void initprint() {
+        PrinterManager instance = PrinterManager.getInstance();
+        mPrinter = instance.getPrinter();
+        if ("D30".equals(Build.MODEL)) {
+            mPrinter.initPrinter(PaymentActivity.this, new PrinterInitListener() {
+                @Override
+                public void connected() {
+                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
+                /*When no paper, the
+                printer terminates printing and cancels the printing task.*/
+//              PrinterDevice.PrintTerminationState.PRINT_STOP
+               /* When no paper, the
+                printer will prompt that no paper. After loading the paper, the printer
+                will continue to restart printing.*/
+//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
+                }
+
+                @Override
+                public void disconnected() {
+                }
+            });
+
+        } else {
+            mPrinter.initPrinter(this);
+        }
+        MyPrinterListener myPrinterListener = new MyPrinterListener();
+        mPrinter.setPrintListener(myPrinterListener);
+        printLineStyle = new PrintLineStyle();
+    }
+
+    public void printText(String info) {
+        printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD_ITALIC);
+        printLineStyle.setFontSize(10);
+        printLineStyle.setAlign(PrintLine.CENTER);
+        mPrinter.addPrintLintStyle(printLineStyle);
+
+        try {
+            mPrinter.addText("Testing");
+            mPrinter.addText("POS Signing of purchase orders");
+            mPrinter.addText("MERCHANT COPY");
+            mPrinter.addText("- - - - - - - - - - - - - -");
+            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
+            mPrinter.addText("ISSUER Agricultural Bank of China");
+            mPrinter.addText("ACQ 48873110");
+            mPrinter.addText("CARD number.");
+            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
+            mPrinter.addText("6228 48******8 116 S");
+            mPrinter.addText("TYPE of transaction(TXN TYPE)");
+            mPrinter.addText("SALE");
+            mPrinter.addText("- - - - - - - - - - - - - -");
+            mPrinter.addTexts(new String[]{"BATCH NO", "000043"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+            mPrinter.addTexts(new String[]{"VOUCHER NO", "000509"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+            mPrinter.addTexts(new String[]{"AUTH NO", "000786"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+            mPrinter.addTexts(new String[]{"DATE/TIME", "2010/12/07 16:15:17"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+            mPrinter.addTexts(new String[]{"REF NO", "000001595276"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+            mPrinter.addTexts(new String[]{"2014/12/07 16:12:17", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+            mPrinter.addTexts(new String[]{"AMOUNT:", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+            mPrinter.addText("RMB:249.00");
+            mPrinter.addText(info);
+            mPrinter.addText("- - - - - - - - - - - - - -");
+            mPrinter.addText("Please scan the QRCode for getting more information: ");
+            mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
+            mPrinter.addText("Please scan the QRCode for getting more information:");
+            mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
+//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+//            mPrinter.addBitmap(bitmap);
+            mPrinter.setPrintStyle(printLineStyle);
+            mPrinter.addText(" ");
+            mPrinter.print(this);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     public void sendInfo(String receipt) {
@@ -430,7 +524,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case 2:
                 tvTitle.setText(getText(R.string.device_connect));
                 mrllayout.setVisibility(View.GONE);
-                open(QPOSService.CommunicationMode.UART);
+                open(QPOSService.CommunicationMode.UART_SERVICE);
                 pos.setDeviceAddress("/dev/ttyS1");
                 pos.openUart();
                 break;
@@ -953,6 +1047,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 mllinfo.setVisibility(View.VISIBLE);
                 mtvinfo.setText(content);
                 mllchrccard.setVisibility(View.GONE);
+                printText(content);
             } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
                 nfcLog = decodeData.get("nfcLog");
                 String content = getString(R.string.tap_card);
@@ -1033,6 +1128,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 mllinfo.setVisibility(View.VISIBLE);
                 mtvinfo.setText(content);
                 mllchrccard.setVisibility(View.GONE);
+                printText(content);
                 sendMsg(8003);
             } else if ((result == QPOSService.DoTradeResult.NFC_DECLINED)) {
                 statusEditText.setText(getString(R.string.transaction_declined));
@@ -1210,18 +1306,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     mtvinfo.setText(content);
                     mllchrccard.setVisibility(View.GONE);
                 } else {
-                     if (type == 2) {
-                            tvTitle.setText("SN:" + posId);
-                            isVisiblePosID = true;
-                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-                            pos.doTrade(20);
+                    if (type == 2) {
+                        tvTitle.setText("SN:" + posId);
+                        isVisiblePosID = true;
+                        pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+                        pos.doTrade(20);
 
                     } else if (type == 3) {
-                            tvTitle.setText("SN:" + posId);
-                            isVisiblePosID = true;
-                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-                            pos.doTrade(20);
-                        }
+                        tvTitle.setText("SN:" + posId);
+                        isVisiblePosID = true;
+                        pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+                        pos.doTrade(20);
+                    }
                 }
 
             } else {
@@ -1382,7 +1478,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
             TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
-
+            printText(tlv);
 
             if (isPinCanceled) {
                 mllchrccard.setVisibility(View.GONE);
@@ -1774,14 +1870,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onPaypass() {
 //                pos.bypassPin();
-                        pos.sendPin("");
-                        Paydialog.dismiss();
+                    pos.sendPin("");
+                    Paydialog.dismiss();
                 }
 
                 @Override
                 public void onConfirm(String password) {
                     if (password.length() >= 4 && password.length() <= 12) {
-                        Log.w("password","password=="+password);
+                        Log.w("password", "password==" + password);
 //                        pos.sendPin(password);
                         String newPin = "";
                         //this part is used to enctypt the plaintext pin with random seed
@@ -1797,7 +1893,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             }
                         }
                         String pinBlock = buildCvmPinBlock(pos.getEncryptData(), newPin);// build the ISO format4 pin block
-                        Log.w("password","pinBlock=="+pinBlock);
+                        Log.w("password", "pinBlock==" + pinBlock);
                         pos.sendCvmPin(pinBlock, true);
                         Paydialog.dismiss();
                     } else {
@@ -2575,7 +2671,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             KB = ParseASN1Util.parseToken(response, "KB");
             String signatureData = "a57e821386de1038b1a12dc22fa59ce317625680c523bd66bf2b9f840aebe52d020e07105d4107eeb05edd560d0345cd73ce2b68dbf19c61f9d56fbd1ddf9222c47956595b773c88eb7ec4577fb17053d42acf64f3e5c38ff325cdac7b689df029299087b69211e61bdfc22e329eb287456f83ef6c25e84fe1324e36ee85ba7e3accb79eb8ab7b270916a28a42a867e0e050c6950100c90daddb1f421444d16accb6005a312c3273c2f1b28f0c77456ae875081ae594d26139efd267c8dafa15e1b6cf961f3acdb92b26777127f474d24d57611b29f01dec062c02d720c4e759e1757f85ee39e74e05e23aa0aed53d62d05a902a6539a3e986e6dd237888ff92";
-            boolean verifyResult = pos.authenticServerResponse(QPOSUtil.HexStringToByteArray(KA), signatureData);
+            boolean verifyResult = pos.authenticServerResponse(HexStringToByteArray(KA), signatureData);
             verifyResult = true;
             if (verifyResult) {
                 if (response.contains("AP")) {
@@ -2604,6 +2700,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 statusEditText.setText("signature verification failed.");
             }
         }
+
         private String buildCvmPinBlock(Hashtable<String, String> value, String pin) {
             String randomData = value.get("RandomData") == null ? "" : value.get("RandomData");
             String pan = value.get("PAN") == null ? "" : value.get("PAN");
@@ -2719,5 +2816,15 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    class MyPrinterListener implements PrintListener {
+
+        @Override
+        public void printResult(boolean b, String s, int i) {
+            Log.w("printResult", "boolean b==" + b);
+            Log.w("printResult", "String s==" + s);
+            Log.w("printResult", "int i==" + i);
+
+        }
+    }
 
 }

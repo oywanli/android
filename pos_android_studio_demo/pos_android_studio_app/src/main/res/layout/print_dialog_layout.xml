@@ -27,6 +27,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/dp_20"
             android:focusable="true"
+            android:inputType="none"
             android:focusableInTouchMode="true"
             android:padding="@dimen/dp_5"
             android:background="@color/white"

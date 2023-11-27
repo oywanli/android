@@ -35,6 +35,29 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/brcode_symbology"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/symbology_barcode"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/brcode_text_symbology"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/lift_arrow"
+            android:gravity="right|center_vertical"
+            android:text="CODE_128"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText,RtlHardcoded,UseCompatTextViewDrawableXml" />
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/brcode_height"
         android:layout_width="match_parent"
         android:layout_height="54dp"

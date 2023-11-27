@@ -1,5 +1,6 @@
 package com.dspread.demoui.activity.printer;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
@@ -16,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
 import com.dspread.demoui.ui.dialog.PrintDialog;
+import com.dspread.helper.printer.PrinterClass;
 import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
+import com.dspread.print.device.PrinterInitListener;
 import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
@@ -51,14 +54,32 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         setContentView(R.layout.activity_print_text);
         initView();
-
         PrinterManager instance = PrinterManager.getInstance();
         mPrinter = instance.getPrinter();
-        mPrinter.initPrinter(this);
+        if ("D30".equals(Build.MODEL)) {
+            mPrinter.initPrinter(PrintTextActivity.this, new PrinterInitListener() {
+                @Override
+                public void connected() {
+                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
+                /*When no paper, the
+                printer terminates printing and cancels the printing task.*/
+//              PrinterDevice.PrintTerminationState.PRINT_STOP
+               /* When no paper, the
+                printer will prompt that no paper. After loading the paper, the printer
+                will continue to restart printing.*/
+//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
+                }
+                @Override
+                public void disconnected() {
+                }
+            });
+
+        }else{
+            mPrinter.initPrinter(this);
+        }
         MyPrinterListener myPrinterListener = new MyPrinterListener();
         mPrinter.setPrintListener(myPrinterListener);
         printLineStyle = new PrintLineStyle();
-        int fontSize = printLineStyle.getFontSize();
     }
 
     private void initView() {
@@ -82,7 +103,6 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
         layoutTextSize.setOnClickListener(this);
 
     }
-
 
 
     @Override
@@ -133,18 +153,18 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                         textSetFontStyle.setText(content);
                         fontText = content;
                         if ("NORMAL".equals(content) || "正常".equals(content)) {
-                        textSetFontStyle.setText(content);
-                        fontText = "NORMAL";
-                    } else if ("BOLD".equals(content) || "粗体".equals(content)) {
-                        textSetFontStyle.setText(content);
-                        fontText = "BOLD";
-                    } else if ("ITALIC".equals(content) || "斜体".equals(content)) {
-                        textSetFontStyle.setText(content);
-                        fontText = "ITALIC";
-                    } else if ("BOLD_ITALIC".equals(content) || "斜体加粗".equals(content)) {
-                        textSetFontStyle.setText(content);
-                        fontText = "BOLD_ITALIC";
-                    }
+                            textSetFontStyle.setText(content);
+                            fontText = "NORMAL";
+                        } else if ("BOLD".equals(content) || "粗体".equals(content)) {
+                            textSetFontStyle.setText(content);
+                            fontText = "BOLD";
+                        } else if ("ITALIC".equals(content) || "斜体".equals(content)) {
+                            textSetFontStyle.setText(content);
+                            fontText = "ITALIC";
+                        } else if ("BOLD_ITALIC".equals(content) || "斜体加粗".equals(content)) {
+                            textSetFontStyle.setText(content);
+                            fontText = "BOLD_ITALIC";
+                        }
                     }
                 });
 
@@ -163,6 +183,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                     if (!"".equals(fontText)) {
                         if ("NORMAL".equals(fontText)) {
                             printLineStyle.setFontStyle(PrintStyle.FontStyle.NORMAL);
+                            printLineStyle.setFontStyle(PrintStyle.Key.ALIGNMENT);
                         } else if ("BOLD".equals(fontText)) {
                             printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD);
                         } else if ("ITALIC".equals(fontText)) {

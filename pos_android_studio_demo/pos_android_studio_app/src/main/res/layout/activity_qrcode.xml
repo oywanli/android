@@ -35,6 +35,29 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/qrcode_errorLevel"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/QR_code_errorLevel"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/qrcode_text_errorLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/lift_arrow"
+            android:gravity="right|center_vertical"
+            android:text="L"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText,RtlHardcoded,UseCompatTextViewDrawableXml" />
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/qrcode_size"
         android:layout_width="match_parent"
         android:layout_height="54dp"
