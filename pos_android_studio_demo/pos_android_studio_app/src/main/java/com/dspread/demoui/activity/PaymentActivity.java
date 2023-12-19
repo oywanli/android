@@ -3,9 +3,6 @@ package com.dspread.demoui.activity;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 
-import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
-import static com.dspread.demoui.ui.dialog.Mydialog.UART_SERVICE;
-import static com.dspread.demoui.ui.dialog.Mydialog.USB_OTG_CDC_ACM;
 import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
 
 import android.Manifest;
@@ -366,7 +363,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private void deviceType(int type) {
 
 
-        if (type == BLUETOOTH) {
+        if (type == 1) {
             if (pos == null) {
                 open(QPOSService.CommunicationMode.BLUETOOTH);
             }
@@ -461,9 +458,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initIntent() {
         type = getIntent().getIntExtra("connect_type", 0);
-        Log.w("paymentActivity","type=="+type);
         switch (type) {
-            case BLUETOOTH:
+            case 1:
                 title = getString(R.string.title_blu);
                 scanBlue();
                 open(QPOSService.CommunicationMode.BLUETOOTH);
@@ -472,7 +468,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onCancel() {
                             pos.disconnectBT();
-                            deviceType(BLUETOOTH);
+                            deviceType(1);
                             refreshAdapter();
                             if (m_Adapter != null) {
                                 m_Adapter.notifyDataSetChanged();
@@ -511,7 +507,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
 
                 } else {
-                    deviceType(BLUETOOTH);
+                    deviceType(1);
                     refreshAdapter();
                     if (m_Adapter != null) {
                         m_Adapter.notifyDataSetChanged();
@@ -525,10 +521,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
                 break;
-            case UART_SERVICE:
+            case 2:
                 tvTitle.setText(getText(R.string.device_connect));
                 mrllayout.setVisibility(View.GONE);
-                open(QPOSService.CommunicationMode.UART);
+                open(QPOSService.CommunicationMode.UART_SERVICE);
                 pos.setDeviceAddress("/dev/ttyS1");
                 pos.openUart();
                 break;
@@ -544,10 +540,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        if (type == USB_OTG_CDC_ACM) {
+        if (type == 3) {
 
             mrllayout.setVisibility(View.GONE);
             tvTitle.setText(getString(R.string.device_connect));
+            open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
             if (!flag) {
                 USBClass usb = new USBClass();
                 ArrayList<String> deviceList = usb.GetUSBDevices(getBaseContext());
@@ -617,7 +614,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
 
-        if (type == UART_SERVICE) {
+        if (type == 2) {
             pos.setD20Trade(true);
         } else {
             pos.setD20Trade(false);
@@ -643,6 +640,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 setResult(2, intent);
                 finish();
 
+            } else {
+                Intent intent = new Intent();
+                intent.putExtra("info", getString(R.string.blue_disconect));
+                setResult(2, intent);
+                finish();
+
             }
         }
         if (!"".equals(disbuart) && disbuart != null) {
@@ -652,6 +655,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.closeUart();
                 } catch (Exception e) {
                 }
+                Intent intent = new Intent();
+                intent.putExtra("info", getString(R.string.blue_disconect));
+                setResult(2, intent);
+                finish();
+
+            } else {
                 Intent intent = new Intent();
                 intent.putExtra("info", getString(R.string.blue_disconect));
                 setResult(2, intent);
@@ -2728,16 +2737,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     private void devicePermissionRequest(UsbManager mManager, UsbDevice usbDevice) {
-        PendingIntent mPermissionIntent;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            mPermissionIntent = PendingIntent.getBroadcast(PaymentActivity.this, 0, new Intent(
-                    "com.android.example.USB_PERMISSION"), PendingIntent.FLAG_IMMUTABLE);
-        } else {
-            mPermissionIntent = PendingIntent.getBroadcast(PaymentActivity.this, 0, new Intent(
-                    "com.android.example.USB_PERMISSION"), 0);
-        }
+        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(PaymentActivity.this, 0, new Intent("com.android.example.USB_PERMISSION"), 0);
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         registerReceiver(mUsbReceiver, filter);
         mManager.requestPermission(usbDevice, mPermissionIntent);
