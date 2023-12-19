@@ -87,7 +87,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     implementation 'com.github.xuexiangjys:XHttp2:2.0.4'
 
-    implementation 'com.dspread.print:dspread_print_sdk:1.2.0'
+    implementation 'com.dspread.print:dspread_print_sdk:1.2.4'
     implementation 'com.dspread.library:dspread_pos_sdk:4.4.8'
     implementation 'cn.hutool:hutool-all:5.1.0'
     implementation 'com.alibaba:fastjson:1.2.76'
