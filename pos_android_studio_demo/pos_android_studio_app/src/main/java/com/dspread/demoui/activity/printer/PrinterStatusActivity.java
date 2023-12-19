@@ -41,25 +41,30 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
     private TextView tvGetSpeed;
     private TextView tvGetTemperature;
     private TextView tvGetVoltage;
+    private final  int PRINTER_DENSITY=3;
+    private final  int PRINTER_SPEED=5;
+    private final  int PRINTER_TEMPERATURE=6;
+    private final  int PRINTER_VOLTAGE=7;
+    private final  int PRINTER_STATUS=8;
 
     private  final Handler handler = new Handler(Looper.myLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case 3:
+                case PRINTER_DENSITY:
                     tvGetDesity.setText(getString(R.string.get_printer_density)+": "+msg.obj);
                   break;
-                case 5:
+                case PRINTER_SPEED:
                     tvGetSpeed.setText(getString(R.string.get_printer_speed)+": "+msg.obj);
                   break;
-                case 6:
+                case PRINTER_TEMPERATURE:
                     tvGetTemperature.setText(getString(R.string.get_printer_temperature)+": "+msg.obj);
                   break;
-                case 7:
+                case PRINTER_VOLTAGE:
                     tvGetVoltage.setText(getString(R.string.get_printer_voltage)+": "+msg.obj);
                   break;
-                case 8:
+                case PRINTER_STATUS:
                     tvPrintStatusInfo.setText(getString(R.string.get_printer_status)+": "+msg.obj);
                   break;
 

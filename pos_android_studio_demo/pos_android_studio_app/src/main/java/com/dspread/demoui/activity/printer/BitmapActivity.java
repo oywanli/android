@@ -42,7 +42,8 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
             mPrinter.initPrinter(BitmapActivity.this, new PrinterInitListener() {
                 @Override
                 public void connected() {
-                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
+                    Log.w("MODEL","modeD30");
+//                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_NORMAL);
                 /*When no paper, the
                 printer terminates printing and cancels the printing task.*/
 //              PrinterDevice.PrintTerminationState.PRINT_STOP
@@ -84,7 +85,9 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_bitmap_print:
                 try {
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+                    mPrinter.setFooter(100);
                     mPrinter.printBitmap(this,bitmap);
+
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
 

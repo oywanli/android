@@ -90,7 +90,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
         btnComposite.setOnClickListener(this);
         btnMulti.setOnClickListener(this);
         btnStopPrint.setOnClickListener(this);
-        printtext();
+//        printtext();
     }
 
     private void printtext() {
@@ -129,7 +129,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
             mPrinter.addBitmap(bitmap);
             mPrinter.setPrintStyle(printLineStyle);
-            mPrinter.addText(" ");
+            mPrinter.setFooter(100);
             mPrinter.print(this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);

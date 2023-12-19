@@ -152,16 +152,16 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                     public void onConfirm(String content) {
                         textSetFontStyle.setText(content);
                         fontText = content;
-                        if ("NORMAL".equals(content) || "正常".equals(content)) {
+                        if (getString(R.string.fontStyle_normal).equals(content)) {
                             textSetFontStyle.setText(content);
                             fontText = "NORMAL";
-                        } else if ("BOLD".equals(content) || "粗体".equals(content)) {
+                        } else if (getString(R.string.fontStyle_bold).equals(content)) {
                             textSetFontStyle.setText(content);
                             fontText = "BOLD";
-                        } else if ("ITALIC".equals(content) || "斜体".equals(content)) {
+                        } else if (getString(R.string.fontStyle_italic).equals(content)) {
                             textSetFontStyle.setText(content);
                             fontText = "ITALIC";
-                        } else if ("BOLD_ITALIC".equals(content) || "斜体加粗".equals(content)) {
+                        } else if (getString(R.string.fontStyle_bold_italic).equals(content)) {
                             textSetFontStyle.setText(content);
                             fontText = "BOLD_ITALIC";
                         }
