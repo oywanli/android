@@ -162,6 +162,9 @@ public class Mydialog {
     private static RecyclerView rvlist;
     private static String transactionTypeString = "GOODS";
     private static MyAdapter myAdapter;
+    public static final int BLUETOOTH =1;
+    public static final int UART =2;
+    public static final int USB_OTG_CDC_ACM =3;
 
     public static void payTypeDialog(Activity mContext, String amount, long inputMoney, String[] data) {
 
@@ -201,7 +204,7 @@ public class Mydialog {
                             String inputMoneyString = String.valueOf(inputMoney);
                             intent.putExtra("inputMoney", inputMoneyString);
                             intent.putExtra("paytype", transactionTypeString);
-                            intent.putExtra("connect_type", 2);
+                            intent.putExtra("connect_type", UART);
                             mContext.startActivity(intent);
                         } else if (!"".equals(conType) && "usb".equals(conType)) {
                             transactionTypeString = content;
@@ -211,7 +214,7 @@ public class Mydialog {
                             intent.putExtra("inputMoney", inputMoneyString);
                             intent.putExtra("paytype", transactionTypeString);
                             intent.putExtra("conType", conType);
-                            intent.putExtra("connect_type", 3);
+                            intent.putExtra("connect_type", USB_OTG_CDC_ACM);
                             mContext.startActivity(intent);
                         } else if (!"".equals(conType) && "blue".equals(conType)) {//blue
                             transactionTypeString = content;
@@ -220,7 +223,7 @@ public class Mydialog {
                             String inputMoneyString = String.valueOf(inputMoney);
                             intent.putExtra("inputMoney", inputMoneyString);
                             intent.putExtra("paytype", transactionTypeString);
-                            intent.putExtra("connect_type", 1);
+                            intent.putExtra("connect_type", BLUETOOTH);
                             mContext.startActivity(intent);
                         }
                     }

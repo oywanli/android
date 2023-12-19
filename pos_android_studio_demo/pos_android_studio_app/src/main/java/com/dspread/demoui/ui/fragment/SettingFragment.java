@@ -1,5 +1,8 @@
 package com.dspread.demoui.ui.fragment;
 
+import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
+import static com.dspread.demoui.ui.dialog.Mydialog.UART;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -100,13 +103,13 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     public void disconnectbluetooth() {
         Intent intent = new Intent(getActivity(), PaymentActivity.class);
-        intent.putExtra("connect_type", 1);
+        intent.putExtra("connect_type", BLUETOOTH);
         intent.putExtra("disblue", "disblue");
         startActivityForResult(intent, REQUEST_CODE);
     }
     public void closeUart() {
         Intent intent = new Intent(getActivity(), PaymentActivity.class);
-        intent.putExtra("connect_type", 1);
+        intent.putExtra("connect_type", UART);
         intent.putExtra("disbuart", "disbuart");
         startActivityForResult(intent, REQUEST_CODE);
     }
