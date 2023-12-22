@@ -184,4 +184,10 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
 
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrinter.close();
+    }
 }

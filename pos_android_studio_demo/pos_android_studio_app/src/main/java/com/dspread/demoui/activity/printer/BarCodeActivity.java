@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -371,5 +372,11 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
             Log.w("printResult", "int i==" + i);
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrinter.close();
     }
 }

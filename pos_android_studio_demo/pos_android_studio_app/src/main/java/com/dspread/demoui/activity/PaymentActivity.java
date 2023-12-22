@@ -175,6 +175,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         initIntent();
         TRACE.setContext(this);
     }
+
     public void sendInfo(String receipt) {
         Intent intent = new Intent();
         intent.putExtra("info", receipt);
@@ -242,7 +243,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            updateThread = new UpdateThread();
 //            updateThread.start();
             byte[] data = null;
-            data = FileUtils.readAssetsLine("D20(PVT Xflash)_master.asc", PaymentActivity.this);
+            data = FileUtils.readAssetsLine("D20_master.asc", PaymentActivity.this);
             if (data != null) {
                 int a = pos.updatePosFirmware(data, blueTootchAddress);
 //                Mydialog.loading(PaymentActivity.this, progres + "%");
@@ -1152,12 +1153,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 Mydialog.ErrorDialog(PaymentActivity.this, msg, new Mydialog.OnMyClickListener() {
                     @Override
                     public void onCancel() {
-
                     }
 
                     @Override
                     public void onConfirm() {
-                        pos.cancelTrade();
                         finish();
                         Mydialog.ErrorDialog.dismiss();
                     }
@@ -1213,19 +1212,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     mllchrccard.setVisibility(View.GONE);
                 } else {
                     if (type == UART) {
-                        if (!"".equals(posId)){
+                        if (!"".equals(posId)) {
                             tvTitle.setText("SN:" + posId);
-                        }else{
+                        } else {
                             tvTitle.setText(getString(R.string.waiting_for_card));
                         }
                         isVisiblePosID = true;
                         pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
                         pos.doTrade(20);
 
-                    } else if (type ==USB_OTG_CDC_ACM) {
-                        if (!"".equals(posId)){
+                    } else if (type == USB_OTG_CDC_ACM) {
+                        if (!"".equals(posId)) {
                             tvTitle.setText("SN:" + posId);
-                        }else{
+                        } else {
                             tvTitle.setText(getString(R.string.waiting_for_card));
                         }
 
@@ -1405,7 +1404,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     mtvinfo.setText(decodeData.toString());
                     mllchrccard.setVisibility(View.GONE);
                     tradeSuccess.setVisibility(View.GONE);
-                    pos.cancelTrade();
                     Mydialog.onlingDialog.dismiss();
 
                 }
@@ -1634,9 +1632,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onConfirm() {
-                    if (pos != null) {
-                        pos.cancelTrade();
-                    }
                     finish();
                     Mydialog.ErrorDialog.dismiss();
                 }
@@ -2720,13 +2715,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (updateThread != null) {
             updateThread.concelSelf();
         }
-        if (pos != null) {
-            pos.cancelTrade();
-        }
 
         if (type == UART) {
             if (pos != null) {
-//                pos.closeUart();
+                pos.closeUart();
             }
         }
         if (type == USB_OTG_CDC_ACM) {

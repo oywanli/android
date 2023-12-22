@@ -136,4 +136,6 @@ public class PrinterHelperFragment extends Fragment {
             this.activityClass = activityClass;
         }
     }
+
+
 }
