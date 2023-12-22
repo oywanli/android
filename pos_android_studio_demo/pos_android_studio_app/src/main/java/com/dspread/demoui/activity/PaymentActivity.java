@@ -1404,6 +1404,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     mtvinfo.setText(decodeData.toString());
                     mllchrccard.setVisibility(View.GONE);
                     tradeSuccess.setVisibility(View.GONE);
+                    pos.sendOnlineProcessResult(null);
                     Mydialog.onlingDialog.dismiss();
 
                 }
