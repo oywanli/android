@@ -53,11 +53,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.action.printerservice.PrintStyle;
-import com.action.printerservice.barcode.Barcode1D;
-import com.action.printerservice.barcode.Barcode2D;
 import com.dspread.demoui.R;
-import com.dspread.demoui.activity.printer.PrintTextActivity;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
@@ -177,86 +173,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         cashbackAmounts = getIntent().getStringExtra("cashbackAmounts");
         initView();
         initIntent();
-        initprint();
         TRACE.setContext(this);
     }
-
-    public void initprint() {
-        PrinterManager instance = PrinterManager.getInstance();
-        mPrinter = instance.getPrinter();
-        if ("D30".equals(Build.MODEL)) {
-            mPrinter.initPrinter(PaymentActivity.this, new PrinterInitListener() {
-                @Override
-                public void connected() {
-                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
-                /*When no paper, the
-                printer terminates printing and cancels the printing task.*/
-//              PrinterDevice.PrintTerminationState.PRINT_STOP
-               /* When no paper, the
-                printer will prompt that no paper. After loading the paper, the printer
-                will continue to restart printing.*/
-//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
-                }
-
-                @Override
-                public void disconnected() {
-                }
-            });
-
-        } else {
-            mPrinter.initPrinter(this);
-        }
-        MyPrinterListener myPrinterListener = new MyPrinterListener();
-        mPrinter.setPrintListener(myPrinterListener);
-        printLineStyle = new PrintLineStyle();
-    }
-
-    public void printText(String info) {
-        printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD_ITALIC);
-        printLineStyle.setFontSize(10);
-        printLineStyle.setAlign(PrintLine.CENTER);
-        mPrinter.addPrintLintStyle(printLineStyle);
-
-        try {
-            mPrinter.addText("Testing");
-            mPrinter.addText("POS Signing of purchase orders");
-            mPrinter.addText("MERCHANT COPY");
-            mPrinter.addText("- - - - - - - - - - - - - -");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
-            mPrinter.addText("ISSUER Agricultural Bank of China");
-            mPrinter.addText("ACQ 48873110");
-            mPrinter.addText("CARD number.");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
-            mPrinter.addText("6228 48******8 116 S");
-            mPrinter.addText("TYPE of transaction(TXN TYPE)");
-            mPrinter.addText("SALE");
-            mPrinter.addText("- - - - - - - - - - - - - -");
-            mPrinter.addTexts(new String[]{"BATCH NO", "000043"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"VOUCHER NO", "000509"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"AUTH NO", "000786"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"DATE/TIME", "2010/12/07 16:15:17"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"REF NO", "000001595276"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"2014/12/07 16:12:17", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"AMOUNT:", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addText("RMB:249.00");
-            mPrinter.addText(info);
-            mPrinter.addText("- - - - - - - - - - - - - -");
-            mPrinter.addText("Please scan the QRCode for getting more information: ");
-            mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
-            mPrinter.addText("Please scan the QRCode for getting more information:");
-            mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
-//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-//            mPrinter.addBitmap(bitmap);
-            mPrinter.setPrintStyle(printLineStyle);
-            mPrinter.addText(" ");
-            mPrinter.print(this);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
-
     public void sendInfo(String receipt) {
         Intent intent = new Intent();
         intent.putExtra("info", receipt);
@@ -1037,7 +955,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 mllinfo.setVisibility(View.VISIBLE);
                 mtvinfo.setText(content);
                 mllchrccard.setVisibility(View.GONE);
-                printText(content);
             } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
                 nfcLog = decodeData.get("nfcLog");
                 String content = getString(R.string.tap_card);
@@ -1118,7 +1035,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 mllinfo.setVisibility(View.VISIBLE);
                 mtvinfo.setText(content);
                 mllchrccard.setVisibility(View.GONE);
-                printText(content);
                 sendMsg(8003);
             } else if ((result == QPOSService.DoTradeResult.NFC_DECLINED)) {
                 statusEditText.setText(getString(R.string.transaction_declined));
@@ -1477,8 +1393,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
             TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
-            printText(tlv);
-
             if (isPinCanceled) {
                 mllchrccard.setVisibility(View.GONE);
             } else {
@@ -2821,16 +2735,4 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
     }
-
-    class MyPrinterListener implements PrintListener {
-
-        @Override
-        public void printResult(boolean b, String s, int i) {
-            Log.w("printResult", "boolean b==" + b);
-            Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "int i==" + i);
-
-        }
-    }
-
 }
