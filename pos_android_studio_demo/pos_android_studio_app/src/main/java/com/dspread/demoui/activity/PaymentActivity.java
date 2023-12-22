@@ -2,7 +2,11 @@ package com.dspread.demoui.activity;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-import static com.dspread.print.Utils.HexStringToByteArray;
+
+import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
+import static com.dspread.demoui.ui.dialog.Mydialog.UART;
+import static com.dspread.demoui.ui.dialog.Mydialog.USB_OTG_CDC_ACM;
+import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,13 +20,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -49,6 +57,12 @@ import com.dspread.demoui.R;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
+import com.dspread.print.device.PrintListener;
+import com.dspread.print.device.PrinterDevice;
+import com.dspread.print.device.PrinterInitListener;
+import com.dspread.print.device.PrinterManager;
+import com.dspread.print.device.bean.PrintLineStyle;
+import com.dspread.print.widget.PrintLine;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
 import com.dspread.demoui.ui.dialog.Mydialog;
@@ -140,6 +154,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private int type;
     private ProgressBar progressBar;
     private TextView tvProgress;
+    private PrinterDevice mPrinter;
+    private PrintLineStyle printLineStyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +175,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         initIntent();
         TRACE.setContext(this);
     }
-
     public void sendInfo(String receipt) {
         Intent intent = new Intent();
         intent.putExtra("info", receipt);
@@ -269,7 +284,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private void deviceType(int type) {
 
 
-        if (type == 1) {
+        if (type == BLUETOOTH) {
             if (pos == null) {
                 open(QPOSService.CommunicationMode.BLUETOOTH);
             }
@@ -365,7 +380,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private void initIntent() {
         type = getIntent().getIntExtra("connect_type", 0);
         switch (type) {
-            case 1:
+            case BLUETOOTH:
                 title = getString(R.string.title_blu);
                 scanBlue();
                 open(QPOSService.CommunicationMode.BLUETOOTH);
@@ -374,7 +389,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onCancel() {
                             pos.disconnectBT();
-                            deviceType(1);
+                            deviceType(BLUETOOTH);
                             refreshAdapter();
                             if (m_Adapter != null) {
                                 m_Adapter.notifyDataSetChanged();
@@ -413,7 +428,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
 
                 } else {
-                    deviceType(1);
+                    deviceType(BLUETOOTH);
                     refreshAdapter();
                     if (m_Adapter != null) {
                         m_Adapter.notifyDataSetChanged();
@@ -427,7 +442,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
                 break;
-            case 2:
+            case UART:
                 tvTitle.setText(getText(R.string.device_connect));
                 mrllayout.setVisibility(View.GONE);
                 open(QPOSService.CommunicationMode.UART);
@@ -446,11 +461,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        if (type == 3) {
-
+        if (type == USB_OTG_CDC_ACM) {
             mrllayout.setVisibility(View.GONE);
             tvTitle.setText(getString(R.string.device_connect));
-            open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
+//            open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
             if (!flag) {
                 USBClass usb = new USBClass();
                 ArrayList<String> deviceList = usb.GetUSBDevices(getBaseContext());
@@ -520,7 +534,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
 
-        if (type == 2) {
+        if (type == UART) {
             pos.setD20Trade(true);
         } else {
             pos.setD20Trade(false);
@@ -541,18 +555,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.disconnectBT();
                 } catch (Exception e) {
                 }
-                Intent intent = new Intent();
-                intent.putExtra("info", getString(R.string.blue_disconect));
-                setResult(2, intent);
-                finish();
-
-            } else {
-                Intent intent = new Intent();
-                intent.putExtra("info", getString(R.string.blue_disconect));
-                setResult(2, intent);
-                finish();
 
             }
+            Intent intent = new Intent();
+            intent.putExtra("info", getString(R.string.blue_disconect));
+            setResult(2, intent);
+            finish();
         }
         if (!"".equals(disbuart) && disbuart != null) {
             mrllayout.setVisibility(View.GONE);
@@ -561,18 +569,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.closeUart();
                 } catch (Exception e) {
                 }
-                Intent intent = new Intent();
-                intent.putExtra("info", getString(R.string.blue_disconect));
-                setResult(2, intent);
-                finish();
-
-            } else {
-                Intent intent = new Intent();
-                intent.putExtra("info", getString(R.string.blue_disconect));
-                setResult(2, intent);
-                finish();
 
             }
+            Intent intent = new Intent();
+            intent.putExtra("info", getString(R.string.blue_disconect));
+            setResult(2, intent);
+            finish();
         }
     }
 
@@ -1210,18 +1212,27 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     mtvinfo.setText(content);
                     mllchrccard.setVisibility(View.GONE);
                 } else {
-                     if (type == 2) {
+                    if (type == UART) {
+                        if (!"".equals(posId)){
                             tvTitle.setText("SN:" + posId);
-                            isVisiblePosID = true;
-                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-                            pos.doTrade(20);
-
-                    } else if (type == 3) {
-                            tvTitle.setText("SN:" + posId);
-                            isVisiblePosID = true;
-                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-                            pos.doTrade(20);
+                        }else{
+                            tvTitle.setText(getString(R.string.waiting_for_card));
                         }
+                        isVisiblePosID = true;
+                        pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+                        pos.doTrade(20);
+
+                    } else if (type ==USB_OTG_CDC_ACM) {
+                        if (!"".equals(posId)){
+                            tvTitle.setText("SN:" + posId);
+                        }else{
+                            tvTitle.setText(getString(R.string.waiting_for_card));
+                        }
+
+                        isVisiblePosID = true;
+                        pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+                        pos.doTrade(20);
+                    }
                 }
 
             } else {
@@ -1382,8 +1393,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
             TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
-
-
             if (isPinCanceled) {
                 mllchrccard.setVisibility(View.GONE);
             } else {
@@ -1519,7 +1528,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onRequestQposConnected() {
             TRACE.d("onRequestQposConnected()");
             dismissDialog();
-            if (type == 1) {
+            if (type == BLUETOOTH) {
                 mrllayout.setVisibility(View.GONE);
                 ivBlue.setVisibility(View.GONE);
                 tvTitle.setText(title + "(" + blueTitle.substring(0, 6) + "..." + blueTitle.substring(blueTitle.length() - 3) + ")");
@@ -1534,7 +1543,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.doTrade(keyIdex, 30);//start do trade
                 }
 
-            } else if (type == 2) {
+            } else if (type == UART) {
                 if (posinfo != null) {
                     getPosInfo(posinfo);
                 } else if (posUpdate != null) {
@@ -1543,7 +1552,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.getQposId();
                 }
 
-            } else if (type == 3) {
+            } else if (type == USB_OTG_CDC_ACM) {
                 if (posinfo != null) {
                     getPosInfo(posinfo);
                 } else if (posUpdate != null) {
@@ -1564,7 +1573,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onRequestQposDisconnected() {
             dismissDialog();
-            if (type == 3) {
+            if (type == USB_OTG_CDC_ACM) {
                 Mydialog.ErrorDialog(PaymentActivity.this, "USB " + getString(R.string.disconnect), null);
             }
             tvTitle.setText(title);
@@ -1774,14 +1783,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onPaypass() {
 //                pos.bypassPin();
-                        pos.sendPin("");
-                        Paydialog.dismiss();
+                    pos.sendPin("".getBytes());
+                    Paydialog.dismiss();
                 }
 
                 @Override
                 public void onConfirm(String password) {
                     if (password.length() >= 4 && password.length() <= 12) {
-                        Log.w("password","password=="+password);
+                        Log.w("password", "password==" + password);
 //                        pos.sendPin(password);
                         String newPin = "";
                         //this part is used to enctypt the plaintext pin with random seed
@@ -1797,7 +1806,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             }
                         }
                         String pinBlock = buildCvmPinBlock(pos.getEncryptData(), newPin);// build the ISO format4 pin block
-                        Log.w("password","pinBlock=="+pinBlock);
+                        Log.w("password", "pinBlock==" + pinBlock);
                         pos.sendCvmPin(pinBlock, true);
                         Paydialog.dismiss();
                     } else {
@@ -2575,7 +2584,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             KB = ParseASN1Util.parseToken(response, "KB");
             String signatureData = "a57e821386de1038b1a12dc22fa59ce317625680c523bd66bf2b9f840aebe52d020e07105d4107eeb05edd560d0345cd73ce2b68dbf19c61f9d56fbd1ddf9222c47956595b773c88eb7ec4577fb17053d42acf64f3e5c38ff325cdac7b689df029299087b69211e61bdfc22e329eb287456f83ef6c25e84fe1324e36ee85ba7e3accb79eb8ab7b270916a28a42a867e0e050c6950100c90daddb1f421444d16accb6005a312c3273c2f1b28f0c77456ae875081ae594d26139efd267c8dafa15e1b6cf961f3acdb92b26777127f474d24d57611b29f01dec062c02d720c4e759e1757f85ee39e74e05e23aa0aed53d62d05a902a6539a3e986e6dd237888ff92";
-            boolean verifyResult = pos.authenticServerResponse(QPOSUtil.HexStringToByteArray(KA), signatureData);
+            boolean verifyResult = pos.authenticServerResponse(HexStringToByteArray(KA), signatureData);
             verifyResult = true;
             if (verifyResult) {
                 if (response.contains("AP")) {
@@ -2604,6 +2613,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 statusEditText.setText("signature verification failed.");
             }
         }
+
         private String buildCvmPinBlock(Hashtable<String, String> value, String pin) {
             String randomData = value.get("RandomData") == null ? "" : value.get("RandomData");
             String pan = value.get("PAN") == null ? "" : value.get("PAN");
@@ -2641,7 +2651,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void devicePermissionRequest(UsbManager mManager, UsbDevice usbDevice) {
-        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(PaymentActivity.this, 0, new Intent("com.android.example.USB_PERMISSION"), 0);
+        PendingIntent mPermissionIntent;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
+                    "com.android.example.USB_PERMISSION"), PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
+                    "com.android.example.USB_PERMISSION"), 0);
+        }
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         registerReceiver(mUsbReceiver, filter);
         mManager.requestPermission(usbDevice, mPermissionIntent);
@@ -2707,17 +2724,15 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             pos.cancelTrade();
         }
 
-        if (type == 2) {
+        if (type == UART) {
             if (pos != null) {
 //                pos.closeUart();
             }
         }
-        if (type == 3) {
+        if (type == USB_OTG_CDC_ACM) {
             if (pos != null) {
                 pos.closeUsb();
             }
         }
     }
-
-
 }

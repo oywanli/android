@@ -20,6 +20,7 @@ import com.action.printerservice.barcode.Barcode2D;
 import com.dspread.demoui.R;
 import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
+import com.dspread.print.device.PrinterInitListener;
 import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
@@ -32,6 +33,8 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
     private Button btnComposite;
     private Button btnMulti;
     private Button btnStopPrint;
+    private Button btnPrint;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,28 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_print_ticket);
         PrinterManager instance = PrinterManager.getInstance();
         mPrinter = instance.getPrinter();
-        mPrinter.initPrinter(this);
+        if ("D30".equals(Build.MODEL)) {
+            mPrinter.initPrinter(PrintTicketActivity.this, new PrinterInitListener() {
+                @Override
+                public void connected() {
+                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
+                /*When no paper, the
+                printer terminates printing and cancels the printing task.*/
+//              PrinterDevice.PrintTerminationState.PRINT_STOP
+               /* When no paper, the
+                printer will prompt that no paper. After loading the paper, the printer
+                will continue to restart printing.*/
+//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
+                }
+
+                @Override
+                public void disconnected() {
+                }
+            });
+
+        } else {
+            mPrinter.initPrinter(this);
+        }
         MyPrinterListener myPrinterListener = new MyPrinterListener();
         mPrinter.setPrintListener(myPrinterListener);
         printLineStyle = new PrintLineStyle();
@@ -54,17 +78,19 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
         tvTitle.setText(getString(R.string.print_ticket));
         btnComposite = findViewById(R.id.btn_composite);
         btnMulti = findViewById(R.id.btn_multi);
-        btnStopPrint= findViewById(R.id.btn_stopprint);
+        btnStopPrint = findViewById(R.id.btn_stopprint);
         String deviceModel = Build.MODEL;
-        if("mp600".equals(deviceModel)){
+        btnPrint = findViewById(R.id.btn_Print);
+        if ("mp600".equals(deviceModel)) {
             btnStopPrint.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             btnStopPrint.setVisibility(View.GONE);
         }
         ivBackTitle.setOnClickListener(this);
         btnComposite.setOnClickListener(this);
         btnMulti.setOnClickListener(this);
         btnStopPrint.setOnClickListener(this);
+//        printtext();
     }
 
     private void printtext() {
@@ -101,10 +127,9 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
             mPrinter.addText("Please scan the QRCode for getting more information:");
             mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-            mPrinter.printBitmap(this, bitmap);
             mPrinter.addBitmap(bitmap);
-            mPrinter.setFooter(3);
             mPrinter.setPrintStyle(printLineStyle);
+            mPrinter.setFooter(100);
             mPrinter.print(this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -121,6 +146,9 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
             case R.id.btn_composite:
                 printtext();
                 break;
+            case R.id.btn_Print:
+                printtext();
+                break;
             case R.id.btn_multi:
                 try {
                     mPrinter.addTexts(new String[]{"TEST1"}, new int[]{1}, new int[]{PrintStyle.Alignment.NORMAL});
@@ -128,7 +156,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
                     mPrinter.addTexts(new String[]{"TEST1", "TEST2", "TEST3"}, new int[]{1, 2, 2}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER, PrintStyle.Alignment.ALIGN_OPPOSITE});
                     mPrinter.addTexts(new String[]{"TEST1", "TEST2", "TEST3", "TEST4"}, new int[]{1, 1, 1, 2}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER, PrintStyle.Alignment.CENTER, PrintStyle.Alignment.ALIGN_OPPOSITE});
                     mPrinter.addTexts(new String[]{"TEST1", "TEST2", "TEST3", "TEST4", "TEST5"}, new int[]{1, 1, 1, 1, 1}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER, PrintStyle.Alignment.CENTER, PrintStyle.Alignment.CENTER, PrintStyle.Alignment.ALIGN_OPPOSITE});
-
+                    mPrinter.addText(" ");
                     mPrinter.print(this);
                 } catch (Exception e) {
                     throw new RuntimeException(e);

@@ -58,6 +58,9 @@
             android:name=".activity.printer.PrintTextActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.printer.PrintFunctionMultiActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.PaymentActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
