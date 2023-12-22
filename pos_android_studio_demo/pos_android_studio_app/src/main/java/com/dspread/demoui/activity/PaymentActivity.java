@@ -1783,7 +1783,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onPaypass() {
 //                pos.bypassPin();
-                    pos.sendPin("");
+                    pos.sendPin("".getBytes());
                     Paydialog.dismiss();
                 }
 
