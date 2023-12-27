@@ -54,6 +54,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dspread.demoui.R;
+import com.dspread.demoui.beans.Constants;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
@@ -78,8 +79,16 @@ import com.dspread.demoui.widget.pinpad.PayPassDialog;
 import com.dspread.demoui.widget.pinpad.PayPassView;
 import com.dspread.xpos.Util;
 import com.dspread.xpos.utils.AESUtil;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.AbsCallback;
+import com.lzy.okgo.callback.Callback;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Progress;
+import com.lzy.okgo.model.Response;
+import com.lzy.okgo.request.base.Request;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -141,9 +150,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private EditText statusEditText, pinpadEditText;
     private RecyclerView lvIndicatorBTPOS;
     private RelativeLayout mrllayout;
-    private ImageView imgAnimScanbt;
     private View line1;
-    private TextView tradeSuccessFlag;
     private ImageView imgLine;
     private ScrollView scvText;
     private String disblue = "";
@@ -154,8 +161,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private int type;
     private ProgressBar progressBar;
     private TextView tvProgress;
-    private PrinterDevice mPrinter;
-    private PrintLineStyle printLineStyle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,7 +248,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            updateThread = new UpdateThread();
 //            updateThread.start();
             byte[] data = null;
-            data = FileUtils.readAssetsLine("D20(PVT Xflash)_master.asc", PaymentActivity.this);
+            data = FileUtils.readAssetsLine("D30(样机 Xflash)_master.asc", PaymentActivity.this);
             if (data != null) {
                 int a = pos.updatePosFirmware(data, blueTootchAddress);
 //                Mydialog.loading(PaymentActivity.this, progres + "%");
@@ -351,10 +357,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         tvAmount = findViewById(R.id.tv_amount);
         tvAmount.setText(amount);
         tradeSuccess = findViewById(R.id.trade_success_flag);
-        imgAnimScanbt = findViewById(R.id.img_anim_scanbt);
         line1 = findViewById(R.id.line1);
         lvIndicatorBTPOS = findViewById(R.id.lv_indicator_BTPOS);
-        tradeSuccessFlag = findViewById(R.id.trade_success_flag);
         imgLine = findViewById(R.id.img_line);
         scvText = findViewById(R.id.scv_text);
         mrllayout = findViewById(R.id.rl_layout);
@@ -766,27 +770,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + nfcLog;
                     }
                     Log.w("nfc", "nfc-------------------");
-
+                    sendRequestToBackend(content);
                     break;
-                case 1703:
-//                    int keyIndex = getKeyIndex();
-//                    String digEnvelopStr = null;
-//                    Poskeys posKeys = null;
-//                    try {
-//                        if (resetIpekFlag) {
-//                            posKeys = new DukptKeys();
-//                        }
-//                        if (resetMasterKeyFlag) {
-//                            posKeys = new TMKKey();
-//                        }
-//                        posKeys.setRSA_public_key(pubModel); //Model of device public key
-//                        digEnvelopStr = Envelope.getDigitalEnvelopStrByKey(getAssets().open("priva.pem"),
-//                                posKeys, Poskeys.RSA_KEY_LEN.RSA_KEY_1024, keyIndex);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    pos.updateWorkKey(digEnvelopStr);
-//                    break;
                 default:
                     break;
             }
@@ -814,6 +799,45 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (Paydialog != null) {
             Paydialog.dismiss();
         }
+    }
+
+    private void sendRequestToBackend(String data){
+        OkGo.<String>post(Constants.backendUploadUrl)
+                .tag(this)
+                .headers("X-RapidAPI-Key",Constants.rapidAPIKey)
+                .headers("X-RapidAPI-Host",Constants.rapidAPIHost)
+                .params("data",data)
+                .execute(new AbsCallback<String>() {
+                    @Override
+                    public void onStart(Request<String, ? extends Request> request) {
+                        super.onStart(request);
+                        TRACE.i("onStart==");
+                        Mydialog.loading(PaymentActivity.this,getString(R.string.processing));
+                    }
+
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        dismissDialog();
+                        pinpadEditText.setVisibility(View.GONE);
+                        tvTitle.setText(getText(R.string.transaction_result));
+                        mllinfo.setVisibility(View.VISIBLE);
+                        mtvinfo.setText(data);
+                        mllchrccard.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public String convertResponse(okhttp3.Response response) throws Throwable {
+                        return null;
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
+                        TRACE.i("onError==");
+                       Mydialog.ErrorDialog(PaymentActivity.this,getString(R.string.replied_failed),null);
+                    }
+                });
     }
 
     private List<String> keyBoardList = new ArrayList<>();
@@ -950,11 +974,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         content += "PIN:" + " " + s + "\n";
                     }
                 }
-                pinpadEditText.setVisibility(View.GONE);
-                tvTitle.setText(getText(R.string.transaction_result));
-                mllinfo.setVisibility(View.VISIBLE);
-                mtvinfo.setText(content);
-                mllchrccard.setVisibility(View.GONE);
+//                pinpadEditText.setVisibility(View.GONE);
+//                tvTitle.setText(getText(R.string.transaction_result));
+//                mllinfo.setVisibility(View.VISIBLE);
+//                mtvinfo.setText(content);
+//                mllchrccard.setVisibility(View.GONE);
+                sendRequestToBackend(content);
             } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
                 nfcLog = decodeData.get("nfcLog");
                 String content = getString(R.string.tap_card);
@@ -1029,12 +1054,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     cardNo = maskedPAN;
                 }
 //                    statusEditText.setText(content);
-                pinpadEditText.setVisibility(View.GONE);
-                tvTitle.setText(getText(R.string.transaction_result));
-                mrllayout.setVisibility(View.GONE);
-                mllinfo.setVisibility(View.VISIBLE);
-                mtvinfo.setText(content);
-                mllchrccard.setVisibility(View.GONE);
+//                pinpadEditText.setVisibility(View.GONE);
+//                tvTitle.setText(getText(R.string.transaction_result));
+//                mrllayout.setVisibility(View.GONE);
+//                mllinfo.setVisibility(View.VISIBLE);
+//                mtvinfo.setText(content);
+//                mllchrccard.setVisibility(View.GONE);
                 sendMsg(8003);
             } else if ((result == QPOSService.DoTradeResult.NFC_DECLINED)) {
                 statusEditText.setText(getString(R.string.transaction_declined));
@@ -1157,7 +1182,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                     @Override
                     public void onConfirm() {
-                        pos.cancelTrade();
+//                        pos.cancelTrade();
                         finish();
                         Mydialog.ErrorDialog.dismiss();
                     }
@@ -1391,6 +1416,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             tvTitle.setText(getString(R.string.online_process_requested));
             dismissDialog();
 
+
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
             TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
             if (isPinCanceled) {
@@ -1398,35 +1424,42 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 mllchrccard.setVisibility(View.GONE);
             }
-            Mydialog.onlingDialog(PaymentActivity.this, isPinCanceled, new Mydialog.OnMyClickListener() {
-                @Override
-                public void onCancel() {
-                    mllinfo.setVisibility(View.VISIBLE);
-                    mtvinfo.setText(decodeData.toString());
-                    mllchrccard.setVisibility(View.GONE);
-                    tradeSuccess.setVisibility(View.GONE);
-                    pos.cancelTrade();
-                    Mydialog.onlingDialog.dismiss();
+            OkGo.<String>post(Constants.backendUploadUrl)
+                    .tag(this)
+                    .headers("X-RapidAPI-Key",Constants.rapidAPIKey)
+                    .headers("X-RapidAPI-Host",Constants.rapidAPIHost)
+                    .params("tlv",tlv)
+                    .execute(new AbsCallback<String>() {
+                        @Override
+                        public void onStart(Request<String, ? extends Request> request) {
+                            super.onStart(request);
+                            TRACE.i("onStart==");
+                            Mydialog.loading(PaymentActivity.this,getString(R.string.processing));
+                        }
 
-                }
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            dismissDialog();
+                            String str = "8A023030";//Currently the default value,
+                            // should be assigned to the server to return data,
+                            // the data format is TLV
+                            pos.sendOnlineProcessResult(str);//Script notification/55domain/ICCDATA
+                        }
 
-                @Override
-                public void onConfirm() {
-                    if (isPinCanceled) {
-                        Log.w("lll", "isPinCanceled==" + isPinCanceled);
-                        pos.sendOnlineProcessResult(null);
-                    } else {
-//									String str = "5A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F009505088004E0009A031406179C01009F02060000000000019F03060000000000009F0702AB009F080200209F0902008C9F0D05D86004A8009F0E0500109800009F0F05D86804F8009F101307010103A02000010A010000000000CE0BCE899F1A0201569F1E0838333230314943439F21031826509F2608881E2E4151E527899F2701809F3303E0F8C89F34030203009F3501229F3602008E9F37042120A7189F4104000000015A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F00";
-//									str = "9F26088930C9018CAEBCD69F2701809F101307010103A02802010A0100000000007EF350299F370415B4E5829F360202179505000004E0009A031504169C01009F02060000000010005F2A02015682027C009F1A0201569F03060000000000009F330360D8C89F34030203009F3501229F1E0838333230314943438408A0000003330101019F090200209F410400000001";
-                        String str = "8A023030";//Currently the default value,
-                        // should be assigned to the server to return data,
-                        // the data format is TLV
-                        pos.sendOnlineProcessResult(str);//Script notification/55domain/ICCDATA
-                    }
-                    Mydialog.onlingDialog.dismiss();
-                    Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
-                }
-            });
+                        @Override
+                        public String convertResponse(okhttp3.Response response) throws Throwable {
+                            return null;
+                        }
+
+                        @Override
+                        public void onError(Response<String> response) {
+                            super.onError(response);
+                            dismissDialog();
+                            TRACE.i("onError==");
+                            pos.sendOnlineProcessResult("8A025A33");
+                        }
+                    });
+
         }
 
         @Override
@@ -1634,9 +1667,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onConfirm() {
-                    if (pos != null) {
-                        pos.cancelTrade();
-                    }
+//                    if (pos != null) {
+//                        pos.cancelTrade();
+//                    }
                     finish();
                     Mydialog.ErrorDialog.dismiss();
                 }
@@ -2720,9 +2753,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (updateThread != null) {
             updateThread.concelSelf();
         }
-        if (pos != null) {
-            pos.cancelTrade();
-        }
+//        if (pos != null) {
+//            pos.cancelTrade();
+//        }
 
         if (type == UART) {
             if (pos != null) {
