@@ -1,3 +1,10 @@
+## [4.6.1](https://gitlab.com/[secure]/android/compare/v4.6.0...v4.6.1) (2023-12-27)
+
+
+### Bug Fixes
+
+* add the server backend request for all type txns ([a17d2ab](https://gitlab.com/[secure]/android/commit/a17d2ab21e8be17d53430f039899f1617aad1ce5))
+
 # [4.6.0](https://gitlab.com/[secure]/android/compare/v4.5.1...v4.6.0) (2023-12-22)
 
 
