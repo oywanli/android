@@ -170,4 +170,10 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
 
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrinter.close();
+    }
 }

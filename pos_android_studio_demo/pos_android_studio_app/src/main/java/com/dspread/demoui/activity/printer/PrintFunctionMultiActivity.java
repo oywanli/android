@@ -72,7 +72,6 @@ public class PrintFunctionMultiActivity extends AppCompatActivity {
                 finish();
             }
         });
-        printFunctionMulti();
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,4 +106,9 @@ public class PrintFunctionMultiActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrinter.close();
+    }
 }

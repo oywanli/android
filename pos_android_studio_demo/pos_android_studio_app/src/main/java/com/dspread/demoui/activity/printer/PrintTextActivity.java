@@ -243,5 +243,11 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
 
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrinter.close();
+    }
 }
 

@@ -1,38 +1,3 @@
-## [4.6.1](https://gitlab.com/[secure]/android/compare/v4.6.0...v4.6.1) (2023-12-27)
-
-
-### Bug Fixes
-
-* add the server backend request for all type txns ([a17d2ab](https://gitlab.com/[secure]/android/commit/a17d2ab21e8be17d53430f039899f1617aad1ce5))
-
-# [4.6.0](https://gitlab.com/[secure]/android/compare/v4.5.1...v4.6.0) (2023-12-22)
-
-
-### Bug Fixes
-
-* add printing module to modify printing process ([2a9acea](https://gitlab.com/[secure]/android/commit/2a9acea6eb603aa2c69d81004cc86a2e0ea75296))
-* change the cr100 upload password to ciphertext mode ([ab6b2d2](https://gitlab.com/[secure]/android/commit/ab6b2d29c62a9b0e66bf826d1fb5196afac838f6))
-* change version number+1 ([c48bdd6](https://gitlab.com/[secure]/android/commit/c48bdd683dbeee968b5417f48a883b97f2b545d3))
-* delete printer code from paymentactivity ([6c527d4](https://gitlab.com/[secure]/android/commit/6c527d4bf1278566e32d1f6327d897426ef23a1f))
-* import the latest printer jar ([95f57e6](https://gitlab.com/[secure]/android/commit/95f57e61b6edf94a39a403e618ddc9c29533e355))
-* international character attributes define numerical type attributes and add print line breaks ([6b4a8e0](https://gitlab.com/[secure]/android/commit/6b4a8e043c0db7600217335369d4f184bce7e551))
-* merge branch master into develop ([c282e8a](https://gitlab.com/[secure]/android/commit/c282e8a168bad10b284a8341da15b48e3574903e))
-* modify optimized printing class name ([ca9d889](https://gitlab.com/[secure]/android/commit/ca9d889de702155caa83699b8ca04316c37fd86e))
-* optimize android 13 version otg connection adaptation ([16b7762](https://gitlab.com/[secure]/android/commit/16b7762864f1ef7b831fb2ba3ff1ced8076b9dda))
-* optimize Android 13 version OTG connection adaptation ([5aaa708](https://gitlab.com/[secure]/android/commit/5aaa7084830721b3bf000e9b4ba9791c3b4b48bf))
-* prompt for modifying transaction title ([561b8f3](https://gitlab.com/[secure]/android/commit/561b8f378ab353cbfca003983f77f5b9164da2d2))
-* resolve code conflicts ([7b44d2a](https://gitlab.com/[secure]/android/commit/7b44d2a24981a2781249e4a572d5ca2991890d37))
-* update readMe implement sdk method ([aba7c6a](https://gitlab.com/[secure]/android/commit/aba7c6a648e93f5e502829ae99ced6220e460e34))
-* update sdk version to 4.5.3 ([6e3cba5](https://gitlab.com/[secure]/android/commit/6e3cba55df725c7fd1c1fbfd647db88095dc9c1b))
-* update the version of the squareup package ([c2c6a1b](https://gitlab.com/[secure]/android/commit/c2c6a1be31b4ba6143aff0759bdd23ef6c47e3da))
-
-
-### Features
-
-* add printer module functionality ([822c604](https://gitlab.com/[secure]/android/commit/822c604a1f513695b42d5174b1734632eacde750))
-* add scanning function module ([f3ffb61](https://gitlab.com/[secure]/android/commit/f3ffb6190dbe50aeca30248a09d6888dd8c6a7d2))
-* merge branch master into develop ([37df575](https://gitlab.com/[secure]/android/commit/37df57553ddf4de70b7bfa5fc658b110e28442fb))
-
 ## [4.5.1](https://gitlab.com/[secure]/android/compare/v4.5.0...v4.5.1) (2023-10-13)
 
 

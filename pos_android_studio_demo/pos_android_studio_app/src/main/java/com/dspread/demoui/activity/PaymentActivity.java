@@ -181,6 +181,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         initIntent();
         TRACE.setContext(this);
     }
+
     public void sendInfo(String receipt) {
         Intent intent = new Intent();
         intent.putExtra("info", receipt);
@@ -1177,7 +1178,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 Mydialog.ErrorDialog(PaymentActivity.this, msg, new Mydialog.OnMyClickListener() {
                     @Override
                     public void onCancel() {
-
                     }
 
                     @Override
@@ -1238,19 +1238,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     mllchrccard.setVisibility(View.GONE);
                 } else {
                     if (type == UART) {
-                        if (!"".equals(posId)){
+                        if (!"".equals(posId)) {
                             tvTitle.setText("SN:" + posId);
-                        }else{
+                        } else {
                             tvTitle.setText(getString(R.string.waiting_for_card));
                         }
                         isVisiblePosID = true;
                         pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
                         pos.doTrade(20);
 
-                    } else if (type ==USB_OTG_CDC_ACM) {
-                        if (!"".equals(posId)){
+                    } else if (type == USB_OTG_CDC_ACM) {
+                        if (!"".equals(posId)) {
                             tvTitle.setText("SN:" + posId);
-                        }else{
+                        } else {
                             tvTitle.setText(getString(R.string.waiting_for_card));
                         }
 
@@ -1424,6 +1424,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 mllchrccard.setVisibility(View.GONE);
             }
+
             OkGo.<String>post(Constants.backendUploadUrl)
                     .tag(this)
                     .headers("X-RapidAPI-Key",Constants.rapidAPIKey)
@@ -1436,6 +1437,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             TRACE.i("onStart==");
                             Mydialog.loading(PaymentActivity.this,getString(R.string.processing));
                         }
+
 
                         @Override
                         public void onSuccess(Response<String> response) {
@@ -1667,9 +1669,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onConfirm() {
-//                    if (pos != null) {
-//                        pos.cancelTrade();
-//                    }
                     finish();
                     Mydialog.ErrorDialog.dismiss();
                 }
@@ -2753,13 +2752,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (updateThread != null) {
             updateThread.concelSelf();
         }
-//        if (pos != null) {
-//            pos.cancelTrade();
-//        }
+
 
         if (type == UART) {
             if (pos != null) {
-//                pos.closeUart();
+                pos.closeUart();
             }
         }
         if (type == USB_OTG_CDC_ACM) {
