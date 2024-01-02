@@ -74,7 +74,6 @@ public class DeviceInfoFragment extends Fragment implements View.OnClickListener
     }
 
     private void initView(View view) {
-        Log.w("llll", "lllll");
         getPosid = view.findViewById(R.id.get_posid);
         getPosinfo = view.findViewById(R.id.get_posinfo);
         getUpdatekey = view.findViewById(R.id.get_updatekey);

@@ -14,9 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.beans.Constants;
-import com.dspread.demoui.ui.dialog.Mydialog;
-import com.dspread.demoui.utils.TRACE;
-import com.dspread.xpos.QPOSService;
+
 
 public class SuccessActivity extends AppCompatActivity {
     private TextView textView;
@@ -41,9 +39,14 @@ public class SuccessActivity extends AppCompatActivity {
         String tradeResut = getIntent().getStringExtra("tradeResut");
         String posinfo = getIntent().getStringExtra("posinfo");
         if("payment".equals(paytment)){
+            initInfo();
             tvTitle.setText(getString(R.string.transaction_approved));
             tvInfo.setText(tradeResut);
-            initInfo();
+            if ("autoTrade".equals(Constants.transData.getAutoTrade())){
+                Constants.transData.setSuccessSub(Constants.transData.getSuccessSub()+1);
+                Constants.transData.setSub(Constants.transData.getSub()+1);
+                finish();
+            }
         }
         if ("posid".equals(posinfo)) {
             tvTitle.setText(getString(R.string.get_pos_id));
@@ -75,7 +78,7 @@ public class SuccessActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.w("onDestroy","onDestroy");
-        initInfo();
+//        initInfo();
     }
 
     public void initInfo() {

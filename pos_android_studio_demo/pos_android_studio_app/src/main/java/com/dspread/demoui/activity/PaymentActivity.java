@@ -414,8 +414,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                         @Override
                         public void onConfirm() {
-                            if (BluetoothToolsBean.getBulueName() != null) {
-                                tvTitle.setText(BluetoothToolsBean.getBulueName());
+                            if (BluetoothToolsBean.getBulueToothName() != null) {
+                                tvTitle.setText(BluetoothToolsBean.getBulueToothName());
                             }
                             if (posinfo != null) {
                                 getPosInfo(posinfo);
@@ -1074,6 +1074,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 getString(R.string.card_no_response);
             }
             if (msg != null && !"".equals(msg)) {
+
                 Mydialog.ErrorDialog(PaymentActivity.this, msg, null);
 
             }
@@ -1576,7 +1577,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 mrllayout.setVisibility(View.GONE);
                 ivBlue.setVisibility(View.GONE);
                 tvTitle.setText(title + "(" + blueTitle.substring(0, 6) + "..." + blueTitle.substring(blueTitle.length() - 3) + ")");
-                BluetoothToolsBean.setBulueName(title + "(" + blueTitle.substring(0, 6) + "..." + blueTitle.substring(blueTitle.length() - 3) + ")");
+                BluetoothToolsBean.setBulueToothName(title + "(" + blueTitle.substring(0, 6) + "..." + blueTitle.substring(blueTitle.length() - 3) + ")");
                 isConnStatus = true;
                 int keyIdex = getKeyIndex();
                 if (posinfo != null) {

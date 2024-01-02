@@ -155,13 +155,13 @@
     <string name="please_select_app">请选择App</string>
     <string name="transaction_result">交易结果</string>
     <string name="transaction_approved">成功</string>
-    <string name="transaction_terminated">终止</string>
+    <string name="transaction_terminated">交易终止</string>
     <string name="transaction_declined">不成功</string>
     <string name="transaction_cancel">取消</string>
     <string name="transaction_capk_fail">不成功﹝CAPK失败﹞</string>
     <string name="transaction_not_icc">不成功﹝不是ICC卡﹞</string>
     <string name="transaction_app_fail">不成功﹝App失败﹞</string>
-    <string name="transaction_device_error">装置错误</string>
+    <string name="transaction_device_error">读卡器错误</string>
     <string name="tlv_list">TLV列表：\n</string>
     <string name="advice_process">咨询过程。</string>
     <string name="call_your_bank">请致电您的银行</string>
@@ -184,23 +184,23 @@
     <string name="use_chip_reader">请使用芯片读取器</string>
     <string name="use_mag_stripe">请使用磁条</string>
     <string name="try_again">请再试一次</string>
-    <string name="refer_payment_device">请参阅您的付款装置</string>
+    <string name="refer_payment_device">请参阅您的付款读卡器</string>
     <string name="try_another_interface">请尝试另一个接口</string>
     <string name="processing">处理中…</string>
     <string name="welcome">欢迎</string>
     <string name="present_one_card">请只出示一张卡</string>
     <string name="capk_failed">CAPK加载失败</string>
     <string name="last_pin_try">最后密码尝试</string>
-    <string name="battery_low">装置电量不足，请充电</string>
-    <string name="battery_critically_low">装置电量严重不足并已断电</string>
-    <string name="no_device_detected">装置未插上</string>
-    <string name="device_plugged">侦测到装置</string>
+    <string name="battery_low">读卡器电量不足，请充电</string>
+    <string name="battery_critically_low">读卡器电量严重不足并已断电</string>
+    <string name="no_device_detected">读卡器未插上</string>
+    <string name="device_plugged">侦测到读卡器</string>
     <string name="device_unplugged">已断开连接</string>
     <string name="command_not_available">命令不可用</string>
-    <string name="device_no_response">装置没有回复</string>
-    <string name="device_reset">装置已重置</string>
+    <string name="device_no_response">读卡器没有回复</string>
+    <string name="device_reset">读卡器已重置</string>
     <string name="unknown_error">未知的错误</string>
-    <string name="device_busy">装置忙碌</string>
+    <string name="device_busy">读卡器忙碌</string>
     <string name="out_of_range">超出范围的输入。</string>
     <string name="invalid_format">输入格式无效。</string>
     <string name="zero_values">输入是零值。</string>
@@ -208,7 +208,7 @@
     <string name="cashback_not_supported">不支持提款。</string>
     <string name="crc_error">CRC错误。</string>
     <string name="comm_error">通讯错误。</string>
-    <string name="device_off">装置已待机。</string>
+    <string name="device_off">读卡器已待机。</string>
     <string name="get_info">获取PosInfo</string>
     <string name="get_key_checkvalue">获取PosKeyCheckValue</string>
     <string name="get_update_key">获取UpdateKey</string>
@@ -229,7 +229,7 @@
     <string name="confirm">确认</string>
     <string name="bypass">略过</string>
     <string name="decline">拒绝</string>
-    <string name="getting_info">正在取得装置资讯…</string>
+    <string name="getting_info">正在取得读卡器资讯…</string>
     <string name="starting">开始中…</string>
     <string name="power_on_icc">ICC上电</string>
     <string name="power_off_icc">关闭ICC</string>
@@ -467,7 +467,7 @@
     <string name="double_zero">00</string>
     <string name="zero_point">0.</string>
     <string name="vConsole">vConsole</string>
-    <string name="network_failed">网络请求失败</string>
+    <string name="network_failed">请求失败，请检查网络连接</string>
     <string name="auto_trade">自动交易</string>
 
 </resources>

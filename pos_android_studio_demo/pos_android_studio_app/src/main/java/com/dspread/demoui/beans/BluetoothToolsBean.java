@@ -5,14 +5,14 @@ package com.dspread.demoui.beans;
 public class BluetoothToolsBean {
 
     private static String conectedState;
-    private static String blueName;
+    private static String bluetoothName;
 
-    public static String getBulueName() {
-        return blueName;
+    public static String getBulueToothName() {
+        return bluetoothName;
     }
 
-    public static void setBulueName(String bulueName) {
-        BluetoothToolsBean.blueName = bulueName;
+    public static void setBulueToothName(String blueoothName) {
+        BluetoothToolsBean.bluetoothName = blueoothName;
     }
 
     public static String getConectedState() {

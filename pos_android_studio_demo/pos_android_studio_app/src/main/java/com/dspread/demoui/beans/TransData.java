@@ -13,6 +13,11 @@ public class TransData implements Serializable {
    private String SN;
    private String cashbackAmounts;
 
+   private int sub;
+   private int successSub;
+   private int fialSub;
+   private String autoTrade;
+
    public String getCashbackAmounts() {
       return cashbackAmounts;
    }
@@ -85,5 +90,35 @@ public class TransData implements Serializable {
       this.posId = posId;
    }
 
+   public int getSub() {
+      return sub;
+   }
 
+   public void setSub(int sub) {
+      this.sub = sub;
+   }
+
+   public int getSuccessSub() {
+      return successSub;
+   }
+
+   public void setSuccessSub(int successSub) {
+      this.successSub = successSub;
+   }
+
+   public int getFialSub() {
+      return fialSub;
+   }
+
+   public void setFialSub(int fialSub) {
+      this.fialSub = fialSub;
+   }
+
+   public String getAutoTrade() {
+      return autoTrade;
+   }
+
+   public void setAutoTrade(String autoTrade) {
+      this.autoTrade = autoTrade;
+   }
 }
