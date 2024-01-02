@@ -2,6 +2,7 @@ package com.dspread.demoui.activity.printer;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
@@ -9,18 +10,16 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
 import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
+import com.dspread.print.device.PrinterInitListener;
 import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
-import com.dspread.print.widget.PrintLine;
 
 public class BitmapActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,7 +38,28 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
         initView();
         PrinterManager instance = PrinterManager.getInstance();
         mPrinter = instance.getPrinter();
-        mPrinter.initPrinter(this);
+        if ("D30".equals(Build.MODEL)) {
+            mPrinter.initPrinter(BitmapActivity.this, new PrinterInitListener() {
+                @Override
+                public void connected() {
+                    Log.w("MODEL","modeD30");
+//                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_NORMAL);
+                /*When no paper, the
+                printer terminates printing and cancels the printing task.*/
+//              PrinterDevice.PrintTerminationState.PRINT_STOP
+               /* When no paper, the
+                printer will prompt that no paper. After loading the paper, the printer
+                will continue to restart printing.*/
+//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
+                }
+                @Override
+                public void disconnected() {
+                }
+            });
+
+        }else{
+            mPrinter.initPrinter(this);
+        }
         MyPrinterListener myPrinterListener = new MyPrinterListener();
         mPrinter.setPrintListener(myPrinterListener);
         printLineStyle = new PrintLineStyle();
@@ -65,7 +85,9 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_bitmap_print:
                 try {
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+                    mPrinter.setFooter(100);
                     mPrinter.printBitmap(this,bitmap);
+
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
 
@@ -83,5 +105,11 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
             Log.w("printResult", "int i==" + i);
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrinter.close();
     }
 }

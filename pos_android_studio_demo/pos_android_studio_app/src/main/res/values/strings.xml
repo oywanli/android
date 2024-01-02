@@ -357,6 +357,7 @@
     <string name="Barcode_height">Barcode height</string>
     <string name="QR_code_error_correction_level">QR code error correction level</string>
     <string name="QR_code_type">QR code type</string>
+    <string name="QR_code_errorLevel">Error correction level</string>
     <string name="QR_code_size">QR code size</string>
     <string name="print_Test">Print Test</string>
     <string name="select_dialog_normal">normal</string>
@@ -433,6 +434,7 @@
     <string name="fontStyle_italic">ITALIC</string>
     <string name="fontStyle_bold_italic">BOLD_ITALIC</string>
     <string name="content_barcode">BarCode</string>
+    <string name="symbology_barcode">Symbology</string>
 
     <string name="barcode_height">BarCodeHeight</string>
     <string name="barcode_width">BarCodeWidth</string>

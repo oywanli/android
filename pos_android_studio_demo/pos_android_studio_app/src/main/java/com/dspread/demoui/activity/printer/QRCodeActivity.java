@@ -16,11 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.action.printerservice.barcode.Barcode2D;
 import com.dspread.demoui.R;
 import com.dspread.demoui.ui.dialog.PrintDialog;
+import com.dspread.demoui.utils.QRCodeUtil;
 import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
+import com.dspread.print.device.PrinterInitListener;
 import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
-import com.dspread.print.util.QRCodeUtil;
 import com.dspread.print.widget.PrintLine;
 
 public class QRCodeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -41,6 +42,8 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayout qrcodeSpeedlevel;
     private TextView qrTextDensitylevel;
     private LinearLayout qrcodeDensitylevel;
+    private LinearLayout qrcodeErrorLevel;
+    private TextView qrcodeTextErrorLevel;
     private PrinterDevice mPrinter;
     private PrintLineStyle printLineStyle;
     private String qrCodeSize = "";
@@ -54,7 +57,7 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
     private int speedLevel;
     private String qrDensitylevel = "";
     private int densityLevel;
-
+    private String qrErrorLevel = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,28 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         initView();
         PrinterManager instance = PrinterManager.getInstance();
         mPrinter = instance.getPrinter();
-        mPrinter.initPrinter(this);
+        if ("D30".equals(Build.MODEL)) {
+            mPrinter.initPrinter(QRCodeActivity.this, new PrinterInitListener() {
+                @Override
+                public void connected() {
+                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
+                /*When no paper, the
+                printer terminates printing and cancels the printing task.*/
+//              PrinterDevice.PrintTerminationState.PRINT_STOP
+               /* When no paper, the
+                printer will prompt that no paper. After loading the paper, the printer
+                will continue to restart printing.*/
+//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
+                }
+
+                @Override
+                public void disconnected() {
+                }
+            });
+
+        } else {
+            mPrinter.initPrinter(this);
+        }
         MyPrinterListener myPrinterListener = new MyPrinterListener();
         mPrinter.setPrintListener(myPrinterListener);
         printLineStyle = new PrintLineStyle();
@@ -89,6 +113,8 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         qrcodeSpeedlevel = findViewById(R.id.qrcode_speedlevel);
         qrTextDensitylevel = findViewById(R.id.qr_text_densitylevel);
         qrcodeDensitylevel = findViewById(R.id.qrcode_densitylevel);
+        qrcodeErrorLevel = findViewById(R.id.qrcode_errorLevel);
+        qrcodeTextErrorLevel = findViewById(R.id.qrcode_text_errorLevel);
         String deviceModel = Build.MODEL;
         if ("mp600".equals(deviceModel)) {
             qrcodeDensitylevel.setVisibility(View.VISIBLE);
@@ -106,8 +132,7 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         btnQrcodePrint.setOnClickListener(this);
         qrcodeSpeedlevel.setOnClickListener(this);
         qrcodeDensitylevel.setOnClickListener(this);
-
-
+        qrcodeErrorLevel.setOnClickListener(this);
     }
 
     @Override
@@ -131,6 +156,26 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                     }
 
 
+                });
+                break;
+            case R.id.qrcode_errorLevel:
+//                L,
+//                        M,
+//                        Q,
+//                        H;
+                final String[] errorLevel = {Barcode2D.ErrorLevel.L.name(), Barcode2D.ErrorLevel.M.name(),
+                        Barcode2D.ErrorLevel.Q.name(), Barcode2D.ErrorLevel.H.name()};
+                PrintDialog.setDialog(QRCodeActivity.this, getString(R.string.QR_code_errorLevel), errorLevel, new PrintDialog.PrintClickListener() {
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onConfirm(String str) {
+                        qrcodeTextErrorLevel.setText(str);
+                        qrErrorLevel = str;
+                    }
                 });
                 break;
             case R.id.qrcode_size:
@@ -254,15 +299,19 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                     if ("".equals(qrContent)) {
                         qrContent = qrcodeTextContent.getText().toString();
                     }
-                    Bitmap bitmap = QRCodeUtil.getQrcodeBM(qrContent, qrSize, Barcode2D.ErrorLevel.L.name());
+                    Bitmap bitmap = QRCodeUtil.getQrcodeBM(qrContent, qrSize);
                     qrcodeImage.setImageBitmap(bitmap);
                     if ("mp600".equals(Build.MODEL)) {
-                        mPrinter.setPrintSpeed(speedLevel);
-                        mPrinter.setPrintDensity(densityLevel);
+                        mPrinter.setPrinterSpeed(speedLevel);
+                        mPrinter.setPrinterDensity(densityLevel);
                     }
                     mPrinter.setPrinterGrey(grayLevel);
                     mPrinter.setPrintStyle(printLineStyle);
-                    mPrinter.printQRCode(this, Barcode2D.ErrorLevel.L.name(), qrSize, qrContent, printLineAlign);
+                    Log.w("qrErrorLevel","qrErrorLevel=="+qrErrorLevel);
+                    if ("".equals(qrErrorLevel)){
+                        qrErrorLevel = qrcodeTextErrorLevel.getText().toString();
+                    }
+                    mPrinter.printQRCode(this,qrErrorLevel, qrSize, qrContent, printLineAlign);
 
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -283,5 +332,11 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
             Log.w("printResult", "int i==" + i);
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrinter.close();
     }
 }

@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/gray"
+            android:background="@drawable/print_button_background"
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/get_printer_status"
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/gray"
+            android:background="@drawable/print_button_background"
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/get_printer_density"
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/gray"
+            android:background="@drawable/print_button_background"
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/get_printer_speed"
@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/gray"
+            android:background="@drawable/print_button_background"
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/get_printer_temperature"
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/gray"
+            android:background="@drawable/print_button_background"
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/get_printer_voltage"
@@ -89,6 +89,30 @@
                 android:orientation="vertical" >
                 <TextView
                     android:id="@+id/tv_printStatusInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/dp_12"
+                     />
+                <TextView
+                    android:id="@+id/tv_get_desity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/dp_12"
+                     />
+                <TextView
+                    android:id="@+id/tv_get_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/dp_12"
+                     />
+                <TextView
+                    android:id="@+id/tv_get_temperature"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/dp_12"
+                     />
+                <TextView
+                    android:id="@+id/tv_get_voltage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="@dimen/dp_12"

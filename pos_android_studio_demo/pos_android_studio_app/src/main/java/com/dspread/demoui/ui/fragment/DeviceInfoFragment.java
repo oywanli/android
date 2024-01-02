@@ -1,5 +1,9 @@
 package com.dspread.demoui.ui.fragment;
 
+import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
+import static com.dspread.demoui.ui.dialog.Mydialog.UART;
+import static com.dspread.demoui.ui.dialog.Mydialog.USB_OTG_CDC_ACM;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -81,15 +85,15 @@ public class DeviceInfoFragment extends Fragment implements View.OnClickListener
         Intent intent = new Intent(getActivity(), PaymentActivity.class);
         if ("blue".equals(conType)) {
             intent.putExtra("posinfo", posInfo);
-            intent.putExtra("connect_type", 1);
+            intent.putExtra("connect_type", BLUETOOTH);
             startActivity(intent);
         } else if ("uart".equals(conType)) {
             intent.putExtra("posinfo", posInfo);
-            intent.putExtra("connect_type", 2);
+            intent.putExtra("connect_type", UART);
             startActivity(intent);
         } else if ("usb".equals(conType)) {
             intent.putExtra("posinfo", posInfo);
-            intent.putExtra("connect_type", 3);
+            intent.putExtra("connect_type", USB_OTG_CDC_ACM);
             startActivity(intent);
         }
 

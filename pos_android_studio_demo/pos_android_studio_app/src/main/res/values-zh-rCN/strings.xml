@@ -351,6 +351,7 @@
     <string name="Barcode_height">条码高度</string>
     <string name="QR_code_error_correction_level">二维码纠错等级</string>
     <string name="QR_code_type">二维码类型</string>
+    <string name="QR_code_errorLevel">纠错级别</string>
     <string name="QR_code_size">二维码大小</string>
     <string name="print_Test">打印机测试</string>
     <string name="select_dialog_normal">正常</string>
@@ -428,6 +429,7 @@
     <string name="fontStyle_italic">斜体</string>
     <string name="fontStyle_bold_italic">斜体加粗</string>
     <string name="content_barcode">条码内容</string>
+    <string name="symbology_barcode">码制</string>
     <string name="barcode_height">条码高度</string>
     <string name="barcode_width">条码宽度</string>
     <string name="grayLevel">灰度</string>

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.dspread.demoui.R;
 import com.dspread.demoui.activity.printer.BarCodeActivity;
 import com.dspread.demoui.activity.printer.BitmapActivity;
+import com.dspread.demoui.activity.printer.PrintFunctionMultiActivity;
 import com.dspread.demoui.activity.printer.PrintTicketActivity;
 import com.dspread.demoui.activity.printer.PrintTextActivity;
 import com.dspread.demoui.activity.printer.PrinterStatusActivity;
@@ -39,10 +40,14 @@ public class PrinterHelperFragment extends Fragment {
                     BarCodeActivity.class),
             new DemoDetails(R.string.function_pic, R.drawable.function_pic,
                     BitmapActivity.class),
+            new DemoDetails(R.string.function_multi, R.drawable.function_multi,
+                    PrintFunctionMultiActivity.class),
             new DemoDetails(R.string.print_ticket, R.drawable.function_all,
                     PrintTicketActivity.class),
+
             new DemoDetails(R.string.get_printer_status, R.drawable.function_status,
                     PrinterStatusActivity.class),
+
 //            new DemoDetails(R.string.fill_name, R.drawable.fill,
 //                    null),
     };
@@ -61,10 +66,10 @@ public class PrinterHelperFragment extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         printerWorkList.setLayoutManager(layoutManager);
         printerWorkList.setAdapter(new PrinterWordListAdapter());
-        if (!"mp600".equals(Build.MODEL)) {
-            demos[5] = new DemoDetails(R.string.fill_name, R.drawable.fill,
-                    null);
-        }
+//        if ("D30".equals(Build.MODEL)) {
+//            demos[5] = new DemoDetails(R.string.fill_name, R.drawable.fill,
+//                    null);
+//        }
     }
 
     class PrinterWordListAdapter extends RecyclerView.Adapter<PrinterWordListAdapter.MyViewHolder> {
@@ -131,4 +136,6 @@ public class PrinterHelperFragment extends Fragment {
             this.activityClass = activityClass;
         }
     }
+
+
 }

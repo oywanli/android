@@ -2,7 +2,11 @@ package com.dspread.demoui.activity;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-import static com.dspread.print.Utils.HexStringToByteArray;
+
+import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
+import static com.dspread.demoui.ui.dialog.Mydialog.UART;
+import static com.dspread.demoui.ui.dialog.Mydialog.USB_OTG_CDC_ACM;
+import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,13 +20,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -46,9 +54,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dspread.demoui.R;
+import com.dspread.demoui.beans.Constants;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
+import com.dspread.print.device.PrintListener;
+import com.dspread.print.device.PrinterDevice;
+import com.dspread.print.device.PrinterInitListener;
+import com.dspread.print.device.PrinterManager;
+import com.dspread.print.device.bean.PrintLineStyle;
+import com.dspread.print.widget.PrintLine;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
 import com.dspread.demoui.ui.dialog.Mydialog;
@@ -64,8 +79,16 @@ import com.dspread.demoui.widget.pinpad.PayPassDialog;
 import com.dspread.demoui.widget.pinpad.PayPassView;
 import com.dspread.xpos.Util;
 import com.dspread.xpos.utils.AESUtil;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.AbsCallback;
+import com.lzy.okgo.callback.Callback;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Progress;
+import com.lzy.okgo.model.Response;
+import com.lzy.okgo.request.base.Request;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -127,9 +150,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private EditText statusEditText, pinpadEditText;
     private RecyclerView lvIndicatorBTPOS;
     private RelativeLayout mrllayout;
-    private ImageView imgAnimScanbt;
     private View line1;
-    private TextView tradeSuccessFlag;
     private ImageView imgLine;
     private ScrollView scvText;
     private String disblue = "";
@@ -140,6 +161,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private int type;
     private ProgressBar progressBar;
     private TextView tvProgress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,7 +249,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            updateThread = new UpdateThread();
 //            updateThread.start();
             byte[] data = null;
-            data = FileUtils.readAssetsLine("D20(PVT Xflash)_master.asc", PaymentActivity.this);
+            data = FileUtils.readAssetsLine("D30(样机 Xflash)_master.asc", PaymentActivity.this);
             if (data != null) {
                 int a = pos.updatePosFirmware(data, blueTootchAddress);
 //                Mydialog.loading(PaymentActivity.this, progres + "%");
@@ -269,7 +291,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private void deviceType(int type) {
 
 
-        if (type == 1) {
+        if (type == BLUETOOTH) {
             if (pos == null) {
                 open(QPOSService.CommunicationMode.BLUETOOTH);
             }
@@ -336,10 +358,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         tvAmount = findViewById(R.id.tv_amount);
         tvAmount.setText(amount);
         tradeSuccess = findViewById(R.id.trade_success_flag);
-        imgAnimScanbt = findViewById(R.id.img_anim_scanbt);
         line1 = findViewById(R.id.line1);
         lvIndicatorBTPOS = findViewById(R.id.lv_indicator_BTPOS);
-        tradeSuccessFlag = findViewById(R.id.trade_success_flag);
         imgLine = findViewById(R.id.img_line);
         scvText = findViewById(R.id.scv_text);
         mrllayout = findViewById(R.id.rl_layout);
@@ -365,7 +385,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private void initIntent() {
         type = getIntent().getIntExtra("connect_type", 0);
         switch (type) {
-            case 1:
+            case BLUETOOTH:
                 title = getString(R.string.title_blu);
                 scanBlue();
                 open(QPOSService.CommunicationMode.BLUETOOTH);
@@ -374,7 +394,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onCancel() {
                             pos.disconnectBT();
-                            deviceType(1);
+                            deviceType(BLUETOOTH);
                             refreshAdapter();
                             if (m_Adapter != null) {
                                 m_Adapter.notifyDataSetChanged();
@@ -413,7 +433,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
 
                 } else {
-                    deviceType(1);
+                    deviceType(BLUETOOTH);
                     refreshAdapter();
                     if (m_Adapter != null) {
                         m_Adapter.notifyDataSetChanged();
@@ -427,7 +447,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
                 break;
-            case 2:
+            case UART:
                 tvTitle.setText(getText(R.string.device_connect));
                 mrllayout.setVisibility(View.GONE);
                 open(QPOSService.CommunicationMode.UART);
@@ -446,11 +466,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        if (type == 3) {
-
+        if (type == USB_OTG_CDC_ACM) {
             mrllayout.setVisibility(View.GONE);
             tvTitle.setText(getString(R.string.device_connect));
-            open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
+//            open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
             if (!flag) {
                 USBClass usb = new USBClass();
                 ArrayList<String> deviceList = usb.GetUSBDevices(getBaseContext());
@@ -520,7 +539,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
         }
 
-        if (type == 2) {
+        if (type == UART) {
             pos.setD20Trade(true);
         } else {
             pos.setD20Trade(false);
@@ -541,18 +560,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.disconnectBT();
                 } catch (Exception e) {
                 }
-                Intent intent = new Intent();
-                intent.putExtra("info", getString(R.string.blue_disconect));
-                setResult(2, intent);
-                finish();
-
-            } else {
-                Intent intent = new Intent();
-                intent.putExtra("info", getString(R.string.blue_disconect));
-                setResult(2, intent);
-                finish();
 
             }
+            Intent intent = new Intent();
+            intent.putExtra("info", getString(R.string.blue_disconect));
+            setResult(2, intent);
+            finish();
         }
         if (!"".equals(disbuart) && disbuart != null) {
             mrllayout.setVisibility(View.GONE);
@@ -561,18 +574,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.closeUart();
                 } catch (Exception e) {
                 }
-                Intent intent = new Intent();
-                intent.putExtra("info", getString(R.string.blue_disconect));
-                setResult(2, intent);
-                finish();
-
-            } else {
-                Intent intent = new Intent();
-                intent.putExtra("info", getString(R.string.blue_disconect));
-                setResult(2, intent);
-                finish();
 
             }
+            Intent intent = new Intent();
+            intent.putExtra("info", getString(R.string.blue_disconect));
+            setResult(2, intent);
+            finish();
         }
     }
 
@@ -764,27 +771,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + nfcLog;
                     }
                     Log.w("nfc", "nfc-------------------");
-
+                    sendRequestToBackend(content);
                     break;
-                case 1703:
-//                    int keyIndex = getKeyIndex();
-//                    String digEnvelopStr = null;
-//                    Poskeys posKeys = null;
-//                    try {
-//                        if (resetIpekFlag) {
-//                            posKeys = new DukptKeys();
-//                        }
-//                        if (resetMasterKeyFlag) {
-//                            posKeys = new TMKKey();
-//                        }
-//                        posKeys.setRSA_public_key(pubModel); //Model of device public key
-//                        digEnvelopStr = Envelope.getDigitalEnvelopStrByKey(getAssets().open("priva.pem"),
-//                                posKeys, Poskeys.RSA_KEY_LEN.RSA_KEY_1024, keyIndex);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    pos.updateWorkKey(digEnvelopStr);
-//                    break;
                 default:
                     break;
             }
@@ -812,6 +800,45 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (Paydialog != null) {
             Paydialog.dismiss();
         }
+    }
+
+    private void sendRequestToBackend(String data){
+        OkGo.<String>post(Constants.backendUploadUrl)
+                .tag(this)
+                .headers("X-RapidAPI-Key",Constants.rapidAPIKey)
+                .headers("X-RapidAPI-Host",Constants.rapidAPIHost)
+                .params("data",data)
+                .execute(new AbsCallback<String>() {
+                    @Override
+                    public void onStart(Request<String, ? extends Request> request) {
+                        super.onStart(request);
+                        TRACE.i("onStart==");
+                        Mydialog.loading(PaymentActivity.this,getString(R.string.processing));
+                    }
+
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        dismissDialog();
+                        pinpadEditText.setVisibility(View.GONE);
+                        tvTitle.setText(getText(R.string.transaction_result));
+                        mllinfo.setVisibility(View.VISIBLE);
+                        mtvinfo.setText(data);
+                        mllchrccard.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public String convertResponse(okhttp3.Response response) throws Throwable {
+                        return null;
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
+                        TRACE.i("onError==");
+                       Mydialog.ErrorDialog(PaymentActivity.this,getString(R.string.replied_failed),null);
+                    }
+                });
     }
 
     private List<String> keyBoardList = new ArrayList<>();
@@ -948,11 +975,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         content += "PIN:" + " " + s + "\n";
                     }
                 }
-                pinpadEditText.setVisibility(View.GONE);
-                tvTitle.setText(getText(R.string.transaction_result));
-                mllinfo.setVisibility(View.VISIBLE);
-                mtvinfo.setText(content);
-                mllchrccard.setVisibility(View.GONE);
+//                pinpadEditText.setVisibility(View.GONE);
+//                tvTitle.setText(getText(R.string.transaction_result));
+//                mllinfo.setVisibility(View.VISIBLE);
+//                mtvinfo.setText(content);
+//                mllchrccard.setVisibility(View.GONE);
+                sendRequestToBackend(content);
             } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
                 nfcLog = decodeData.get("nfcLog");
                 String content = getString(R.string.tap_card);
@@ -1027,12 +1055,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     cardNo = maskedPAN;
                 }
 //                    statusEditText.setText(content);
-                pinpadEditText.setVisibility(View.GONE);
-                tvTitle.setText(getText(R.string.transaction_result));
-                mrllayout.setVisibility(View.GONE);
-                mllinfo.setVisibility(View.VISIBLE);
-                mtvinfo.setText(content);
-                mllchrccard.setVisibility(View.GONE);
+//                pinpadEditText.setVisibility(View.GONE);
+//                tvTitle.setText(getText(R.string.transaction_result));
+//                mrllayout.setVisibility(View.GONE);
+//                mllinfo.setVisibility(View.VISIBLE);
+//                mtvinfo.setText(content);
+//                mllchrccard.setVisibility(View.GONE);
                 sendMsg(8003);
             } else if ((result == QPOSService.DoTradeResult.NFC_DECLINED)) {
                 statusEditText.setText(getString(R.string.transaction_declined));
@@ -1150,12 +1178,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 Mydialog.ErrorDialog(PaymentActivity.this, msg, new Mydialog.OnMyClickListener() {
                     @Override
                     public void onCancel() {
-
                     }
 
                     @Override
                     public void onConfirm() {
-                        pos.cancelTrade();
+//                        pos.cancelTrade();
                         finish();
                         Mydialog.ErrorDialog.dismiss();
                     }
@@ -1210,18 +1237,27 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     mtvinfo.setText(content);
                     mllchrccard.setVisibility(View.GONE);
                 } else {
-                     if (type == 2) {
+                    if (type == UART) {
+                        if (!"".equals(posId)) {
                             tvTitle.setText("SN:" + posId);
-                            isVisiblePosID = true;
-                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-                            pos.doTrade(20);
-
-                    } else if (type == 3) {
-                            tvTitle.setText("SN:" + posId);
-                            isVisiblePosID = true;
-                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-                            pos.doTrade(20);
+                        } else {
+                            tvTitle.setText(getString(R.string.waiting_for_card));
                         }
+                        isVisiblePosID = true;
+                        pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+                        pos.doTrade(20);
+
+                    } else if (type == USB_OTG_CDC_ACM) {
+                        if (!"".equals(posId)) {
+                            tvTitle.setText("SN:" + posId);
+                        } else {
+                            tvTitle.setText(getString(R.string.waiting_for_card));
+                        }
+
+                        isVisiblePosID = true;
+                        pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+                        pos.doTrade(20);
+                    }
                 }
 
             } else {
@@ -1380,44 +1416,52 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             tvTitle.setText(getString(R.string.online_process_requested));
             dismissDialog();
 
+
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
             TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
-
-
             if (isPinCanceled) {
                 mllchrccard.setVisibility(View.GONE);
             } else {
                 mllchrccard.setVisibility(View.GONE);
             }
-            Mydialog.onlingDialog(PaymentActivity.this, isPinCanceled, new Mydialog.OnMyClickListener() {
-                @Override
-                public void onCancel() {
-                    mllinfo.setVisibility(View.VISIBLE);
-                    mtvinfo.setText(decodeData.toString());
-                    mllchrccard.setVisibility(View.GONE);
-                    tradeSuccess.setVisibility(View.GONE);
-                    pos.cancelTrade();
-                    Mydialog.onlingDialog.dismiss();
 
-                }
+            OkGo.<String>post(Constants.backendUploadUrl)
+                    .tag(this)
+                    .headers("X-RapidAPI-Key",Constants.rapidAPIKey)
+                    .headers("X-RapidAPI-Host",Constants.rapidAPIHost)
+                    .params("tlv",tlv)
+                    .execute(new AbsCallback<String>() {
+                        @Override
+                        public void onStart(Request<String, ? extends Request> request) {
+                            super.onStart(request);
+                            TRACE.i("onStart==");
+                            Mydialog.loading(PaymentActivity.this,getString(R.string.processing));
+                        }
 
-                @Override
-                public void onConfirm() {
-                    if (isPinCanceled) {
-                        Log.w("lll", "isPinCanceled==" + isPinCanceled);
-                        pos.sendOnlineProcessResult(null);
-                    } else {
-//									String str = "5A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F009505088004E0009A031406179C01009F02060000000000019F03060000000000009F0702AB009F080200209F0902008C9F0D05D86004A8009F0E0500109800009F0F05D86804F8009F101307010103A02000010A010000000000CE0BCE899F1A0201569F1E0838333230314943439F21031826509F2608881E2E4151E527899F2701809F3303E0F8C89F34030203009F3501229F3602008E9F37042120A7189F4104000000015A0A6214672500000000056F5F24032307315F25031307085F2A0201565F34010182027C008407A00000033301018E0C000000000000000002031F00";
-//									str = "9F26088930C9018CAEBCD69F2701809F101307010103A02802010A0100000000007EF350299F370415B4E5829F360202179505000004E0009A031504169C01009F02060000000010005F2A02015682027C009F1A0201569F03060000000000009F330360D8C89F34030203009F3501229F1E0838333230314943438408A0000003330101019F090200209F410400000001";
-                        String str = "8A023030";//Currently the default value,
-                        // should be assigned to the server to return data,
-                        // the data format is TLV
-                        pos.sendOnlineProcessResult(str);//Script notification/55domain/ICCDATA
-                    }
-                    Mydialog.onlingDialog.dismiss();
-                    Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
-                }
-            });
+
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            dismissDialog();
+                            String str = "8A023030";//Currently the default value,
+                            // should be assigned to the server to return data,
+                            // the data format is TLV
+                            pos.sendOnlineProcessResult(str);//Script notification/55domain/ICCDATA
+                        }
+
+                        @Override
+                        public String convertResponse(okhttp3.Response response) throws Throwable {
+                            return null;
+                        }
+
+                        @Override
+                        public void onError(Response<String> response) {
+                            super.onError(response);
+                            dismissDialog();
+                            TRACE.i("onError==");
+                            pos.sendOnlineProcessResult("8A025A33");
+                        }
+                    });
+
         }
 
         @Override
@@ -1519,7 +1563,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onRequestQposConnected() {
             TRACE.d("onRequestQposConnected()");
             dismissDialog();
-            if (type == 1) {
+            if (type == BLUETOOTH) {
                 mrllayout.setVisibility(View.GONE);
                 ivBlue.setVisibility(View.GONE);
                 tvTitle.setText(title + "(" + blueTitle.substring(0, 6) + "..." + blueTitle.substring(blueTitle.length() - 3) + ")");
@@ -1534,7 +1578,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.doTrade(keyIdex, 30);//start do trade
                 }
 
-            } else if (type == 2) {
+            } else if (type == UART) {
                 if (posinfo != null) {
                     getPosInfo(posinfo);
                 } else if (posUpdate != null) {
@@ -1543,7 +1587,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.getQposId();
                 }
 
-            } else if (type == 3) {
+            } else if (type == USB_OTG_CDC_ACM) {
                 if (posinfo != null) {
                     getPosInfo(posinfo);
                 } else if (posUpdate != null) {
@@ -1564,7 +1608,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onRequestQposDisconnected() {
             dismissDialog();
-            if (type == 3) {
+            if (type == USB_OTG_CDC_ACM) {
                 Mydialog.ErrorDialog(PaymentActivity.this, "USB " + getString(R.string.disconnect), null);
             }
             tvTitle.setText(title);
@@ -1625,9 +1669,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onConfirm() {
-                    if (pos != null) {
-                        pos.cancelTrade();
-                    }
                     finish();
                     Mydialog.ErrorDialog.dismiss();
                 }
@@ -1774,14 +1815,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onPaypass() {
 //                pos.bypassPin();
-                        pos.sendPin("");
-                        Paydialog.dismiss();
+                    pos.sendPin("".getBytes());
+                    Paydialog.dismiss();
                 }
 
                 @Override
                 public void onConfirm(String password) {
                     if (password.length() >= 4 && password.length() <= 12) {
-                        Log.w("password","password=="+password);
+                        Log.w("password", "password==" + password);
 //                        pos.sendPin(password);
                         String newPin = "";
                         //this part is used to enctypt the plaintext pin with random seed
@@ -1797,7 +1838,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             }
                         }
                         String pinBlock = buildCvmPinBlock(pos.getEncryptData(), newPin);// build the ISO format4 pin block
-                        Log.w("password","pinBlock=="+pinBlock);
+                        Log.w("password", "pinBlock==" + pinBlock);
                         pos.sendCvmPin(pinBlock, true);
                         Paydialog.dismiss();
                     } else {
@@ -2575,7 +2616,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             KB = ParseASN1Util.parseToken(response, "KB");
             String signatureData = "a57e821386de1038b1a12dc22fa59ce317625680c523bd66bf2b9f840aebe52d020e07105d4107eeb05edd560d0345cd73ce2b68dbf19c61f9d56fbd1ddf9222c47956595b773c88eb7ec4577fb17053d42acf64f3e5c38ff325cdac7b689df029299087b69211e61bdfc22e329eb287456f83ef6c25e84fe1324e36ee85ba7e3accb79eb8ab7b270916a28a42a867e0e050c6950100c90daddb1f421444d16accb6005a312c3273c2f1b28f0c77456ae875081ae594d26139efd267c8dafa15e1b6cf961f3acdb92b26777127f474d24d57611b29f01dec062c02d720c4e759e1757f85ee39e74e05e23aa0aed53d62d05a902a6539a3e986e6dd237888ff92";
-            boolean verifyResult = pos.authenticServerResponse(QPOSUtil.HexStringToByteArray(KA), signatureData);
+            boolean verifyResult = pos.authenticServerResponse(HexStringToByteArray(KA), signatureData);
             verifyResult = true;
             if (verifyResult) {
                 if (response.contains("AP")) {
@@ -2604,6 +2645,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 statusEditText.setText("signature verification failed.");
             }
         }
+
         private String buildCvmPinBlock(Hashtable<String, String> value, String pin) {
             String randomData = value.get("RandomData") == null ? "" : value.get("RandomData");
             String pan = value.get("PAN") == null ? "" : value.get("PAN");
@@ -2641,7 +2683,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void devicePermissionRequest(UsbManager mManager, UsbDevice usbDevice) {
-        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(PaymentActivity.this, 0, new Intent("com.android.example.USB_PERMISSION"), 0);
+        PendingIntent mPermissionIntent;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
+                    "com.android.example.USB_PERMISSION"), PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
+                    "com.android.example.USB_PERMISSION"), 0);
+        }
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         registerReceiver(mUsbReceiver, filter);
         mManager.requestPermission(usbDevice, mPermissionIntent);
@@ -2703,21 +2752,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (updateThread != null) {
             updateThread.concelSelf();
         }
-        if (pos != null) {
-            pos.cancelTrade();
-        }
 
-        if (type == 2) {
+
+        if (type == UART) {
             if (pos != null) {
-//                pos.closeUart();
+                pos.closeUart();
             }
         }
-        if (type == 3) {
+        if (type == USB_OTG_CDC_ACM) {
             if (pos != null) {
                 pos.closeUsb();
             }
         }
     }
-
-
 }
