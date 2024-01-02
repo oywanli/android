@@ -65,8 +65,9 @@ public class LogFileConfig {
     }
 
     public void writeLog(String str) {
-        if (!writeFlag)
+        if (!writeFlag) {
             return;
+        }
         if (logFileWR == null) {
             LogFileInit(FILE_DS_LOG);
             return;
@@ -177,16 +178,18 @@ public class LogFileConfig {
 
     public boolean deleteAllFile() {
         File dir = new File(Environment.getExternalStorageDirectory(), PATH_DS_LOG);
-        if (!dir.exists())
+        if (!dir.exists()) {
             return true;
-            String[] children = dir.list();
-            if (children != null && children.length > 0)
-            for (int i=0; i<children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
         }
+            String[] children = dir.list();
+            if (children != null && children.length > 0) {
+                for (int i=0; i<children.length; i++) {
+                    boolean success = deleteDir(new File(dir, children[i]));
+                    if (!success) {
+                        return false;
+                    }
+            }
+            }
         // 目录此时为空，可以删除
         return dir.delete();
 

@@ -93,7 +93,7 @@
     <string name="open_audio">打开音频</string>
     <string name="scan_bt_pos_error">没有绑定的设备\n请先绑定</string>
     <string name="connecting_bt_pos">连接设备中\n请稍等…</string>
-    <string name="app_name">鼎和Demo</string>
+    <string name="app_name">鼎合Demo</string>
     <string name="action_settings">设置</string>
     <string name="nav_header_desc">导航标题</string>
     <string name="navigation_drawer_open">打开导航栏</string>
@@ -453,4 +453,21 @@
     <string name="fill_name"></string>
     <string name="scan">扫码</string>
     <string name="scan_toast">此功能尚未激活!</string>
+    <string name="amount_identification">¥</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="zero">0</string>
+    <string name="double_zero">00</string>
+    <string name="zero_point">0.</string>
+    <string name="vConsole">vConsole</string>
+    <string name="network_failed">网络请求失败</string>
+    <string name="auto_trade">自动交易</string>
+
 </resources>

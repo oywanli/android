@@ -1,9 +1,14 @@
 package com.dspread.demoui.ui.fragment;
 
+import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
+import static com.dspread.demoui.activity.BaseApplication.pos;
+import static com.dspread.demoui.utils.Utils.open;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,12 +18,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
 import com.dspread.demoui.R;
+import com.dspread.demoui.activity.BaseApplication;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.MoneyUtil;
+import com.dspread.demoui.utils.SharedPreferencesUtil;
 import com.dspread.demoui.utils.TitleUpdateListener;
+import com.dspread.xpos.QPOSService;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -28,9 +38,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private Button mConfirm;
     private TextView mAmount;
     private String amount = "";
-
+    SharedPreferencesUtil connectType;
+    String conType;
     View view;
     TitleUpdateListener myListener;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -90,12 +102,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mConfirm = view.findViewById(R.id.btn_confirm);
         mConfirm.setOnClickListener(this);
         mAmount = view.findViewById(R.id.tv_amount);
+        connectType = SharedPreferencesUtil.getmInstance(getActivity());
+        conType = (String) connectType.get("conType", "");
+        if (conType != null && "uart".equals(conType)) {
+            open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
+            Log.w("log","home-----------------");
+        }
     }
 
     protected void initData() {
         bundle = getActivity().getIntent().getExtras();
         if (bundle == null) {
             bundle = new Bundle();
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        conType = (String) connectType.get("conType", "");
+        Log.w("onHiddenChanged", "onHiddenChanged==" + conType);
+        if (!hidden) {
+            if (conType != null && "uart".equals(conType)) {
+                open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
+            }
+        } else {
+            if (conType != null && "uart".equals(conType)) {
+                pos.closeUart();
+            }
+
         }
     }
 
@@ -138,11 +173,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.btn_confirm:
+                BaseApplication.getApplicationInstance=getActivity();
                 if (inputMoney > 0) {
-                    if (!canshow){
+                    if (!canshow) {
                         return;
                     }
-                    canshow=false;
+                    canshow = false;
                     showTimer.start();
                     Mydialog.payTypeDialog(getActivity(), amount, inputMoney, data);
                 } else {
@@ -178,7 +214,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
     private String[] data = {"GOODS", "SERVICES", "CASH", "CASHBACK", "INQUIRY",
             "TRANSFER", "ADMIN", "CASHDEPOSIT",
             "PAYMENT", "PBOCLOG||ECQ_INQUIRE_LOG", "SALE",
@@ -186,13 +221,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             "ECQ_CASH_LOAD", "ECQ_CASH_LOAD_VOID", "CHANGE_PIN", "REFOUND", "SALES_NEW"};
 
 
-
-
-    private boolean canshow=true;
-    private CountDownTimer showTimer = new CountDownTimer(500,500){
+    private boolean canshow = true;
+    private CountDownTimer showTimer = new CountDownTimer(500, 500) {
         @Override
         public void onTick(long millisUntilFinished) {
         }
+
         @Override
         public void onFinish() {
             canshow = true;
