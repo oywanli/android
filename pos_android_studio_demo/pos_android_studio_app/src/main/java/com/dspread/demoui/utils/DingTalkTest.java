@@ -1,7 +1,11 @@
 package com.dspread.demoui.utils;
 
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.alibaba.fastjson.JSON;
+import com.dspread.demoui.ui.dialog.Mydialog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -96,9 +100,7 @@ public class DingTalkTest {
             body = HttpRequest.post(url).body(reqStr).timeout(timeout).execute().body();
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
         return body;
 

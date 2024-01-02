@@ -1,6 +1,7 @@
 package com.dspread.demoui.widget.pinpad.keyboard;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,7 +36,7 @@ public class KeyboardUtil {
     private int mHeightPixels;//screen height
     private int mKeyBoardMarginEditTextTopHeight;//the minimum distance between the keyboard and the top of the edit text
     private List<String> dataList;
-
+    public static EditText pinpadEditText;
     public KeyboardUtil(Activity context, View parent, List<String> dataList) {
         this.dataList = dataList;
         this.mActivity = context;
@@ -51,6 +52,24 @@ public class KeyboardUtil {
         mKeyboardHeight = dp2px(260);//260dp
         mKeyBoardMarginEditTextTopHeight = mEditTextHeight * 2;
         mHeightPixels = context.getResources().getDisplayMetrics().heightPixels;
+
+    }
+    public KeyboardUtil(Activity context, List<String> dataList) {
+        LinearLayout mIncludeKeyboardview = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.include_pinpad, null);
+        this.dataList = dataList;
+        this.mActivity =  context;
+        this.mParent = mIncludeKeyboardview;
+        pinpadEditText = mIncludeKeyboardview.findViewById(R.id.pinpadEditText);
+        mKeyboardView = (MyKeyboardView) mIncludeKeyboardview.findViewById(R.id.keyboard_view);
+        mWindow = new PopupWindow(mIncludeKeyboardview, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
+        mWindow.setAnimationStyle(R.style.AnimBottom);   //Animation style
+        mWindow.setOnDismissListener(mOnDismissListener);
+        mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);//prevent being blocked by the bottom toolbar
+        int mEditTextHeight = dp2px(44);//44dp edit text height
+        mKeyboardHeight = dp2px(260);//260dp
+        mKeyBoardMarginEditTextTopHeight = mEditTextHeight * 2;
+        mHeightPixels = context.getResources().getDisplayMetrics().heightPixels;
+        initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, pinpadEditText);
 
     }
 
@@ -168,6 +187,7 @@ public class KeyboardUtil {
 
     private int dp2px(float dpValue) {
         float scale = mActivity.getResources().getDisplayMetrics().density;
+
         return (int) (dpValue * scale + 0.5f);
     }
 

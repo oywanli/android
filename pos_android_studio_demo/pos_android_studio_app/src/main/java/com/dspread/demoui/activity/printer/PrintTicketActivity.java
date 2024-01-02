@@ -126,8 +126,8 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
             mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
             mPrinter.addText("Please scan the QRCode for getting more information:");
             mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-            mPrinter.addBitmap(bitmap);
+//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+//            mPrinter.addBitmap(bitmap);
             mPrinter.setPrintStyle(printLineStyle);
             mPrinter.setFooter(100);
             mPrinter.print(this);

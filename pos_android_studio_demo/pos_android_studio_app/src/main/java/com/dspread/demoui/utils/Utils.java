@@ -1,6 +1,16 @@
 package com.dspread.demoui.utils;
 
+import static com.dspread.demoui.activity.BaseApplication.handler;
+import static com.dspread.demoui.activity.BaseApplication.pos;
+
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.dspread.demoui.activity.MyQposClass;
+import com.dspread.xpos.QPOSService;
 
 public class Utils {
 	
@@ -378,6 +388,45 @@ public class Utils {
 		}
 		lastClickTime = curClickTime;
 		return flag;
+	}
+
+	public static int getKeyIndex() {
+//        String s = mKeyIndex.getText().toString();
+		String s = "";
+		if (TextUtils.isEmpty(s)) {
+			return 0;
+		}
+		int i = 0;
+		try {
+			i = Integer.parseInt(s);
+			if (i > 9 || i < 0) {
+				i = 0;
+			}
+		} catch (Exception e) {
+			i = 0;
+			return i;
+		}
+		return i;
+	}
+	public static void open(QPOSService.CommunicationMode mode, Context context) {
+		TRACE.d("open");
+		MyQposClass listener = new MyQposClass();
+		pos = QPOSService.getInstance(context, mode);
+		if (pos == null) {
+			return;
+		}
+		if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
+			pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
+		}
+		pos.setD20Trade(true);
+
+		pos.setConext(context);
+
+		handler = new Handler(Looper.myLooper());
+		pos.initListener(handler, listener);
+
+		pos.setDeviceAddress("/dev/ttyS1");
+		pos.openUart();
 	}
 }
 

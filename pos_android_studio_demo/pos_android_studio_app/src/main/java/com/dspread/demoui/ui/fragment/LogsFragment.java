@@ -5,7 +5,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.dspread.demoui.R;
+import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.DingTalkTest;
 import com.dspread.demoui.utils.LogFileConfig;
 import com.dspread.demoui.utils.TRACE;
@@ -84,7 +89,30 @@ public class LogsFragment extends Fragment {
 //        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_logs_upload,menu);
     }
+    private final int ErrorCode = 1001;
+   private Handler handler = new Handler(Looper.myLooper()){
+       @Override
+       public void handleMessage(@NonNull Message msg) {
+           super.handleMessage(msg);
+           switch (msg.what){
+               case ErrorCode:
+                   Mydialog.ErrorDialog(getActivity(), getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
+                       @Override
+                       public void onCancel() {
+                           Mydialog.ErrorDialog.dismiss();
+                       }
 
+                       @Override
+                       public void onConfirm() {
+                           Mydialog.ErrorDialog.dismiss();
+                       }
+                   });
+                   break;
+               default:
+                   break;
+           }
+       }
+   };
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.logs_upload){
@@ -124,8 +152,13 @@ public class LogsFragment extends Fragment {
             String result =DingTalkTest.postJson(dingUrl, reqStr);
 
             System.out.println("result == " + result);
-
+            if (result==null){
+                Message msg = new Message();
+                 msg.what = ErrorCode;
+                 handler.sendMessage(msg);
+            }
         }catch (Exception e){
+            Log.e("Exception","e:"+e.toString());
 
             e.printStackTrace();
 
