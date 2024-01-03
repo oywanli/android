@@ -51,9 +51,10 @@ import Decoder.BASE64Decoder;
 import Decoder.BASE64Encoder;
 
 public class MyQposClass extends CQPOSService {
-    KeyboardUtil keyboardUtil;
+    private static KeyboardUtil keyboardUtil;
     private static Dialog dialog;
     private ListView appListView;
+
     @Override
     public void onDoTradeResult(QPOSService.DoTradeResult result, Hashtable<String, String> decodeData) {
         TRACE.d("(DoTradeResult result, Hashtable<String, String> decodeData) " + result.toString() + TRACE.NEW_LINE + "decodeData:" + decodeData);
@@ -177,11 +178,6 @@ public class MyQposClass extends CQPOSService {
                 }
             }
             sendRequestToBackend(content);
-            Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
-            intent.putExtra("paytment", "payment");
-            intent.putExtra("tradeResut", content);
-            getApplicationInstance.startActivity(intent);
-            ((Activity) getApplicationInstance).finish();
         } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
 //                nfcLog = decodeData.get("nfcLog");
             String content = getString(R.string.tap_card);
@@ -256,11 +252,6 @@ public class MyQposClass extends CQPOSService {
                 cardNo = maskedPAN;
             }
             sendRequestToBackend(content);
-            Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
-            intent.putExtra("paytment", "payment");
-            intent.putExtra("tradeResut", content);
-            getApplicationInstance.startActivity(intent);
-            ((Activity) getApplicationInstance).finish();
         } else if ((result == QPOSService.DoTradeResult.NFC_DECLINED)) {
             msg = getString(R.string.transaction_declined);
         } else if (result == QPOSService.DoTradeResult.NO_RESPONSE) {
@@ -268,11 +259,8 @@ public class MyQposClass extends CQPOSService {
         }
         if (msg != null && !"".equals(msg)) {
             Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, null);
-            if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
-                Mydialog.ErrorDialog.dismiss();
-                Constants.transData.setFialSub(Constants.transData.getFialSub() + 1);
-                Constants.transData.setSub(Constants.transData.getSub() + 1);
-                ((Activity) getApplicationInstance).finish();
+            if (!msg.equals(getApplicationInstance.getString(R.string.bad_swipe))) {
+                autoTrade();
             }
         }
 //            dealDoneflag = true;
@@ -328,7 +316,6 @@ public class MyQposClass extends CQPOSService {
         TRACE.d("onRequestTransactionResult()" + transactionResult.toString());
         if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
         }
-//            dealDoneflag = true;
         dismissDialog();
         String msg = "";
         if (transactionResult == QPOSService.TransactionResult.APPROVED) {
@@ -374,15 +361,8 @@ public class MyQposClass extends CQPOSService {
         } else if (transactionResult == QPOSService.TransactionResult.TRANS_TOKEN_INVALID) {
             msg = "TOKEN INVALID";
         }
-        if (Mydialog.Ldialog != null) {
-            Mydialog.Ldialog.dismiss();
-        }
-        if (keyboardUtil != null) {
-            keyboardUtil.hide();
-        }
 
         initInfo();
-
         if (!"".equals(msg)) {
             Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, new Mydialog.OnMyClickListener() {
                 @Override
@@ -391,18 +371,12 @@ public class MyQposClass extends CQPOSService {
 
                 @Override
                 public void onConfirm() {
-//                        pos.cancelTrade();
-//                        finish();
                     ((Activity) getApplicationInstance).finish();
                     Mydialog.ErrorDialog.dismiss();
+                    autoTrade();
                 }
             });
-            if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
-                Mydialog.ErrorDialog.dismiss();
-                Constants.transData.setFialSub(Constants.transData.getFialSub() + 1);
-                Constants.transData.setSub(Constants.transData.getSub() + 1);
-                ((Activity) getApplicationInstance).finish();
-            }
+
         }
 //            amounts = "";
 //            cashbackAmounts = "";
@@ -470,36 +444,36 @@ public class MyQposClass extends CQPOSService {
         TRACE.d("onRequestSelectEmvApp():" + appList.toString());
         TRACE.d("Please select App -- S，emv card config");
         dismissDialog();
-            dialog = new Dialog(getApplicationInstance);
-            dialog.setContentView(R.layout.emv_app_dialog);
-            dialog.setTitle(R.string.please_select_app);
+        dialog = new Dialog(getApplicationInstance);
+        dialog.setContentView(R.layout.emv_app_dialog);
+        dialog.setTitle(R.string.please_select_app);
         String[] appNameList = new String[appList.size()];
         for (int i = 0; i < appNameList.length; ++i) {
 
             appNameList[i] = appList.get(i);
         }
-            appListView = (ListView) dialog.findViewById(R.id.appList);
-            appListView.setAdapter(new ArrayAdapter<String>(getApplicationInstance, android.R.layout.simple_list_item_1, appNameList));
-            appListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        appListView = (ListView) dialog.findViewById(R.id.appList);
+        appListView.setAdapter(new ArrayAdapter<String>(getApplicationInstance, android.R.layout.simple_list_item_1, appNameList));
+        appListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    pos.selectEmvApp(position);
-                    TRACE.d("select emv app position = " + position);
-                    dismissDialog();
-                }
+                pos.selectEmvApp(position);
+                TRACE.d("select emv app position = " + position);
+                dismissDialog();
+            }
 
-            });
-            dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+        });
+        dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    pos.cancelSelectEmvApp();
-                    dismissDialog();
-                }
-            });
-            dialog.show();
+            @Override
+            public void onClick(View v) {
+                pos.cancelSelectEmvApp();
+                dismissDialog();
+            }
+        });
+        dialog.show();
     }
 
     @Override
@@ -620,7 +594,7 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onRequestOnlineProcess(final String tlv) {
         TRACE.d("onRequestOnlineProcess" + tlv);
-
+        dismissDialog();
         Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
         TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
         OkGo.<String>post(Constants.backendUploadUrl)
@@ -639,7 +613,7 @@ public class MyQposClass extends CQPOSService {
 
                     @Override
                     public void onSuccess(Response<String> response) {
-//                            dismissDialog();
+                        dismissDialog();
                         String str = "8A023030";//Currently the default value,
                         // should be assigned to the server to return data,
                         // the data format is TLV
@@ -648,17 +622,29 @@ public class MyQposClass extends CQPOSService {
 
                     @Override
                     public String convertResponse(okhttp3.Response response) throws Throwable {
+                        dismissDialog();
                         return null;
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-//                            dismissDialog();
+                        dismissDialog();
+                        initInfo();
                         TRACE.i("onError==");
-                        Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), null);
-                        pos.cancelTrade();
-//                        pos.sendOnlineProcessResult("8A025A33");
+                        Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
+                            @Override
+                            public void onCancel() {
+
+                            }
+
+                            @Override
+                            public void onConfirm() {
+                                pos.sendOnlineProcessResult("8A025A33");
+                            }
+                        });
+
+
                     }
                 });
 
@@ -872,15 +858,16 @@ public class MyQposClass extends CQPOSService {
             public void onConfirm() {
                 ((Activity) getApplicationInstance).finish();
                 Mydialog.ErrorDialog.dismiss();
+                if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                    autoTrade();
+                }
             }
         });
-        if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
-            Constants.transData.setFialSub(Constants.transData.getFialSub() + 1);
-            Constants.transData.setSub(Constants.transData.getSub() + 1);
-            ((Activity) getApplicationInstance).finish();
-        } else {
+//        if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+//            autoTrade();
+//        } else {
             initInfo();
-        }
+//        }
     }
 
     @Override
@@ -1876,6 +1863,7 @@ public class MyQposClass extends CQPOSService {
     }
 
     private void sendRequestToBackend(String data) {
+        dismissDialog();
         OkGo.<String>post(Constants.backendUploadUrl)
                 .tag(this)
                 .headers("X-RapidAPI-Key", Constants.rapidAPIKey)
@@ -1891,17 +1879,26 @@ public class MyQposClass extends CQPOSService {
 
                     @Override
                     public void onSuccess(Response<String> response) {
-
+                        dismissDialog();
+                        Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
+                        intent.putExtra("paytment", "payment");
+                        intent.putExtra("tradeResut", data);
+                        getApplicationInstance.startActivity(intent);
+                        ((Activity) getApplicationInstance).finish();
                     }
 
                     @Override
                     public String convertResponse(okhttp3.Response response) throws Throwable {
+                        dismissDialog();
                         return null;
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        dismissDialog();
+                        initInfo();
+                        autoTrade();
                         TRACE.i("onError==");
                         Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), null);
                     }
@@ -1941,7 +1938,10 @@ public class MyQposClass extends CQPOSService {
     }
 
     public static void dismissDialog() {
-
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
+        }
         if (Mydialog.ErrorDialog != null) {
             Mydialog.ErrorDialog.dismiss();
         }
@@ -1955,6 +1955,14 @@ public class MyQposClass extends CQPOSService {
         if (Mydialog.onlingDialog != null) {
             Mydialog.onlingDialog.dismiss();
         }
-
+        if (keyboardUtil != null) {
+            keyboardUtil.hide();
+        }
+    }
+    public void autoTrade() {
+        if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+            Constants.transData.setFialSub(Constants.transData.getFialSub() + 1);
+            Constants.transData.setSub(Constants.transData.getSub() + 1);
+        }
     }
 }

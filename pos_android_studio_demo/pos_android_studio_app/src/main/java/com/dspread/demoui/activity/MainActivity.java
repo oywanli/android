@@ -408,7 +408,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.w("keyevent", "event==" + event.getRepeatCount());
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             toolbar.setTitle(getString(R.string.menu_payment));
             switchFragment(0);

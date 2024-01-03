@@ -52,15 +52,17 @@ public class AutoFragment extends Fragment {
     private int totalRecord;
     private int record;
     String transactionTypeString = "GOODS";
-    private  View view;
+    private View view;
     SharedPreferencesUtil connectType;
     String conType;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         myListener = (TitleUpdateListener) getActivity();
         myListener.sendValue(getString(R.string.device_info));
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,9 +85,12 @@ public class AutoFragment extends Fragment {
         btnTrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BaseApplication.getApplicationInstance=getActivity();
+                BaseApplication.getApplicationInstance = getActivity();
                 etSubstr = etSub.getText().toString();
                 if (etSubstr != null && !"".equals(etSubstr)) {
+                    sub.setText("0");
+                    sucesssub.setText("0");
+                    fialsub.setText("0");
                     totalRecord = Integer.parseInt(etSubstr);
                     Constants.transData.setInputMoney("1000");
                     Constants.transData.setPayType(transactionTypeString);
@@ -104,36 +109,38 @@ public class AutoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        Log.w("onResume","Constants.transData.getSub() ="+Constants.transData.getSub());
-        Log.w("onResume","Constants.transData.getSuccessSub()  ="+Constants.transData.getSuccessSub());
-        Log.w("onResume","record ="+record);
-        Log.w("totalRecord","totalRecord ="+totalRecord);
-        BaseApplication.getApplicationInstance=getActivity();
-        record = Constants.transData.getSub();
-        if (Constants.transData.getSub() != 0 && !"".equals(Constants.transData.getSub())){
-            sub.setText(Constants.transData.getSub()+"");
-        }
-        if (Constants.transData.getSuccessSub() != 0 && !"".equals(Constants.transData.getSuccessSub())){
-            sucesssub.setText(Constants.transData.getSuccessSub()+"");
-        }
-        if (Constants.transData.getFialSub() != 0 && !"".equals(Constants.transData.getFialSub())){
-            fialsub.setText(Constants.transData.getFialSub()+"");
-        }
-        if (record != 0 && !"".equals(record)){
-            if (totalRecord==record){
-                Toast.makeText(getActivity(), "交易完成", Toast.LENGTH_SHORT).show();
-                initInfo();
-            }else{
-                Log.w("transData","transData");
-                transactionTypeString = "GOODS";
-                Constants.transData.setInputMoney("1000");
-                Constants.transData.setPayType(transactionTypeString);
-                Constants.transData.setPayment("payment");
-                Constants.transData.setAutoTrade("autoTrade");
-                pos.getQposId();
+        if (Constants.transData.getAutoTrade() != null && "StopTrade".equals(Constants.transData.getAutoTrade())) {
+            Constants.transData.setAutoTrade("");
+            initInfo();
+            Toast.makeText(getActivity(), "停止交易", Toast.LENGTH_SHORT).show();
+        } else {
+            BaseApplication.getApplicationInstance = getActivity();
+            record = Constants.transData.getSub();
+            if (Constants.transData.getSub() != 0 && !"".equals(Constants.transData.getSub())) {
+                sub.setText(Constants.transData.getSub() + "");
             }
+            if (Constants.transData.getSuccessSub() != 0 && !"".equals(Constants.transData.getSuccessSub())) {
+                sucesssub.setText(Constants.transData.getSuccessSub() + "");
+            }
+            if (Constants.transData.getFialSub() != 0 && !"".equals(Constants.transData.getFialSub())) {
+                fialsub.setText(Constants.transData.getFialSub() + "");
+            }
+            if (record != 0 && !"".equals(record)) {
+                if (totalRecord == record || record > totalRecord) {
+                    Toast.makeText(getActivity(), "交易完成", Toast.LENGTH_SHORT).show();
+                    initInfo();
+                } else {
+//                BaseApplication.getApplicationInstance=getActivity();
+                    Log.w("transData", "transData");
+                    transactionTypeString = "GOODS";
+                    Constants.transData.setInputMoney("1000");
+                    Constants.transData.setPayType(transactionTypeString);
+                    Constants.transData.setPayment("payment");
+                    Constants.transData.setAutoTrade("autoTrade");
+                    pos.getQposId();
+                }
 
+            }
         }
     }
 
@@ -154,7 +161,8 @@ public class AutoFragment extends Fragment {
 
         }
     }
-    public void initInfo(){
+
+    public void initInfo() {
         Constants.transData.setInputMoney("");
         Constants.transData.setPayType("");
         Constants.transData.setCashbackAmounts("");
