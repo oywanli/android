@@ -265,7 +265,7 @@ public class MyQposClass extends CQPOSService {
                 if (!msg.equals(getApplicationInstance.getString(R.string.bad_swipe))) {
                     autoTrade(msg);
                 }else{
-                    Toast.makeText(getApplicationInstance,msg,Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationInstance,msg,Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, null);
@@ -440,11 +440,13 @@ public class MyQposClass extends CQPOSService {
         content += "conn: " + pos.getBluetoothState() + "\n";
         content += "psamId: " + psamId + "\n";
         content += "NFCId: " + NFCId + "\n";
-        if (Constants.transData.getPayType() != null && !"".equals(Constants.transData.getPayType())) {
-            Constants.transData.setSN(posId);
-            Intent intent = new Intent(getApplicationInstance, PaymentUartActivity.class);
-            getApplicationInstance.startActivity(intent);
-        } else {
+        Constants.transData.setSN(posId);
+//        if (Constants.transData.getPayType() != null && !"".equals(Constants.transData.getPayType())) {
+//            Constants.transData.setSN(posId);
+//            Intent intent = new Intent(getApplicationInstance, PaymentUartActivity.class);
+//            getApplicationInstance.startActivity(intent);
+//        } else {
+          if("getposid".equals(Constants.transData.getPayType())){
             Constants.transData.setPosId(content);
             getposInfo("posid");
         }
@@ -759,6 +761,9 @@ public class MyQposClass extends CQPOSService {
     public void onRequestQposConnected() {
         TRACE.d("onRequestQposConnected()");
         dismissDialog();
+        if (Constants.transData.getSN()==null) {
+            pos.getQposId();
+        }
 //            if (type == BLUETOOTH) {
 //                mrllayout.setVisibility(View.GONE);
 //                ivBlue.setVisibility(View.GONE);
@@ -1923,9 +1928,9 @@ public class MyQposClass extends CQPOSService {
         if (Constants.transData.getPayment() != null && !"".equals(Constants.transData.getPayment())) {
             Constants.transData.setPayment("");
         }
-        if (Constants.transData.getSN() != null && !"".equals(Constants.transData.getSN())) {
-            Constants.transData.setSN("");
-        }
+//        if (Constants.transData.getSN() != null && !"".equals(Constants.transData.getSN())) {
+//            Constants.transData.setSN("");
+//        }
         if (Constants.transData.getCashbackAmounts() != null && !"".equals(Constants.transData.getCashbackAmounts())) {
             Constants.transData.setCashbackAmounts("");
         }

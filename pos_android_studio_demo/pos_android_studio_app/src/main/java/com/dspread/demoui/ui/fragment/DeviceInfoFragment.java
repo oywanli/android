@@ -99,6 +99,7 @@ public class DeviceInfoFragment extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.get_posid:
                 if (conType != null && "uart".equals(conType)) {
+                    Constants.transData.setPayType("getposid");
                     pos.getQposId();
                 } else {
                     getposInfo("posid");

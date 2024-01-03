@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.activity.PaymentActivity;
+import com.dspread.demoui.activity.PaymentUartActivity;
 import com.dspread.demoui.beans.Constants;
 import com.dspread.demoui.utils.MoneyUtil;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
@@ -38,6 +39,7 @@ import com.dspread.demoui.widget.MyAdapter;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
+import com.dspread.xpos.QPOSService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -227,8 +229,11 @@ public class Mydialog {
                             Constants.transData.setInputMoney(inputMoneyString);
                             Constants.transData.setPayType(transactionTypeString);
                             Constants.transData.setPayment("payment");
-
-                            pos.getQposId();
+//                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+//                            pos.doTrade(20);
+                            Intent intent = new Intent(getApplicationInstance, PaymentUartActivity.class);
+                            getApplicationInstance.startActivity(intent);
+//                            pos.getQposId();
                         } else if (!"".equals(conType) && "usb".equals(conType)) {
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);

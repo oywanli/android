@@ -1,11 +1,13 @@
 package com.dspread.demoui.ui.fragment;
 
+import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 import static com.dspread.demoui.utils.Utils.open;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -30,6 +32,7 @@ import androidx.fragment.app.Fragment;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.activity.BaseApplication;
+import com.dspread.demoui.activity.PaymentUartActivity;
 import com.dspread.demoui.beans.Constants;
 import com.dspread.demoui.utils.MoneyUtil;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
@@ -96,7 +99,8 @@ public class AutoFragment extends Fragment {
                     Constants.transData.setPayType(transactionTypeString);
                     Constants.transData.setPayment("payment");
                     Constants.transData.setAutoTrade("autoTrade");
-                    pos.getQposId();
+                    Intent intent = new Intent(getApplicationInstance, PaymentUartActivity.class);
+                    getApplicationInstance.startActivity(intent);
                 } else {
                     Toast.makeText(getActivity(), "请输入测试次数", Toast.LENGTH_SHORT).show();
                 }
@@ -130,14 +134,14 @@ public class AutoFragment extends Fragment {
                     Toast.makeText(getActivity(), "交易完成", Toast.LENGTH_SHORT).show();
                     initInfo();
                 } else {
-//                BaseApplication.getApplicationInstance=getActivity();
                     Log.w("transData", "transData");
                     transactionTypeString = "GOODS";
                     Constants.transData.setInputMoney("1000");
                     Constants.transData.setPayType(transactionTypeString);
                     Constants.transData.setPayment("payment");
                     Constants.transData.setAutoTrade("autoTrade");
-                    pos.getQposId();
+                    Intent intent = new Intent(getApplicationInstance, PaymentUartActivity.class);
+                    getApplicationInstance.startActivity(intent);
                 }
 
             }
@@ -158,7 +162,6 @@ public class AutoFragment extends Fragment {
                 initInfo();
                 pos.closeUart();
             }
-
         }
     }
 
@@ -172,4 +175,5 @@ public class AutoFragment extends Fragment {
         Constants.transData.setFialSub(0);
         Constants.transData.setSub(0);
     }
+
 }

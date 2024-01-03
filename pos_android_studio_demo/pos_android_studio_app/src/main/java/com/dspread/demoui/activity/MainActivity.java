@@ -1,8 +1,10 @@
 package com.dspread.demoui.activity;
 
+import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 import static com.dspread.demoui.utils.Utils.open;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         BaseApplication baseApplication = new BaseApplication();
         baseApplication.onCreate();
         baseApplication.attachBaseContext(this);
+        BaseApplication.getApplicationInstance=this;
         if (!"D20".equals(deviceModel)) {
             menuItem.setVisible(true);
         } else {
@@ -125,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 Log.w("onDrawerOpened", "onDrawerOpened");
+                HideKeyboard(drawerView);
             }
 
             @Override
@@ -445,6 +450,14 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                     Mydialog.manualExitDialog.dismiss();
                 }
             });
+        }
+    }
+    public static void HideKeyboard(View v)
+    {
+        InputMethodManager imm = ( InputMethodManager ) v.getContext( ).getSystemService( Context.INPUT_METHOD_SERVICE );
+        if ( imm.isActive( ) ) {
+            imm.hideSoftInputFromWindow( v.getApplicationWindowToken( ) , 0 );
+
         }
     }
 }

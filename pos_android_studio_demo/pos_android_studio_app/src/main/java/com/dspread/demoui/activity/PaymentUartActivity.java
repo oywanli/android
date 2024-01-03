@@ -67,9 +67,9 @@ public class PaymentUartActivity extends AppCompatActivity {
         if (Constants.transData.getPayment() != null && !"".equals(Constants.transData.getPayment())) {
             Constants.transData.setPayment("");
         }
-        if (Constants.transData.getSN() != null && !"".equals(Constants.transData.getSN())) {
-            Constants.transData.setSN("");
-        }
+//        if (Constants.transData.getSN() != null && !"".equals(Constants.transData.getSN())) {
+//            Constants.transData.setSN("");
+//        }
         if (Constants.transData.getCashbackAmounts() != null && !"".equals(Constants.transData.getCashbackAmounts())) {
             Constants.transData.setCashbackAmounts("");
         }

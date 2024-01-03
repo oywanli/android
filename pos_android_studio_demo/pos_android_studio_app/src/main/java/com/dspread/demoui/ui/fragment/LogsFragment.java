@@ -87,7 +87,11 @@ public class LogsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 //        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_logs_upload,menu);
+//        inflater.inflate(R.menu.menu_logs_upload,menu);
+        inflater.inflate(R.menu.main, menu);
+        menu.add(0, 1, 0, getString(R.string.upload_logs));
+        menu.add(0, 2, 0, "Clear logs");
+        super.onCreateOptionsMenu(menu, inflater);
     }
     private final int ErrorCode = 1001;
    private Handler handler = new Handler(Looper.myLooper()){
@@ -115,7 +119,7 @@ public class LogsFragment extends Fragment {
    };
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.logs_upload){
+        if(item.getItemId() == 1){
             EditText editText = new EditText(getContext());
             editText.setHint(getString(R.string.input_email));
             AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
@@ -135,6 +139,11 @@ public class LogsFragment extends Fragment {
             });
             dialog.show();
 
+        }else if(item.getItemId() == 2){
+            if (logFileConfig.logFileWR!=null) {
+                logFileConfig.deleteDir(logFileConfig.logFileWR);
+                tv_log.setText("");
+            }
         }
         return super.onOptionsItemSelected(item);
     }
