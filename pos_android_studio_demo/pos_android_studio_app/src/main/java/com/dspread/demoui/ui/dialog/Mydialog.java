@@ -121,50 +121,6 @@ public class Mydialog {
         window.setContentView(view);
 
     }
-//    public static AlertDialog ErrorDialogs;
-//    public static void ErrorDialog(Context mContext, String msg, OnMyClickListener listener) {
-//        View view = View.inflate(mContext, R.layout.alert_dialog, null);
-//        Button mbtnConfirm = view.findViewById(R.id.btnConfirm);
-//        TextView mtvInfo = view.findViewById(R.id.tvInfo);
-//        mtvInfo.setText(msg);
-//        Button mbtnCancel = view.findViewById(R.id.btnCancel);
-//        mbtnCancel.setVisibility(View.GONE);
-//        mbtnConfirm.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (listener != null) {
-//                    listener.onConfirm();
-//                } else {
-//                    ErrorDialogs.dismiss();
-////                    if (!msg.equals(mContext.getString(R.string.bad_swipe))) {
-////                        mContext.finish();
-////                    }
-//                }
-//            }
-//        });
-//
-//        ErrorDialogs = new AlertDialog.Builder(mContext).create();
-//        ErrorDialogs.setCanceledOnTouchOutside(false);
-//        ErrorDialogs.setCancelable(false);
-////        if (!((Activity)mContext).isFinishing()) {
-//        ErrorDialogs.show();
-////        }
-//        //显示对话框
-//        Window window = ErrorDialogs.getWindow();
-//        window.setWindowAnimations(R.style.popupAnimation);
-//        window.setBackgroundDrawable(null);
-//        WindowManager.LayoutParams wlp = window.getAttributes();
-//        wlp.gravity = Gravity.BOTTOM;
-//        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-//
-//        Display d = wm.getDefaultDisplay();
-//        android.view.WindowManager.LayoutParams p = ErrorDialogs.getWindow().getAttributes();
-//        p.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//        p.width = WindowManager.LayoutParams.MATCH_PARENT;
-//        ErrorDialogs.getWindow().setAttributes(p);
-//        window.setContentView(view);
-//
-//    }
 
 
     public static AlertDialog manualExitDialog;
@@ -255,6 +211,7 @@ public class Mydialog {
                             transactionTypeString = content;
 //                            Intent intent = new Intent(mContext, PaymentActivity.class);
                             String inputMoneyString = String.valueOf(inputMoney);
+                            Log.w("inputMoneyString","inputMoneyString+"+inputMoneyString);
 //                            intent.putExtra("inputMoney", inputMoneyString);
 //                            intent.putExtra("paytype", transactionTypeString);
 //                            intent.putExtra("connect_type", UART);

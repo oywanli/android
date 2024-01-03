@@ -34,7 +34,7 @@ public class PaymentUartActivity extends AppCompatActivity {
         ivBackTitle = findViewById(R.id.iv_back_title);
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setText("SN:"+Constants.transData.getSN());
-        getApplicationInstance = this;
+        BaseApplication.getApplicationInstance = this;
         pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
         pos.doTrade(20);
         ivBackTitle.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +42,7 @@ public class PaymentUartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 pos.cancelTrade();
                 finish();
+                pos.cancelTrade();
                 initInfo();
             }
         });
@@ -50,7 +51,6 @@ public class PaymentUartActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        pos.cancelTrade();
     }
 
     public void initInfo() {

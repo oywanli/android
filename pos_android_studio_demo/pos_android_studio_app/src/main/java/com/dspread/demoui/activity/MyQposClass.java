@@ -7,12 +7,16 @@ import static com.xuexiang.xutil.resource.ResUtils.getString;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.beans.Constants;
@@ -48,38 +52,32 @@ import Decoder.BASE64Encoder;
 
 public class MyQposClass extends CQPOSService {
     KeyboardUtil keyboardUtil;
-
+    private static Dialog dialog;
+    private ListView appListView;
     @Override
     public void onDoTradeResult(QPOSService.DoTradeResult result, Hashtable<String, String> decodeData) {
         TRACE.d("(DoTradeResult result, Hashtable<String, String> decodeData) " + result.toString() + TRACE.NEW_LINE + "decodeData:" + decodeData);
-//            dismissDialog();
+        dismissDialog();
         String cardNo = "";
         String msg = "";
         if (result == QPOSService.DoTradeResult.NONE) {
-//                statusEditText.setText(getString(R.string.no_card_detected));
             msg = getString(R.string.no_card_detected);
             Log.w("paymentActivity", "msg==" + msg);
         } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
-//                statusEditText.setText(getString(R.string.try_another_interface));
             Log.w("paymentActivity", "msg==" + msg);
         } else if (result == QPOSService.DoTradeResult.ICC) {
-//                statusEditText.setText(getString(R.string.icc_card_inserted));
             TRACE.d("EMV ICC Start");
             pos.doEmvApp(QPOSService.EmvOption.START);
         } else if (result == QPOSService.DoTradeResult.NOT_ICC) {
-//                statusEditText.setText(getString(R.string.card_inserted));
             msg = getString(R.string.card_inserted);
             Log.w("paymentActivity", "msg==" + msg);
         } else if (result == QPOSService.DoTradeResult.BAD_SWIPE) {
-//                statusEditText.setText(getString(R.string.bad_swipe));
             msg = getString(R.string.bad_swipe);
             Log.w("paymentActivity", "msg==" + msg);
         } else if (result == QPOSService.DoTradeResult.CARD_NOT_SUPPORT) {
-//                statusEditText.setText("GPO NOT SUPPORT");
             msg = "GPO NOT SUPPORT";
             Log.w("paymentActivity", "msg==" + msg);
         } else if (result == QPOSService.DoTradeResult.PLS_SEE_PHONE) {
-//                statusEditText.setText("PLS SEE PHONE");
             msg = "PLS SEE PHONE";
             Log.w("paymentActivity", "msg==" + msg);
         } else if (result == QPOSService.DoTradeResult.MCR) {//Magnetic card
@@ -178,17 +176,12 @@ public class MyQposClass extends CQPOSService {
                     content += "PIN:" + " " + s + "\n";
                 }
             }
-//                pinpadEditText.setVisibility(View.GONE);
-//                tvTitle.setText(getText(R.string.transaction_result));
-//                mllinfo.setVisibility(View.VISIBLE);
-//                mtvinfo.setText(content);
-//                mllchrccard.setVisibility(View.GONE);
+            sendRequestToBackend(content);
             Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
             intent.putExtra("paytment", "payment");
             intent.putExtra("tradeResut", content);
             getApplicationInstance.startActivity(intent);
             ((Activity) getApplicationInstance).finish();
-//                sendRequestToBackend(content);
         } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
 //                nfcLog = decodeData.get("nfcLog");
             String content = getString(R.string.tap_card);
@@ -262,29 +255,25 @@ public class MyQposClass extends CQPOSService {
                 content += "pinRandomNumber:" + " " + pinRandomNumber + "\n";
                 cardNo = maskedPAN;
             }
-//                    statusEditText.setText(content);
-//                pinpadEditText.setVisibility(View.GONE);
-//                tvTitle.setText(getText(R.string.transaction_result));
-//                mrllayout.setVisibility(View.GONE);
-//                mllinfo.setVisibility(View.VISIBLE);
-//                mtvinfo.setText(content);
-//                mllchrccard.setVisibility(View.GONE);
-//                sendMsg(8003);
+            sendRequestToBackend(content);
             Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
             intent.putExtra("paytment", "payment");
             intent.putExtra("tradeResut", content);
             getApplicationInstance.startActivity(intent);
             ((Activity) getApplicationInstance).finish();
         } else if ((result == QPOSService.DoTradeResult.NFC_DECLINED)) {
-//                statusEditText.setText(getString(R.string.transaction_declined));
             msg = getString(R.string.transaction_declined);
         } else if (result == QPOSService.DoTradeResult.NO_RESPONSE) {
-//                statusEditText.setText(getString(R.string.card_no_response));
             msg = getString(R.string.card_no_response);
         }
         if (msg != null && !"".equals(msg)) {
             Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, null);
-
+            if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                Mydialog.ErrorDialog.dismiss();
+                Constants.transData.setFialSub(Constants.transData.getFialSub() + 1);
+                Constants.transData.setSub(Constants.transData.getSub() + 1);
+                ((Activity) getApplicationInstance).finish();
+            }
         }
 //            dealDoneflag = true;
     }
@@ -292,7 +281,7 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onQposInfoResult(Hashtable<String, String> posInfoData) {
 //            tvTitle.setText(getString(R.string.get_info));
-//            dismissDialog();
+        dismissDialog();
         TRACE.d("onQposInfoResult" + posInfoData.toString());
         String isSupportedTrack1 = posInfoData.get("isSupportedTrack1") == null ? "" : posInfoData.get("isSupportedTrack1");
         String isSupportedTrack2 = posInfoData.get("isSupportedTrack2") == null ? "" : posInfoData.get("isSupportedTrack2");
@@ -340,7 +329,7 @@ public class MyQposClass extends CQPOSService {
         if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
         }
 //            dealDoneflag = true;
-//            dismissDialog();
+        dismissDialog();
         String msg = "";
         if (transactionResult == QPOSService.TransactionResult.APPROVED) {
             TRACE.d("TransactionResult.APPROVED");
@@ -408,6 +397,12 @@ public class MyQposClass extends CQPOSService {
                     Mydialog.ErrorDialog.dismiss();
                 }
             });
+            if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                Mydialog.ErrorDialog.dismiss();
+                Constants.transData.setFialSub(Constants.transData.getFialSub() + 1);
+                Constants.transData.setSub(Constants.transData.getSub() + 1);
+                ((Activity) getApplicationInstance).finish();
+            }
         }
 //            amounts = "";
 //            cashbackAmounts = "";
@@ -415,7 +410,7 @@ public class MyQposClass extends CQPOSService {
 
     @Override
     public void onRequestBatchData(String tlv) {
-//            dismissDialog();
+        dismissDialog();
 //            dealDoneflag = true;
 //            pinpadEditText.setVisibility(View.GONE);
 //            tvTitle.setText(getText(R.string.transaction_result));
@@ -440,15 +435,14 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onRequestTransactionLog(String tlv) {
         TRACE.d("onRequestTransactionLog(String tlv):" + tlv);
-//            dismissDialog();
+        dismissDialog();
         String content = getString(R.string.transaction_log);
         content += tlv;
-//            statusEditText.setText(content);
     }
 
     @Override
     public void onQposIdResult(Hashtable<String, String> posIdTable) {
-//            dismissDialog();
+        dismissDialog();
 //            dealDoneflag = true;
         TRACE.w("onQposIdResult():" + posIdTable.toString());
         String posId = posIdTable.get("posId") == null ? "" : posIdTable.get("posId");
@@ -475,44 +469,43 @@ public class MyQposClass extends CQPOSService {
     public void onRequestSelectEmvApp(ArrayList<String> appList) {
         TRACE.d("onRequestSelectEmvApp():" + appList.toString());
         TRACE.d("Please select App -- S，emv card config");
-//            dismissDialog();
-//            dialog = new Dialog(PaymentActivity.this);
-//            dialog.setContentView(R.layout.emv_app_dialog);
-//            dialog.setTitle(R.string.please_select_app);
+        dismissDialog();
+            dialog = new Dialog(getApplicationInstance);
+            dialog.setContentView(R.layout.emv_app_dialog);
+            dialog.setTitle(R.string.please_select_app);
         String[] appNameList = new String[appList.size()];
         for (int i = 0; i < appNameList.length; ++i) {
 
             appNameList[i] = appList.get(i);
         }
-//            appListView = (ListView) dialog.findViewById(R.id.appList);
-//            appListView.setAdapter(new ArrayAdapter<String>(PaymentActivity.this, android.R.layout.simple_list_item_1, appNameList));
-//            appListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            appListView = (ListView) dialog.findViewById(R.id.appList);
+            appListView.setAdapter(new ArrayAdapter<String>(getApplicationInstance, android.R.layout.simple_list_item_1, appNameList));
+            appListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                    pos.selectEmvApp(position);
-//                    TRACE.d("select emv app position = " + position);
-//                    dismissDialog();
-//                }
-//
-//            });
-//            dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
-//
-//                @Override
-//                public void onClick(View v) {
-//                    pos.cancelSelectEmvApp();
-//                    dismissDialog();
-//                }
-//            });
-//            dialog.show();
-//
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    pos.selectEmvApp(position);
+                    TRACE.d("select emv app position = " + position);
+                    dismissDialog();
+                }
+
+            });
+            dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    pos.cancelSelectEmvApp();
+                    dismissDialog();
+                }
+            });
+            dialog.show();
     }
 
     @Override
     public void onRequestWaitingUser() {//wait user to insert/swipe/tap card
         TRACE.d("onRequestWaitingUser()");
-//            dismissDialog();
+        dismissDialog();
 //            mllchrccard.setVisibility(View.VISIBLE);
 
     }
@@ -531,7 +524,7 @@ public class MyQposClass extends CQPOSService {
             });
             keyboardUtil = new KeyboardUtil((Activity) getApplicationInstance, dataList);
         } catch (Exception e) {
-            Log.w("e", "e:" + e);
+            Log.e("e", "e:" + e);
         }
     }
 
@@ -606,6 +599,8 @@ public class MyQposClass extends CQPOSService {
             }
             String amounts = Constants.transData.getInputMoney();
             String cashbackAmounts = Constants.transData.getCashbackAmounts();
+            Log.w("amounts", "amounts==" + amounts);
+            Log.w("cashbackAmounts", "cashbackAmounts==" + cashbackAmounts);
             if (cashbackAmounts == null) {
                 cashbackAmounts = "";
             }
@@ -661,7 +656,9 @@ public class MyQposClass extends CQPOSService {
                         super.onError(response);
 //                            dismissDialog();
                         TRACE.i("onError==");
-                        pos.sendOnlineProcessResult("8A025A33");
+                        Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), null);
+                        pos.cancelTrade();
+//                        pos.sendOnlineProcessResult("8A025A33");
                     }
                 });
 
@@ -670,7 +667,7 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onRequestTime() {
         TRACE.d("onRequestTime");
-//            dismissDialog();
+        dismissDialog();
         String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
         pos.sendTime(terminalTime);
 //            statusEditText.setText(getString(R.string.request_terminal_time) + " " + terminalTime);
@@ -680,7 +677,7 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onRequestDisplay(QPOSService.Display displayMsg) {
         TRACE.d("onRequestDisplay(Display displayMsg):" + displayMsg.toString());
-//            dismissDialog();
+        dismissDialog();
         String msg = "";
         if (displayMsg == QPOSService.Display.CLEAR_DISPLAY_MSG) {
             msg = "";
@@ -723,7 +720,7 @@ public class MyQposClass extends CQPOSService {
     public void onRequestFinalConfirm() {
         TRACE.d("onRequestFinalConfirm() ");
         TRACE.d("onRequestFinalConfirm - S");
-//            dismissDialog();
+        dismissDialog();
 //            if (!isPinCanceled) {
 //                dialog = new Dialog(PaymentActivity.this);
 //                dialog.setContentView(R.layout.confirm_dialog);
@@ -757,15 +754,14 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onRequestNoQposDetected() {
         TRACE.d("onRequestNoQposDetected()");
-//            dismissDialog();
-//            statusEditText.setText(getString(R.string.no_device_detected));
+        dismissDialog();
         Log.w("onRequestNoQposDetected", "No pos detected.");
     }
 
     @Override
     public void onRequestQposConnected() {
         TRACE.d("onRequestQposConnected()");
-//            dismissDialog();
+        dismissDialog();
 //            if (type == BLUETOOTH) {
 //                mrllayout.setVisibility(View.GONE);
 //                ivBlue.setVisibility(View.GONE);
@@ -811,7 +807,7 @@ public class MyQposClass extends CQPOSService {
 
     @Override
     public void onRequestQposDisconnected() {
-//            dismissDialog();
+        dismissDialog();
 //            if (type == USB_OTG_CDC_ACM) {
 //                Mydialog.ErrorDialog(PaymentActivity.this, "USB " + getString(R.string.disconnect), null);
 //            } else if (type == UART) {
@@ -819,7 +815,6 @@ public class MyQposClass extends CQPOSService {
 //            }
 //            tvTitle.setText(title);
         TRACE.d("onRequestQposDisconnected()");
-//            statusEditText.setText(getString(R.string.device_unplugged));
     }
 
     @Override
@@ -828,7 +823,7 @@ public class MyQposClass extends CQPOSService {
 //                updateThread.concelSelf();
 //            }
         TRACE.d("onError" + errorState.toString());
-//            dismissDialog();
+        dismissDialog();
         String msg = "";
         if (errorState == QPOSService.Error.CMD_NOT_AVAILABLE) {
             msg = getString(R.string.command_not_available);
@@ -879,6 +874,13 @@ public class MyQposClass extends CQPOSService {
                 Mydialog.ErrorDialog.dismiss();
             }
         });
+        if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+            Constants.transData.setFialSub(Constants.transData.getFialSub() + 1);
+            Constants.transData.setSub(Constants.transData.getSub() + 1);
+            ((Activity) getApplicationInstance).finish();
+        } else {
+            initInfo();
+        }
     }
 
     @Override
@@ -916,7 +918,6 @@ public class MyQposClass extends CQPOSService {
         String content = "get pin result\n";
         content += getString(R.string.pinKsn) + " " + pinKsn + "\n";
         content += getString(R.string.pinBlock) + " " + pinBlock + "\n";
-//            statusEditText.setText(content);
         TRACE.i(content);
     }
 
@@ -995,7 +996,7 @@ public class MyQposClass extends CQPOSService {
     public void onRequestSetPin() {
         TRACE.i("onRequestSetPin()");
 //            tvTitle.setText(getString(R.string.input_pin));
-//            dismissDialog();
+        dismissDialog();
 ////            Mydialog.pinpadDialog(CheckActivity.this, pos);
 //            mllchrccard.setVisibility(View.GONE);
 //            Paydialog = new PayPassDialog(PaymentActivity.this);
@@ -1309,7 +1310,7 @@ public class MyQposClass extends CQPOSService {
 
     @Override
     public void onReturnUpdateEMVRIDResult(boolean arg0) {
-//            dismissDialog();
+        dismissDialog();
         TRACE.d("onReturnUpdateEMVRIDResult(boolean arg0):" + arg0);
 //            mllinfo.setVisibility(View.VISIBLE);
 //            mbtnNewpay.setVisibility(View.GONE);
@@ -1320,7 +1321,7 @@ public class MyQposClass extends CQPOSService {
 
     @Override
     public void onReturnUpdateEMVResult(boolean arg0) {
-//            dismissDialog();
+        dismissDialog();
         TRACE.d("onReturnUpdateEMVResult(boolean arg0):" + arg0);
 //            mllinfo.setVisibility(View.VISIBLE);
 //            mbtnNewpay.setVisibility(View.GONE);
@@ -1451,17 +1452,12 @@ public class MyQposClass extends CQPOSService {
 
     @Override
     public void onQposKsnResult(Hashtable<String, String> arg0) {
-//            dismissDialog();
+        dismissDialog();
         TRACE.d("onQposKsnResult(Hashtable<String, String> arg0):" + arg0.toString());
         String pinKsn = arg0.get("pinKsn");
         String trackKsn = arg0.get("trackKsn");
         String emvKsn = arg0.get("emvKsn");
         TRACE.d("get the ksn result is :" + "pinKsn" + pinKsn + "\ntrackKsn" + trackKsn + "\nemvKsn" + emvKsn);
-//            mllinfo.setVisibility(View.VISIBLE);
-//            mbtnNewpay.setVisibility(View.GONE);
-//            tradeSuccess.setVisibility(View.GONE);
-//            mtvinfo.setText("pinKsn: " + pinKsn + "\ntrackKsn: " + trackKsn + "\nemvKsn: " + emvKsn);
-//            mllchrccard.setVisibility(View.GONE);
 
     }
 
@@ -1469,7 +1465,6 @@ public class MyQposClass extends CQPOSService {
     public void onQposDoGetTradeLog(String arg0, String arg1) {
         TRACE.d("onQposDoGetTradeLog(String arg0, String arg1):" + arg0 + TRACE.NEW_LINE + arg1);
         arg1 = QPOSUtil.convertHexToString(arg1);
-//            statusEditText.setText("orderId:" + arg1 + "\ntrade log:" + arg0);
     }
 
     @Override
@@ -1506,7 +1501,7 @@ public class MyQposClass extends CQPOSService {
 
     @Override
     public void onGetDevicePubKey(String clearKeys) {
-//            dismissDialog();
+        dismissDialog();
 //            TRACE.d("onGetDevicePubKey(clearKeys):" + clearKeys);
 //            mllinfo.setVisibility(View.VISIBLE);
 //            mbtnNewpay.setVisibility(View.GONE);
@@ -1525,7 +1520,7 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onTradeCancelled() {
         TRACE.d("onTradeCancelled");
-//            dismissDialog();
+        dismissDialog();
     }
 
     @Override
@@ -1673,7 +1668,7 @@ public class MyQposClass extends CQPOSService {
 
     @Override
     public void onGetShutDownTime(String arg0) {
-//            dismissDialog();
+        dismissDialog();
 //            if (arg0 != null) {
         TRACE.d("onGetShutDownTime(String arg0):" + arg0.toString());
 //                mtvinfo.setText("shut down time is : " + Integer.parseInt(arg0, 16) + "s");
@@ -1908,42 +1903,43 @@ public class MyQposClass extends CQPOSService {
                     public void onError(Response<String> response) {
                         super.onError(response);
                         TRACE.i("onError==");
-                        Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.replied_failed), null);
+                        Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), null);
                     }
                 });
     }
 
     public void initInfo() {
-        if (Constants.transData.getPosId() != null&& !"".equals(Constants.transData.getPosId())) {
+        if (Constants.transData.getPosId() != null && !"".equals(Constants.transData.getPosId())) {
             Constants.transData.setPosId("");
         }
-        if (Constants.transData.getPosInfo() != null&& !"".equals(Constants.transData.getPosInfo())) {
+        if (Constants.transData.getPosInfo() != null && !"".equals(Constants.transData.getPosInfo())) {
             Constants.transData.setPosInfo("");
         }
-        if (Constants.transData.getPayment() != null&& !"".equals(Constants.transData.getPayment())) {
+        if (Constants.transData.getPayment() != null && !"".equals(Constants.transData.getPayment())) {
             Constants.transData.setPayment("");
         }
-        if (Constants.transData.getSN() != null&& !"".equals(Constants.transData.getSN())) {
+        if (Constants.transData.getSN() != null && !"".equals(Constants.transData.getSN())) {
             Constants.transData.setSN("");
         }
-        if (Constants.transData.getCashbackAmounts() != null&& !"".equals(Constants.transData.getCashbackAmounts() )) {
+        if (Constants.transData.getCashbackAmounts() != null && !"".equals(Constants.transData.getCashbackAmounts())) {
             Constants.transData.setCashbackAmounts("");
         }
-        if (Constants.transData.getUpdateCheckValue() != null&& !"".equals(Constants.transData.getUpdateCheckValue())) {
+        if (Constants.transData.getUpdateCheckValue() != null && !"".equals(Constants.transData.getUpdateCheckValue())) {
             Constants.transData.setUpdateCheckValue("");
 
         }
-        if (Constants.transData.getKeyCheckValue() != null&& !"".equals(Constants.transData.getKeyCheckValue())) {
+        if (Constants.transData.getKeyCheckValue() != null && !"".equals(Constants.transData.getKeyCheckValue())) {
             Constants.transData.setKeyCheckValue("");
         }
-        if (Constants.transData.getInputMoney() != null&& !"".equals(Constants.transData.getInputMoney())) {
+        if (Constants.transData.getInputMoney() != null && !"".equals(Constants.transData.getInputMoney())) {
             Constants.transData.setInputMoney("");
         }
-        if (Constants.transData.getPayType() != null&& !"".equals(Constants.transData.getPayType() )) {
+        if (Constants.transData.getPayType() != null && !"".equals(Constants.transData.getPayType())) {
             Constants.transData.setPayType("");
         }
 
     }
+
     public static void dismissDialog() {
 
         if (Mydialog.ErrorDialog != null) {

@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         menuItem = navigationView.getMenu().findItem(R.id.nav_printer);
 
         drawerStateChanged();
-        bluetoothRelaPer();
         floatingActionButton.setOnClickListener(view -> {
             toolbar.setTitle(getString(R.string.show_log));
             switchFragment(5);
@@ -101,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
         if ("D20".equals(deviceModel)||"D30".equals(deviceModel)||"D60".equals(deviceModel)){
             open(QPOSService.CommunicationMode.UART_SERVICE, this);
+        }else{
+            bluetoothRelaPer();
         }
     }
 
@@ -223,7 +224,11 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                     }
                 });
                 break;
-
+            case R.id.nav_autotrade:
+                toolbar.setTitle(getString(R.string.auto_trade));
+                switchFragment(8);
+                drawerLayout.close();
+                break;
 
             default:
                 break;
@@ -294,6 +299,13 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 }
                 transaction.show(scanFragment);
                 break;
+            case 8:
+                if (autoFragment == null) {
+                    autoFragment = new AutoFragment();
+                    transaction.add(R.id.nav_host_fragment_content_main, autoFragment);
+                }
+                transaction.show(autoFragment);
+                break;
             default:
                 break;
         }
@@ -325,6 +337,9 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
         if (scanFragment != null) {
             transaction.hide(scanFragment);
+        }
+        if (autoFragment != null) {
+            transaction.hide(autoFragment);
         }
 
     }
@@ -398,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             toolbar.setTitle(getString(R.string.menu_payment));
             switchFragment(0);
             drawerLayout.close();
-            exit();
+//            exit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
