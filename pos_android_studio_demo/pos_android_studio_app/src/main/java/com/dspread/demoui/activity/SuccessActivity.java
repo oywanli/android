@@ -1,5 +1,6 @@
 package com.dspread.demoui.activity;
 
+import static com.dspread.demoui.activity.BaseApplication.handler;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 
 import android.content.Intent;
@@ -38,13 +39,13 @@ public class SuccessActivity extends AppCompatActivity {
         String paytment = getIntent().getStringExtra("paytment");
         String tradeResut = getIntent().getStringExtra("tradeResut");
         String posinfo = getIntent().getStringExtra("posinfo");
-        if("payment".equals(paytment)){
+        if ("payment".equals(paytment)) {
             initInfo();
             tvTitle.setText(getString(R.string.transaction_approved));
             tvInfo.setText(tradeResut);
-            if ("autoTrade".equals(Constants.transData.getAutoTrade())){
-                Constants.transData.setSuccessSub(Constants.transData.getSuccessSub()+1);
-                Constants.transData.setSub(Constants.transData.getSub()+1);
+            if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                Constants.transData.setSuccessSub(Constants.transData.getSuccessSub() + 1);
+                Constants.transData.setSub(Constants.transData.getSub() + 1);
                 finish();
             }
         }
@@ -77,37 +78,37 @@ public class SuccessActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.w("onDestroy","onDestroy");
+        Log.w("onDestroy", "onDestroy");
 //        initInfo();
     }
 
     public void initInfo() {
-        if (Constants.transData.getPosId() != null&& !"".equals(Constants.transData.getPosId())) {
+        if (Constants.transData.getPosId() != null && !"".equals(Constants.transData.getPosId())) {
             Constants.transData.setPosId("");
         }
-        if (Constants.transData.getPosInfo() != null&& !"".equals(Constants.transData.getPosInfo())) {
+        if (Constants.transData.getPosInfo() != null && !"".equals(Constants.transData.getPosInfo())) {
             Constants.transData.setPosInfo("");
         }
-        if (Constants.transData.getPayment() != null&& !"".equals(Constants.transData.getPayment())) {
+        if (Constants.transData.getPayment() != null && !"".equals(Constants.transData.getPayment())) {
             Constants.transData.setPayment("");
         }
-        if (Constants.transData.getSN() != null&& !"".equals(Constants.transData.getSN())) {
+        if (Constants.transData.getSN() != null && !"".equals(Constants.transData.getSN())) {
             Constants.transData.setSN("");
         }
-        if (Constants.transData.getCashbackAmounts() != null&& !"".equals(Constants.transData.getCashbackAmounts() )) {
+        if (Constants.transData.getCashbackAmounts() != null && !"".equals(Constants.transData.getCashbackAmounts())) {
             Constants.transData.setCashbackAmounts("");
         }
-        if (Constants.transData.getUpdateCheckValue() != null&& !"".equals(Constants.transData.getUpdateCheckValue())) {
+        if (Constants.transData.getUpdateCheckValue() != null && !"".equals(Constants.transData.getUpdateCheckValue())) {
             Constants.transData.setUpdateCheckValue("");
 
         }
-        if (Constants.transData.getKeyCheckValue() != null&& !"".equals(Constants.transData.getKeyCheckValue())) {
+        if (Constants.transData.getKeyCheckValue() != null && !"".equals(Constants.transData.getKeyCheckValue())) {
             Constants.transData.setKeyCheckValue("");
         }
-        if (Constants.transData.getInputMoney() != null&& !"".equals(Constants.transData.getInputMoney())) {
+        if (Constants.transData.getInputMoney() != null && !"".equals(Constants.transData.getInputMoney())) {
             Constants.transData.setInputMoney("");
         }
-        if (Constants.transData.getPayType() != null&& !"".equals(Constants.transData.getPayType() )) {
+        if (Constants.transData.getPayType() != null && !"".equals(Constants.transData.getPayType())) {
             Constants.transData.setPayType("");
         }
 

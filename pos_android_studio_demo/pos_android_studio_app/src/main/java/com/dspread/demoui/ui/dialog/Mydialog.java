@@ -85,6 +85,7 @@ public class Mydialog {
         mtvInfo.setText(msg);
         Button mbtnCancel = view.findViewById(R.id.btnCancel);
         mbtnCancel.setVisibility(View.GONE);
+
         mbtnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +103,13 @@ public class Mydialog {
         ErrorDialog = new AlertDialog.Builder(mContext).create();
         ErrorDialog.setCanceledOnTouchOutside(false);
         ErrorDialog.setCancelable(false);
+//        if (msg.equals(mContext.getString(R.string.bad_swipe))) {
+//            mbtnConfirm.setVisibility(View.GONE);
+//            ErrorDialog.setCancelable(true);
+//        }else{
+//            ErrorDialog.setCancelable(false);
+//            mbtnConfirm.setVisibility(View.VISIBLE);
+//        }
         if (!mContext.isFinishing()) {
             ErrorDialog.show();
         }

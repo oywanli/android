@@ -1,6 +1,7 @@
 package com.dspread.demoui.activity;
 
 import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
+import static com.dspread.demoui.activity.BaseApplication.handler;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
 import static com.xuexiang.xutil.resource.ResUtils.getString;
@@ -11,12 +12,14 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.beans.Constants;
@@ -258,9 +261,14 @@ public class MyQposClass extends CQPOSService {
             msg = getString(R.string.card_no_response);
         }
         if (msg != null && !"".equals(msg)) {
-            Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, null);
-            if (!msg.equals(getApplicationInstance.getString(R.string.bad_swipe))) {
-                autoTrade();
+            if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                if (!msg.equals(getApplicationInstance.getString(R.string.bad_swipe))) {
+                    autoTrade(msg);
+                }else{
+                    Toast.makeText(getApplicationInstance,msg,Toast.LENGTH_SHORT);
+                }
+            } else {
+                Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, null);
             }
         }
 //            dealDoneflag = true;
@@ -364,19 +372,22 @@ public class MyQposClass extends CQPOSService {
 
         initInfo();
         if (!"".equals(msg)) {
-            Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, new Mydialog.OnMyClickListener() {
-                @Override
-                public void onCancel() {
-                }
+            if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                autoTrade(msg);
+            } else {
+                Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, new Mydialog.OnMyClickListener() {
+                    @Override
+                    public void onCancel() {
+                    }
 
-                @Override
-                public void onConfirm() {
-                    ((Activity) getApplicationInstance).finish();
-                    Mydialog.ErrorDialog.dismiss();
-                    autoTrade();
-                }
-            });
+                    @Override
+                    public void onConfirm() {
+                        ((Activity) getApplicationInstance).finish();
+                        Mydialog.ErrorDialog.dismiss();
 
+                    }
+                });
+            }
         }
 //            amounts = "";
 //            cashbackAmounts = "";
@@ -848,26 +859,23 @@ public class MyQposClass extends CQPOSService {
             pos.resetPosStatus();
             msg = getString(R.string.device_reset);
         }
-        Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, new Mydialog.OnMyClickListener() {
-            @Override
-            public void onCancel() {
+        if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+            autoTrade(msg);
+        } else {
+            Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, new Mydialog.OnMyClickListener() {
+                @Override
+                public void onCancel() {
 
-            }
-
-            @Override
-            public void onConfirm() {
-                ((Activity) getApplicationInstance).finish();
-                Mydialog.ErrorDialog.dismiss();
-                if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
-                    autoTrade();
                 }
-            }
-        });
-//        if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
-//            autoTrade();
-//        } else {
-            initInfo();
-//        }
+
+                @Override
+                public void onConfirm() {
+                    ((Activity) getApplicationInstance).finish();
+                    Mydialog.ErrorDialog.dismiss();
+                }
+            });
+        }
+        initInfo();
     }
 
     @Override
@@ -1898,7 +1906,7 @@ public class MyQposClass extends CQPOSService {
                         super.onError(response);
                         dismissDialog();
                         initInfo();
-                        autoTrade();
+                        autoTrade(getString(R.string.network_failed));
                         TRACE.i("onError==");
                         Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), null);
                     }
@@ -1959,10 +1967,19 @@ public class MyQposClass extends CQPOSService {
             keyboardUtil.hide();
         }
     }
-    public void autoTrade() {
+
+    public void autoTrade(String msg) {
+        dismissDialog();
+        Toast.makeText(getApplicationInstance,msg,Toast.LENGTH_SHORT).show();
         if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
             Constants.transData.setFialSub(Constants.transData.getFialSub() + 1);
             Constants.transData.setSub(Constants.transData.getSub() + 1);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            ((Activity) getApplicationInstance).finish();
         }
     }
 }
