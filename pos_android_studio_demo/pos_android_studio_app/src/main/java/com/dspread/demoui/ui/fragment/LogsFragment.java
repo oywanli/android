@@ -142,7 +142,7 @@ public class LogsFragment extends Fragment {
         }else if(item.getItemId() == 2){
             if (logFileConfig.logFileWR!=null) {
                 logFileConfig.deleteDir(logFileConfig.logFileWR);
-                tv_log.setText("");
+                tv_log.setText("Empty logs");
             }
         }
         return super.onOptionsItemSelected(item);

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -141,6 +142,11 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
                 }
                 break;
             case R.id.update_emvByXml:
+                if (!canshow) {
+                    return;
+                }
+                canshow = false;
+                showTimer.start();
                 if (conType != null && "uart".equals(conType)) {
                     Mydialog.loading(getActivity(),getString(R.string.updateEMVByXml));
                     pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv.xml", getActivity())));
@@ -306,4 +312,16 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
         }
 
     }
+    private boolean canshow = true;
+    private CountDownTimer showTimer = new CountDownTimer(1500, 500) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+        }
+
+        @Override
+        public void onFinish() {
+            canshow = true;
+        }
+
+    };
 }

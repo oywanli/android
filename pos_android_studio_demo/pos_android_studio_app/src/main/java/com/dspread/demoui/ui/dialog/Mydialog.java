@@ -478,7 +478,7 @@ public class Mydialog {
 
         ShowInfoDialog = new AlertDialog.Builder(mContext).create();
         ShowInfoDialog.setCanceledOnTouchOutside(false);
-        ShowInfoDialog.setCancelable(false);
+//        ShowInfoDialog.setCancelable(false);
         ShowInfoDialog.show();
         //显示对话框
         Window window = ShowInfoDialog.getWindow();

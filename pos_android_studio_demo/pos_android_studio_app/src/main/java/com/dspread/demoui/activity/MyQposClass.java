@@ -645,19 +645,23 @@ public class MyQposClass extends CQPOSService {
                         dismissDialog();
                         initInfo();
                         TRACE.i("onError==");
-                        Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
-                            @Override
-                            public void onCancel() {
+                        if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                            Toast.makeText(getApplicationInstance,getString(R.string.network_failed),Toast.LENGTH_SHORT).show();
+                            pos.sendOnlineProcessResult("8A025A33");
+                        }else {
+                            Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
+                                @Override
+                                public void onCancel() {
 
-                            }
+                                }
 
-                            @Override
-                            public void onConfirm() {
-                                pos.sendOnlineProcessResult("8A025A33");
-                            }
-                        });
+                                @Override
+                                public void onConfirm() {
+                                    pos.sendOnlineProcessResult("8A025A33");
+                                }
+                            });
 
-
+                        }
                     }
                 });
 
@@ -1911,10 +1915,13 @@ public class MyQposClass extends CQPOSService {
                         super.onError(response);
                         dismissDialog();
                         initInfo();
-                        autoTrade(getString(R.string.network_failed));
-                        TRACE.i("onError==");
-                        Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), null);
-                    }
+                        if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                            autoTrade(getString(R.string.network_failed));
+                        }else {
+                            TRACE.i("onError==");
+                            Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), null);
+                        }
+                        }
                 });
     }
 

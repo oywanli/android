@@ -38,6 +38,7 @@ public class PaymentUartActivity extends AppCompatActivity {
         tvTitle.setText("SN:" + Constants.transData.getSN());
         BaseApplication.getApplicationInstance = this;
         pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+//        pos.doCheckCard();
         pos.doTrade(20);
         ivBackTitle.setOnClickListener(new View.OnClickListener() {
             @Override
