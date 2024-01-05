@@ -1,3 +1,19 @@
+## [4.6.2](https://gitlab.com/[secure]/android/compare/v4.6.1...v4.6.2) (2024-01-05)
+
+
+### Bug Fixes
+
+* add the sendOnlineProcessResult (null) method ([05e48e0](https://gitlab.com/[secure]/android/commit/05e48e06935a6b2f45521cec877c4b02b1580c87))
+* delete android-pos-demo-work-doc.o3e5ib2o.sw.md ([f94eeab](https://gitlab.com/[secure]/android/commit/f94eeab00a071b66068723b49c4f34e0a2d7d20d))
+* delete calls to cancel transactions and add print exit closure methods ([3903d64](https://gitlab.com/[secure]/android/commit/3903d6473e15517a93ba53dd6deecad8bd98ec44))
+* delete calls to cancel transactions and add print exit closure methods ([64d5fe1](https://gitlab.com/[secure]/android/commit/64d5fe19758396b2c8ed927b86d6681f6f51c3bc))
+* delete swimm.json ([8e5c544](https://gitlab.com/[secure]/android/commit/8e5c544e84143d7b1be6ce5436c90222f3e9c78d))
+* merge branch 'master' into develop ([ae9a312](https://gitlab.com/[secure]/android/commit/ae9a31218c69c23c4cc9e2475b4cefb351dc0f35))
+* update swimm.json ([e8cd7d9](https://gitlab.com/[secure]/android/commit/e8cd7d9876db968e29bf01192753a375ad49552e))
+* updated the fastjson version ([ed041e2](https://gitlab.com/[secure]/android/commit/ed041e2a023707bb5a010ba1340c2004fa0459be))
+* updated the fastjson version ([26ecee1](https://gitlab.com/[secure]/android/commit/26ecee1eca30bcffe3b7cf114ea31e54915cd6fa))
+* updated the fastjson version. ([1f0dce2](https://gitlab.com/[secure]/android/commit/1f0dce2e62d4cf98522c8a6b2d7d6b26af0ca9a1))
+
 ## [4.5.1](https://gitlab.com/[secure]/android/compare/v4.5.0...v4.5.1) (2023-10-13)
 
 
