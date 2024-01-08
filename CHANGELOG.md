@@ -6,13 +6,10 @@
 * add the sendOnlineProcessResult (null) method ([05e48e0](https://gitlab.com/[secure]/android/commit/05e48e06935a6b2f45521cec877c4b02b1580c87))
 * delete android-pos-demo-work-doc.o3e5ib2o.sw.md ([f94eeab](https://gitlab.com/[secure]/android/commit/f94eeab00a071b66068723b49c4f34e0a2d7d20d))
 * delete calls to cancel transactions and add print exit closure methods ([3903d64](https://gitlab.com/[secure]/android/commit/3903d6473e15517a93ba53dd6deecad8bd98ec44))
-* delete calls to cancel transactions and add print exit closure methods ([64d5fe1](https://gitlab.com/[secure]/android/commit/64d5fe19758396b2c8ed927b86d6681f6f51c3bc))
 * delete swimm.json ([8e5c544](https://gitlab.com/[secure]/android/commit/8e5c544e84143d7b1be6ce5436c90222f3e9c78d))
 * merge branch 'master' into develop ([ae9a312](https://gitlab.com/[secure]/android/commit/ae9a31218c69c23c4cc9e2475b4cefb351dc0f35))
 * update swimm.json ([e8cd7d9](https://gitlab.com/[secure]/android/commit/e8cd7d9876db968e29bf01192753a375ad49552e))
 * updated the fastjson version ([ed041e2](https://gitlab.com/[secure]/android/commit/ed041e2a023707bb5a010ba1340c2004fa0459be))
-* updated the fastjson version ([26ecee1](https://gitlab.com/[secure]/android/commit/26ecee1eca30bcffe3b7cf114ea31e54915cd6fa))
-* updated the fastjson version. ([1f0dce2](https://gitlab.com/[secure]/android/commit/1f0dce2e62d4cf98522c8a6b2d7d6b26af0ca9a1))
 
 ## [4.5.1](https://gitlab.com/[secure]/android/compare/v4.5.0...v4.5.1) (2023-10-13)
 
@@ -64,7 +61,6 @@
 ### Bug Fixes
 
 * implement unified modification of project names with existing project file names ([b93000a](https://gitlab.com/[secure]/android/commit/b93000aaa4e77a181efe733b34606bb1083201b9))
-* implement unified modification of project names with existing project file names ([a2ff052](https://gitlab.com/[secure]/android/commit/a2ff052583db957a539011db4c058912b84d5567))
 * modify code according to method naming rules ([b1c0a44](https://gitlab.com/[secure]/android/commit/b1c0a444d4a80076bc4763d80152bb516031842c))
 * modify files that failed compilation ([f6da7f8](https://gitlab.com/[secure]/android/commit/f6da7f8fc9efe437651b57d3edfd70674f63d532))
 * modify the application package name and remove the welcome interface ([ded8caf](https://gitlab.com/[secure]/android/commit/ded8cafb619ec4c22286f3dd3442bbb0ceecbf88))
@@ -72,7 +68,6 @@
 * modify the class name to optimize the code ([17f2cd7](https://gitlab.com/[secure]/android/commit/17f2cd73c3d1ce1c5c1cdd68d856441f3f8bbf09))
 * optimize the code encoding format ([a0d7646](https://gitlab.com/[secure]/android/commit/a0d764668532d869327aee38c2bf9fb671544859))
 * problems during the compilation process of modifying strings files ([e727282](https://gitlab.com/[secure]/android/commit/e7272820a82630a35fda67c97779f766c3f81d49))
-* problems during the compilation process of modifying strings files ([37af695](https://gitlab.com/[secure]/android/commit/37af695e09b9febd6dd97b886c90f6495c19b467))
 * removed the jniLibs file to address the issue of failed introduction of so files ([1f3e482](https://gitlab.com/[secure]/android/commit/1f3e482162a2c707af9a3eca1fc7477ecae62155))
 
 
@@ -87,10 +82,8 @@
 ### Bug Fixes
 
 * implement unified modification of project names with existing project file names ([b93000a](https://gitlab.com/[secure]/android/commit/b93000aaa4e77a181efe733b34606bb1083201b9))
-* implement unified modification of project names with existing project file names ([a2ff052](https://gitlab.com/[secure]/android/commit/a2ff052583db957a539011db4c058912b84d5567))
 * modify files that failed compilation ([f6da7f8](https://gitlab.com/[secure]/android/commit/f6da7f8fc9efe437651b57d3edfd70674f63d532))
 * problems during the compilation process of modifying strings files ([e727282](https://gitlab.com/[secure]/android/commit/e7272820a82630a35fda67c97779f766c3f81d49))
-* problems during the compilation process of modifying strings files ([37af695](https://gitlab.com/[secure]/android/commit/37af695e09b9febd6dd97b886c90f6495c19b467))
 * removed the jniLibs file to address the issue of failed introduction of so files ([1f3e482](https://gitlab.com/[secure]/android/commit/1f3e482162a2c707af9a3eca1fc7477ecae62155))
 
 
