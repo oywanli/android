@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }else{
             bluetoothRelaPer();
         }
+        toolbar.setTitle(getString(R.string.menu_payment));
+        switchFragment(0);
     }
 
     @Override

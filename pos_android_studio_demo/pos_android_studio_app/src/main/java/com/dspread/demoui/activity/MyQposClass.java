@@ -69,6 +69,7 @@ public class MyQposClass extends CQPOSService {
             Log.w("paymentActivity", "msg==" + msg);
         } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
             Log.w("paymentActivity", "msg==" + msg);
+            msg = getString(R.string.try_another_interface);
         } else if (result == QPOSService.DoTradeResult.ICC) {
             TRACE.d("EMV ICC Start");
             pos.doEmvApp(QPOSService.EmvOption.START);
@@ -879,7 +880,9 @@ public class MyQposClass extends CQPOSService {
 
                 @Override
                 public void onConfirm() {
+                    if(!"com.dspread.demoui.activity.MainActivity".equals(getApplicationInstance.getClass().getName())){
                     ((Activity) getApplicationInstance).finish();
+                    }
                     Mydialog.ErrorDialog.dismiss();
                 }
             });

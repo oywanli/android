@@ -186,7 +186,6 @@ public class Mydialog {
     public static final int USB_OTG_CDC_ACM = 3;
 
     public static void payTypeDialog(Activity mContext, String amount, long inputMoney, String[] data) {
-
         payTypeDialog = new AlertDialog.Builder(mContext).create();
         if (!mContext.isFinishing()) {
             payTypeDialog.show();
