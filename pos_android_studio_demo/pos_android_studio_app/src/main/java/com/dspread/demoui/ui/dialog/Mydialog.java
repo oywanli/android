@@ -390,7 +390,8 @@ public class Mydialog {
                                 Constants.transData.setPayType("CASHBACK");
                                 Constants.transData.setCashbackAmounts(inputcashbackMoney);
                                 Constants.transData.setPayment("payment");
-                                pos.getQposId();
+                                Intent intent = new Intent(getApplicationInstance, PaymentUartActivity.class);
+                                getApplicationInstance.startActivity(intent);
                                 cashBackPaymentDialog.dismiss();
                             } else if (conType != null && "usb".equals(conType)) {
                                 Intent intent = new Intent(mContext, PaymentActivity.class);

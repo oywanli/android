@@ -130,18 +130,16 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                Log.w("onDrawerOpened", "onDrawerOpened");
+                TRACE.d( "onDrawerOpened");
                 HideKeyboard(drawerView);
             }
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                Log.w("onDrawerClosed", "onDrawerClosed");
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                Log.w("onDrawerStateChanged", "onDrawerStateChanged");
             }
         });
     }
@@ -321,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     private void hideFragemts() {
         if (homeFragment != null) {
-            Log.w("homeFragment", "homeFragment");
+            TRACE.d( "homeFragment");
             transaction.hide(homeFragment);
         }
         if (settingFragment != null) {

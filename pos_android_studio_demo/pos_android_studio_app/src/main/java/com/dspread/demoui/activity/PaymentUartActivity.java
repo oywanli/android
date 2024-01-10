@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,11 +36,15 @@ public class PaymentUartActivity extends AppCompatActivity {
     private void initView() {
         ivBackTitle = findViewById(R.id.iv_back_title);
         tvTitle = findViewById(R.id.tv_title);
-        tvTitle.setText("SN:" + Constants.transData.getSN());
+        if (Constants.transData.getSN()!=null&&!"".equals(Constants.transData.getSN())) {
+            tvTitle.setText("SN:" + Constants.transData.getSN());
+        }else{
+            tvTitle.setText(getString(R.string.menu_payment));
+        }
         BaseApplication.getApplicationInstance = this;
         pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-//        pos.doCheckCard();
-        pos.doTrade(20);
+        pos.doCheckCard();
+//        pos.doTrade(20);
         ivBackTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,9 +94,10 @@ public class PaymentUartActivity extends AppCompatActivity {
         }
 
     }
-
+   
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.w("onKeyDown","keyCode=="+keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
                 Constants.transData.setAutoTrade("StopTrade");

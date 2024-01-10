@@ -104,10 +104,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mAmount = view.findViewById(R.id.tv_amount);
         connectType = SharedPreferencesUtil.getmInstance(getActivity());
         conType = (String) connectType.get("conType", "");
-        if (conType != null && "uart".equals(conType)) {
-            open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
-            Log.w("log","home-----------------");
-        }
     }
 
     protected void initData() {

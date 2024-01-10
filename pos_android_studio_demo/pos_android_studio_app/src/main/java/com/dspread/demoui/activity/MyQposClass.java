@@ -369,6 +369,8 @@ public class MyQposClass extends CQPOSService {
             msg = "CARD BLOCKED";
         } else if (transactionResult == QPOSService.TransactionResult.TRANS_TOKEN_INVALID) {
             msg = "TOKEN INVALID";
+        } else if (transactionResult == QPOSService.TransactionResult.APP_BLOCKED) {
+            msg = "APP BLOCKED";
         }
 
         initInfo();
@@ -769,58 +771,11 @@ public class MyQposClass extends CQPOSService {
         if (Constants.transData.getSN()==null) {
             pos.getQposId();
         }
-//            if (type == BLUETOOTH) {
-//                mrllayout.setVisibility(View.GONE);
-//                ivBlue.setVisibility(View.GONE);
-//                tvTitle.setText(title + "(" + blueTitle.substring(0, 6) + "..." + blueTitle.substring(blueTitle.length() - 3) + ")");
-//                BluetoothToolsBean.setBulueName(title + "(" + blueTitle.substring(0, 6) + "..." + blueTitle.substring(blueTitle.length() - 3) + ")");
-//                isConnStatus = true;
-//                int keyIdex = getKeyIndex();
-//                if (posinfo != null) {
-//                    getPosInfo(posinfo);
-//                } else if (posUpdate != null) {
-//                    updatePosInfo(posUpdate);
-//                } else {
-//                    pos.doTrade(keyIdex, 30);//start do trade
-//                }
-//
-//            } else if (type == UART) {
-//                if (posinfo != null) {
-//                    getPosInfo(posinfo);
-//                } else if (posUpdate != null) {
-//                    updatePosInfo(posUpdate);
-//                } else {
-//                    Log.w("type", "type==" + type);
-//                    pos.getQposId();
-//                }
-//
-//            } else if (type == USB_OTG_CDC_ACM) {
-//                if (posinfo != null) {
-//                    getPosInfo(posinfo);
-//                } else if (posUpdate != null) {
-//                    updatePosInfo(posUpdate);
-//                } else {
-//                    pos.getQposId();
-//                }
-//            } else {
-//                tvTitle.setText(getString(R.string.device_connect));
-//            }
-//            if (ActivityCompat.checkSelfPermission(PaymentActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
-//                //申请权限
-//                ActivityCompat.requestPermissions(PaymentActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
-//            }
-
     }
-
     @Override
     public void onRequestQposDisconnected() {
         dismissDialog();
-//            if (type == USB_OTG_CDC_ACM) {
-//                Mydialog.ErrorDialog(PaymentActivity.this, "USB " + getString(R.string.disconnect), null);
-//            } else if (type == UART) {
-//                tvTitle.setText(getString(R.string.disconnect));
-//            }
-//            tvTitle.setText(title);
+//        Mydialog.ErrorDialog((Activity) getApplicationInstance, "UART " + getString(R.string.disconnect), null);
         TRACE.d("onRequestQposDisconnected()");
     }
 
@@ -829,13 +784,13 @@ public class MyQposClass extends CQPOSService {
 //            if (updateThread != null) {
 //                updateThread.concelSelf();
 //            }
-        TRACE.d("onError" + errorState.toString());
-        dismissDialog();
+        TRACE.d("onError: " + errorState.toString());
+
         String msg = "";
         if (errorState == QPOSService.Error.CMD_NOT_AVAILABLE) {
             msg = getString(R.string.command_not_available);
         } else if (errorState == QPOSService.Error.TIMEOUT) {
-            msg = getString(R.string.device_no_response);
+            msg = getString(R.string.payment_timeout);
         } else if (errorState == QPOSService.Error.DEVICE_RESET) {
             msg = getString(R.string.device_reset);
         } else if (errorState == QPOSService.Error.UNKNOWN) {
@@ -869,6 +824,8 @@ public class MyQposClass extends CQPOSService {
             pos.resetPosStatus();
             msg = getString(R.string.device_reset);
         }
+            dismissDialog();
+
         if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
             autoTrade(msg);
         } else {
@@ -999,59 +956,7 @@ public class MyQposClass extends CQPOSService {
 
     }
 
-    @Override
-    public void onRequestSetPin() {
-        TRACE.i("onRequestSetPin()");
-//            tvTitle.setText(getString(R.string.input_pin));
-        dismissDialog();
-////            Mydialog.pinpadDialog(CheckActivity.this, pos);
-//            mllchrccard.setVisibility(View.GONE);
-//            Paydialog = new PayPassDialog(PaymentActivity.this);
-//            Paydialog.getPayViewPass().setRandomNumber(true).setPayClickListener(new PayPassView.OnPayClickListener() {
-//
-//                @Override
-//                public void onCencel() {
-//                    pos.cancelPin();
-//                    Paydialog.dismiss();
-//                }
-//
-//                @Override
-//                public void onPaypass() {
-////                pos.bypassPin();
-//                    pos.sendPin("".getBytes());
-//                    Paydialog.dismiss();
-//                }
-//
-//                @Override
-//                public void onConfirm(String password) {
-//                    if (password.length() >= 4 && password.length() <= 12) {
-//                        Log.w("password", "password==" + password);
-////                        pos.sendPin(password);
-//                        String newPin = "";
-//                        //this part is used to enctypt the plaintext pin with random seed
-//                        if (pos.getCvmKeyList() != null && !("").equals(pos.getCvmKeyList())) {
-//                            String keyList = Util.convertHexToString(pos.getCvmKeyList());
-//                            for (int i = 0; i < password.length(); i++) {
-//                                for (int j = 0; j < keyList.length(); j++) {
-//                                    if (keyList.charAt(j) == password.charAt(i)) {
-//                                        newPin = newPin + Integer.toHexString(j) + "";
-//                                        break;
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        String pinBlock = buildCvmPinBlock(pos.getEncryptData(), newPin);// build the ISO format4 pin block
-//                        Log.w("password", "pinBlock==" + pinBlock);
-//                        pos.sendCvmPin(pinBlock, true);
-//                        Paydialog.dismiss();
-//                    } else {
-//                        Toast.makeText(PaymentActivity.this, "The length just can input 4 - 12 digits", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//
-//            });
-    }
+
 
     @Override
     public void onReturnSetMasterKeyResult(boolean isSuccess) {

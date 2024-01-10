@@ -1178,6 +1178,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 msg = "CARD BLOCKED";
             } else if (transactionResult == QPOSService.TransactionResult.TRANS_TOKEN_INVALID) {
                 msg = "TOKEN INVALID";
+            }else if (transactionResult == QPOSService.TransactionResult.APP_BLOCKED) {
+                msg = "APP BLOCKED";
             }
             Log.w("TAG", "transactionResult==" + msg);
             Log.w("transactionResult", "transactionResult==" + transactionResult);

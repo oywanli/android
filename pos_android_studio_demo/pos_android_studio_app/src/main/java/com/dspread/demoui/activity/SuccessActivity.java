@@ -5,6 +5,9 @@ import static com.dspread.demoui.activity.BaseApplication.pos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -46,7 +49,13 @@ public class SuccessActivity extends AppCompatActivity {
             if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
                 Constants.transData.setSuccessSub(Constants.transData.getSuccessSub() + 1);
                 Constants.transData.setSub(Constants.transData.getSub() + 1);
-                finish();
+                new Handler(Looper.myLooper(),new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(Message msg) {
+                        finish();
+                        return false;
+                    }
+                }).sendEmptyMessageDelayed(0x123,1000);
             }
         }
         if ("posid".equals(posinfo)) {
@@ -78,7 +87,6 @@ public class SuccessActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.w("onDestroy", "onDestroy");
 //        initInfo();
     }
 

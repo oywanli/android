@@ -377,6 +377,7 @@
     <string name="prompt_message">信息提示:</string>
     <string name="delete">清除</string>
     <string name="blue_disconect">蓝牙连接已经断开</string>
+    <string name="payment_timeout">交易超时</string>
 
 
     <string name="setting_uart">POS串口连接</string>

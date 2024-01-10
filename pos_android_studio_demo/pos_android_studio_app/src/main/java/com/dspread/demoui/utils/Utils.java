@@ -7,8 +7,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
-
 import com.dspread.demoui.activity.MyQposClass;
 import com.dspread.xpos.QPOSService;
 
@@ -380,7 +378,7 @@ public class Utils {
 //	}
 	private static final int MIN_CLICK_DELAY_TIME2 = 3000;
 	public static boolean islistFastClick() {
-		Log.w("islistFastClick","islistFastClick");
+		TRACE.d("islistFastClick");
 		boolean flag = false;
 		long curClickTime = System.currentTimeMillis();
 		if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME2) {
