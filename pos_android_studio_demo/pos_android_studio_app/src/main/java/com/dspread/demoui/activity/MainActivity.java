@@ -13,9 +13,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     ExtendedFloatingActionButton floatingActionButton;
     private MenuItem menuItem;
     private AutoFragment autoFragment;
+    SharedPreferencesUtil connectType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,15 +100,22 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         BaseApplication baseApplication = new BaseApplication();
         baseApplication.onCreate();
         baseApplication.attachBaseContext(this);
-        BaseApplication.getApplicationInstance=this;
+        BaseApplication.getApplicationInstance = this;
         if (!"D20".equals(deviceModel)) {
             menuItem.setVisible(true);
         } else {
             menuItem.setVisible(false);
         }
-        if ("D20".equals(deviceModel)||"D30".equals(deviceModel)||"D60".equals(deviceModel)){
-            open(QPOSService.CommunicationMode.UART_SERVICE, this);
-        }else{
+        if ("D20".equals(deviceModel) || "D30".equals(deviceModel) || "D60".equals(deviceModel)) {
+            connectType = SharedPreferencesUtil.getmInstance(this);
+            String conType = (String) connectType.get("conType", "");
+            if (conType == null || "uart".equals(conType)) {
+                open(QPOSService.CommunicationMode.UART_SERVICE, this);
+            }
+            if ("blue".equals(conType)) {
+                bluetoothRelaPer();
+            }
+        } else {
             bluetoothRelaPer();
         }
         toolbar.setTitle(getString(R.string.menu_payment));
@@ -130,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                TRACE.d( "onDrawerOpened");
+                TRACE.d("onDrawerOpened");
                 HideKeyboard(drawerView);
             }
 
@@ -319,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     private void hideFragemts() {
         if (homeFragment != null) {
-            TRACE.d( "homeFragment");
+            TRACE.d("homeFragment");
             transaction.hide(homeFragment);
         }
         if (settingFragment != null) {
@@ -393,16 +404,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
     }
 
-    final int REQUEST_CODE = 1;
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == 2) {
-            String info = data.getStringExtra("info");
-//            Toast.makeText(MainActivity.this, info, Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -452,14 +454,17 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             });
         }
     }
-    public static void HideKeyboard(View v)
-    {
-        InputMethodManager imm = ( InputMethodManager ) v.getContext( ).getSystemService( Context.INPUT_METHOD_SERVICE );
-        if ( imm.isActive( ) ) {
-            imm.hideSoftInputFromWindow( v.getApplicationWindowToken( ) , 0 );
+
+    public static void HideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
 
         }
     }
+
+
+
 }
 
 

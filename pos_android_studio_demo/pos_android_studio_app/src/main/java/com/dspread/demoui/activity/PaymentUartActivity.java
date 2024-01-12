@@ -3,8 +3,9 @@ package com.dspread.demoui.activity;
 import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,10 +13,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dspread.demoui.R;
+import com.dspread.demoui.utils.SystemKeyListener;
 import com.dspread.demoui.beans.Constants;
 import com.dspread.xpos.QPOSService;
 
@@ -23,6 +28,7 @@ public class PaymentUartActivity extends AppCompatActivity {
 
     private ImageView ivBackTitle;
     private TextView tvTitle;
+    private SystemKeyListener systemKeyListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +37,17 @@ public class PaymentUartActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         setContentView(R.layout.activity_payment_uart);
         initView();
+        systemKeyListener = new SystemKeyListener(this);
+        systemKeyStart();
+        systemKeyListener.startSystemKeyListener();
     }
 
     private void initView() {
         ivBackTitle = findViewById(R.id.iv_back_title);
         tvTitle = findViewById(R.id.tv_title);
-        if (Constants.transData.getSN()!=null&&!"".equals(Constants.transData.getSN())) {
+        if (Constants.transData.getSN() != null && !"".equals(Constants.transData.getSN())) {
             tvTitle.setText("SN:" + Constants.transData.getSN());
-        }else{
+        } else {
             tvTitle.setText(getString(R.string.menu_payment));
         }
         BaseApplication.getApplicationInstance = this;
@@ -61,6 +70,9 @@ public class PaymentUartActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (systemKeyListener != null) {
+            systemKeyListener.stopSystemKeyListener();
+        }
     }
 
     public void initInfo() {
@@ -94,10 +106,10 @@ public class PaymentUartActivity extends AppCompatActivity {
         }
 
     }
-   
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.w("onKeyDown","keyCode=="+keyCode);
+        Log.w("onKeyDown", "keyCode==" + keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
                 Constants.transData.setAutoTrade("StopTrade");
@@ -109,4 +121,27 @@ public class PaymentUartActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    private void systemKeyStart() {
+        systemKeyListener.setOnSystemKeyListener(new SystemKeyListener.OnSystemKeyListener() {
+            @Override
+            public void onHomePressed() {
+                if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                    Constants.transData.setAutoTrade("StopTrade");
+                }
+                pos.cancelTrade();
+                getApplicationInstance = null;
+                finish();
+            }
+
+            @Override
+            public void onMenuPressed() {
+                if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                    Constants.transData.setAutoTrade("StopTrade");
+                }
+                pos.cancelTrade();
+                getApplicationInstance = null;
+                finish();
+            }
+        });
+    }
 }

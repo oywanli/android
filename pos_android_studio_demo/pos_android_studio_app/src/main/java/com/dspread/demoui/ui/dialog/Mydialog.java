@@ -81,6 +81,9 @@ public class Mydialog {
     public static AlertDialog ErrorDialog;
 
     public static void ErrorDialog(Activity mContext, String msg, OnMyClickListener listener) {
+        if (mContext==null){
+            return;
+        }
         View view = View.inflate(mContext, R.layout.alert_dialog, null);
         Button mbtnConfirm = view.findViewById(R.id.btnConfirm);
         TextView mtvInfo = view.findViewById(R.id.tvInfo);

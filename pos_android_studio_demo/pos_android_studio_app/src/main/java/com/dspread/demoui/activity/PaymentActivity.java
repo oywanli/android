@@ -437,17 +437,28 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
 
                 } else {
-                    deviceType(BLUETOOTH);
-                    refreshAdapter();
-                    if (m_Adapter != null) {
-                        m_Adapter.notifyDataSetChanged();
+                    if (!"".equals(disblue) && disblue != null) {
+                        mrllayout.setVisibility(View.GONE);
+                        try {
+                            pos.disconnectBT();
+                        } catch (Exception e) {
+
+                        }
+                        finish();
+                        return;
+                    }else {
+                        deviceType(BLUETOOTH);
+                        refreshAdapter();
+                        if (m_Adapter != null) {
+                            m_Adapter.notifyDataSetChanged();
+                        }
+                        lvIndicatorBTPOS.setAdapter(m_Adapter);
+                        statusEditText.setVisibility(View.GONE);
+                        mrllayout.setVisibility(View.VISIBLE);
+                        ivBlue.setVisibility(View.VISIBLE);
+                        mllinfo.setVisibility(View.GONE);
+                        statusEditText.setText("");
                     }
-                    lvIndicatorBTPOS.setAdapter(m_Adapter);
-                    statusEditText.setVisibility(View.GONE);
-                    mrllayout.setVisibility(View.VISIBLE);
-                    ivBlue.setVisibility(View.VISIBLE);
-                    mllinfo.setVisibility(View.GONE);
-                    statusEditText.setText("");
                 }
 
                 break;

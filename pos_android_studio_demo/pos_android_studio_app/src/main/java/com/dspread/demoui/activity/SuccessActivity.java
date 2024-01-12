@@ -3,6 +3,7 @@ package com.dspread.demoui.activity;
 import static com.dspread.demoui.activity.BaseApplication.handler;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;

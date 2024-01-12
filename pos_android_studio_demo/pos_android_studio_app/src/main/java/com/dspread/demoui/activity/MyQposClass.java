@@ -272,7 +272,6 @@ public class MyQposClass extends CQPOSService {
                 Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, null);
             }
         }
-//            dealDoneflag = true;
     }
 
     @Override
@@ -392,46 +391,32 @@ public class MyQposClass extends CQPOSService {
                 });
             }
         }
-//            amounts = "";
-//            cashbackAmounts = "";
     }
 
     @Override
     public void onRequestBatchData(String tlv) {
         dismissDialog();
-//            dealDoneflag = true;
-//            pinpadEditText.setVisibility(View.GONE);
-//            tvTitle.setText(getText(R.string.transaction_result));
         Mydialog.Ldialog.dismiss();
         TRACE.d("ICC trade finished");
         String content = getString(R.string.batch_data);
         content += tlv;
-        Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
-        intent.putExtra("paytment", "payment");
-        intent.putExtra("tradeResut", content);
-        getApplicationInstance.startActivity(intent);
-        ((Activity) getApplicationInstance).finish();
+        if(getApplicationInstance!=null) {
+            Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
+            intent.putExtra("paytment", "payment");
+            intent.putExtra("tradeResut", content);
+            getApplicationInstance.startActivity(intent);
+            ((Activity) getApplicationInstance).finish();
+        }
         Constants.transData.setInputMoney("");
         Constants.transData.setPayType("");
         Constants.transData.setCashbackAmounts("");
         Constants.transData.setPayment("");
-//            mllinfo.setVisibility(View.VISIBLE);
-//            mtvinfo.setText(content);
-//            mllchrccard.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onRequestTransactionLog(String tlv) {
-        TRACE.d("onRequestTransactionLog(String tlv):" + tlv);
-        dismissDialog();
-        String content = getString(R.string.transaction_log);
-        content += tlv;
-    }
 
     @Override
     public void onQposIdResult(Hashtable<String, String> posIdTable) {
         dismissDialog();
-//            dealDoneflag = true;
         TRACE.w("onQposIdResult():" + posIdTable.toString());
         String posId = posIdTable.get("posId") == null ? "" : posIdTable.get("posId");
         String csn = posIdTable.get("csn") == null ? "" : posIdTable.get("csn");
@@ -444,11 +429,6 @@ public class MyQposClass extends CQPOSService {
         content += "psamId: " + psamId + "\n";
         content += "NFCId: " + NFCId + "\n";
         Constants.transData.setSN(posId);
-//        if (Constants.transData.getPayType() != null && !"".equals(Constants.transData.getPayType())) {
-//            Constants.transData.setSN(posId);
-//            Intent intent = new Intent(getApplicationInstance, PaymentUartActivity.class);
-//            getApplicationInstance.startActivity(intent);
-//        } else {
           if("getposid".equals(Constants.transData.getPayType())){
             Constants.transData.setPosId(content);
             getposInfo("posid");
@@ -649,7 +629,9 @@ public class MyQposClass extends CQPOSService {
                         initInfo();
                         TRACE.i("onError==");
                         if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                            if(getApplicationInstance!=null){
                             Toast.makeText(getApplicationInstance,getString(R.string.network_failed),Toast.LENGTH_SHORT).show();
+                            }
                             pos.sendOnlineProcessResult("8A025A33");
                         }else {
                             Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
@@ -676,7 +658,6 @@ public class MyQposClass extends CQPOSService {
         dismissDialog();
         String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
         pos.sendTime(terminalTime);
-//            statusEditText.setText(getString(R.string.request_terminal_time) + " " + terminalTime);
     }
 
 
@@ -722,40 +703,7 @@ public class MyQposClass extends CQPOSService {
 //            Mydialog.loading(PaymentActivity.this, msg);
     }
 
-    @Override
-    public void onRequestFinalConfirm() {
-        TRACE.d("onRequestFinalConfirm() ");
-        TRACE.d("onRequestFinalConfirm - S");
-        dismissDialog();
-//            if (!isPinCanceled) {
-//                dialog = new Dialog(PaymentActivity.this);
-//                dialog.setContentView(R.layout.confirm_dialog);
-//                dialog.setTitle(getString(R.string.confirm_amount));
-//
-//                String message = getString(R.string.amount) + ": $" + amounts;
-//                if (!cashbackAmounts.equals("")) {
-//                    message += "\n" + getString(R.string.cashback_amount) + ": $" + cashbackAmounts;
-//                }
-//                ((TextView) dialog.findViewById(R.id.messageTextView)).setText(message);
-//                dialog.findViewById(R.id.confirmButton).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        pos.finalConfirm(true);
-//                        dialog.dismiss();
-//                    }
-//                });
-//                dialog.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        pos.finalConfirm(false);
-//                        dialog.dismiss();
-//                    }
-//                });
-//                dialog.show();
-//            } else {
-//                pos.finalConfirm(false);
-//            }
-    }
+
 
     @Override
     public void onRequestNoQposDetected() {
@@ -781,9 +729,6 @@ public class MyQposClass extends CQPOSService {
 
     @Override
     public void onError(QPOSService.Error errorState) {
-//            if (updateThread != null) {
-//                updateThread.concelSelf();
-//            }
         TRACE.d("onError: " + errorState.toString());
 
         String msg = "";
@@ -859,20 +804,7 @@ public class MyQposClass extends CQPOSService {
 //        ((Activity) getApplicationInstance).finish();
     }
 
-    @Override
-    public void onReturnupdateKeyByTR_31Result(boolean result, String keyType) {
-        super.onReturnupdateKeyByTR_31Result(result, keyType);
-//            if (result) {
-//                statusEditText.setText("send TR31 key success! The keyType is " + keyType);
-//            } else {
-//                statusEditText.setText("send TR31 key fail");
-//            }
-    }
 
-    @Override
-    public void onReturnServerCertResult(String serverSignCert, String serverEncryptCert) {
-        super.onReturnServerCertResult(serverSignCert, serverEncryptCert);
-    }
 
     @Override
     public void onReturnGetPinResult(Hashtable<String, String> result) {
@@ -885,56 +817,6 @@ public class MyQposClass extends CQPOSService {
         TRACE.i(content);
     }
 
-    @Override
-    public void onReturnApduResult(boolean arg0, String arg1, int arg2) {
-        TRACE.d("onReturnApduResult(boolean arg0, String arg1, int arg2):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2);
-    }
-
-    @Override
-    public void onReturnPowerOffIccResult(boolean arg0) {
-        TRACE.d("onReturnPowerOffIccResult(boolean arg0):" + arg0);
-    }
-
-    @Override
-    public void onReturnPowerOnIccResult(boolean arg0, String arg1, String arg2, int arg3) {
-        TRACE.d("onReturnPowerOnIccResult(boolean arg0, String arg1, String arg2, int arg3) :" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
-        if (arg0) {
-            pos.sendApdu("123456");
-        }
-    }
-
-    @Override
-    public void onReturnSetSleepTimeResult(boolean isSuccess) {
-        TRACE.d("onReturnSetSleepTimeResult(boolean isSuccess):" + isSuccess);
-        String content = "";
-        if (isSuccess) {
-            content = "set the sleep time success.";
-        } else {
-            content = "set the sleep time failed.";
-        }
-//            statusEditText.setText(content);
-    }
-
-    @Override
-    public void onGetCardNoResult(String cardNo) {
-        TRACE.d("onGetCardNoResult(String cardNo):" + cardNo);
-//            statusEditText.setText("cardNo: " + cardNo);
-    }
-
-    @Override
-    public void onRequestCalculateMac(String calMac) {
-        TRACE.d("onRequestCalculateMac(String calMac):" + calMac);
-        if (calMac != null && !"".equals(calMac)) {
-            calMac = QPOSUtil.byteArray2Hex(calMac.getBytes());
-        }
-//            statusEditText.setText("calMac: " + calMac);
-        TRACE.d("calMac_result: calMac=> e: " + calMac);
-    }
-
-    @Override
-    public void onRequestSignatureResult(byte[] arg0) {
-        TRACE.d("onRequestSignatureResult(byte[] arg0):" + arg0.toString());
-    }
 
     @Override
     public void onRequestUpdateWorkKeyResult(QPOSService.UpdateInformationResult result) {
@@ -981,38 +863,7 @@ public class MyQposClass extends CQPOSService {
 //            statusEditText.setText("\n" + sb.toString());
     }
 
-    @Override
-    public void onBluetoothBondFailed() {
-        TRACE.d("onBluetoothBondFailed()");
-//            statusEditText.setText("bond failed");
-    }
 
-    @Override
-    public void onBluetoothBondTimeout() {
-        TRACE.d("onBluetoothBondTimeout()");
-//            statusEditText.setText("bond timeout");
-    }
-
-    @Override
-    public void onBluetoothBonded() {
-        TRACE.d("onBluetoothBonded()");
-//            statusEditText.setText("bond success");
-    }
-
-    @Override
-    public void onBluetoothBonding() {
-        TRACE.d("onBluetoothBonding()");
-//            statusEditText.setText("bonding .....");
-    }
-
-    @Override
-    public void onReturniccCashBack(Hashtable<String, String> result) {
-        TRACE.d("onReturniccCashBack(Hashtable<String, String> result):" + result.toString());
-        String s = "serviceCode: " + result.get("serviceCode");
-        s += "\n";
-        s += "trackblock: " + result.get("trackblock");
-//            statusEditText.setText(s);
-    }
 
     @Override
     public void onLcdShowCustomDisplay(boolean arg0) {
@@ -1041,173 +892,6 @@ public class MyQposClass extends CQPOSService {
     }
 
     @Override
-    public void onReturnDownloadRsaPublicKey(HashMap<String, String> map) {
-        TRACE.d("onReturnDownloadRsaPublicKey(HashMap<String, String> map):" + map.toString());
-        if (map == null) {
-            TRACE.d("MainActivity++++++++++++++map == null");
-            return;
-        }
-        String randomKeyLen = map.get("randomKeyLen");
-        String randomKey = map.get("randomKey");
-        String randomKeyCheckValueLen = map.get("randomKeyCheckValueLen");
-        String randomKeyCheckValue = map.get("randomKeyCheckValue");
-        TRACE.d("randomKey" + randomKey + "    \n    randomKeyCheckValue" + randomKeyCheckValue);
-//            statusEditText.setText("randomKeyLen:" + randomKeyLen + "\nrandomKey:" + randomKey + "\nrandomKeyCheckValueLen:" + randomKeyCheckValueLen + "\nrandomKeyCheckValue:" + randomKeyCheckValue);
-    }
-
-    @Override
-    public void onGetPosComm(int mod, String amount, String posid) {
-        TRACE.d("onGetPosComm(int mod, String amount, String posid):" + mod + TRACE.NEW_LINE + amount + TRACE.NEW_LINE + posid);
-    }
-
-    @Override
-    public void onPinKey_TDES_Result(String arg0) {
-        TRACE.d("onPinKey_TDES_Result(String arg0):" + arg0);
-//            statusEditText.setText("result:" + arg0);
-    }
-
-    @Override
-    public void onUpdateMasterKeyResult(boolean arg0, Hashtable<String, String> arg1) {
-        TRACE.d("onUpdateMasterKeyResult(boolean arg0, Hashtable<String, String> arg1):" + arg0 + TRACE.NEW_LINE + arg1.toString());
-        String upgradeInfo;
-    }
-
-    @Override
-    public void onEmvICCExceptionData(String arg0) {
-        TRACE.d("onEmvICCExceptionData(String arg0):" + arg0);
-    }
-
-    @Override
-    public void onSetParamsResult(boolean arg0, Hashtable<String, Object> arg1) {
-        TRACE.d("onSetParamsResult(boolean arg0, Hashtable<String, Object> arg1):" + arg0 + TRACE.NEW_LINE + arg1.toString());
-    }
-
-    @Override
-    public void onGetInputAmountResult(boolean arg0, String arg1) {
-        TRACE.d("onGetInputAmountResult(boolean arg0, String arg1):" + arg0 + TRACE.NEW_LINE + arg1.toString());
-    }
-
-    @Override
-    public void onReturnNFCApduResult(boolean arg0, String arg1, int arg2) {
-        TRACE.d("onReturnNFCApduResult(boolean arg0, String arg1, int arg2):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2);
-//            statusEditText.setText("onReturnNFCApduResult(boolean arg0, String arg1, int arg2):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2);
-    }
-
-    @Override
-    public void onReturnPowerOffNFCResult(boolean arg0) {
-        TRACE.d(" onReturnPowerOffNFCResult(boolean arg0) :" + arg0);
-//            statusEditText.setText(" onReturnPowerOffNFCResult(boolean arg0) :" + arg0);
-    }
-
-    @Override
-    public void onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3) {
-        TRACE.d("onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
-//            statusEditText.setText("onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
-    }
-
-    @Override
-    public void onCbcMacResult(String result) {
-        TRACE.d("onCbcMacResult(String result):" + result);
-        if (result == null || "".equals(result)) {
-//                statusEditText.setText("cbc_mac:false");
-        } else {
-//                statusEditText.setText("cbc_mac: " + result);
-        }
-    }
-
-    @Override
-    public void onReadBusinessCardResult(boolean arg0, String arg1) {
-        TRACE.d(" onReadBusinessCardResult(boolean arg0, String arg1):" + arg0 + TRACE.NEW_LINE + arg1);
-    }
-
-    @Override
-    public void onWriteBusinessCardResult(boolean arg0) {
-        TRACE.d(" onWriteBusinessCardResult(boolean arg0):" + arg0);
-    }
-
-    @Override
-    public void onConfirmAmountResult(boolean arg0) {
-        TRACE.d("onConfirmAmountResult(boolean arg0):" + arg0);
-    }
-
-    @Override
-    public void onQposIsCardExist(boolean cardIsExist) {
-        TRACE.d("onQposIsCardExist(boolean cardIsExist):" + cardIsExist);
-        if (cardIsExist) {
-//                statusEditText.setText("cardIsExist:" + cardIsExist);
-        } else {
-//                statusEditText.setText("cardIsExist:" + cardIsExist);
-        }
-    }
-
-    @Override
-    public void onSearchMifareCardResult(Hashtable<String, String> arg0) {
-        if (arg0 != null) {
-            TRACE.d("onSearchMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
-            String statuString = arg0.get("status");
-            String cardTypeString = arg0.get("cardType");
-            String cardUidLen = arg0.get("cardUidLen");
-            String cardUid = arg0.get("cardUid");
-            String cardAtsLen = arg0.get("cardAtsLen");
-            String cardAts = arg0.get("cardAts");
-            String ATQA = arg0.get("ATQA");
-            String SAK = arg0.get("SAK");
-//                statusEditText.setText("statuString:" + statuString + "\n" + "cardTypeString:" + cardTypeString + "\ncardUidLen:" + cardUidLen + "\ncardUid:" + cardUid + "\ncardAtsLen:" + cardAtsLen + "\ncardAts:" + cardAts + "\nATQA:" + ATQA + "\nSAK:" + SAK);
-        } else {
-//                statusEditText.setText("poll card failed");
-        }
-    }
-
-    @Override
-    public void onBatchReadMifareCardResult(String msg, Hashtable<String, List<String>> cardData) {
-        if (cardData != null) {
-            TRACE.d("onBatchReadMifareCardResult(boolean arg0):" + msg + cardData.toString());
-        }
-    }
-
-    @Override
-    public void onBatchWriteMifareCardResult(String msg, Hashtable<String, List<String>> cardData) {
-        if (cardData != null) {
-            TRACE.d("onBatchWriteMifareCardResult(boolean arg0):" + msg + cardData.toString());
-        }
-    }
-
-    @Override
-    public void onSetBuzzerResult(boolean arg0) {
-        TRACE.d("onSetBuzzerResult(boolean arg0):" + arg0);
-        if (arg0) {
-//                statusEditText.setText("Set buzzer success");
-        } else {
-//                statusEditText.setText("Set buzzer failed");
-        }
-    }
-
-    @Override
-    public void onSetBuzzerTimeResult(boolean b) {
-        TRACE.d("onSetBuzzerTimeResult(boolean b):" + b);
-    }
-
-    @Override
-    public void onSetBuzzerStatusResult(boolean b) {
-        TRACE.d("onSetBuzzerStatusResult(boolean b):" + b);
-    }
-
-    @Override
-    public void onGetBuzzerStatusResult(String s) {
-        TRACE.d("onGetBuzzerStatusResult(String s):" + s);
-    }
-
-    @Override
-    public void onSetManagementKey(boolean arg0) {
-        TRACE.d("onSetManagementKey(boolean arg0):" + arg0);
-        if (arg0) {
-//                statusEditText.setText("Set master key success");
-        } else {
-//                statusEditText.setText("Set master key failed");
-        }
-    }
-
-    @Override
     public void onReturnUpdateIPEKResult(boolean arg0) {
         TRACE.d("onReturnUpdateIPEKResult(boolean arg0):" + arg0);
         String upgradeInfo;
@@ -1220,66 +904,15 @@ public class MyQposClass extends CQPOSService {
 
     }
 
-    @Override
-    public void onReturnUpdateEMVRIDResult(boolean arg0) {
-        dismissDialog();
-        TRACE.d("onReturnUpdateEMVRIDResult(boolean arg0):" + arg0);
-//            mllinfo.setVisibility(View.VISIBLE);
-//            mbtnNewpay.setVisibility(View.GONE);
-//            mtvinfo.setText("updateEmvDidResult: " + arg0);
-//            mllchrccard.setVisibility(View.GONE);
-//            tradeSuccess.setVisibility(View.GONE);
-    }
 
-    @Override
-    public void onReturnUpdateEMVResult(boolean arg0) {
-        dismissDialog();
-        TRACE.d("onReturnUpdateEMVResult(boolean arg0):" + arg0);
-//            mllinfo.setVisibility(View.VISIBLE);
-//            mbtnNewpay.setVisibility(View.GONE);
-//            mtvinfo.setText("updateEmvAppResult: " + arg0);
-//            mllchrccard.setVisibility(View.GONE);
-//            tradeSuccess.setVisibility(View.GONE);
-
-    }
 
     @Override
     public void onBluetoothBoardStateResult(boolean arg0) {
         TRACE.d("onBluetoothBoardStateResult(boolean arg0):" + arg0);
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onDeviceFound(BluetoothDevice arg0) {
-        if (arg0 != null && arg0.getName() != null) {
-            TRACE.d("onDeviceFound(BluetoothDevice arg0):" + arg0.getName() + ":" + arg0.toString());
-//                if (m_Adapter != null) {
-//                    Map<String, Object> itm = new HashMap<String, Object>();
-//                    itm.put("ICON", arg0.getBondState() == BluetoothDevice.BOND_BONDED ? Integer.valueOf(R.drawable.bluetooth_blue) : Integer.valueOf(R.drawable.bluetooth_blue_unbond));
-//                    itm.put("TITLE", arg0.getName() + "(" + arg0.getAddress() + ")");
-//                    itm.put("ADDRESS", arg0.getAddress());
-//                    m_Adapter.setData(itm);
-//                }
-//                String address = arg0.getAddress();
-//                String name = arg0.getName();
-//                name += address + "\n";
-//                statusEditText.setText(name);
-//                TRACE.d("found new device" + name);
-//            } else {
-//                statusEditText.setText("Don't found new device");
-//                TRACE.d("Don't found new device");
-        }
-    }
 
-    @Override
-    public void onSetSleepModeTime(boolean arg0) {
-        TRACE.d("onSetSleepModeTime(boolean arg0):" + arg0);
-//            if (arg0) {
-//                statusEditText.setText("set the Sleep timee Success");
-//            } else {
-//                statusEditText.setText("set the Sleep timee unSuccess");
-//            }
-    }
+
 
     @Override
     public void onReturnGetEMVListResult(String arg0) {
@@ -1294,71 +927,13 @@ public class MyQposClass extends CQPOSService {
         TRACE.d("onWaitingforData(String arg0):" + arg0);
     }
 
-    @Override
-    public void onRequestDeviceScanFinished() {
-        TRACE.d("onRequestDeviceScanFinished()");
-//            Toast.makeText(CheckActivity.this, R.string.scan_over, Toast.LENGTH_SHORT).show();
 
-    }
 
     @Override
     public void onRequestUpdateKey(String arg0) {
         TRACE.d("onRequestUpdateKey(String arg0):" + arg0);
         Constants.transData.setUpdateCheckValue("update checkvalue : " + arg0);
         getposInfo("updatekey");
-    }
-
-    @Override
-    public void onReturnGetQuickEmvResult(boolean arg0) {
-        TRACE.d("onReturnGetQuickEmvResult(boolean arg0):" + arg0);
-        if (arg0) {
-//                statusEditText.setText("emv configed");
-            pos.setQuickEmv(true);
-        } else {
-//                statusEditText.setText("emv don't configed");
-        }
-    }
-
-    @Override
-    public void onQposDoGetTradeLogNum(String arg0) {
-        TRACE.d("onQposDoGetTradeLogNum(String arg0):" + arg0);
-        int a = Integer.parseInt(arg0, 16);
-        if (a >= 188) {
-//                statusEditText.setText("the trade num has become max value!!");
-            return;
-        }
-//            statusEditText.setText("get log num:" + a);
-    }
-
-    @Override
-    public void onQposDoTradeLog(boolean arg0) {
-        TRACE.d("onQposDoTradeLog(boolean arg0) :" + arg0);
-        if (arg0) {
-//                statusEditText.setText("clear log success!");
-        } else {
-//                statusEditText.setText("clear log fail!");
-        }
-    }
-
-    @Override
-    public void onAddKey(boolean arg0) {
-        TRACE.d("onAddKey(boolean arg0) :" + arg0);
-        if (arg0) {
-//                statusEditText.setText("ksn add 1 success");
-        } else {
-//                statusEditText.setText("ksn add 1 failed");
-        }
-    }
-
-    @Override
-    public void onEncryptData(Hashtable<String, String> resultTable) {
-        if (resultTable != null) {
-            TRACE.d("onEncryptData(String arg0) :" + resultTable);
-//                mllinfo.setVisibility(View.VISIBLE);
-//                mtvinfo.setText("onEncryptData: " + resultTable);
-//                mllchrccard.setVisibility(View.GONE);
-
-        }
     }
 
 
@@ -1371,30 +946,6 @@ public class MyQposClass extends CQPOSService {
         String emvKsn = arg0.get("emvKsn");
         TRACE.d("get the ksn result is :" + "pinKsn" + pinKsn + "\ntrackKsn" + trackKsn + "\nemvKsn" + emvKsn);
 
-    }
-
-    @Override
-    public void onQposDoGetTradeLog(String arg0, String arg1) {
-        TRACE.d("onQposDoGetTradeLog(String arg0, String arg1):" + arg0 + TRACE.NEW_LINE + arg1);
-        arg1 = QPOSUtil.convertHexToString(arg1);
-    }
-
-    @Override
-    public void onRequestDevice() {
-        Log.w("onRequestDevice", "onRequestDevice");
-//            List<UsbDevice> deviceList = getPermissionDeviceList();
-//            UsbManager mManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-//            for (int i = 0; i < deviceList.size(); i++) {
-//                UsbDevice usbDevice = deviceList.get(i);
-//                if (usbDevice.getVendorId() == 2965 || usbDevice.getVendorId() == 0x03EB) {
-//
-//                    if (mManager.hasPermission(usbDevice)) {
-//                        pos.setPermissionDevice(usbDevice);
-//                    } else {
-//                        devicePermissionRequest(mManager, usbDevice);
-//                    }
-//                }
-//            }
     }
 
     @Override
@@ -1411,23 +962,6 @@ public class MyQposClass extends CQPOSService {
         }
     }
 
-    @Override
-    public void onGetDevicePubKey(String clearKeys) {
-        dismissDialog();
-//            TRACE.d("onGetDevicePubKey(clearKeys):" + clearKeys);
-//            mllinfo.setVisibility(View.VISIBLE);
-//            mbtnNewpay.setVisibility(View.GONE);
-//            tradeSuccess.setVisibility(View.GONE);
-//            mtvinfo.setText("DevicePubbicKey: \n" + clearKeys);
-//            mllchrccard.setVisibility(View.GONE);
-//            String lenStr = clearKeys.substring(0, 4);
-//            int sum = 0;
-//            for (int i = 0; i < 4; i++) {
-//                int bit = Integer.parseInt(lenStr.substring(i, i + 1));
-//                sum += bit * Math.pow(16, (3 - i));
-//            }
-//            pubModel = clearKeys.substring(4, 4 + sum * 2);
-    }
 
     @Override
     public void onTradeCancelled() {
@@ -1435,241 +969,10 @@ public class MyQposClass extends CQPOSService {
         dismissDialog();
     }
 
-    @Override
-    public void onReturnSignature(boolean b, String signaturedData) {
-        if (b) {
-            BASE64Encoder base64Encoder = new BASE64Encoder();
-            String encode = base64Encoder.encode(signaturedData.getBytes());
-//                statusEditText.setText("signature data (Base64 encoding):" + encode);
-        }
-    }
-
-    @Override
-    public void onReturnConverEncryptedBlockFormat(String result) {
-//            statusEditText.setText(result);
-    }
-
-    @Override
-    public void onFinishMifareCardResult(boolean arg0) {
-        TRACE.d("onFinishMifareCardResult(boolean arg0):" + arg0);
-        if (arg0) {
-//                statusEditText.setText("finish success");
-        } else {
-//                statusEditText.setText("finish fail");
-        }
-    }
-
-    @Override
-    public void onVerifyMifareCardResult(boolean arg0) {
-        TRACE.d("onVerifyMifareCardResult(boolean arg0):" + arg0);
-        if (arg0) {
-//                statusEditText.setText(" onVerifyMifareCardResult success");
-        } else {
-//                statusEditText.setText("onVerifyMifareCardResult fail");
-        }
-    }
-
-    @Override
-    public void onReadMifareCardResult(Hashtable<String, String> arg0) {
-        if (arg0 != null) {
-            TRACE.d("onReadMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
-            String addr = arg0.get("addr");
-            String cardDataLen = arg0.get("cardDataLen");
-            String cardData = arg0.get("cardData");
-//                statusEditText.setText("addr:" + addr + "\ncardDataLen:" + cardDataLen + "\ncardData:" + cardData);
-        } else {
-//                statusEditText.setText("onReadWriteMifareCardResult fail");
-        }
-    }
-
-    @Override
-    public void onWriteMifareCardResult(boolean arg0) {
-        TRACE.d("onWriteMifareCardResult(boolean arg0):" + arg0);
-        if (arg0) {
-//                statusEditText.setText("write data success!");
-        } else {
-//                statusEditText.setText("write data fail!");
-        }
-    }
-
-    @Override
-    public void onOperateMifareCardResult(Hashtable<String, String> arg0) {
-        if (arg0 != null) {
-            TRACE.d("onOperateMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
-            String cmd = arg0.get("Cmd");
-            String blockAddr = arg0.get("blockAddr");
-//                statusEditText.setText("Cmd:" + cmd + "\nBlock Addr:" + blockAddr);
-        } else {
-//                statusEditText.setText("operate failed");
-        }
-    }
-
-    @Override
-    public void getMifareCardVersion(Hashtable<String, String> arg0) {
-        if (arg0 != null) {
-            TRACE.d("getMifareCardVersion(Hashtable<String, String> arg0):" + arg0.toString());
-
-            String verLen = arg0.get("versionLen");
-            String ver = arg0.get("cardVersion");
-//                statusEditText.setText("versionLen:" + verLen + "\nverison:" + ver);
-        } else {
-//                statusEditText.setText("get mafire UL version failed");
-        }
-    }
-
-    @Override
-    public void getMifareFastReadData(Hashtable<String, String> arg0) {
-        if (arg0 != null) {
-            TRACE.d("getMifareFastReadData(Hashtable<String, String> arg0):" + arg0.toString());
-            String startAddr = arg0.get("startAddr");
-            String endAddr = arg0.get("endAddr");
-            String dataLen = arg0.get("dataLen");
-            String cardData = arg0.get("cardData");
-//                statusEditText.setText("startAddr:" + startAddr + "\nendAddr:" + endAddr + "\ndataLen:" + dataLen + "\ncardData:" + cardData);
-        } else {
-//                statusEditText.setText("read fast UL failed");
-        }
-    }
-
-    @Override
-    public void getMifareReadData(Hashtable<String, String> arg0) {
-        if (arg0 != null) {
-            TRACE.d("getMifareReadData(Hashtable<String, String> arg0):" + arg0.toString());
-            String blockAddr = arg0.get("blockAddr");
-            String dataLen = arg0.get("dataLen");
-            String cardData = arg0.get("cardData");
-//                statusEditText.setText("blockAddr:" + blockAddr + "\ndataLen:" + dataLen + "\ncardData:" + cardData);
-        } else {
-//                statusEditText.setText("read mafire UL failed");
-        }
-    }
-
-    @Override
-    public void writeMifareULData(String arg0) {
-        if (arg0 != null) {
-            TRACE.d("writeMifareULData(String arg0):" + arg0);
-//                statusEditText.setText("addr:" + arg0);
-        } else {
-//                statusEditText.setText("write UL failed");
-        }
-    }
-
-    @Override
-    public void verifyMifareULData(Hashtable<String, String> arg0) {
-        if (arg0 != null) {
-            TRACE.d("verifyMifareULData(Hashtable<String, String> arg0):" + arg0.toString());
-            String dataLen = arg0.get("dataLen");
-            String pack = arg0.get("pack");
-//                statusEditText.setText("dataLen:" + dataLen + "\npack:" + pack);
-        } else {
-//                statusEditText.setText("verify UL failed");
-        }
-    }
-
-    @Override
-    public void onGetSleepModeTime(String arg0) {
-        if (arg0 != null) {
-            TRACE.d("onGetSleepModeTime(String arg0):" + arg0.toString());
-
-            int time = Integer.parseInt(arg0, 16);
-//                statusEditText.setText("time is ： " + time + " seconds");
-        } else {
-//                statusEditText.setText("get the time is failed");
-        }
-    }
-
-    @Override
-    public void onGetShutDownTime(String arg0) {
-        dismissDialog();
-//            if (arg0 != null) {
-        TRACE.d("onGetShutDownTime(String arg0):" + arg0.toString());
-//                mtvinfo.setText("shut down time is : " + Integer.parseInt(arg0, 16) + "s");
-//            } else {
-//                mtvinfo.setText(getString(R.string.get_shutdown_time_fail));
-//            }
-//            mllinfo.setVisibility(View.VISIBLE);
-//            mbtnNewpay.setVisibility(View.GONE);
-//            mllchrccard.setVisibility(View.GONE);
-//            tradeSuccess.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onQposDoSetRsaPublicKey(boolean arg0) {
-        TRACE.d("onQposDoSetRsaPublicKey(boolean arg0):" + arg0);
-        if (arg0) {
-//                statusEditText.setText("set rsa is successed!");
-        } else {
-//                statusEditText.setText("set rsa is failed!");
-        }
-    }
-
-    @Override
-    public void onQposGenerateSessionKeysResult(Hashtable<String, String> arg0) {
-        if (arg0 != null) {
-            TRACE.d("onQposGenerateSessionKeysResult(Hashtable<String, String> arg0):" + arg0.toString());
-            String rsaFileName = arg0.get("rsaReginString");
-            String enPinKeyData = arg0.get("enPinKey");
-            String enKcvPinKeyData = arg0.get("enPinKcvKey");
-            String enCardKeyData = arg0.get("enDataCardKey");
-            String enKcvCardKeyData = arg0.get("enKcvDataCardKey");
-//                statusEditText.setText("rsaFileName:" + rsaFileName + "\nenPinKeyData:" + enPinKeyData + "\nenKcvPinKeyData:" + enKcvPinKeyData + "\nenCardKeyData:" + enCardKeyData + "\nenKcvCardKeyData:" + enKcvCardKeyData);
-        } else {
-//                statusEditText.setText("get key failed,pls try again!");
-        }
-    }
-
-    @Override
-    public void transferMifareData(String arg0) {
-        TRACE.d("transferMifareData(String arg0):" + arg0.toString());
-
-        // TODO Auto-generated method stub
-        if (arg0 != null) {
-//                statusEditText.setText("response data:" + arg0);
-        } else {
-//                statusEditText.setText("transfer data failed!");
-        }
-    }
-
-    @Override
-    public void onReturnRSAResult(String arg0) {
-        TRACE.d("onReturnRSAResult(String arg0):" + arg0.toString());
-
-        if (arg0 != null) {
-//                statusEditText.setText("rsa data:\n" + arg0);
-        } else {
-//                statusEditText.setText("get the rsa failed");
-        }
-    }
-
-    @Override
-    public void onRequestNoQposDetectedUnbond() {
-        // TODO Auto-generated method stub
-        TRACE.d("onRequestNoQposDetectedUnbond()");
-    }
-
-    @Override
-    public void onReturnDeviceCSRResult(String re) {
-        TRACE.d("onReturnDeviceCSRResult:" + re);
-//            statusEditText.setText("onReturnDeviceCSRResult:" + re);
-    }
-
-    @Override
-    public void onReturnStoreCertificatesResult(boolean re) {
-        TRACE.d("onReturnStoreCertificatesResult:" + re);
-//            if (isInitKey) {
-//                statusEditText.setText("Init key result is :" + re);
-//                isInitKey = false;
-//            } else {
-//                statusEditText.setText("Exchange Certificates result is :" + re);
-//            }
-
-    }
 
     @Override
     public void onReturnDeviceSigningCertResult(String certificates, String certificatesTree) {
         TRACE.d("onReturnDeviceSigningCertResult:" + certificates + "\n" + certificatesTree);
-//            deviceSignCert = certificates;
-//            String command = getString(R.string.pedi_command, certificates, "1", "oeap");
         String command = "    <string name=\"pedi_command\">&#091;AOPEDI&#059;VS2&#059;RF0&#059;TD1&#059;CC%s&#059;RG%s&#059;CE%s&#059;&#093;</string>\n";
         command = ParseASN1Util.addTagToCommand(command, "CD", certificates);
         TRACE.i("request the RKMS command is " + command);
@@ -1678,93 +981,11 @@ public class MyQposClass extends CQPOSService {
         String cd = ParseASN1Util.parseToken(pediRespose, "CD");
         BASE64Decoder base64Decoder = new BASE64Decoder();
         try {
-//                String caChain = QPOSUtil.byteArray2Hex(base64Decoder.decodeBuffer(QPOSUtil.readRSANStream(getAssets().open("FX-Dspread-CA-Tree.pem"))));
-//                //the api callback is onReturnStoreCertificatesResult
-//                pos.loadCertificates(cc, cd, caChain);
-//                statusEditText.setText("is load the server cert to device...");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void onReturnAnalyseDigEnvelop(String result) {
-        super.onReturnAnalyseDigEnvelop(result);
-//            verifySignatureCommand = ParseASN1Util.addTagToCommand(verifySignatureCommand, "KA", result);
-//            if (pedvVerifySignatureCommand != null) {
-//                pedvVerifySignatureCommand = ParseASN1Util.addTagToCommand(pedvVerifySignatureCommand, "KA", result);
-//                TRACE.i("send key encryption command to RMKS is " + pedvVerifySignatureCommand);
-//            }
-//            TRACE.i("send key encryption command to RMKS is " + verifySignatureCommand);
-//            String response = "[AOPEDK;ANY;KN0;KB30819D0201013181973081941370413031313242315458303045303130304B5331384646464630303030303030303031453030303030414332313038323435443442443733373445443932464142363838373438314544363034344137453635433239463132393739383931384441394434353631443235324143414641020102040AFFFF0000000001E00000020100130A4473707265616442444B04021D58;KA0D0B2F2F3178D4045C1363274890494664B23D32BABEA47E5DB42F15C06816107FD293BAFF7371119F0B11B685A29D40DE78D397F9629A56112629452A9525F5261F8BDCA168328C49ACCFF0133C90E91AFCCA1E18178EBBA5E0BFA054B09514BA87EE05F2E4837D2C74E00BFD3B14EB708598517F357F79AA34C89DFEA9F59B6D3CECABA6C211809400DE9D0B0CA09384FDD834B8BFD416C4B09D32B3F5E45001F18E5C3116A0FFD8E0C6ACE567FCCE1AC909FD038FB58F16BB32163866CD9DCB4B131A394757638111B2CF3DC968D58CBAA95279BEFF697C0D92C6A42248B53A3E56E595AD128EDB50710BDBFFCB113A7DC4ECBCE8668482CBFD22CD7B2E42;RDB077A03C07C94F161842AA0C4831E0EF;CE1;AP308205A906092A864886F70D010702A082059A30820596020149310D300B06096086480165030402013082032506092A864886F70D010703A082031604820312020100318201FB308201F70201003081A830819C310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A56697274754372797074311B3019060355040C0C12447370726561642044657669636573204341311B301906035504410C12447370726561642044657669636573204341311B301906035504030C1244737072656164204465766963657320434102074EB0D600009880304306092A864886F70D0101073036300B0609608648016503040201301806092A864886F70D010108300B0609608648016503040201300D06092A864886F70D01010904000482010092583A07F6280625EE4CA043E3245F2CD6CCA8BAE6E198F4046A5DDE055723D2591A84DDCA4D7F7BB1B179881FD9EC4E33ED22333A9008DAEB3C3B1D7143D1953F2363BEA4C0D2592667C3468F228F856A95A6DCA1FA9CA0AB05D25DC612E7E2BF2AE3012D22C78BB7224C8C8E02146929937C3DF9FA3589B2A486C132477ACFA50BE09528FCBFDA43079AF54C050843BE4BDE701D246D8D8A4C947F12AFD97A66010459BBAE4ED627F687CC3E6DC30B5B35FE3564D9FB07F501B57A73A70AB9C3398E14391B16A5FE45C374984219F0B3A3265A82D3F5A48CEEF3998DCEA59F1CC5821B51605C66C8FD2687778C84B51CCE51C1FBFA876F978E0A9546C425FF3082010C06092A864886F70D010701301406082A864886F70D03070408C8FA8F2094E103118081E85816DF38AEC7C0E569C011DB7212278A767C8934770C7E994E9508E256B693973FBB4B47A78A9F6B1AB2D326CC2A76A53E3731B8A8128B1DE4BEDCCA51E0E740C1A474C21C8CF4A4726F4FBE0DC5CE41C4DB7A2CDBB2EF7B2C0F61B50E34A1A327A5069EB23524DB0D8119C4C407B90277B806288ECAC2826AF8AF6D092B29E90C03554986F38345B6BB247BC1498C2185661BDE318ADECAF199E798D70A058305F686ECC3A267D28EED6052483401EB5B5B84F897CAEA7968B8EEAB23F465CE3F1E7F7F7E402D1AA681D76D34CF9EC0B6BBBE9A513B8C42E5EA5319E218AC996F87767966DBD8F8318202573082025302014930819C308190310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A5669727475437279707431173015060355040C0C0E44737072656164204B44482043413117301506035504410C0E44737072656164204B44482043413117301506035504030C0E44737072656164204B444820434102074EB0D60000987E300B0609608648016503040201A0818E301806092A864886F70D010903310B06092A864886F70D0107033020060A2A864886F70D01091903311204104CDCEDD916AAACEEAE548A1C5B0A0EAA301F06092A864886F70D0107013112041041303031364B30544E30304530303030302F06092A864886F70D01090431220420A0E06A133DA8D4A5EC5A2E51E468B470B19E13834019A0C2563BA39308660A1F300D06092A864886F70D0101010500048201003BA0F51DC5B3400E5CD29429663008713C3B61DE0C053590296421635218AEB228A1802C971B18CCF0A137D66FE07B08A0B2A592F11557CC401C353C859E1B82C4BAE146F8AC2955BD1326A3482B173E5589B321FBA0517DCA071F120D0940DC7B8CD33C861E1403CCBD7C3203F1609D261D38B415A0BF234CC9370D18B1004D89BE4C7C4631C7A5D3A1010F0371E25F70B8000D5B94C946571D0F6A730DEF57950AED18839B38B0FF6497D03E960194CF3F113C57575F62E8299FCDE855A1BD36ECE5CAF3DC9F942387A76A329715EC09FDBED3C4FACA06160D538EC00D0166D46152D61F6C665F749E91A0E70E532CE726525B946ACD81510FF47146F00994;]";
-//            String KA = ParseASN1Util.parseToken(response, "KA");
-//
-//            KB = ParseASN1Util.parseToken(response, "KB");
-//            String signatureData = "a57e821386de1038b1a12dc22fa59ce317625680c523bd66bf2b9f840aebe52d020e07105d4107eeb05edd560d0345cd73ce2b68dbf19c61f9d56fbd1ddf9222c47956595b773c88eb7ec4577fb17053d42acf64f3e5c38ff325cdac7b689df029299087b69211e61bdfc22e329eb287456f83ef6c25e84fe1324e36ee85ba7e3accb79eb8ab7b270916a28a42a867e0e050c6950100c90daddb1f421444d16accb6005a312c3273c2f1b28f0c77456ae875081ae594d26139efd267c8dafa15e1b6cf961f3acdb92b26777127f474d24d57611b29f01dec062c02d720c4e759e1757f85ee39e74e05e23aa0aed53d62d05a902a6539a3e986e6dd237888ff92";
-//            boolean verifyResult = pos.authenticServerResponse(HexStringToByteArray(KA), signatureData);
-//            verifyResult = true;
-//            if (verifyResult) {
-//                if (response.contains("AP")) {
-//                    String AP = ParseASN1Util.parseToken(response, "AP");
-//                    ParseASN1Util.parseASN1new(AP.replace("A081", "3081"));
-//                    String nonce = ParseASN1Util.getNonce();
-//                    String header = ParseASN1Util.getHeader();
-//                    String digist = ParseASN1Util.getDigest();
-//                    String encryptData = ParseASN1Util.getEncryptData();
-//                    ParseASN1Util.parseASN1new(encryptData.substring(6));
-//                    String signData = ParseASN1Util.getSignData();
-//                    String encryptDataWith3des = ParseASN1Util.getEncryptDataWith3Des();
-//                    String IV = ParseASN1Util.getIVStr();
-//                    String clearData = "A0818e301806092a864886f70d010903310b06092a864886f70d0107033020060a2a864886f70d01091903311204104cdcedd916aaaceeae548a1c5b0a0eaa301f06092a864886f70d0107013112041041303031364b30544e30304530303030302f06092a864886f70d01090431220420a0e06a133da8d4a5ec5a2e51e468b470b19e13834019a0c2563ba39308660a1f";
-//                    String envelop = getDigitalEnvelopStr(encryptData, encryptDataWith3des, "01", clearData, signData, IV);
-//                    //the api callback is onRequestUpdateWorkKeyResult
-//                    pos.loadSessionKeyByTR_34(envelop);
-//                } else {
-//                    statusEditText.setText("signature verification successful.");
-//                    ParseASN1Util.parseASN1new(KB);
-//                    String data = ParseASN1Util.getTr31Data();
-//                    //the api callback is onReturnupdateKeyByTR_31Result
-//                    pos.updateKeyByTR_31(data, 30);
-//                }
-//            } else {
-//                statusEditText.setText("signature verification failed.");
-//            }
-    }
-
-    private String buildCvmPinBlock(Hashtable<String, String> value, String pin) {
-        String randomData = value.get("RandomData") == null ? "" : value.get("RandomData");
-        String pan = value.get("PAN") == null ? "" : value.get("PAN");
-        String AESKey = value.get("AESKey") == null ? "" : value.get("AESKey");
-        String isOnline = value.get("isOnlinePin") == null ? "" : value.get("isOnlinePin");
-        String pinTryLimit = value.get("pinTryLimit") == null ? "" : value.get("pinTryLimit");
-        //iso-format4 pinblock
-        int pinLen = pin.length();
-        pin = "4" + Integer.toHexString(pinLen) + pin;
-        for (int i = 0; i < 14 - pinLen; i++) {
-            pin = pin + "A";
-        }
-        pin += randomData.substring(0, 16);
-        String panBlock = "";
-        int panLen = pan.length();
-        int m = 0;
-        if (panLen < 12) {
-            panBlock = "0";
-            for (int i = 0; i < 12 - panLen; i++) {
-                panBlock += "0";
-            }
-            panBlock = panBlock + pan + "0000000000000000000";
-        } else {
-            m = pan.length() - 12;
-            panBlock = m + pan;
-            for (int i = 0; i < 31 - panLen; i++) {
-                panBlock += "0";
-            }
-        }
-        String pinBlock1 = AESUtil.encrypt(AESKey, pin);
-        pin = Util.xor16(HexStringToByteArray(pinBlock1), HexStringToByteArray(panBlock));
-        String pinBlock2 = AESUtil.encrypt(AESKey, pin);
-        return pinBlock2;
-    }
 
     public void getposInfo(String posinfo) {
         Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
@@ -1805,11 +1026,14 @@ public class MyQposClass extends CQPOSService {
                     @Override
                     public void onSuccess(Response<String> response) {
                         dismissDialog();
-                        Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
-                        intent.putExtra("paytment", "payment");
-                        intent.putExtra("tradeResut", data);
-                        getApplicationInstance.startActivity(intent);
-                        ((Activity) getApplicationInstance).finish();
+                        Log.w("application","getApplicationInstance="+getApplicationInstance);
+                        if(getApplicationInstance!=null) {
+                            Intent intent = new Intent(getApplicationInstance, SuccessActivity.class);
+                            intent.putExtra("paytment", "payment");
+                            intent.putExtra("tradeResut", data);
+                            getApplicationInstance.startActivity(intent);
+                            ((Activity) getApplicationInstance).finish();
+                        }
                     }
 
                     @Override
@@ -1843,9 +1067,6 @@ public class MyQposClass extends CQPOSService {
         if (Constants.transData.getPayment() != null && !"".equals(Constants.transData.getPayment())) {
             Constants.transData.setPayment("");
         }
-//        if (Constants.transData.getSN() != null && !"".equals(Constants.transData.getSN())) {
-//            Constants.transData.setSN("");
-//        }
         if (Constants.transData.getCashbackAmounts() != null && !"".equals(Constants.transData.getCashbackAmounts())) {
             Constants.transData.setCashbackAmounts("");
         }
@@ -1883,14 +1104,14 @@ public class MyQposClass extends CQPOSService {
         if (Mydialog.onlingDialog != null) {
             Mydialog.onlingDialog.dismiss();
         }
-        if (keyboardUtil != null) {
-            keyboardUtil.hide();
-        }
+
     }
 
     public void autoTrade(String msg) {
         dismissDialog();
-        Toast.makeText(getApplicationInstance,msg,Toast.LENGTH_SHORT).show();
+        if(getApplicationInstance!=null) {
+            Toast.makeText(getApplicationInstance, msg, Toast.LENGTH_SHORT).show();
+        }
         if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
             Constants.transData.setFialSub(Constants.transData.getFialSub() + 1);
             Constants.transData.setSub(Constants.transData.getSub() + 1);
@@ -1899,7 +1120,10 @@ public class MyQposClass extends CQPOSService {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            ((Activity) getApplicationInstance).finish();
+            if(getApplicationInstance!=null) {
+                ((Activity) getApplicationInstance).finish();
+            }
+
         }
     }
 }

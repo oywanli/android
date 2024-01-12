@@ -112,6 +112,7 @@ public class AutoFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.w("onResume","onResume");
         super.onResume();
         if (Constants.transData.getAutoTrade() != null && "StopTrade".equals(Constants.transData.getAutoTrade())) {
             Constants.transData.setAutoTrade("");
