@@ -57,6 +57,9 @@ public class Mydialog {
     public static Dialog Ldialog;
 
     public static void loading(Activity mContext, String msg) {
+        if(mContext==null){
+            return;
+        }
         Ldialog = new Dialog(mContext);
         Ldialog.setContentView(R.layout.processing_dialog);
         Button confirmButton = Ldialog.findViewById(R.id.confirmButton);
@@ -462,6 +465,9 @@ public class Mydialog {
     public static AlertDialog ShowInfoDialog;
 
     public static void ShowInfoDialog(Context mContext, String msg, OnMyClickListener listener) {
+        if(mContext==null){
+            return;
+        }
         View view = View.inflate(mContext, R.layout.alert_dialog, null);
         Button mbtnConfirm = view.findViewById(R.id.btnConfirm);
         TextView mtvInfo = view.findViewById(R.id.tvInfo);

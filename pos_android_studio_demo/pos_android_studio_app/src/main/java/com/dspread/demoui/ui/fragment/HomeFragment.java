@@ -113,22 +113,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        conType = (String) connectType.get("conType", "");
-        Log.w("onHiddenChanged", "onHiddenChanged==" + conType);
-        if (!hidden) {
-            if (conType != null && "uart".equals(conType)) {
-                open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
-            }
-        } else {
-            if (conType != null && "uart".equals(conType)) {
-                pos.closeUart();
-            }
 
-        }
-    }
 
     @Override
     public void onClick(View v) {

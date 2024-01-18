@@ -84,10 +84,6 @@ public class DeviceInfoFragment extends Fragment implements View.OnClickListener
         getUpdatekey.setOnClickListener(this);
         getKeycheckvalue.setOnClickListener(this);
         connectType = SharedPreferencesUtil.getmInstance(getActivity());
-        conType = (String) connectType.get("conType", "");
-        if (conType != null && "uart".equals(conType)) {
-            open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
-        }
 
     }
 
@@ -150,24 +146,6 @@ public class DeviceInfoFragment extends Fragment implements View.OnClickListener
             startActivity(intent);
         }
 
-
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        conType = (String) connectType.get("conType", "");
-        Log.w("onHiddenChanged", "onHiddenChanged==" + conType);
-        if (!hidden) {
-            if (conType != null && "uart".equals(conType)) {
-                open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
-            }
-        } else {
-            if (conType != null && "uart".equals(conType)) {
-                pos.closeUart();
-            }
-
-        }
 
     }
 

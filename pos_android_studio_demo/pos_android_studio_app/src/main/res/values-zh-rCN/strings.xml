@@ -470,5 +470,6 @@
     <string name="vConsole">vConsole</string>
     <string name="network_failed">请求失败，请检查网络连接</string>
     <string name="auto_trade">自动交易</string>
+    <string name="trade_returnfailed">交易数据返回失败</string>
 
 </resources>

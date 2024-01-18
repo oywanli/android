@@ -4,6 +4,7 @@ import static android.content.Context.LOCATION_SERVICE;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
 import static com.dspread.demoui.ui.dialog.Mydialog.UART;
+import static com.dspread.demoui.utils.Utils.open;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +36,7 @@ import com.dspread.demoui.R;
 import com.dspread.demoui.activity.PaymentActivity;
 import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
+import com.dspread.xpos.QPOSService;
 
 public class SettingFragment extends Fragment implements View.OnClickListener {
     TitleUpdateListener myListener;
@@ -42,6 +44,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     private RadioButton rBtnBlue, rBtnSerialPort, rBtnUsb;
     private RadioGroup rgType;
     private TextView tvConnectType;
+    SharedPreferencesUtil connectType;
+    String conType;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -56,8 +60,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_setting, null);
         myListener.sendValue(getString(R.string.menu_setting));
         initView(view);
-        SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(getActivity());
-        String conType = (String) connectType.get("conType", "");
+        connectType = SharedPreferencesUtil.getmInstance(getActivity());
+        conType = (String) connectType.get("conType", "");
         Log.w("setting", "contyep==" + conType);
         if (!"".equals(conType) && "blue".equals(conType)) {
             rBtnBlue.setEnabled(true);
@@ -150,13 +154,17 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == 2) {
-            String info = data.getStringExtra("info");
-//            Toast.makeText(getActivity(), info, Toast.LENGTH_SHORT).show();
+            conType = (String) connectType.get("conType", "");
+            if (!"".equals(conType) && "uart".equals(conType)) {
+                open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
+            }
         }
     }
+
     private static final int BLUETOOTH_CODE = 100;
     private static final int LOCATION_CODE = 101;
     LocationManager lm;//【Location management】
+
     public void bluetoothRelaPer() {
         android.bluetooth.BluetoothAdapter adapter = android.bluetooth.BluetoothAdapter.getDefaultAdapter();
         if (adapter != null && !adapter.isEnabled()) {//if bluetooth is disabled, add one fix

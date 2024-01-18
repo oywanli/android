@@ -95,10 +95,6 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
         updateFirmware.setOnClickListener(this);
         updateEmvByXml.setOnClickListener(this);
         connectType = SharedPreferencesUtil.getmInstance(getActivity());
-        conType = (String) connectType.get("conType", "");
-        if (conType != null && "uart".equals(conType)) {
-            open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
-        }
     }
 
     @Override
@@ -179,23 +175,7 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        conType = (String) connectType.get("conType", "");
-        Log.w("onHiddenChanged", "onHiddenChanged==" + conType);
-        if (!hidden) {
-            if (conType != null && "uart".equals(conType)) {
-                open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
-            }
-        } else {
-            if (conType != null && "uart".equals(conType)) {
-                pos.closeUart();
-            }
 
-        }
-
-    }
 
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
 

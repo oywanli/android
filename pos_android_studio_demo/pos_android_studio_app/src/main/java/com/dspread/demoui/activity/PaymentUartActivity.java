@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.SystemKeyListener;
 import com.dspread.demoui.beans.Constants;
+import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.xpos.QPOSService;
 
 public class PaymentUartActivity extends AppCompatActivity {
@@ -73,6 +74,9 @@ public class PaymentUartActivity extends AppCompatActivity {
         if (systemKeyListener != null) {
             systemKeyListener.stopSystemKeyListener();
         }
+        if(MyQposClass.keyboardUtil!=null){
+        MyQposClass.keyboardUtil.hide();
+        }
     }
 
     public void initInfo() {
@@ -115,6 +119,7 @@ public class PaymentUartActivity extends AppCompatActivity {
                 Constants.transData.setAutoTrade("StopTrade");
             }
             pos.cancelTrade();
+            getApplicationInstance = null;
             finish();
             return true;
         }

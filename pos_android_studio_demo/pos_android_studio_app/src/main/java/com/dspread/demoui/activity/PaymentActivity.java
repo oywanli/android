@@ -444,6 +444,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         } catch (Exception e) {
 
                         }
+                        setResult(2);
                         finish();
                         return;
                     }else {
@@ -561,6 +562,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            Intent intent = new Intent();
 //            intent.putExtra("info", getString(R.string.blue_disconect));
 //            setResult(2, intent);
+            setResult(2);
             finish();
             return;
         }

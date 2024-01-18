@@ -54,7 +54,7 @@ import Decoder.BASE64Decoder;
 import Decoder.BASE64Encoder;
 
 public class MyQposClass extends CQPOSService {
-    private static KeyboardUtil keyboardUtil;
+    public  static KeyboardUtil keyboardUtil;
     private static Dialog dialog;
     private ListView appListView;
 
@@ -181,7 +181,11 @@ public class MyQposClass extends CQPOSService {
                     content += "PIN:" + " " + s + "\n";
                 }
             }
+            if(decodeData.get("maskedPAN")!=null&&!"".equals(decodeData.get("maskedPAN"))){
             sendRequestToBackend(content);
+            }else{
+                Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.trade_returnfailed), null);
+            }
         } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
 //                nfcLog = decodeData.get("nfcLog");
             String content = getString(R.string.tap_card);
@@ -396,7 +400,6 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onRequestBatchData(String tlv) {
         dismissDialog();
-        Mydialog.Ldialog.dismiss();
         TRACE.d("ICC trade finished");
         String content = getString(R.string.batch_data);
         content += tlv;
@@ -492,7 +495,9 @@ public class MyQposClass extends CQPOSService {
                     pos.pinMapSync(value, 20);
                 }
             });
+            if(getApplicationInstance!=null){
             keyboardUtil = new KeyboardUtil((Activity) getApplicationInstance, dataList);
+            }
         } catch (Exception e) {
             Log.e("e", "e:" + e);
         }
@@ -737,10 +742,12 @@ public class MyQposClass extends CQPOSService {
         } else if (errorState == QPOSService.Error.TIMEOUT) {
             msg = getString(R.string.payment_timeout);
         } else if (errorState == QPOSService.Error.DEVICE_RESET) {
-            msg = getString(R.string.device_reset);
+            dismissDialog();
+//            msg = getString(R.string.device_reset);
         } else if (errorState == QPOSService.Error.UNKNOWN) {
             msg = getString(R.string.unknown_error);
         } else if (errorState == QPOSService.Error.DEVICE_BUSY) {
+            pos.resetPosStatus();
             msg = getString(R.string.device_busy);
         } else if (errorState == QPOSService.Error.INPUT_OUT_OF_RANGE) {
             msg = getString(R.string.out_of_range);
@@ -770,25 +777,26 @@ public class MyQposClass extends CQPOSService {
             msg = getString(R.string.device_reset);
         }
             dismissDialog();
+      if(!"".equals(msg)) {
+          if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+              autoTrade(msg);
+          } else {
+              Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, new Mydialog.OnMyClickListener() {
+                  @Override
+                  public void onCancel() {
 
-        if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
-            autoTrade(msg);
-        } else {
-            Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, new Mydialog.OnMyClickListener() {
-                @Override
-                public void onCancel() {
+                  }
 
-                }
-
-                @Override
-                public void onConfirm() {
-                    if(!"com.dspread.demoui.activity.MainActivity".equals(getApplicationInstance.getClass().getName())){
-                    ((Activity) getApplicationInstance).finish();
-                    }
-                    Mydialog.ErrorDialog.dismiss();
-                }
-            });
-        }
+                  @Override
+                  public void onConfirm() {
+                      if (!"com.dspread.demoui.activity.MainActivity".equals(getApplicationInstance.getClass().getName())) {
+                          ((Activity) getApplicationInstance).finish();
+                      }
+                      Mydialog.ErrorDialog.dismiss();
+                  }
+              });
+          }
+      }
         initInfo();
     }
 

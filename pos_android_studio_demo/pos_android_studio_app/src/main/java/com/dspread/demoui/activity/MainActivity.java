@@ -405,7 +405,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -419,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             toolbar.setTitle(getString(R.string.menu_payment));
             switchFragment(0);
             drawerLayout.close();
-//            exit();
+            exit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -434,12 +433,12 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
     };
 
-
     private void exit() {
         if (!isExit) {
             isExit = true;
             mHandler.sendEmptyMessageDelayed(0, 1500);
         } else {
+            isExit = false;
             Mydialog.manualExitDialog(MainActivity.this, getString(R.string.msg_exit), new Mydialog.OnMyClickListener() {
                 @Override
                 public void onCancel() {
@@ -449,6 +448,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 @Override
                 public void onConfirm() {
                     finish();
+
                     Mydialog.manualExitDialog.dismiss();
                 }
             });
@@ -462,7 +462,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
         }
     }
-
 
 
 }

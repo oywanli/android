@@ -80,11 +80,7 @@ public class AutoFragment extends Fragment {
         fialsub = view.findViewById(R.id.fialsub);
         etSub = view.findViewById(R.id.et_sub);
         btnTrade = view.findViewById(R.id.btn_trade);
-        connectType = SharedPreferencesUtil.getmInstance(getActivity());
-        conType = (String) connectType.get("conType", "");
-        if (conType != null && "uart".equals(conType)) {
-            open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
-        }
+
         btnTrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,22 +145,6 @@ public class AutoFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        conType = (String) connectType.get("conType", "");
-        Log.w("onHiddenChanged", "onHiddenChanged==" + conType);
-        if (!hidden) {
-            if (conType != null && "uart".equals(conType)) {
-                open(QPOSService.CommunicationMode.UART_SERVICE, getActivity());
-            }
-        } else {
-            if (conType != null && "uart".equals(conType)) {
-                initInfo();
-                pos.closeUart();
-            }
-        }
-    }
 
     public void initInfo() {
         Constants.transData.setInputMoney("");
