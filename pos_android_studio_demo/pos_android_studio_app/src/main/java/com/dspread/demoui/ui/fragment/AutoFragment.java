@@ -137,6 +137,7 @@ public class AutoFragment extends Fragment {
                     Constants.transData.setPayType(transactionTypeString);
                     Constants.transData.setPayment("payment");
                     Constants.transData.setAutoTrade("autoTrade");
+                    PaymentUartActivity.flag=false;
                     Intent intent = new Intent(getApplicationInstance, PaymentUartActivity.class);
                     getApplicationInstance.startActivity(intent);
                 }

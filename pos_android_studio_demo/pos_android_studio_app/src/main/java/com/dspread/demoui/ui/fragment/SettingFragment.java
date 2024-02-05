@@ -46,6 +46,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     private TextView tvConnectType;
     SharedPreferencesUtil connectType;
     String conType;
+    public static boolean uartFlag = false;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -104,6 +105,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                         break;
                     case R.id.rbtn_serialport:
                         conType.put("conType", "uart");
+                        uartFlag = false;
                         tvConnectType.setText(getString(R.string.setting_uart));
                         disconnectbluetooth();
                         break;
@@ -133,6 +135,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     public void closeUart() {
         if (pos != null) {
             pos.closeUart();
+             uartFlag = true;
         }
 
     }

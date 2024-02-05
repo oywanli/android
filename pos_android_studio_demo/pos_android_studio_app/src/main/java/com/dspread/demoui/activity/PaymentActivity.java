@@ -241,7 +241,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         } else if ("updateEmvByXml".equals(updatePosInfo)) {
             tvTitle.setText(getString(R.string.updateEMVByXml));
             Mydialog.loading(PaymentActivity.this, getString(R.string.updateEMVByXml));
-            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv.xml", PaymentActivity.this)));
+            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv_cit.xml", PaymentActivity.this)));
         }
     }
 
@@ -253,7 +253,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            updateThread = new UpdateThread();
 //            updateThread.start();
             byte[] data = null;
-            data = FileUtils.readAssetsLine("D30(样机 Xflash)_master.asc", PaymentActivity.this);
+            data = FileUtils.readAssetsLine("CR100D(样机-XFLASH)_master.asc", PaymentActivity.this);
             if (data != null) {
                 int a = pos.updatePosFirmware(data, blueTootchAddress);
 //                Mydialog.loading(PaymentActivity.this, progres + "%");
@@ -1422,7 +1422,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (transactionTypeString.equals("SALES_NEW")) {
                     transactionType = QPOSService.TransactionType.SALES_NEW;
                 }
-                pos.setAmount(amounts, cashbackAmounts, "156", transactionType);
+                pos.setAmount(amounts, cashbackAmounts, "643", transactionType);
             }
         }
 
@@ -1948,14 +1948,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onUpdatePosFirmwareResult(QPOSService.UpdateInformationResult arg0) {
             tvTitle.setText(getString(R.string.updateFirmware));
             dismissDialog();
+            String msg = "";
             TRACE.d("onUpdatePosFirmwareResult(UpdateInformationResult arg0):" + arg0.toString());
 //            isUpdateFw = false;
             if (arg0 != QPOSService.UpdateInformationResult.UPDATE_SUCCESS) {
                 updateThread.concelSelf();
+                msg = "update firmware fail";
             } else {
 //                    mhipStatus.setText("");
+               msg ="update firmware success";
             }
-            mtvinfo.setText("onUpdatePosFirmwareResult" + arg0.toString());
+            mtvinfo.setText("onUpdatePosFirmwareResult" +msg);
             mllinfo.setVisibility(View.VISIBLE);
             mbtnNewpay.setVisibility(View.GONE);
             mllchrccard.setVisibility(View.GONE);
@@ -2800,7 +2803,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
         if (!dealDoneflag) {
+            if(pos!=null){
             pos.cancelTrade();
+            }
         }
         finish();
     }

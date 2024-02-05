@@ -12,10 +12,14 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.os.BatteryManager;
+import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -26,6 +30,7 @@ import com.dspread.demoui.beans.Constants;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.ui.fragment.DeviceInfoFragment;
 import com.dspread.demoui.ui.fragment.DeviceUpdataFragment;
+import com.dspread.demoui.ui.fragment.SettingFragment;
 import com.dspread.demoui.utils.DUKPK2009_CBC;
 import com.dspread.demoui.utils.ParseASN1Util;
 import com.dspread.demoui.utils.QPOSUtil;
@@ -57,7 +62,9 @@ public class MyQposClass extends CQPOSService {
     public  static KeyboardUtil keyboardUtil;
     private static Dialog dialog;
     private ListView appListView;
-
+    boolean disconnect=false;
+    public static List<String> dataLists;
+    public static String datavalue;
     @Override
     public void onDoTradeResult(QPOSService.DoTradeResult result, Hashtable<String, String> decodeData) {
         TRACE.d("(DoTradeResult result, Hashtable<String, String> decodeData) " + result.toString() + TRACE.NEW_LINE + "decodeData:" + decodeData);
@@ -300,15 +307,21 @@ public class MyQposClass extends CQPOSService {
         String content = "";
         content += getString(R.string.bootloader_version) + bootloaderVersion + "\n";
         content += getString(R.string.firmware_version) + firmwareVersion + "\n";
-        content += getString(R.string.usb) + isUsbConnected + "\n";
-        content += getString(R.string.charge) + isCharging + "\n";
+//        content += getString(R.string.usb) + isUsbConnected + "\n";
+//        content += getString(R.string.charge) + isCharging + "\n";
 //			if (batteryPercentage==null || "".equals(batteryPercentage)) {
-        content += getString(R.string.battery_level) + batteryLevel + "\n";
+//        content += getString(R.string.battery_level) + batteryLevel + "\n";
 //			}else {
-        content += getString(R.string.battery_percentage) + batteryPercentage + "\n";
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = getApplicationInstance.registerReceiver(null, ifilter);
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        int batteryPct = level / scale * 100;
+
+        content += getString(R.string.battery_percentage) + batteryPct +"%"+ "\n";
 //			}
         content += getString(R.string.hardware_version) + hardwareVersion + "\n";
-        content += "SUB : " + SUB + "\n";
+//        content += "SUB : " + SUB + "\n";
         content += getString(R.string.track_1_supported) + isSupportedTrack1 + "\n";
         content += getString(R.string.track_2_supported) + isSupportedTrack2 + "\n";
         content += getString(R.string.track_3_supported) + isSupportedTrack3 + "\n";
@@ -486,17 +499,31 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
         super.onQposRequestPinResult(dataList, offlineTime);
+        dataLists = dataList;
+        Log.w("dataList","dataList=="+dataList);
+        for (int i=0;i<dataList.size();i++){
+            Log.w("dataList","dataList="+ dataList.get(i));
+        }
+        Log.w("myQposClass","PaymentUartActivity.flag=="+PaymentUartActivity.flag);
         try {
             dismissDialog();
-
-            MyKeyboardView.setKeyBoardListener(new KeyBoardNumInterface() {
-                @Override
-                public void getNumberValue(String value) {
-                    pos.pinMapSync(value, 20);
-                }
-            });
-            if(getApplicationInstance!=null){
-            keyboardUtil = new KeyboardUtil((Activity) getApplicationInstance, dataList);
+//            if(!PaymentUartActivity.flag) {
+                Log.w("myQposClass","PaymentUartActivity.flag=22="+PaymentUartActivity.flag);
+                MyKeyboardView.setKeyBoardListener(new KeyBoardNumInterface() {
+                    @Override
+                    public void getNumberValue(String value) {
+                        datavalue = value;
+                        Log.w("myQposClass","PaymentUartActivity.flag=23="+value);
+                        pos.pinMapSync(value, 20);
+                    }
+                });
+                if (getApplicationInstance != null) {
+//                    PowerManager pm = (PowerManager) getApplicationInstance.getSystemService(Context.POWER_SERVICE);
+//                    boolean isScreenOn = pm.isInteractive();
+//                    if(isScreenOn) {
+                        keyboardUtil = new KeyboardUtil((Activity) getApplicationInstance, dataLists);
+//                    }
+//                }
             }
         } catch (Exception e) {
             Log.e("e", "e:" + e);
@@ -714,6 +741,17 @@ public class MyQposClass extends CQPOSService {
     public void onRequestNoQposDetected() {
         TRACE.d("onRequestNoQposDetected()");
         dismissDialog();
+        Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.no_device_detected), new Mydialog.OnMyClickListener() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onConfirm() {
+                ((Activity) getApplicationInstance).finishAffinity();
+            }
+        });
         Log.w("onRequestNoQposDetected", "No pos detected.");
     }
 
@@ -728,7 +766,11 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onRequestQposDisconnected() {
         dismissDialog();
-//        Mydialog.ErrorDialog((Activity) getApplicationInstance, "UART " + getString(R.string.disconnect), null);
+        if (!SettingFragment.uartFlag) {
+            Mydialog.ErrorDialog((Activity) getApplicationInstance, getString(R.string.device_unplugged), null);
+        }
+        SettingFragment.uartFlag=false;
+        disconnect = true;
         TRACE.d("onRequestQposDisconnected()");
     }
 
@@ -747,7 +789,9 @@ public class MyQposClass extends CQPOSService {
         } else if (errorState == QPOSService.Error.UNKNOWN) {
             msg = getString(R.string.unknown_error);
         } else if (errorState == QPOSService.Error.DEVICE_BUSY) {
+            if(!disconnect) {
             pos.resetPosStatus();
+            }
             msg = getString(R.string.device_busy);
         } else if (errorState == QPOSService.Error.INPUT_OUT_OF_RANGE) {
             msg = getString(R.string.out_of_range);
@@ -776,27 +820,30 @@ public class MyQposClass extends CQPOSService {
             pos.resetPosStatus();
             msg = getString(R.string.device_reset);
         }
+        if(!disconnect) {
             dismissDialog();
-      if(!"".equals(msg)) {
-          if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
-              autoTrade(msg);
-          } else {
-              Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, new Mydialog.OnMyClickListener() {
-                  @Override
-                  public void onCancel() {
+            if (!"".equals(msg)) {
+                if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                    autoTrade(msg);
+                } else {
+                    Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, new Mydialog.OnMyClickListener() {
+                        @Override
+                        public void onCancel() {
 
-                  }
+                        }
 
-                  @Override
-                  public void onConfirm() {
-                      if (!"com.dspread.demoui.activity.MainActivity".equals(getApplicationInstance.getClass().getName())) {
-                          ((Activity) getApplicationInstance).finish();
-                      }
-                      Mydialog.ErrorDialog.dismiss();
-                  }
-              });
-          }
-      }
+                        @Override
+                        public void onConfirm() {
+                            if (!"com.dspread.demoui.activity.MainActivity".equals(getApplicationInstance.getClass().getName())) {
+                                ((Activity) getApplicationInstance).finish();
+                            }
+                            Mydialog.ErrorDialog.dismiss();
+                        }
+                    });
+                }
+            }
+
+        }
         initInfo();
     }
 
@@ -829,7 +876,18 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onRequestUpdateWorkKeyResult(QPOSService.UpdateInformationResult result) {
         TRACE.d("onRequestUpdateWorkKeyResult(UpdateInformationResult result):" + result);
-        ShowInfoDialog(result.toString());
+        dismissDialog();
+        String msg="";
+        if (result == QPOSService.UpdateInformationResult.UPDATE_SUCCESS) {
+            msg="update work key success";
+        } else if (result == QPOSService.UpdateInformationResult.UPDATE_FAIL) {
+            msg="update work key fail";
+        } else if (result == QPOSService.UpdateInformationResult.UPDATE_PACKET_VEFIRY_ERROR) {
+            msg="update work key packet vefiry error";
+        } else if (result == QPOSService.UpdateInformationResult.UPDATE_PACKET_LEN_ERROR) {
+            msg="update work key packet len error";
+        }
+        ShowInfoDialog(msg);
     }
 
     @Override
@@ -853,9 +911,9 @@ public class MyQposClass extends CQPOSService {
         TRACE.d("onReturnSetMasterKeyResult(boolean isSuccess) : " + isSuccess);
         String upgradeInfo;
         if (isSuccess) {
-            upgradeInfo = "SetMasterkey Success";
+            upgradeInfo = "Set Masterkey Success";
         } else {
-            upgradeInfo = "SetMasterkey Fail";
+            upgradeInfo = "Set Masterkey Fail";
         }
         ShowInfoDialog(upgradeInfo);
     }
@@ -881,19 +939,10 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onUpdatePosFirmwareResult(QPOSService.UpdateInformationResult arg0) {
         TRACE.d("onUpdatePosFirmwareResult(UpdateInformationResult arg0):" + arg0.toString());
+        dismissDialog();
         if (arg0 != QPOSService.UpdateInformationResult.UPDATE_SUCCESS) {
             DeviceUpdataFragment.UpdateThread.concelFlag = true;
-            Mydialog.ErrorDialog((Activity) getApplicationInstance, arg0.toString(), new Mydialog.OnMyClickListener() {
-                @Override
-                public void onCancel() {
-
-                }
-
-                @Override
-                public void onConfirm() {
-                    Mydialog.ErrorDialog.dismiss();
-                }
-            });
+            ShowInfoDialog("update firmware fail");
         } else {
 
         }

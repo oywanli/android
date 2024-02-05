@@ -50,13 +50,13 @@ public class SuccessActivity extends AppCompatActivity {
             if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
                 Constants.transData.setSuccessSub(Constants.transData.getSuccessSub() + 1);
                 Constants.transData.setSub(Constants.transData.getSub() + 1);
-                new Handler(Looper.myLooper(),new Handler.Callback() {
+                new Handler(Looper.myLooper(), new Handler.Callback() {
                     @Override
                     public boolean handleMessage(Message msg) {
                         finish();
                         return false;
                     }
-                }).sendEmptyMessageDelayed(0x123,1000);
+                }).sendEmptyMessageDelayed(0x123, 1000);
             }
         }
         if ("posid".equals(posinfo)) {
@@ -88,7 +88,8 @@ public class SuccessActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        initInfo();
+//        initInfo();;
+        finish();
     }
 
     public void initInfo() {

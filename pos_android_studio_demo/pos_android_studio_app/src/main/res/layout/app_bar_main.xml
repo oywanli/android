@@ -45,6 +45,7 @@
         app:elevation="16dp"
         app:layout_anchor="@id/main"
         app:layout_anchorGravity="right|bottom"
+        android:visibility="gone"
         android:layout_margin="16dp"
         android:backgroundTint="@color/alipay"/>
 

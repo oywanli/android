@@ -41,6 +41,10 @@ public class SystemKeyListener {
          */
         public void onMenuPressed();
 
+        public void onScreenOff();
+
+        public void onScreenOn();
+
     }
 
     /**
@@ -100,6 +104,10 @@ public class SystemKeyListener {
                         }
                     }
                 }
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mListener.onScreenOff();
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mListener.onScreenOn();
             }
         }
     }

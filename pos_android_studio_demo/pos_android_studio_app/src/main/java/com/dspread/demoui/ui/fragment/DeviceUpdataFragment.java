@@ -63,6 +63,7 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
     private static TextView tvProgress;
     SharedPreferencesUtil connectType;
     String conType;
+    public static UpdateThread  updateThread ;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -132,6 +133,8 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.update_firmware:
                 if (conType != null && "uart".equals(conType)) {
+//                    Mydialog.loading(getActivity(),getString(R.string.updateFirmware));
+                    DeviceUpdataFragment.UpdateThread.concelFlag = false;
                   updateFirmware();
                 } else {
                     updateDevice("updateFirmware");
@@ -180,12 +183,17 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
 
     public void updateFirmware() {
+       Mydialog.loading(getActivity(),getString(R.string.updateFirmware));
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             //request permission
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
-        } else {
+            if (Mydialog.Ldialog!=null) {
+                Mydialog.Ldialog.dismiss();
+            }
+            updateFirmware();
+        } else{
             byte[] data = null;
-            data = FileUtils.readAssetsLine("D30(样机 Xflash)_master.asc", getActivity());
+            data = FileUtils.readAssetsLine("D20(mercado-墨西哥)_master.asc", getActivity());
             if (data != null) {
                 int a = pos.updatePosFirmware(data, "");
 //                Mydialog.loading(PaymentActivity.this, progres + "%");
@@ -203,8 +211,11 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
                     });
                     return;
                 }
-                UpdateThread updateThread = new UpdateThread();
+                Log.w("updateThread.start()","updateThread.start(1234)");
+                updateThread = new UpdateThread();
                 updateThread.start();
+                Log.w("updateThread.start()","updateThread.start()");
+
             } else {
                 Mydialog.ErrorDialog(getActivity(), getString(R.string.does_the_file_exist), new Mydialog.OnMyClickListener() {
                     @Override
@@ -231,7 +242,7 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
                 case 1002:
                     tvProgress.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
-
+                    updateThread.interrupt();
                     Log.w("handlermessage", "progress---" + Constants.transData.getPosId());
                     break;
                 case 1003:
@@ -254,7 +265,7 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
         int progress = 0;
         @Override
         public void run() {
-
+            Log.w("UpdateThread","UpdateThread--------------");
             while (!concelFlag) {
                 int i = 0;
                 while (!concelFlag && i < 100) {
@@ -267,6 +278,7 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
                     i++;
                 }
                 if (concelFlag) {
+                    Log.w("update","concelflag");
                     Message msg = new Message();
                     msg.what = 1002;
                     msg.arg1 = progress;

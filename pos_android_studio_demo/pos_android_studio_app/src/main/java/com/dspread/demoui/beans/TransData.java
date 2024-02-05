@@ -17,7 +17,6 @@ public class TransData implements Serializable {
    private int successSub;
    private int fialSub;
    private String autoTrade;
-
    public String getCashbackAmounts() {
       return cashbackAmounts;
    }

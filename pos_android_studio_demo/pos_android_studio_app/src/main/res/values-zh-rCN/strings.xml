@@ -193,7 +193,7 @@
     <string name="last_pin_try">最后密码尝试</string>
     <string name="battery_low">读卡器电量不足，请充电</string>
     <string name="battery_critically_low">读卡器电量严重不足并已断电</string>
-    <string name="no_device_detected">读卡器未插上</string>
+    <string name="no_device_detected">未检测到读卡器</string>
     <string name="device_plugged">侦测到读卡器</string>
     <string name="device_unplugged">已断开连接</string>
     <string name="command_not_available">命令不可用</string>
@@ -221,7 +221,7 @@
     <string name="do_tradelog_operation">操作交易记录</string>
     <string name="clear_log">清除日志</string>
     <string name="check_card">开始</string>
-    <string name="disconnect">断开连接</string>
+    <string name="disconnect">已断开连接</string>
     <string name="start_emv">启动EMV</string>
     <string name="cancel">取消</string>
     <string name="pin">密码</string>
@@ -377,7 +377,7 @@
     <string name="prompt_message">信息提示:</string>
     <string name="delete">清除</string>
     <string name="blue_disconect">蓝牙连接已经断开</string>
-    <string name="payment_timeout">交易超时</string>
+    <string name="payment_timeout">超时</string>
 
 
     <string name="setting_uart">POS串口连接</string>

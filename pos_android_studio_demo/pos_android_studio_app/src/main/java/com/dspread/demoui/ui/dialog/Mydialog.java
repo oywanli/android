@@ -123,7 +123,7 @@ public class Mydialog {
         }
         //显示对话框
         Window window = ErrorDialog.getWindow();
-        window.setWindowAnimations(R.style.popupAnimation);
+//        window.setWindowAnimations(R.style.popupAnimation);
         window.setBackgroundDrawable(null);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.BOTTOM;
@@ -197,7 +197,7 @@ public class Mydialog {
             payTypeDialog.show();
         }
         Window window = payTypeDialog.getWindow();
-        window.setWindowAnimations(R.style.popupAnimation);
+//        window.setWindowAnimations(R.style.popupAnimation);
         window.setBackgroundDrawable(null);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.BOTTOM;
@@ -449,7 +449,7 @@ public class Mydialog {
         }, 100);
 
         Window window = cashBackPaymentDialog.getWindow();
-        window.setWindowAnimations(R.style.popupAnimation);
+//        window.setWindowAnimations(R.style.popupAnimation);
         window.setBackgroundDrawable(null);
         window.setGravity(Gravity.BOTTOM);
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);

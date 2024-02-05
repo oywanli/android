@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.activity.BaseApplication;
+import com.dspread.demoui.activity.PaymentUartActivity;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.MoneyUtil;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
@@ -161,6 +162,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     }
                     canshow = false;
                     showTimer.start();
+                    PaymentUartActivity.flag=false;
                     Mydialog.payTypeDialog(getActivity(), amount, inputMoney, data);
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.set_amount), Toast.LENGTH_SHORT).show();

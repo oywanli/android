@@ -3,6 +3,8 @@ package com.dspread.demoui.activity;
 import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -22,7 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dspread.demoui.R;
 import com.dspread.demoui.utils.SystemKeyListener;
 import com.dspread.demoui.beans.Constants;
+import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
+import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
 import com.dspread.xpos.QPOSService;
 
 public class PaymentUartActivity extends AppCompatActivity {
@@ -30,9 +34,11 @@ public class PaymentUartActivity extends AppCompatActivity {
     private ImageView ivBackTitle;
     private TextView tvTitle;
     private SystemKeyListener systemKeyListener;
+    public static boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -41,6 +47,7 @@ public class PaymentUartActivity extends AppCompatActivity {
         systemKeyListener = new SystemKeyListener(this);
         systemKeyStart();
         systemKeyListener.startSystemKeyListener();
+        flag = false;
     }
 
     private void initView() {
@@ -53,8 +60,12 @@ public class PaymentUartActivity extends AppCompatActivity {
         }
         BaseApplication.getApplicationInstance = this;
         pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
-        pos.doCheckCard();
-//        pos.doTrade(20);
+//        pos.doCheckCard();
+
+//        pos.clearD20Device();
+        pos.setFormatId(QPOSService.FORMATID.DUKPT);
+        pos.doTrade(20);
+
         ivBackTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,11 +82,14 @@ public class PaymentUartActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+//        pos.getD20DeviceSPLog();
         if (systemKeyListener != null) {
             systemKeyListener.stopSystemKeyListener();
         }
-        if(MyQposClass.keyboardUtil!=null){
-        MyQposClass.keyboardUtil.hide();
+        MyQposClass.dismissDialog();
+        if (MyQposClass.keyboardUtil != null) {
+            MyQposClass.keyboardUtil.hide();
+            MyQposClass.keyboardUtil = null;
         }
     }
 
@@ -147,6 +161,24 @@ public class PaymentUartActivity extends AppCompatActivity {
                 getApplicationInstance = null;
                 finish();
             }
+
+            @Override
+            public void onScreenOff() {
+//                flag = true;
+//                if (MyQposClass.keyboardUtil == null) {
+//                   pos.cancelTrade();
+//                    finish();
+//                }
+
+            }
+
+            @Override
+            public void onScreenOn() {
+                flag = false;
+            }
         });
     }
+
+
 }
+

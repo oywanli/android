@@ -59,6 +59,7 @@ public class KeyboardUtil {
         this.dataList = dataList;
         this.mActivity =  context;
         this.mParent = mIncludeKeyboardview;
+
         pinpadEditText = mIncludeKeyboardview.findViewById(R.id.pinpadEditText);
         mKeyboardView = (MyKeyboardView) mIncludeKeyboardview.findViewById(R.id.keyboard_view);
         mWindow = new PopupWindow(mIncludeKeyboardview, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);

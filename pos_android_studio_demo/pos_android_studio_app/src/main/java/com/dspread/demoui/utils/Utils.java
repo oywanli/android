@@ -376,7 +376,7 @@ public class Utils {
 //		lastClickTime = curClickTime;
 //		return flag;
 //	}
-	private static final int MIN_CLICK_DELAY_TIME2 = 3000;
+	public static int MIN_CLICK_DELAY_TIME2 = 3000;
 	public static boolean islistFastClick() {
 		TRACE.d("islistFastClick");
 		boolean flag = false;
@@ -384,6 +384,7 @@ public class Utils {
 		if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME2) {
 			flag = true;
 		}
+		MIN_CLICK_DELAY_TIME2 = 00;
 		lastClickTime = curClickTime;
 		return flag;
 	}
@@ -409,7 +410,7 @@ public class Utils {
 	public static void open(QPOSService.CommunicationMode mode, Context context) {
 		TRACE.d("open");
 		MyQposClass listener = new MyQposClass();
-		pos = QPOSService.getInstance(context, mode);
+		pos = QPOSService.getInstance(context,mode);
 		if (pos == null) {
 			return;
 		}
