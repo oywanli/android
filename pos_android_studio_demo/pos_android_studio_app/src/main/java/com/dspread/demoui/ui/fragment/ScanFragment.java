@@ -50,7 +50,7 @@ public class ScanFragment extends Fragment {
                 canshow = false;
                 showTimer.start();
                 Intent intent = new Intent();
-                ComponentName comp = new ComponentName("com.dspread.components.scan.server", "com.dspread.components.scan.ScanActivity");
+                ComponentName comp = new ComponentName("com.dspread.components.scan.service", "com.dspread.components.scan.service.ScanActivity");
                 try {
                     intent.putExtra("amount", "CHARGE ￥1");
                     intent.setComponent(comp);
