@@ -217,14 +217,12 @@ public class PayPassView extends RelativeLayout {
                             String SavePwds =""+listNumber.get(position);
                             if (pos.getCvmKeyList() != null && !("").equals(pos.getCvmKeyList())) {
                                 String keyList = Util.convertHexToString(pos.getCvmKeyList());
-                                for (int i = 0; i < SavePwds.length(); i++) {
                                     for (int j = 0; j < keyList.length(); j++) {
-                                        if (keyList.charAt(j) == SavePwds.charAt(i)) {
+                                        if (keyList.charAt(j) == SavePwds.charAt(0)) {
                                             savePwd = savePwd + Integer.toHexString(j) + "";
                                             break;
                                         }
                                     }
-                                }
                             }
                             mEtinputpin.setText(savePwd);
                         }

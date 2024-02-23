@@ -1821,27 +1821,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onConfirm(String password) {
-
-                        Log.w("password", "password==" + password);
-//                        pos.sendPin(password);
-                        String newPin = "";
-                        //this part is used to enctypt the plaintext pin with random seed
-//                        if (pos.getCvmKeyList() != null && !("").equals(pos.getCvmKeyList())) {
-//                            String keyList = Util.convertHexToString(pos.getCvmKeyList());
-//                            for (int i = 0; i < password.length(); i++) {
-//                                for (int j = 0; j < keyList.length(); j++) {
-//                                    if (keyList.charAt(j) == password.charAt(i)) {
-//                                        newPin = newPin + Integer.toHexString(j) + "";
-//                                        break;
-//                                    }
-//                                }
-//                            }
-//                        }
                         String pinBlock = buildCvmPinBlock(pos.getEncryptData(), password);// build the ISO format4 pin block
-                        Log.w("password", "pinBlock==" + pinBlock);
                         pos.sendCvmPin(pinBlock, true);
                         Paydialog.dismiss();
-
                 }
 
 
