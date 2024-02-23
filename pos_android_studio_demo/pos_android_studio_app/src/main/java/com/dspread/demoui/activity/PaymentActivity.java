@@ -1804,7 +1804,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            Mydialog.pinpadDialog(CheckActivity.this, pos);
             mllchrccard.setVisibility(View.GONE);
             Paydialog = new PayPassDialog(PaymentActivity.this);
-            Paydialog.getPayViewPass().setRandomNumber(true).setPayClickListener(new PayPassView.OnPayClickListener() {
+            Paydialog.getPayViewPass().setRandomNumber(true).setPayClickListener(pos,new PayPassView.OnPayClickListener() {
 
                 @Override
                 public void onCencel() {
@@ -1821,29 +1821,27 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onConfirm(String password) {
-                    if (password.length() >= 4 && password.length() <= 12) {
+
                         Log.w("password", "password==" + password);
 //                        pos.sendPin(password);
                         String newPin = "";
                         //this part is used to enctypt the plaintext pin with random seed
-                        if (pos.getCvmKeyList() != null && !("").equals(pos.getCvmKeyList())) {
-                            String keyList = Util.convertHexToString(pos.getCvmKeyList());
-                            for (int i = 0; i < password.length(); i++) {
-                                for (int j = 0; j < keyList.length(); j++) {
-                                    if (keyList.charAt(j) == password.charAt(i)) {
-                                        newPin = newPin + Integer.toHexString(j) + "";
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        String pinBlock = buildCvmPinBlock(pos.getEncryptData(), newPin);// build the ISO format4 pin block
+//                        if (pos.getCvmKeyList() != null && !("").equals(pos.getCvmKeyList())) {
+//                            String keyList = Util.convertHexToString(pos.getCvmKeyList());
+//                            for (int i = 0; i < password.length(); i++) {
+//                                for (int j = 0; j < keyList.length(); j++) {
+//                                    if (keyList.charAt(j) == password.charAt(i)) {
+//                                        newPin = newPin + Integer.toHexString(j) + "";
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+                        String pinBlock = buildCvmPinBlock(pos.getEncryptData(), password);// build the ISO format4 pin block
                         Log.w("password", "pinBlock==" + pinBlock);
                         pos.sendCvmPin(pinBlock, true);
                         Paydialog.dismiss();
-                    } else {
-                        Toast.makeText(PaymentActivity.this, "The length just can input 4 - 12 digits", Toast.LENGTH_SHORT).show();
-                    }
+
                 }
 
 

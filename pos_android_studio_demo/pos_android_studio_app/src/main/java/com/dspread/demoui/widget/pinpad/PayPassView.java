@@ -3,6 +3,7 @@ package com.dspread.demoui.widget.pinpad;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,10 +13,14 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.dspread.demoui.R;
+import com.dspread.demoui.activity.PaymentActivity;
+import com.dspread.xpos.QPOSService;
+import com.dspread.xpos.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +38,7 @@ public class PayPassView extends RelativeLayout {
     private View mPassLayout;
     private boolean isRandom;
     private EditText mEtinputpin;
-
+    private QPOSService pos;
 
     public static interface OnPayClickListener {
 
@@ -46,7 +51,8 @@ public class PayPassView extends RelativeLayout {
 
     private OnPayClickListener mPayClickListener;
 
-    public void setPayClickListener(OnPayClickListener listener) {
+    public void setPayClickListener(QPOSService qPOSService, OnPayClickListener listener) {
+        pos = qPOSService;
         mPayClickListener = listener;
     }
 
@@ -207,7 +213,19 @@ public class PayPassView extends RelativeLayout {
                         if (savePwd.length() == 12) {
                             return;
                         } else {
-                            savePwd = savePwd + listNumber.get(position);
+//                            savePwd = savePwd + listNumber.get(position);
+                            String SavePwds =""+listNumber.get(position);
+                            if (pos.getCvmKeyList() != null && !("").equals(pos.getCvmKeyList())) {
+                                String keyList = Util.convertHexToString(pos.getCvmKeyList());
+                                for (int i = 0; i < SavePwds.length(); i++) {
+                                    for (int j = 0; j < keyList.length(); j++) {
+                                        if (keyList.charAt(j) == SavePwds.charAt(i)) {
+                                            savePwd = savePwd + Integer.toHexString(j) + "";
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                             mEtinputpin.setText(savePwd);
                         }
                     } else if (position == 11) {
@@ -226,7 +244,12 @@ public class PayPassView extends RelativeLayout {
                     } else if (position == 13) {//cancel
                         mPayClickListener.onCencel();
                     } else if (position == 14) {//confirm
-                        mPayClickListener.onConfirm(savePwd);
+                        if (savePwd.length() >= 4 && savePwd.length() <= 12) {
+                            mPayClickListener.onConfirm(savePwd);
+                        } else {
+                            Toast.makeText(mContext, "The length just can input 4 - 12 digits", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }
             });
