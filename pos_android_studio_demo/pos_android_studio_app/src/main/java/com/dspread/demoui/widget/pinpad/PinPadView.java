@@ -30,7 +30,7 @@ import java.util.List;
  * Custom payment password component
  */
 
-public class PayPassView extends RelativeLayout {
+public class PinPadView extends RelativeLayout {
     private Activity mContext;
     private GridView mGridView;
     private String savePwd = "";
@@ -56,17 +56,17 @@ public class PayPassView extends RelativeLayout {
         mPayClickListener = listener;
     }
 
-    public PayPassView(Context context) {
+    public PinPadView(Context context) {
         super(context);
     }
 
 
-    public PayPassView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PinPadView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
 
-    public PayPassView(Context context, @Nullable AttributeSet attrs) {
+    public PinPadView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.mContext = (Activity) context;
 
@@ -264,7 +264,7 @@ public class PayPassView extends RelativeLayout {
      * 设置随机数
      * @param israndom
      */
-    public PayPassView setRandomNumber(boolean israndom) {
+    public PinPadView setRandomNumber(boolean israndom) {
         isRandom = israndom;
         initData();
         adapter.notifyDataSetChanged();
