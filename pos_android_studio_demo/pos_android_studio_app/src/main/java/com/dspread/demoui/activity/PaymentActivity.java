@@ -139,7 +139,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private String disbuart = "";
     private String posinfo = "";
     private String posUpdate = "";
-    public PinPadDialog pinPaddialog;
+    public PinPadDialog pinPadDialog;
     private int type;
     private ProgressBar progressBar;
     private TextView tvProgress;
@@ -779,8 +779,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (Mydialog.onlingDialog != null) {
             Mydialog.onlingDialog.dismiss();
         }
-        if (pinPaddialog != null) {
-            pinPaddialog.dismiss();
+        if (pinPadDialog != null) {
+            pinPadDialog.dismiss();
         }
     }
 
@@ -1783,29 +1783,28 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             TRACE.i("onRequestSetPin()");
             tvTitle.setText(getString(R.string.input_pin));
             dismissDialog();
-//            Mydialog.pinpadDialog(CheckActivity.this, pos);
             mllchrccard.setVisibility(View.GONE);
-            pinPaddialog = new PinPadDialog(PaymentActivity.this);
-            pinPaddialog.getPayViewPass().setRandomNumber(true).setPayClickListener(pos, new PinPadView.OnPayClickListener() {
+            pinPadDialog = new PinPadDialog(PaymentActivity.this);
+            pinPadDialog.getPayViewPass().setRandomNumber(true).setPayClickListener(pos, new PinPadView.OnPayClickListener() {
 
                 @Override
                 public void onCencel() {
                     pos.cancelPin();
-                    pinPaddialog.dismiss();
+                    pinPadDialog.dismiss();
                 }
 
                 @Override
                 public void onPaypass() {
 //                pos.bypassPin();
                     pos.sendPin("".getBytes());
-                    pinPaddialog.dismiss();
+                    pinPadDialog.dismiss();
                 }
 
                 @Override
                 public void onConfirm(String password) {
                     String pinBlock = buildCvmPinBlock(pos.getEncryptData(), password);// build the ISO format4 pin block
                     pos.sendCvmPin(pinBlock, true);
-                    pinPaddialog.dismiss();
+                    pinPadDialog.dismiss();
                 }
 
 
