@@ -3,6 +3,7 @@ package com.dspread.demoui.widget.pinpad;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.dspread.demoui.R;
+import com.dspread.demoui.activity.PaymentActivity;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.Util;
 

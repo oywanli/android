@@ -139,7 +139,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private String disbuart = "";
     private String posinfo = "";
     private String posUpdate = "";
-    public PinPadDialog Paydialog;
+    public PinPadDialog pinPaddialog;
     private int type;
     private ProgressBar progressBar;
     private TextView tvProgress;
@@ -779,23 +779,23 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (Mydialog.onlingDialog != null) {
             Mydialog.onlingDialog.dismiss();
         }
-        if (Paydialog != null) {
-            Paydialog.dismiss();
+        if (pinPaddialog != null) {
+            pinPaddialog.dismiss();
         }
     }
 
-    private void sendRequestToBackend(String data){
+    private void sendRequestToBackend(String data) {
         OkGo.<String>post(Constants.backendUploadUrl)
                 .tag(this)
-                .headers("X-RapidAPI-Key",Constants.rapidAPIKey)
-                .headers("X-RapidAPI-Host",Constants.rapidAPIHost)
-                .params("data",data)
+                .headers("X-RapidAPI-Key", Constants.rapidAPIKey)
+                .headers("X-RapidAPI-Host", Constants.rapidAPIHost)
+                .params("data", data)
                 .execute(new AbsCallback<String>() {
                     @Override
                     public void onStart(Request<String, ? extends Request> request) {
                         super.onStart(request);
                         TRACE.i("onStart==");
-                        Mydialog.loading(PaymentActivity.this,getString(R.string.processing));
+                        Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
                     }
 
                     @Override
@@ -818,7 +818,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         super.onError(response);
                         dismissDialog();
                         TRACE.i("onError==");
-                       Mydialog.ErrorDialog(PaymentActivity.this,getString(R.string.replied_failed),null);
+                        Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.replied_failed), null);
                     }
                 });
     }
@@ -1409,15 +1409,15 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             OkGo.<String>post(Constants.backendUploadUrl)
                     .tag(this)
-                    .headers("X-RapidAPI-Key",Constants.rapidAPIKey)
-                    .headers("X-RapidAPI-Host",Constants.rapidAPIHost)
-                    .params("tlv",tlv)
+                    .headers("X-RapidAPI-Key", Constants.rapidAPIKey)
+                    .headers("X-RapidAPI-Host", Constants.rapidAPIHost)
+                    .params("tlv", tlv)
                     .execute(new AbsCallback<String>() {
                         @Override
                         public void onStart(Request<String, ? extends Request> request) {
                             super.onStart(request);
                             TRACE.i("onStart==");
-                            Mydialog.loading(PaymentActivity.this,getString(R.string.processing));
+                            Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
                         }
 
 
@@ -1785,27 +1785,27 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             dismissDialog();
 //            Mydialog.pinpadDialog(CheckActivity.this, pos);
             mllchrccard.setVisibility(View.GONE);
-            Paydialog = new PinPadDialog(PaymentActivity.this);
-            Paydialog.getPayViewPass().setRandomNumber(true).setPayClickListener(pos,new PinPadView.OnPayClickListener() {
+            pinPaddialog = new PinPadDialog(PaymentActivity.this);
+            pinPaddialog.getPayViewPass().setRandomNumber(true).setPayClickListener(pos, new PinPadView.OnPayClickListener() {
 
                 @Override
                 public void onCencel() {
                     pos.cancelPin();
-                    Paydialog.dismiss();
+                    pinPaddialog.dismiss();
                 }
 
                 @Override
                 public void onPaypass() {
 //                pos.bypassPin();
                     pos.sendPin("".getBytes());
-                    Paydialog.dismiss();
+                    pinPaddialog.dismiss();
                 }
 
                 @Override
                 public void onConfirm(String password) {
-                        String pinBlock = buildCvmPinBlock(pos.getEncryptData(), password);// build the ISO format4 pin block
-                        pos.sendCvmPin(pinBlock, true);
-                        Paydialog.dismiss();
+                    String pinBlock = buildCvmPinBlock(pos.getEncryptData(), password);// build the ISO format4 pin block
+                    pos.sendCvmPin(pinBlock, true);
+                    pinPaddialog.dismiss();
                 }
 
 
