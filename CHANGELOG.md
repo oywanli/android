@@ -1,10 +1,3 @@
-## [4.6.3](https://gitlab.com/[secure]/android/compare/v4.6.2...v4.6.3) (2024-02-23)
-
-
-### Bug Fixes
-
-* update pin input logic in the callback onRequestSetPin ([4199880](https://gitlab.com/[secure]/android/commit/41998801a885e1dd3b8433794ecdf88885a2a98f))
-
 ## [4.6.2](https://gitlab.com/[secure]/android/compare/v4.6.1...v4.6.2) (2024-01-05)
 
 
