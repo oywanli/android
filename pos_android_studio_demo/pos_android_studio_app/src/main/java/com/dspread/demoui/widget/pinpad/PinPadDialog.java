@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import com.dspread.demoui.R;
 
 
-public class PayPassDialog {
+public class PinPadDialog {
     private AlertDialog mDialog;
     private Window window;
     private Context mContext;
@@ -19,7 +19,7 @@ public class PayPassDialog {
     private View mDialogLayout;
 
 
-    public PayPassDialog(Context context) {
+    public PinPadDialog(Context context) {
 
         this.mContext = context;
         this.mThemeResId = R.style.dialog_pay_theme;
@@ -39,7 +39,7 @@ public class PayPassDialog {
     }
 
 
-    public PayPassView getPayViewPass() {
+    public PinPadView getPayViewPass() {
         return mDialogLayout.findViewById(R.id.pay_View);
 
     }

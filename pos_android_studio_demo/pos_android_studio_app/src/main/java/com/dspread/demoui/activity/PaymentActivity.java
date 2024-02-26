@@ -20,17 +20,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -46,7 +41,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -58,12 +52,6 @@ import com.dspread.demoui.beans.Constants;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
 import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
-import com.dspread.print.device.PrintListener;
-import com.dspread.print.device.PrinterDevice;
-import com.dspread.print.device.PrinterInitListener;
-import com.dspread.print.device.PrinterManager;
-import com.dspread.print.device.bean.PrintLineStyle;
-import com.dspread.print.widget.PrintLine;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
 import com.dspread.demoui.ui.dialog.Mydialog;
@@ -75,24 +63,18 @@ import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.USBClass;
 import com.dspread.demoui.beans.BluetoothToolsBean;
 import com.dspread.demoui.widget.BluetoothAdapter;
-import com.dspread.demoui.widget.pinpad.PayPassDialog;
-import com.dspread.demoui.widget.pinpad.PayPassView;
+import com.dspread.demoui.widget.pinpad.PinPadDialog;
+import com.dspread.demoui.widget.pinpad.PinPadView;
 import com.dspread.xpos.Util;
 import com.dspread.xpos.utils.AESUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
-import com.lzy.okgo.callback.Callback;
-import com.lzy.okgo.callback.StringCallback;
-import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.base.Request;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
@@ -157,7 +139,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private String disbuart = "";
     private String posinfo = "";
     private String posUpdate = "";
-    public PayPassDialog Paydialog;
+    public PinPadDialog Paydialog;
     private int type;
     private ProgressBar progressBar;
     private TextView tvProgress;
@@ -1803,8 +1785,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             dismissDialog();
 //            Mydialog.pinpadDialog(CheckActivity.this, pos);
             mllchrccard.setVisibility(View.GONE);
-            Paydialog = new PayPassDialog(PaymentActivity.this);
-            Paydialog.getPayViewPass().setRandomNumber(true).setPayClickListener(pos,new PayPassView.OnPayClickListener() {
+            Paydialog = new PinPadDialog(PaymentActivity.this);
+            Paydialog.getPayViewPass().setRandomNumber(true).setPayClickListener(pos,new PinPadView.OnPayClickListener() {
 
                 @Override
                 public void onCencel() {
