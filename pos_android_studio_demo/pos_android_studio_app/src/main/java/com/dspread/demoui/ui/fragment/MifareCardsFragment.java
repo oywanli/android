@@ -54,11 +54,11 @@ public class MifareCardsFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.operate_mifareCards:
-                Mydialog.loading(getActivity(),"");
+//                Mydialog.loading(getActivity(),"");
                 operateMafireCards("MifareClassic");
                 break;
             case R.id.operate_mifareDesfire:
-                Mydialog.loading(getActivity(),"");
+//                Mydialog.loading(getActivity(),"");
                 operateMafireCards("MifareDesfire");
                 break;
             default:

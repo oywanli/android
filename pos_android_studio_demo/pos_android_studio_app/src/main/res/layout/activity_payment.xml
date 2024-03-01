@@ -259,13 +259,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="block addr : " />
+                    android:text="@string/block_addr" />
 
                 <EditText
                     android:id="@+id/et_block"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="OA" />
+                    android:hint="0A" />
             </LinearLayout>
 
             <LinearLayout
@@ -276,7 +276,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="key  value : " />
+                    android:text="@string/key_value" />
 
                 <EditText
                     android:id="@+id/et_keyValue"
@@ -327,7 +327,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="card data : " />
+                    android:text="@string/card_datas" />
 
                 <EditText
                     android:id="@+id/et_cardData"
@@ -352,19 +352,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        android:text="Add" />
+                        android:text="@string/operate_add" />
 
                     <RadioButton
                         android:id="@+id/rbtn_Reduce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reduce" />
+                        android:text="@string/operate_reduce" />
 
                     <RadioButton
                         android:id="@+id/rbtn_Restore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Restore" />
+                        android:text="@string/operate_restore" />
                 </RadioGroup>
 
                 <Button
@@ -383,7 +383,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="write card : " />
+                    android:text="@string/write_cards" />
 
                 <EditText
                     android:id="@+id/et_writeCard"
@@ -464,7 +464,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Send apdu data: " />
+                    android:text="@string/send_apdu_data" />
 
                 <EditText
                     android:id="@+id/et_sendApdu"

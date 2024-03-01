@@ -1763,7 +1763,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if (type == USB_OTG_CDC_ACM) {
                 Mydialog.ErrorDialog(PaymentActivity.this, "USB " + getString(R.string.disconnect), null);
             }
-            Log.w("onRequestQposDisconnected","title=="+title);
             if (type == BLUETOOTH) {
                 tvTitle.setText(title);
             }
@@ -2178,7 +2177,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 String SAK = arg0.get("SAK");
                 etCardstate.setText("statuString:" + statuString + "\n" + "cardTypeString:" + cardTypeString + "\ncardUidLen:" + cardUidLen + "\ncardUid:" + cardUid + "\ncardAtsLen:" + cardAtsLen + "\ncardAts:" + cardAts + "\nATQA:" + ATQA + "\nSAK:" + SAK);
             } else {
-                etCardstate.setText("poll card failed");
+                etCardstate.setText(getString(R.string.poll_card_failed));
             }
         }
 
@@ -2503,9 +2502,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onFinishMifareCardResult(boolean arg0) {
             TRACE.d("onFinishMifareCardResult(boolean arg0):" + arg0);
             if (arg0) {
-                etCardstate.setText("finish success");
+                etCardstate.setText(getString(R.string.finish_success));
             } else {
-                etCardstate.setText("finish fail");
+                etCardstate.setText(getString(R.string.finish_fail));
             }
         }
 
@@ -2513,9 +2512,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onVerifyMifareCardResult(boolean arg0) {
             TRACE.d("onVerifyMifareCardResult(boolean arg0):" + arg0);
             if (arg0) {
-                etCardstate.setText(" onVerifyMifareCardResult success");
+                etCardstate.setText(getString(R.string.Verify_success));
             } else {
-                etCardstate.setText("onVerifyMifareCardResult fail");
+                etCardstate.setText(getString(R.string.Verify_fail));
             }
         }
 
@@ -2529,7 +2528,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 String cardData = arg0.get("cardData");
                 etCardstate.setText("addr:" + addr + "\ncardDataLen:" + cardDataLen + "\ncardData:" + cardData);
             } else {
-                etCardstate.setText("onReadWriteMifareCardResult fail");
+                etCardstate.setText(getString(R.string.read_fail));
             }
         }
 
@@ -2537,9 +2536,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onWriteMifareCardResult(boolean arg0) {
             TRACE.d("onWriteMifareCardResult(boolean arg0):" + arg0);
             if (arg0) {
-                etCardstate.setText("write data success!");
+                etCardstate.setText(getString(R.string.write_success));
             } else {
-                etCardstate.setText("write data fail!");
+                etCardstate.setText(getString(R.string.write_fail));
             }
         }
 
@@ -2552,7 +2551,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 String blockAddr = arg0.get("blockAddr");
                 etCardstate.setText("Cmd:" + cmd + "\nBlock Addr:" + blockAddr);
             } else {
-                etCardstate.setText("operate failed");
+                etCardstate.setText(getString(R.string.operate_failed));
             }
         }
 

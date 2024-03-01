@@ -240,6 +240,25 @@
     <string name="power_on_icc">Power on ICC</string>
     <string name="power_off_icc">Power off ICC</string>
     <string name="send_apdu">Send APDU</string>
+    <string name="send_apdu_data">send apdu data: </string>
+    <string name="block_addr">block addr : </string>
+    <string name="key_value">key  value : </string>
+    <string name="card_datas">card data : </string>
+    <string name="write_cards">write card : </string>
+    <string name="operate_add">Add</string>
+    <string name="operate_reduce">Reduce</string>
+    <string name="operate_restore">Restore</string>
+    <string name="poll_card_failed">poll card failed</string>
+    <string name="finish_success">finish success</string>
+    <string name="finish_fail">finish fail</string>
+    <string name="Verify_success">Verify success</string>
+    <string name="Verify_fail">Verify fail</string>
+    <string name="read_fail">Write card fail</string>
+    <string name="write_fail">Write card fail</string>
+    <string name="write_success">Write card success</string>
+    <string name="operate_failed">operate failed</string>
+
+
     <string name="power_on_icc_success">Power on ICC Success</string>
     <string name="power_on_icc_failed">Power on ICC Failed</string>
     <string name="power_off_icc_success">Power off ICC Success</string>

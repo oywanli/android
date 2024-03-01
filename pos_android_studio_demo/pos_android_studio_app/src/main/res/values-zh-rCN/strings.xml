@@ -48,7 +48,7 @@
     <string name="scan_usb_device">扫描USB设备</string>
     <string name="audio_open">音效控制:开</string>
     <string name="audio_close">音效控制:关</string>
-    <string name="poll_card">寻mifare卡</string>
+    <string name="poll_card">寻卡</string>
     <string name="verify_card">验证卡片</string>
     <string name="verify_card1">验证卡片1</string>
     <string name="the_result">这是结果</string>
@@ -95,7 +95,7 @@
     <string name="open_audio">打开音频</string>
     <string name="scan_bt_pos_error">没有绑定的设备\n请先绑定</string>
     <string name="connecting_bt_pos">连接设备中\n请稍等…</string>
-    <string name="app_name">鼎和Demo</string>
+    <string name="app_name">鼎合Demo</string>
     <string name="action_settings">设置</string>
     <string name="nav_header_desc">导航标题</string>
     <string name="navigation_drawer_open">打开导航栏</string>
@@ -235,7 +235,25 @@
     <string name="starting">开始中…</string>
     <string name="power_on_icc">ICC上电</string>
     <string name="power_off_icc">关闭ICC</string>
-    <string name="send_apdu">传送APDU</string>
+    <string name="send_apdu">发送APDU</string>
+    <string name="send_apdu_data">apdu数据: </string>
+    <string name="block_addr">块地址 : </string>
+    <string name="key_value">key  值 : </string>
+    <string name="card_datas">卡数据 : </string>
+    <string name="write_cards">写 卡 : </string>
+    <string name="operate_add">加</string>
+    <string name="operate_reduce">减</string>
+    <string name="operate_restore">存储</string>
+    <string name="poll_card_failed">上电失败</string>
+    <string name="finish_success">结束成功</string>
+    <string name="finish_fail">结束失败</string>
+    <string name="Verify_success">验证成功</string>
+    <string name="Verify_fail">验证失败</string>
+    <string name="read_fail">读卡失败</string>
+    <string name="write_fail">写卡失败</string>
+    <string name="write_success">写卡成功</string>
+    <string name="operate_failed">操作失败</string>
+
     <string name="power_on_icc_success">ICC上电成功</string>
     <string name="power_on_icc_failed">ICC上电失败</string>
     <string name="power_off_icc_success">ICC关闭成功</string>
@@ -253,7 +271,7 @@
     <string name="card_blocked_or_no_evm_apps">卡已被锁或无EMV应用程序</string>
     <string name="invalid_icc_data">无效的ICC数据</string>
     <string name="power_on_nfc">NFC上电</string>
-    <string name="power_off_nfc">关闭NFC</string>
+    <string name="power_off_nfc">NFC下电</string>
     <string name="data_exchange">数据互换</string>
     <string name="power_on_nfc_success">NFC上电成功</string>
     <string name="power_on_nfc_failed">NFC上电失败</string>
@@ -375,7 +393,7 @@
     <string name="transaction_type">交易类型</string>
     <string name="device_connect">设备连接</string>
     <string name="menu_setting">设置</string>
-    <string name="menu_mifareCards">Mifare Cards</string>
+    <string name="menu_mifareCards">Mifare 卡</string>
     <string name="continue_trading">继续交易</string>
     <string name="prompt_message">信息提示:</string>
     <string name="delete">清除</string>
