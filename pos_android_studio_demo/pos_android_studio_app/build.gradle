@@ -27,7 +27,7 @@ android {
 
     defaultConfig {
         applicationId "com.dspread.demoui"
-        minSdk 28
+        minSdk 22
         targetSdk 33
         versionCode 22
         versionName "4.4.2"
