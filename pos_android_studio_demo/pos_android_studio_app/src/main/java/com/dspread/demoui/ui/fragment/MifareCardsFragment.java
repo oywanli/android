@@ -63,7 +63,6 @@ public class MifareCardsFragment extends Fragment implements View.OnClickListene
                 break;
             default:
                 break;
-
         }
     }
 
