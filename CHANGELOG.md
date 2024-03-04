@@ -1,3 +1,17 @@
+## [4.6.5](https://gitlab.com/[secure]/android/compare/v4.6.4...v4.6.5) (2024-03-04)
+
+
+### Bug Fixes
+
+* add mifare card function ([807682b](https://gitlab.com/[secure]/android/commit/807682bbcecce7644e03549a841565742c710dc3))
+* add mifare card function ([d26bde0](https://gitlab.com/[secure]/android/commit/d26bde0af1f4fa188a58bf1907160289256ca431))
+* change password keyboard file name ([fd3ddbb](https://gitlab.com/[secure]/android/commit/fd3ddbb10aa98f3df52dd7e47b3e8a3adb44f0fe))
+* change password keyboard file name ([d8687d6](https://gitlab.com/[secure]/android/commit/d8687d62ed24dfe84f99e57ece0ef3d8d698f1ee))
+* change password keyboard file name ([5cc535b](https://gitlab.com/[secure]/android/commit/5cc535b7235af669b06aed0d271f2fac39b0ecde))
+* modify content to display in chinese ([cb11f19](https://gitlab.com/[secure]/android/commit/cb11f19f879e9e12e90ea3cfa2dc137ac38f4443))
+* update pin input logic ([825742e](https://gitlab.com/[secure]/android/commit/825742e23c3ef81d4ca13bf77c8e2dfb801d4511))
+* update pin input logic ([2ea2124](https://gitlab.com/[secure]/android/commit/2ea21245e2747c7c6e729c64b15e271626e3f13f))
+
 ## [4.6.2](https://gitlab.com/[secure]/android/compare/v4.6.1...v4.6.2) (2024-01-05)
 
 
