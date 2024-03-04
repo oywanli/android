@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 toolbar.setTitle(getString(R.string.scan));
                 switchFragment(7);
                 drawerLayout.close();
+                break;
             case R.id.nav_mifareCards:
                 toolbar.setTitle(getString(R.string.menu_mifareCards));
                 switchFragment(8);
