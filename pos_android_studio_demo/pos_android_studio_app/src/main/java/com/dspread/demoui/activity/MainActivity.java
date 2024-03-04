@@ -34,6 +34,7 @@ import com.dspread.demoui.ui.fragment.DeviceUpdataFragment;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.ui.fragment.HomeFragment;
 import com.dspread.demoui.ui.fragment.LogsFragment;
+import com.dspread.demoui.ui.fragment.MifareCardsFragment;
 import com.dspread.demoui.ui.fragment.PrinterHelperFragment;
 import com.dspread.demoui.ui.fragment.ScanFragment;
 import com.dspread.demoui.ui.fragment.SettingFragment;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     private TextView tvAppVersion;
     private ExtendedFloatingActionButton floatingActionButton;
     private MenuItem menuItem;
+    private MifareCardsFragment mifareCardsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +195,10 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 toolbar.setTitle(getString(R.string.scan));
                 switchFragment(7);
                 drawerLayout.close();
+            case R.id.nav_mifareCards:
+                toolbar.setTitle(getString(R.string.menu_mifareCards));
+                switchFragment(8);
+                drawerLayout.close();
                 break;
             case R.id.nav_exit:
                 Mydialog.manualExitDialog(MainActivity.this, getString(R.string.msg_exit), new Mydialog.OnMyClickListener() {
@@ -279,6 +285,13 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 }
                 transaction.show(scanFragment);
                 break;
+            case 8:
+                if (mifareCardsFragment == null) {
+                    mifareCardsFragment = new MifareCardsFragment();
+                    transaction.add(R.id.nav_host_fragment_content_main, mifareCardsFragment);
+                }
+                transaction.show(mifareCardsFragment);
+                break;
             default:
                 break;
         }
@@ -310,6 +323,9 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
         if (scanFragment != null) {
             transaction.hide(scanFragment);
+        }
+        if (mifareCardsFragment != null) {
+            transaction.hide(mifareCardsFragment);
         }
 
     }

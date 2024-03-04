@@ -1,10 +1,3 @@
-## [4.6.4](https://gitlab.com/[secure]/android/compare/v4.6.3...v4.6.4) (2024-02-26)
-
-
-### Bug Fixes
-
-* change password keyboard file name ([2becc90](https://gitlab.com/[secure]/android/commit/2becc90cf44ab23e4e381f84ca8a92cfa194b73a))
-
 ## [4.6.2](https://gitlab.com/[secure]/android/compare/v4.6.1...v4.6.2) (2024-01-05)
 
 

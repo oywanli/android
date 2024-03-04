@@ -38,9 +38,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -143,7 +146,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private int type;
     private ProgressBar progressBar;
     private TextView tvProgress;
-
+    private String MifareCards = "";
+    private LinearLayout llayoutMifare;
+    private Button btnPollCard, btnVerifyCard, btnOperateCard, btnWriteCard, btnReadCard, btnFinishCard;
+    private EditText etKeyValue, etBlock, etCardData, etWriteCard, etCardstate;
+    private RadioGroup rgkeyClass, rgAddrr;
+    private RadioButton rbtnKeyA, rbtnKeyB, rbtnAdd, rbtnReduce, rbtnRestore;
+    private String keyclass = "Key A";
+    private String blockaddr = "";
+    private String mifareCardOperationType = "add";
+    private LinearLayout llayoutMifareDesfire;
+    private EditText etDesfireState, etSendApdu;
+    private Button btnPowerOnNfc, btnSendApdu, btnPowerOffNfc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +169,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         disblue = getIntent().getStringExtra("disblue");
         disbuart = getIntent().getStringExtra("disbuart");
         posinfo = getIntent().getStringExtra("posinfo");
+        MifareCards = getIntent().getStringExtra("MifareCards");
         posUpdate = getIntent().getStringExtra("deviceUpdate");
         transactionTypeString = getIntent().getStringExtra("paytype");
         amounts = getIntent().getStringExtra("inputMoney");
@@ -162,6 +177,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         initView();
         initIntent();
         TRACE.setContext(this);
+
     }
 
     public void sendInfo(String receipt) {
@@ -169,6 +185,21 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         intent.putExtra("info", receipt);
         setResult(2, intent);
         finish();
+    }
+
+    private void operateMifareCards() {
+        if ("MifareClassic".equals(MifareCards)) {
+            if(type!=UART) {
+                tvTitle.setText(getString(R.string.operate_mifareCards));
+            }
+            llayoutMifare.setVisibility(View.VISIBLE);
+        } else if ("MifareDesfire".equals(MifareCards)) {
+            if(type!=UART) {
+                tvTitle.setText(getString(R.string.operate_mifarDesfire));
+            }
+            llayoutMifareDesfire.setVisibility(View.VISIBLE);
+
+        }
     }
 
     private void getPosInfo(String info) {
@@ -271,7 +302,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void deviceType(int type) {
-
+        dismissDialog();
 
         if (type == BLUETOOTH) {
             if (pos == null) {
@@ -361,10 +392,82 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         ivBlue.setOnClickListener(this);
         mbtnNewpay.setOnClickListener(this);
         tvTitle.setOnClickListener(this);
+        llayoutMifare = findViewById(R.id.llayout_mifare);
+        btnPollCard = findViewById(R.id.btn_pollCard);
+        btnVerifyCard = findViewById(R.id.btn_verifyCard);
+        btnOperateCard = findViewById(R.id.btn_operateCard);
+        btnWriteCard = findViewById(R.id.btn_writeCard);
+        btnReadCard = findViewById(R.id.btn_readCard);
+        btnFinishCard = findViewById(R.id.btn_finishCard);
+        etKeyValue = findViewById(R.id.et_keyValue);
+        etBlock = findViewById(R.id.et_block);
+        rgkeyClass = findViewById(R.id.rg_keyClass);
+        rbtnKeyA = findViewById(R.id.rbtn_KeyA);
+        rbtnKeyB = findViewById(R.id.rbtn_KeyB);
+        etCardData = findViewById(R.id.et_cardData);
+        etWriteCard = findViewById(R.id.et_writeCard);
+        etCardstate = findViewById(R.id.et_cardstate);
+        rgAddrr = findViewById(R.id.rg_addrr);
+        rbtnAdd = findViewById(R.id.rbtn_Add);
+        rbtnReduce = findViewById(R.id.rbtn_Reduce);
+        rbtnRestore = findViewById(R.id.rbtn_Restore);
+
+        llayoutMifareDesfire = findViewById(R.id.llayout_mifareDesfire);
+        etDesfireState = findViewById(R.id.et_desfireState);
+        etSendApdu = findViewById(R.id.et_sendApdu);
+        btnPowerOnNfc = findViewById(R.id.btn_powerOnNfc);
+        btnSendApdu = findViewById(R.id.btn_sendApdu);
+        btnPowerOffNfc = findViewById(R.id.btn_powerOffNfc);
+        btnPowerOnNfc.setOnClickListener(this);
+        btnSendApdu.setOnClickListener(this);
+        btnPowerOffNfc.setOnClickListener(this);
+
+        btnPollCard.setOnClickListener(this);
+        btnVerifyCard.setOnClickListener(this);
+        btnOperateCard.setOnClickListener(this);
+        btnWriteCard.setOnClickListener(this);
+        btnReadCard.setOnClickListener(this);
+        btnFinishCard.setOnClickListener(this);
+        rgkeyClass.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rbtn_KeyA:
+                        keyclass = "Key A";
+                        break;
+                    case R.id.rbtn_KeyB:
+                        keyclass = "Key B";
+                        break;
+                    default:
+                        break;
+
+
+                }
+            }
+        });
+        rgAddrr.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rbtn_Add:
+                        mifareCardOperationType = "add";
+                        break;
+                    case R.id.rbtn_Reduce:
+                        mifareCardOperationType = "reduce";
+                        break;
+                    case R.id.rbtn_Restore:
+                        mifareCardOperationType = "restore";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
     }
 
     private void initIntent() {
+
         type = getIntent().getIntExtra("connect_type", 0);
         switch (type) {
             case BLUETOOTH:
@@ -399,6 +502,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                                 getPosInfo(posinfo);
                             } else if (posUpdate != null) {
                                 updatePosInfo(posUpdate);
+                            } else if (MifareCards != null) {
+                                operateMifareCards();
                             } else {
 
                                 int keyIdex = getKeyIndex();
@@ -430,7 +535,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                 break;
             case UART:
-                tvTitle.setText(getText(R.string.device_connect));
+                if (MifareCards == null) {
+                    tvTitle.setText(getText(R.string.device_connect));
+                } else {
+                        dismissDialog();
+                        Mydialog.loading(this, "");
+                    if ("MifareClassic".equals(MifareCards)) {
+                        tvTitle.setText(getString(R.string.operate_mifareCards));
+                    } else if ("MifareDesfire".equals(MifareCards)) {
+                        tvTitle.setText(getString(R.string.operate_mifarDesfire));
+                    }
+                }
                 mrllayout.setVisibility(View.GONE);
                 open(QPOSService.CommunicationMode.UART);
                 pos.setDeviceAddress("/dev/ttyS1");
@@ -636,6 +751,55 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         }
                     });
                 }
+                break;
+
+            case R.id.btn_pollCard:
+                pos.pollOnMifareCard(20);
+                break;
+            case R.id.btn_finishCard:
+                pos.finishMifareCard(20);
+                break;
+            case R.id.btn_verifyCard:
+                String keyValue = etKeyValue.getText().toString();
+                blockaddr = etBlock.getText().toString();
+                pos.setBlockaddr(blockaddr);
+                pos.setKeyValue(keyValue);
+                pos.authenticateMifareCard(QPOSService.MifareCardType.CLASSIC, keyclass, blockaddr, keyValue, 20);
+                break;
+
+            case R.id.btn_operateCard:
+                blockaddr = etBlock.getText().toString();
+                String cardData = etCardData.getText().toString();
+                if ("add".equals(mifareCardOperationType)) {
+                    pos.operateMifareCardData(QPOSService.MifareCardOperationType.ADD, blockaddr, cardData, 20);
+                } else if ("reduce".equals(mifareCardOperationType)) {
+                    pos.operateMifareCardData(QPOSService.MifareCardOperationType.REDUCE, blockaddr, cardData, 20);
+                } else if ("restore".equals(mifareCardOperationType)) {
+                    pos.operateMifareCardData(QPOSService.MifareCardOperationType.RESTORE, blockaddr, cardData, 20);
+                }
+                break;
+            case R.id.btn_writeCard:
+                blockaddr = etBlock.getText().toString();
+                String writeCard = etWriteCard.getText().toString();
+                pos.writeMifareCard(QPOSService.MifareCardType.CLASSIC, blockaddr, writeCard, 20);
+                break;
+            case R.id.btn_readCard:
+                blockaddr = etBlock.getText().toString();
+                pos.readMifareCard(QPOSService.MifareCardType.CLASSIC, blockaddr, 20);
+                break;
+            case R.id.btn_powerOnNfc:
+                pos.powerOnNFC(false, 20);
+                break;
+            case R.id.btn_sendApdu:
+                String apduString = etSendApdu.getText().toString();
+                if (apduString != null && !"".equals(apduString)) {
+                    pos.sendApduByNFC(apduString, 20);
+                } else {
+                    Toast.makeText(this, getString(R.string.please_send_apdu_data), Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.btn_powerOffNfc:
+                pos.powerOffNFC(20);
                 break;
             default:
                 break;
@@ -1556,6 +1720,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     getPosInfo(posinfo);
                 } else if (posUpdate != null) {
                     updatePosInfo(posUpdate);
+                } else if (MifareCards != null) {
+                    operateMifareCards();
                 } else {
                     pos.doTrade(keyIdex, 30);//start do trade
                 }
@@ -1565,6 +1731,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     getPosInfo(posinfo);
                 } else if (posUpdate != null) {
                     updatePosInfo(posUpdate);
+                } else if (MifareCards != null) {
+                    operateMifareCards();
                 } else {
                     pos.getQposId();
                 }
@@ -1574,6 +1742,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     getPosInfo(posinfo);
                 } else if (posUpdate != null) {
                     updatePosInfo(posUpdate);
+                } else if (MifareCards != null) {
+                    operateMifareCards();
                 } else {
                     pos.getQposId();
                 }
@@ -1593,7 +1763,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if (type == USB_OTG_CDC_ACM) {
                 Mydialog.ErrorDialog(PaymentActivity.this, "USB " + getString(R.string.disconnect), null);
             }
-            tvTitle.setText(title);
+            if (type == BLUETOOTH) {
+                tvTitle.setText(title);
+            }
             TRACE.d("onRequestQposDisconnected()");
             statusEditText.setText(getString(R.string.device_unplugged));
         }
@@ -1695,6 +1867,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onReturnApduResult(boolean arg0, String arg1, int arg2) {
             TRACE.d("onReturnApduResult(boolean arg0, String arg1, int arg2):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2);
+            etDesfireState.setText("onReturnApduResult(boolean arg0, String arg1, int arg2):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2);
         }
 
         @Override
@@ -1946,13 +2119,13 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onReturnPowerOffNFCResult(boolean arg0) {
             TRACE.d(" onReturnPowerOffNFCResult(boolean arg0) :" + arg0);
-            statusEditText.setText(" onReturnPowerOffNFCResult(boolean arg0) :" + arg0);
+            etDesfireState.setText(" onReturnPowerOffNFCResult(boolean arg0) :" + arg0);
         }
 
         @Override
         public void onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3) {
             TRACE.d("onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
-            statusEditText.setText("onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
+            etDesfireState.setText("onReturnPowerOnNFCResult(boolean arg0, String arg1, String arg2, int arg3):" + arg0 + TRACE.NEW_LINE + arg1 + TRACE.NEW_LINE + arg2 + TRACE.NEW_LINE + arg3);
         }
 
         @Override
@@ -2002,9 +2175,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 String cardAts = arg0.get("cardAts");
                 String ATQA = arg0.get("ATQA");
                 String SAK = arg0.get("SAK");
-                statusEditText.setText("statuString:" + statuString + "\n" + "cardTypeString:" + cardTypeString + "\ncardUidLen:" + cardUidLen + "\ncardUid:" + cardUid + "\ncardAtsLen:" + cardAtsLen + "\ncardAts:" + cardAts + "\nATQA:" + ATQA + "\nSAK:" + SAK);
+                etCardstate.setText("statuString:" + statuString + "\n" + "cardTypeString:" + cardTypeString + "\ncardUidLen:" + cardUidLen + "\ncardUid:" + cardUid + "\ncardAtsLen:" + cardAtsLen + "\ncardAts:" + cardAts + "\nATQA:" + ATQA + "\nSAK:" + SAK);
             } else {
-                statusEditText.setText("poll card failed");
+                etCardstate.setText(getString(R.string.poll_card_failed));
             }
         }
 
@@ -2329,9 +2502,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onFinishMifareCardResult(boolean arg0) {
             TRACE.d("onFinishMifareCardResult(boolean arg0):" + arg0);
             if (arg0) {
-                statusEditText.setText("finish success");
+                etCardstate.setText(getString(R.string.finish_success));
             } else {
-                statusEditText.setText("finish fail");
+                etCardstate.setText(getString(R.string.finish_fail));
             }
         }
 
@@ -2339,22 +2512,23 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onVerifyMifareCardResult(boolean arg0) {
             TRACE.d("onVerifyMifareCardResult(boolean arg0):" + arg0);
             if (arg0) {
-                statusEditText.setText(" onVerifyMifareCardResult success");
+                etCardstate.setText(getString(R.string.Verify_success));
             } else {
-                statusEditText.setText("onVerifyMifareCardResult fail");
+                etCardstate.setText(getString(R.string.Verify_fail));
             }
         }
 
         @Override
         public void onReadMifareCardResult(Hashtable<String, String> arg0) {
+            TRACE.d("onReadMifareCardResult(Hashtable<String, String> arg0):");
             if (arg0 != null) {
                 TRACE.d("onReadMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
                 String addr = arg0.get("addr");
                 String cardDataLen = arg0.get("cardDataLen");
                 String cardData = arg0.get("cardData");
-                statusEditText.setText("addr:" + addr + "\ncardDataLen:" + cardDataLen + "\ncardData:" + cardData);
+                etCardstate.setText("addr:" + addr + "\ncardDataLen:" + cardDataLen + "\ncardData:" + cardData);
             } else {
-                statusEditText.setText("onReadWriteMifareCardResult fail");
+                etCardstate.setText(getString(R.string.read_fail));
             }
         }
 
@@ -2362,21 +2536,22 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onWriteMifareCardResult(boolean arg0) {
             TRACE.d("onWriteMifareCardResult(boolean arg0):" + arg0);
             if (arg0) {
-                statusEditText.setText("write data success!");
+                etCardstate.setText(getString(R.string.write_success));
             } else {
-                statusEditText.setText("write data fail!");
+                etCardstate.setText(getString(R.string.write_fail));
             }
         }
 
         @Override
         public void onOperateMifareCardResult(Hashtable<String, String> arg0) {
+            TRACE.d("onOperateMifareCardResult(Hashtable<String, String> arg0):");
             if (arg0 != null) {
                 TRACE.d("onOperateMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
                 String cmd = arg0.get("Cmd");
                 String blockAddr = arg0.get("blockAddr");
-                statusEditText.setText("Cmd:" + cmd + "\nBlock Addr:" + blockAddr);
+                etCardstate.setText("Cmd:" + cmd + "\nBlock Addr:" + blockAddr);
             } else {
-                statusEditText.setText("operate failed");
+                etCardstate.setText(getString(R.string.operate_failed));
             }
         }
 
@@ -2389,7 +2564,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 String ver = arg0.get("cardVersion");
                 statusEditText.setText("versionLen:" + verLen + "\nverison:" + ver);
             } else {
-                statusEditText.setText("get mafire UL version failed");
+                statusEditText.setText("get mifare UL version failed");
             }
         }
 
@@ -2416,7 +2591,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 String cardData = arg0.get("cardData");
                 statusEditText.setText("blockAddr:" + blockAddr + "\ndataLen:" + dataLen + "\ncardData:" + cardData);
             } else {
-                statusEditText.setText("read mafire UL failed");
+                statusEditText.setText("read mifare UL failed");
             }
         }
 
