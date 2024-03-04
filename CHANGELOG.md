@@ -1,3 +1,10 @@
+## [4.6.6](https://gitlab.com/[secure]/android/compare/v4.6.5...v4.6.6) (2024-03-04)
+
+
+### Bug Fixes
+
+* modify the scanning function ([2fae3ac](https://gitlab.com/[secure]/android/commit/2fae3ac4c657f422867265b395473f0bff6e16bf))
+
 ## [4.6.5](https://gitlab.com/[secure]/android/compare/v4.6.4...v4.6.5) (2024-03-04)
 
 
