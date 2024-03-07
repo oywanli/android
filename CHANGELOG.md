@@ -10,9 +10,9 @@
 
 ### Bug Fixes
 
-* add mifare card function ([807682b](https://gitlab.com/[secure]/android/commit/807682bbcecce7644e03549a841565742c710dc3))
-* change password keyboard file name ([fd3ddbb](https://gitlab.com/[secure]/android/commit/fd3ddbb10aa98f3df52dd7e47b3e8a3adb44f0fe))
-* modify content to display in chinese ([cb11f19](https://gitlab.com/[secure]/android/commit/cb11f19f879e9e12e90ea3cfa2dc137ac38f4443))
+* add mifare cards function ([807682b](https://gitlab.com/[secure]/android/commit/807682bbcecce7644e03549a841565742c710dc3))
+* change password keyboard calss file name ([fd3ddbb](https://gitlab.com/[secure]/android/commit/fd3ddbb10aa98f3df52dd7e47b3e8a3adb44f0fe))
+* modify the text to display in chinese ([cb11f19](https://gitlab.com/[secure]/android/commit/cb11f19f879e9e12e90ea3cfa2dc137ac38f4443))
 * update pin input logic ([825742e](https://gitlab.com/[secure]/android/commit/825742e23c3ef81d4ca13bf77c8e2dfb801d4511))
 
 ## [4.6.2](https://gitlab.com/[secure]/android/compare/v4.6.1...v4.6.2) (2024-01-05)
@@ -33,7 +33,7 @@
 
 ### Bug Fixes
 
-* update the upload logs feature to upload logs to dingding reboot ([a6f9bfa](https://gitlab.com/[secure]/android/commit/a6f9bfa93848995871baab221df54aa697220929))
+* update the upload logs feature that upload logs to dingding reboot ([a6f9bfa](https://gitlab.com/[secure]/android/commit/a6f9bfa93848995871baab221df54aa697220929))
 
 # [4.5.0](https://gitlab.com/[secure]/android/compare/v4.4.1...v4.5.0) (2023-09-27)
 
