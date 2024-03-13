@@ -84,8 +84,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import Decoder.BASE64Decoder;
-import Decoder.BASE64Encoder;
 import pl.droidsonroids.gif.GifImageView;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
@@ -189,12 +187,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void operateMifareCards() {
         if ("MifareClassic".equals(MifareCards)) {
-            if(type!=UART) {
+            if (type != UART) {
                 tvTitle.setText(getString(R.string.operate_mifareCards));
             }
             llayoutMifare.setVisibility(View.VISIBLE);
         } else if ("MifareDesfire".equals(MifareCards)) {
-            if(type!=UART) {
+            if (type != UART) {
                 tvTitle.setText(getString(R.string.operate_mifarDesfire));
             }
             llayoutMifareDesfire.setVisibility(View.VISIBLE);
@@ -538,8 +536,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 if (MifareCards == null) {
                     tvTitle.setText(getText(R.string.device_connect));
                 } else {
-                        dismissDialog();
-                        Mydialog.loading(this, "");
+                    dismissDialog();
+                    Mydialog.loading(this, "");
                     if ("MifareClassic".equals(MifareCards)) {
                         tvTitle.setText(getString(R.string.operate_mifareCards));
                     } else if ("MifareDesfire".equals(MifareCards)) {
@@ -1588,10 +1586,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onSuccess(Response<String> response) {
                             dismissDialog();
-                            String str = "8A023030";//Currently the default value,
+                            String onlineApproveCode = "8A023030";//Currently the default value,
+                            // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
+
                             // should be assigned to the server to return data,
                             // the data format is TLV
-                            pos.sendOnlineProcessResult(str);//Script notification/55domain/ICCDATA
+                            pos.sendOnlineProcessResult(onlineApproveCode);//Script notification/55domain/ICCDATA
                         }
 
                         @Override
@@ -1604,7 +1604,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             super.onError(response);
                             dismissDialog();
                             TRACE.i("onError==");
-                            pos.sendOnlineProcessResult("8A025A33");
+                            //8A025A33 //Unable to go online, offline declined
+                            String offlineDeclinedCode="8A025A33";
+                            pos.sendOnlineProcessResult(offlineDeclinedCode);
                         }
                     });
 
@@ -1838,14 +1840,15 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         @Override
-        public void onReturnupdateKeyByTR_31Result(boolean result, String keyType) {
-            super.onReturnupdateKeyByTR_31Result(result, keyType);
+        public void onReturnUpdateKeyByTR_31Result(boolean result, String keyType) {
+            super.onReturnUpdateKeyByTR_31Result(result, keyType);
             if (result) {
                 statusEditText.setText("send TR31 key success! The keyType is " + keyType);
             } else {
                 statusEditText.setText("send TR31 key fail");
             }
         }
+
 
         @Override
         public void onReturnServerCertResult(String serverSignCert, String serverEncryptCert) {
@@ -2440,24 +2443,54 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         @Override
-        public void onGetKeyCheckValue(List<String> checkValue) {
+        public void onGetKeyCheckValue(Hashtable<String, String> checkValue) {
+            super.onGetKeyCheckValue(checkValue);
             tvTitle.setText(getString(R.string.get_key_checkvalue));
             dismissDialog();
-            if (checkValue != null) {
-                StringBuffer buffer = new StringBuffer();
-                buffer.append("{");
-                for (int i = 0; i < checkValue.size(); i++) {
-                    buffer.append(checkValue.get(i)).append(",");
-                }
-                buffer.append("}");
-                tradeSuccess.setVisibility(View.GONE);
-                mbtnNewpay.setVisibility(View.GONE);
-                mllinfo.setVisibility(View.VISIBLE);
-                mtvinfo.setText("PosKeyCheckValue: \n" + buffer.toString());
-                mllchrccard.setVisibility(View.GONE);
 
+            String MKSK_TMK_KCV = "MKSK_TMK_KCV : " + checkValue.get("MKSK_TMK_KCV");
+            String DUKPT_PIN_IPEK_KCV = "DUKPT_PIN_IPEK_KCV : " + checkValue.get("DUKPT_PIN_IPEK_KCV");
+            String DUKPT_PIN_KSN = "DUKPT_PIN_KSN : " + checkValue.get("DUKPT_PIN_KSN");
+            String DUKPT_EMV_IPEK_KCV = "DUKPT_EMV_IPEK_KCV : " + checkValue.get("DUKPT_EMV_IPEK_KCV");
+            String DUKPT_EMV_KSN = "DUKPT_EMV_KSN : " + checkValue.get("DUKPT_EMV_KSN");
+            String DUKPT_TRK_IPEK_KCV = "DUKPT_TRK_IPEK_KCV : " + checkValue.get("DUKPT_TRK_IPEK_KCV");
+            String DUKPT_TRK_KSN = "DUKPT_TRK_KSN : " + checkValue.get("DUKPT_TRK_KSN");
+            String MKSK_PIK_KCV = "MKSK_PIK_KCV : " + checkValue.get("MKSK_PIK_KCV");
+            String MKSK_TDK_KCV = "MKSK_TDK_KCV : " + checkValue.get("MKSK_TDK_KCV");
+            String MKSK_MCK_KCV = "MKSK_MCK_KCV : " + checkValue.get("MKSK_MCK_KCV");
+            String TCK_KCV = "TCK_KCV : " + checkValue.get("TCK_KCV");
+            String MAGK_KCV = "MAGK_KCV : " + checkValue.get("MAGK_KCV");
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append(MKSK_TMK_KCV);
+            stringBuffer.append("\n");
+            stringBuffer.append(DUKPT_PIN_IPEK_KCV);
+            stringBuffer.append("\n");
+            stringBuffer.append(DUKPT_PIN_KSN);
+            stringBuffer.append("\n");
+            stringBuffer.append(DUKPT_EMV_IPEK_KCV);
+            stringBuffer.append("\n");
+            stringBuffer.append(DUKPT_EMV_KSN);
+            stringBuffer.append("\n");
+            stringBuffer.append(DUKPT_TRK_IPEK_KCV);
+            stringBuffer.append("\n");
+            stringBuffer.append(DUKPT_TRK_KSN);
+            stringBuffer.append("\n");
+            stringBuffer.append(MKSK_PIK_KCV);
+            stringBuffer.append("\n");
+            stringBuffer.append(MKSK_TDK_KCV);
+            stringBuffer.append("\n");
+            stringBuffer.append(MKSK_MCK_KCV);
+            stringBuffer.append("\n");
+            stringBuffer.append(TCK_KCV);
+            stringBuffer.append("\n");
+            stringBuffer.append(MAGK_KCV);
 
-            }
+            tradeSuccess.setVisibility(View.GONE);
+            mbtnNewpay.setVisibility(View.GONE);
+            mllinfo.setVisibility(View.VISIBLE);
+            mtvinfo.setText("PosKeyCheckValue : \n" + stringBuffer);
+            mllchrccard.setVisibility(View.GONE);
+
         }
 
         @Override
@@ -2482,15 +2515,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onTradeCancelled() {
             TRACE.d("onTradeCancelled");
             dismissDialog();
-        }
-
-        @Override
-        public void onReturnSignature(boolean b, String signaturedData) {
-            if (b) {
-                BASE64Encoder base64Encoder = new BASE64Encoder();
-                String encode = base64Encoder.encode(signaturedData.getBytes());
-                statusEditText.setText("signature data (Base64 encoding):" + encode);
-            }
         }
 
         @Override
@@ -2714,28 +2738,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 statusEditText.setText("Exchange Certificates result is :" + re);
             }
 
-        }
-
-        @Override
-        public void onReturnDeviceSigningCertResult(String certificates, String certificatesTree) {
-            TRACE.d("onReturnDeviceSigningCertResult:" + certificates + "\n" + certificatesTree);
-            deviceSignCert = certificates;
-//            String command = getString(R.string.pedi_command, certificates, "1", "oeap");
-            String command = "    <string name=\"pedi_command\">&#091;AOPEDI&#059;VS2&#059;RF0&#059;TD1&#059;CC%s&#059;RG%s&#059;CE%s&#059;&#093;</string>\n";
-            command = ParseASN1Util.addTagToCommand(command, "CD", certificates);
-            TRACE.i("request the RKMS command is " + command);
-            String pediRespose = "[AOPEDI;ANY;CC308203B33082029BA00302010202074EB0D60000987E300D06092A864886F70D01010B0500308190310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A5669727475437279707431173015060355040C0C0E44737072656164204B44482043413117301506035504410C0E44737072656164204B44482043413117301506035504030C0E44737072656164204B4448204341301E170D3231303330363030303030305A170D3330303330373030303030305A3081A2310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A56697274754372797074311D301B060355040C0C14447370726561645F417573524B4D533130312D56311D301B06035504410C14447370726561645F417573524B4D533130312D56311D301B06035504030C14447370726561645F417573524B4D533130312D5630820122300D06092A864886F70D01010105000382010F003082010A0282010100D7FD40DD513EE82491FABA3EB734C3FE69C79973797007A2183EC9C468F73D8E1CB669DDA6DC32CA125F9FAEAC0C0556893C9196FB123B06BC9B880EEF367CD17000C7E0ECF7313DD2D396F29C8D977A65946258BE5A4133462F0675161407EED3D263BC20E9271B9070DCC1A6376F89E7E9E2B304BC756E3E3B61B869A2E39F11067D00B5BA3817673A730F42DC4C037FC214207C70A1E3E43F7D7494E71EBDD5BB0E9AFAE32E422DB90B85E230DF406FB12470AD0360FD7BDFDD1A29BCE91655A835129858A0E9EB04845A80F1E9F8EAA20C67C6B8A61113D6FFDD7DF5719778A03A30F69B0DD9033D5E975F723CC18792CC6988250A7DBD20901450651A810203010001300D06092A864886F70D01010B050003820101008F002AE3AFB49C2E7D99CC7B933617D180CB4E8EA13CBCBE7469FC4E5124033F06E4C3B0DAB3C6CA4625E3CD53E7B86C247CDF100E266059366F8FEEC746507E1B0D0924029805AAB89FCE1482946B8B0C1F546DD56B399AB48891B731148C878EF4D02AE641717A3D381C7B62011B76A6FFBF20846217EB68149C96B4B134F980060A542DBE2F32BF7AD308F26A279B41C65E32D4E260AE68B3010685CE36869EFF09D211CE64401F417A72F29F49A2EE713ACC37C29AECBFEBE571EF11D883815F54FA3E52A917CC3D6B008A3E3C52164FF5591D869026D248873F15DE531104F329C279FC5B6BC28ABC833F8C31BEF47783A5D5B9C534A57530D9AE463DC3;CD308203B33082029BA00302010202074EB0D60000987C300D06092A864886F70D01010B0500308190310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A5669727475437279707431173015060355040C0C0E44737072656164204B44482043413117301506035504410C0E44737072656164204B44482043413117301506035504030C0E44737072656164204B4448204341301E170D3231303330373030303030305A170D3330303330383030303030305A3081A2310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A56697274754372797074311D301B060355040C0C14447370726561645F417573524B4D533130312D45311D301B06035504410C14447370726561645F417573524B4D533130312D45311D301B06035504030C14447370726561645F417573524B4D533130312D4530820122300D06092A864886F70D01010105000382010F003082010A0282010100A62A4935B57BA478F41B6C8B3F79E84DB61E516FEC8D5BE3E86FD296C6906625E0316A77F59D6D5075811BA7BB0801366BA7E370B758E3E1DCE005008C13D368536C2216FAF8AF70EBC6B5D1D231AFD19D6270DDBEA6535B46135D1DE11F374978A655FAA8C2A0DDC933CF82E9DC69DABF8676D0E81762D9B01799C83A8DF3EE70584AA4543EBBDAB02A0EFCA6A276588893DD28BD096400E315ECF5FE91EC210EEC2BE8763FEFB57D1448CC7D0FCDC3BDCE4B7BAAD546E0E5E99281B4F1AB052E1B0361977406B6B57B32353E9F338BED29E55E2D1F65C4322B5850D45146D5A66BFE8323C0D3E78E55A8945B622E15295B9176454A868399990B31D7B104CF0203010001300D06092A864886F70D01010B05000382010100296101AC1ED80EF9DD845D03F2D1F822B4AEFD50E0A1F47FA98105155327FDA6CE52BCD650BE1EB6DCD7F3CDF73325E85EE979EF0364970ADF6ED3A247B2E3E2D83D877BEBD66B20F3983E8DF8932F82F30C3FAF980ADF72E9FEE30EBAFC42B19FB1EAEC74BAE16E2D4EF245D18B58FB560A64C9B515EA065ECA7AE81D6ED0B97A24636E1E70EE3F2F3A3364C17C6B36BE82588BBED79F23914D4E4E7E1E3FC2A5438FAB0535D37D6FA52009ACD37B6F413700BBF440B6B94E4F12C7F465B8AAC2A03776AAB9AFBAE42FE19664DC0B4E3D8A90EB185529CABE39335AEC58295E1E073A765733410FD769345E9B99C0AA0CBE3FA815661857DCF7EA3BD35EFB4C;RD04916CCC6289600A55118FC37AF0999E;]";
-            String cc = ParseASN1Util.parseToken(pediRespose, "CC");
-            String cd = ParseASN1Util.parseToken(pediRespose, "CD");
-            BASE64Decoder base64Decoder = new BASE64Decoder();
-            try {
-                String caChain = QPOSUtil.byteArray2Hex(base64Decoder.decodeBuffer(QPOSUtil.readRSANStream(getAssets().open("FX-Dspread-CA-Tree.pem"))));
-                //the api callback is onReturnStoreCertificatesResult
-                pos.loadCertificates(cc, cd, caChain);
-                statusEditText.setText("is load the server cert to device...");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
         @Override

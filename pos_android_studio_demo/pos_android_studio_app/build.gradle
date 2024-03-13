@@ -29,8 +29,8 @@ android {
         applicationId "com.dspread.demoui"
         minSdk 22
         targetSdk 33
-        versionCode 22
-        versionName "4.4.3"
+        versionCode 23
+        versionName "4.4.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
@@ -88,7 +88,7 @@ dependencies {
     implementation 'com.github.xuexiangjys:XHttp2:2.0.4'
 
     implementation 'com.dspread.print:dspread_print_sdk:1.2.4'
-    implementation 'com.dspread.library:dspread_pos_sdk:4.5.3'
+    implementation 'com.dspread.library:dspread_pos_sdk:4.6.5'
     implementation 'cn.hutool:hutool-all:5.1.0'
     implementation 'com.alibaba:fastjson:1.2.83'
     testImplementation 'junit:junit:4.13.2'
