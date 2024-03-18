@@ -107,6 +107,11 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
         tvGetSpeed = findViewById(R.id.tv_get_speed);
         tvGetTemperature = findViewById(R.id.tv_get_temperature);
         tvGetVoltage = findViewById(R.id.tv_get_voltage);
+        tvGetDesity.setText("");
+        tvGetSpeed.setText("");
+        tvGetTemperature.setText("");
+        tvGetVoltage.setText("");
+        tvPrintStatusInfo.setText("");
     }
 
     @Override
@@ -158,16 +163,28 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
 
     class PrinterListener implements PrintListener {
 
+//        @Override
+//        public void printResult(boolean b, String s, int i) {
+//            Log.w("printResult", "boolean b==" + b);
+//            Log.w("printResult", "String s==" + s);
+//            Log.w("printResult", "int i==" + i);
+//            Message msg = new Message();
+//                msg.what = i;
+//                msg.obj = s;
+//                handler.sendMessage(msg);
+//
+//        }
+
         @Override
-        public void printResult(boolean b, String s, int i) {
+        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
             Log.w("printResult", "boolean b==" + b);
             Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "int i==" + i);
+            Log.w("printResult", "resultType==" + resultType.toString());
+
             Message msg = new Message();
-                msg.what = i;
+                msg.what = resultType.getValue();
                 msg.obj = s;
                 handler.sendMessage(msg);
-
         }
     }
 

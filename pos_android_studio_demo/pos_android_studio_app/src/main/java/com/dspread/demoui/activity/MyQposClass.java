@@ -75,8 +75,8 @@ public class MyQposClass extends CQPOSService {
             msg = getString(R.string.no_card_detected);
             Log.w("paymentActivity", "msg==" + msg);
         } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
-            Log.w("paymentActivity", "msg==" + msg);
             msg = getString(R.string.try_another_interface);
+            Log.w("paymentActivity", "msg==" + msg);
         } else if (result == QPOSService.DoTradeResult.ICC) {
             TRACE.d("EMV ICC Start");
             pos.doEmvApp(QPOSService.EmvOption.START);
@@ -698,41 +698,55 @@ public class MyQposClass extends CQPOSService {
         TRACE.d("onRequestDisplay(Display displayMsg):" + displayMsg.toString());
         dismissDialog();
         String msg = "";
-        if (displayMsg == QPOSService.Display.CLEAR_DISPLAY_MSG) {
-            msg = "";
-        } else if (displayMsg == QPOSService.Display.MSR_DATA_READY) {
+//        if (displayMsg == QPOSService.Display.CLEAR_DISPLAY_MSG) {
+//            msg = "";
+//        } else if (displayMsg == QPOSService.Display.MSR_DATA_READY) {
 //                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PaymentActivity.this);
 //                builder.setTitle("Audio");
 //                builder.setMessage("Success,Contine ready");
 //                builder.setPositiveButton("Confirm", null);
 //                builder.show();
-        } else if (displayMsg == QPOSService.Display.PLEASE_WAIT) {
-            msg = getString(R.string.wait);
-        } else if (displayMsg == QPOSService.Display.REMOVE_CARD) {
-            msg = getString(R.string.remove_card);
-        } else if (displayMsg == QPOSService.Display.TRY_ANOTHER_INTERFACE) {
-            msg = getString(R.string.try_another_interface);
-        } else if (displayMsg == QPOSService.Display.PROCESSING) {
+//        } else if (displayMsg == QPOSService.Display.PLEASE_WAIT) {
+//            msg = getString(R.string.wait);
+//        } else if (displayMsg == QPOSService.Display.REMOVE_CARD) {
+//            msg = getString(R.string.remove_card);
+//        } else if (displayMsg == QPOSService.Display.TRY_ANOTHER_INTERFACE) {
+//            msg = getString(R.string.try_another_interface);
+//        else if (displayMsg == QPOSService.Display.PROCESSING) {
+//
+//            msg = getString(R.string.processing);
+//
+//        } else if (displayMsg == QPOSService.Display.INPUT_PIN_ING) {
+//            msg = "please input pin on pos";
+//
+//        } else if (displayMsg == QPOSService.Display.INPUT_OFFLINE_PIN_ONLY || displayMsg == QPOSService.Display.INPUT_LAST_OFFLINE_PIN) {
+//            msg = "please input offline pin on pos";
 
-            msg = getString(R.string.processing);
-
-        } else if (displayMsg == QPOSService.Display.INPUT_PIN_ING) {
-            msg = "please input pin on pos";
-
-        } else if (displayMsg == QPOSService.Display.INPUT_OFFLINE_PIN_ONLY || displayMsg == QPOSService.Display.INPUT_LAST_OFFLINE_PIN) {
-            msg = "please input offline pin on pos";
-
-        } else if (displayMsg == QPOSService.Display.MAG_TO_ICC_TRADE) {
+//        } else
+            if (displayMsg == QPOSService.Display.MAG_TO_ICC_TRADE) {
             msg = "please insert chip card on pos";
-        } else if (displayMsg == QPOSService.Display.CARD_REMOVED) {
-            msg = "card removed";
-        } else if (displayMsg == QPOSService.Display.TRANSACTION_TERMINATED) {
-            msg = "transaction terminated";
+//        } else if (displayMsg == QPOSService.Display.CARD_REMOVED) {
+//            msg = "card removed";
+//        } else if (displayMsg == QPOSService.Display.TRANSACTION_TERMINATED) {
+//            msg = "transaction terminated";
 //                mrllayout.setVisibility(View.GONE);
+        }else if(displayMsg == QPOSService.Display.PlEASE_TAP_CARD_AGAIN){
+                msg = getString(R.string.please_tap_card_again);
         }
 //            Log.w("displayMsg==", "displayMsg==" + msg);
 //            Toast.makeText(CheckActivity.this, msg, Toast.LENGTH_SHORT).show();
 //            Mydialog.loading(PaymentActivity.this, msg);
+        if (msg != null && !"".equals(msg)) {
+            if ("autoTrade".equals(Constants.transData.getAutoTrade())) {
+                if (!msg.equals(getApplicationInstance.getString(R.string.bad_swipe))) {
+                    autoTrade(msg);
+                }else{
+                    Toast.makeText(getApplicationInstance,msg,Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Mydialog.ErrorDialog((Activity) getApplicationInstance, msg, null);
+            }
+        }
     }
 
 

@@ -421,7 +421,7 @@
     <string name="set_font_size">Set Font Size</string>
     <string name="print_text">Print Text</string>
     <string name="function_multi">Print Multiple Columns</string>
-
+    <string name="content_maxHeight">content MaxHeight</string>
 
     <!--print content-->
     <string name="text_print">欢迎光临(Simplified Chinese)\n歡迎光臨（traditional chinese）\nWelcome(English)\n어서 오세요.(Korean)\nいらっしゃいませ(Japanese)\nWillkommen in der(Germany)\nSouhaits de bienvenue(France)\nยินดีต้อนรับสู่(Thai)\nДобро пожаловать(Russian)\nBenvenuti a(Italian)\nvítejte v(Czech)\nBEM - vindo Ao(Portutuese)\nمرحبا بكم في(Arabic)\n</string>
@@ -435,6 +435,8 @@
     <string name="fontStyle_bold_italic">BOLD_ITALIC</string>
     <string name="content_barcode">BarCode</string>
     <string name="symbology_barcode">Symbology</string>
+    <string name="please_tap_card_again">Please tap card again</string>
+
 
     <string name="barcode_height">BarCodeHeight</string>
     <string name="barcode_width">BarCodeWidth</string>

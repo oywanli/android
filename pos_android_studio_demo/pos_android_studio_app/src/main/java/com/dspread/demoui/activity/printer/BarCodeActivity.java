@@ -341,7 +341,7 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                         mPrinter.setPrinterDensity(densityLevel);
 
                     }
-                    mPrinter.setPrinterGrey(grayLevel);
+//                    mPrinter.setPrinterGrey(grayLevel);
                     mPrinter.setPrintStyle(printLineStyle);
                     if("".equals(brSymbology)){
                         brSymbology=brcodeTextSymbology.getText().toString();
@@ -365,12 +365,19 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
 
     class MyPrinterListener implements PrintListener {
 
+//        @Override
+//        public void printResult(boolean b, String s, int i) {
+//            Log.w("printResult", "boolean b==" + b);
+//            Log.w("printResult", "String s==" + s);
+//            Log.w("printResult", "int i==" + i);
+//
+//        }
+
         @Override
-        public void printResult(boolean b, String s, int i) {
+        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
             Log.w("printResult", "boolean b==" + b);
             Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "int i==" + i);
-
+            Log.w("printResult", "resultType==" + resultType.toString());
         }
     }
 
