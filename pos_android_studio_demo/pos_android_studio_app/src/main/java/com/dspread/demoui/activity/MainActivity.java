@@ -220,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                     public void onCancel() {
                         Mydialog.manualExitDialog.dismiss();
                     }
-
                     @Override
                     public void onConfirm() {
                         finish();
