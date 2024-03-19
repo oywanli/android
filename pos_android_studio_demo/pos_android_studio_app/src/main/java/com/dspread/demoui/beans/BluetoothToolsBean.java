@@ -1,25 +1,26 @@
 package com.dspread.demoui.beans;
 
 
+@SuppressWarnings("ALL")
 public class BluetoothToolsBean {
 
-    private static String conected_state;
-    private static String bulueName;
+    private static String conectedState;
+    private static String bluetoothName;
 
-    public static String getBulueName() {
-        return bulueName;
+    public static String getBulueToothName() {
+        return bluetoothName;
     }
 
-    public static void setBulueName(String bulueName) {
-        BluetoothToolsBean.bulueName = bulueName;
+    public static void setBulueToothName(String blueoothName) {
+        BluetoothToolsBean.bluetoothName = blueoothName;
     }
 
-    public static String getConected_state() {
-        return conected_state;
+    public static String getConectedState() {
+        return conectedState;
     }
 
-    public static void setConected_state(String conected_state) {
-        BluetoothToolsBean.conected_state = conected_state;
+    public static void setConectedState(String conectedState) {
+        BluetoothToolsBean.conectedState = conectedState;
     }
 //    private static BluetoothTools.BluetoothConnectState connected_states = BluetoothTools.BluetoothConnectState.NOCONNECT;
 //

@@ -399,7 +399,7 @@
     <string name="prompt_message">message prompt:</string>
     <string name="delete">delete</string>
     <string name="blue_disconect">Bluetooth disconnected</string>
-
+    <string name="payment_timeout">Timeout</string>
     <string name="select_dialog_true">open</string>
     <string name="select_dialog_false">power off</string>
 
@@ -448,6 +448,7 @@
     <string name="function_multi">Print Multiple Columns</string>
     <string name="please_send_apdu_data">Send apdu data cannot be empty!</string>
 
+    <string name="content_maxHeight">content MaxHeight</string>
 
     <!--print content-->
     <string name="text_print">欢迎光临(Simplified Chinese)\n歡迎光臨（traditional chinese）\nWelcome(English)\n어서 오세요.(Korean)\nいらっしゃいませ(Japanese)\nWillkommen in der(Germany)\nSouhaits de bienvenue(France)\nยินดีต้อนรับสู่(Thai)\nДобро пожаловать(Russian)\nBenvenuti a(Italian)\nvítejte v(Czech)\nBEM - vindo Ao(Portutuese)\nمرحبا بكم في(Arabic)\n</string>
@@ -461,6 +462,8 @@
     <string name="fontStyle_bold_italic">BOLD_ITALIC</string>
     <string name="content_barcode">BarCode</string>
     <string name="symbology_barcode">Symbology</string>
+    <string name="please_tap_card_again">Please tap card again</string>
+
 
     <string name="barcode_height">BarCodeHeight</string>
     <string name="barcode_width">BarCodeWidth</string>
@@ -485,6 +488,24 @@
     <string name="fill_name"></string>
     <string name="scan">Scan</string>
     <string name="scan_toast">This function has not been activated yet!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="amount_identification">¥</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="zero">0</string>
+    <string name="double_zero">00</string>
+    <string name="zero_point">0.</string>
+    <string name="vConsole">vConsole</string>
+    <string name="network_failed">Network request fail</string>
+    <string name="auto_trade">AutoTrade</string>
+    <string name="trade_returnfailed">Trade data return failed</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 </resources>

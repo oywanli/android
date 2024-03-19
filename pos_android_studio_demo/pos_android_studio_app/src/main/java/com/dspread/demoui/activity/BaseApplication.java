@@ -2,8 +2,13 @@ package com.dspread.demoui.activity;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import com.dspread.demoui.http.OKHttpUpdateHttpService;
+import com.dspread.demoui.utils.TRACE;
+import com.dspread.xpos.QPOSService;
 import com.lzy.okgo.OkGo;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.XHttpSDK;
@@ -25,11 +30,16 @@ import static com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION
  */
 public class BaseApplication extends Application {
     public static Context getApplicationInstance;
-
-
+    public static QPOSService pos;
+    public static Handler handler;
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+//        open(QPOSService.CommunicationMode.UART_SERVICE,base);
+//        pos.setDeviceAddress("/dev/ttyS1");
+//        pos.openUart();
+//        pos.setD20Trade(true);
+
         //  Default init
         OkGo.getInstance().init(this);
         initXHttp();
@@ -88,5 +98,24 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         getApplicationInstance = this;
+    }
+    public void open(QPOSService.CommunicationMode mode,Context context) {
+        TRACE.d("open");
+//       MyQposClass listener = new MyQposClass();
+        pos = QPOSService.getInstance(context, mode);
+        if (pos == null) {
+            return;
+        }
+        if (mode == QPOSService.CommunicationMode.USB_OTG_CDC_ACM) {
+            pos.setUsbSerialDriver(QPOSService.UsbOTGDriver.CDCACM);
+        }
+        pos.setD20Trade(true);
+
+        pos.setConext(this);
+
+        handler = new Handler(Looper.myLooper());
+//        pos.initListener(handler, listener);
+
+
     }
 }

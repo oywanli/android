@@ -4,6 +4,7 @@
     android:id="@+id/text_all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include layout="@layout/activity_title" />
@@ -91,7 +92,35 @@
                 android:textSize="14sp"
                 tools:ignore="HardcodedText,RtlHardcoded,UseCompatTextViewDrawableXml" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/Layout_maxHeight"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/content_maxHeight"
+                android:textSize="18sp" />
+<!--            <EditText-->
+<!--                android:id="@+id/edt_content_maxHeight"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:inputType="number"-->
+<!--                />-->
+            <TextView
+                android:id="@+id/text_content_maxHeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/lift_arrow"
+                android:gravity="right|center_vertical"
+                android:text="5000"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText,RtlHardcoded,UseCompatTextViewDrawableXml" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
