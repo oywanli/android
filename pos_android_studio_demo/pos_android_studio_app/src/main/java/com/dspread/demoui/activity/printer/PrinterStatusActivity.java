@@ -107,6 +107,11 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
         tvGetSpeed = findViewById(R.id.tv_get_speed);
         tvGetTemperature = findViewById(R.id.tv_get_temperature);
         tvGetVoltage = findViewById(R.id.tv_get_voltage);
+        tvGetDesity.setText("");
+        tvGetSpeed.setText("");
+        tvGetTemperature.setText("");
+        tvGetVoltage.setText("");
+        tvPrintStatusInfo.setText("");
     }
 
     @Override
@@ -169,6 +174,18 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
                 handler.sendMessage(msg);
 
         }
+
+//        @Override
+//        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
+//            Log.w("printResult", "boolean b==" + b);
+//            Log.w("printResult", "String s==" + s);
+//            Log.w("printResult", "resultType==" + resultType.toString());
+//
+//            Message msg = new Message();
+//                msg.what = resultType.getValue();
+//                msg.obj = s;
+//                handler.sendMessage(msg);
+//        }
     }
 
     @Override

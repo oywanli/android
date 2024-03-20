@@ -35,7 +35,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
     private TextView textSetFontStyle;
     private LinearLayout layoutSetFontStyle;
     private TextView textTextSize;
-    private LinearLayout layoutTextSize;
+    private LinearLayout layoutTextSize,layoutMaxHeight;
     private LinearLayout textSet;
     private EditText editText;
     private Button btnPrint;
@@ -45,8 +45,9 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
     private String alignText = "";
     private String fontText = "";
     private String textSizeStr = "";
+    private String textMaxHeightStr = "";
     private int textSize;
-
+   private TextView textContentMaxHeight;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +93,8 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
         layoutSetFontStyle = findViewById(R.id.layout_setFontStyle);
         textTextSize = findViewById(R.id.text_text_size);
         layoutTextSize = findViewById(R.id.Layout_textSize);
+        layoutMaxHeight = findViewById(R.id.Layout_maxHeight);;
+        textContentMaxHeight = findViewById(R.id.text_content_maxHeight);
         textSet = findViewById(R.id.text_set);
         editText = findViewById(R.id.edit_text);
         btnPrint = findViewById(R.id.btn_Print);
@@ -101,6 +104,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
         layoutSetFontStyle.setOnClickListener(this);
         btnPrint.setOnClickListener(this);
         layoutTextSize.setOnClickListener(this);
+        layoutMaxHeight.setOnClickListener(this);
 
     }
 
@@ -200,6 +204,13 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                         textSize = Integer.parseInt(textSizeStr);
 
                     }
+//                    if("".equals(textMaxHeightStr)){
+//                        textMaxHeightStr = textContentMaxHeight.getText().toString();
+//                        mPrinter.setMaxHeight(Integer.parseInt(textMaxHeightStr));
+//                    }else{
+//                        mPrinter.setMaxHeight(Integer.parseInt(textMaxHeightStr));
+//                    }
+
                     printLineStyle.setFontSize(textSize);
                     mPrinter.setPrintStyle(printLineStyle);
                     mPrinter.printText(getString(R.string.text_print));
@@ -225,6 +236,23 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                 });
 
                 break;
+            case R.id.Layout_maxHeight:
+                //The max height should range from 100 to 13440。
+                PrintDialog.showSeekBarDialog(this, getResources().getString(R.string.content_maxHeight), 100, 13440, textContentMaxHeight, new PrintDialog.PrintClickListener() {
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onConfirm(String str) {
+                        textContentMaxHeight.setText(str);
+                        textMaxHeightStr = str;
+
+                    }
+                });
+
+                break;
             default:
                 break;
 
@@ -242,6 +270,13 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
             Log.w("printResult", "int i==" + i);
 
         }
+//        @Override
+//        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
+//            Log.w("printResult", "boolean b==" + b);
+//            Log.w("printResult", "String s==" + s);
+//            Log.w("printResult", "resultType==" + resultType.toString());
+//
+//        }
     }
 
     @Override

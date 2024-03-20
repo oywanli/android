@@ -223,12 +223,14 @@ public class DUKPK2009_CBC {
 
 //        Array.Copy(key, key_temp, 8);
         System.arraycopy(key, 0, key_temp, 0, 8);
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 8; i++) {
             temp[i] = (byte) (ksn[i] ^ key[8 + i]);
+        }
 //        DES_Enc(temp, key_temp, out key_r);
         key_r = TriDesEncryption(key_temp, temp);
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 8; i++) {
             key_r[i] ^= key[8 + i];
+        }
 
         key_temp[0] ^= 0xC0;
         key_temp[1] ^= 0xC0;
@@ -239,12 +241,14 @@ public class DUKPK2009_CBC {
         key[10] ^= 0xC0;
         key[11] ^= 0xC0;
 
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 8; i++) {
             temp[i] = (byte) (ksn[i] ^ key[8 + i]);
+        }
 //        DES_Enc(temp, key_temp, out key_l);
         key_l = TriDesEncryption(key_temp, temp);
-        for (i = 0; i < 8; i++)
+        for (i = 0; i < 8; i++) {
             key[i] = (byte) (key_l[i] ^ key[8 + i]);
+        }
 //        Array.Copy(key_r, 0, key, 8, 8);
         System.arraycopy(key_r, 0, key, 8, 8);
     }
@@ -425,8 +429,9 @@ public class DUKPK2009_CBC {
      * convert hexadecimal string to byte array
     **/
     public static byte[] parseHexStr2Byte(String hexStr) {
-        if (hexStr.length() < 1)
+        if (hexStr.length() < 1) {
             return null;
+        }
         byte[] result = new byte[hexStr.length() / 2];
         for (int i = 0; i < hexStr.length() / 2; i++) {
             int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);

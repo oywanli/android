@@ -123,11 +123,11 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
             mPrinter.addText("RMB:249.00");
             mPrinter.addText("- - - - - - - - - - - - - -");
             mPrinter.addText("Please scan the QRCode for getting more information: ");
-            mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
-            mPrinter.addText("Please scan the QRCode for getting more information:");
-            mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-            mPrinter.addBitmap(bitmap);
+//            mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
+//            mPrinter.addText("Please scan the QRCode for getting more information:");
+//            mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
+//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+//            mPrinter.addBitmap(bitmap);
             mPrinter.setPrintStyle(printLineStyle);
             mPrinter.setFooter(100);
             mPrinter.print(this);
@@ -183,6 +183,12 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
             Log.w("printResult", "int i==" + i);
 
         }
+//@Override
+//public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
+//    Log.w("printResult", "boolean b==" + b);
+//    Log.w("printResult", "String s==" + s);
+//    Log.w("printResult", "resultType==" + resultType.toString());
+//}
     }
 
     @Override
