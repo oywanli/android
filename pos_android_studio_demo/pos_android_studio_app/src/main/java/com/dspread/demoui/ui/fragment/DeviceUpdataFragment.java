@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.activity.PaymentActivity;
-import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
+import com.dspread.demoui.utils.TitleUpdateListener;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,15 +1,19 @@
 package com.dspread.demoui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,18 +32,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.dspread.demoui.R;
+import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.ui.fragment.AboutFragment;
 import com.dspread.demoui.ui.fragment.DeviceInfoFragment;
 import com.dspread.demoui.ui.fragment.DeviceUpdataFragment;
-import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.ui.fragment.HomeFragment;
 import com.dspread.demoui.ui.fragment.LogsFragment;
 import com.dspread.demoui.ui.fragment.MifareCardsFragment;
 import com.dspread.demoui.ui.fragment.PrinterHelperFragment;
 import com.dspread.demoui.ui.fragment.ScanFragment;
 import com.dspread.demoui.ui.fragment.SettingFragment;
-import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
+import com.dspread.demoui.utils.TRACE;
+import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.utils.UpdateAppHelper;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -59,9 +64,11 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     private FragmentTransaction transaction;
     private TextView deviceConnectType;
     private TextView tvAppVersion;
-    private ExtendedFloatingActionButton floatingActionButton;
+    ExtendedFloatingActionButton floatingActionButton;
     private MenuItem menuItem;
     private MifareCardsFragment mifareCardsFragment;
+    SharedPreferencesUtil connectType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +84,29 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
         menuItem = navigationView.getMenu().findItem(R.id.nav_printer);
 
+        drawerStateChanged();
+        floatingActionButton.setOnClickListener(view -> {
+            toolbar.setTitle(getString(R.string.show_log));
+            switchFragment(5);
+            drawerLayout.close();
+        });
+        BaseApplication baseApplication = new BaseApplication();
+        baseApplication.onCreate();
+        baseApplication.attachBaseContext(this);
+        BaseApplication.getApplicationInstance = this;
         if (!"D20".equals(deviceModel)) {
             menuItem.setVisible(true);
         } else {
             menuItem.setVisible(false);
         }
 
+        toolbar.setTitle(getString(R.string.menu_payment));
+        switchFragment(0);
+    }
 
-        DrawerStateChanged();
+    @Override
+    protected void onResume() {
+        super.onResume();
         setSupportActionBar(toolbar);
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -96,52 +118,43 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
                 String packageVersionName = UpdateAppHelper.getPackageVersionName(MainActivity.this, "com.dspread.demoui");
                 tvAppVersion.setText(getString(R.string.app_version) + packageVersionName);
-                DrawerStateChanged();
+                drawerStateChanged();
             }
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                Log.w("onDrawerOpened", "onDrawerOpened");
+                TRACE.d("onDrawerOpened");
+                HideKeyboard(drawerView);
             }
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                Log.w("onDrawerClosed", "onDrawerClosed");
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                Log.w("onDrawerStateChanged", "onDrawerStateChanged");
             }
         });
-        switchFragment(0);
-
-        bluetoothRelaPer();
-        floatingActionButton.setOnClickListener(view -> {
-            toolbar.setTitle(getString(R.string.show_log));
-            switchFragment(5);
-            drawerLayout.close();
-        });
     }
-
 
     String deviceModel = Build.MODEL;
     String deviceManufacturer = Build.MANUFACTURER;
 
-    public void DrawerStateChanged() {
+    public void drawerStateChanged() {
         SharedPreferencesUtil connectType = SharedPreferencesUtil.getmInstance(this);
         String conType = (String) connectType.get("conType", "");
         if ("blue".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_blu));
+            bluetoothRelaPer();
         } else if ("uart".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
         } else if ("Dspread".equals(deviceManufacturer) || "D20".equals(deviceModel) || "D30".equals(deviceModel) || "mp600".equals(deviceModel) || "D60".equals(deviceModel)) {
             connectType.put("conType", "uart");
-
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
+            bluetoothRelaPer();
             connectType.put("conType", "blue");
             deviceConnectType.setText(getString(R.string.setting_blu));
         }
@@ -207,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                     public void onCancel() {
                         Mydialog.manualExitDialog.dismiss();
                     }
-
                     @Override
                     public void onConfirm() {
                         finish();
@@ -215,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                     }
                 });
                 break;
-
 
             default:
                 break;
@@ -301,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     private void hideFragemts() {
         if (homeFragment != null) {
-            Log.w("homeFragment", "homeFragment");
+            TRACE.d("homeFragment");
             transaction.hide(homeFragment);
         }
         if (settingFragment != null) {
@@ -333,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     private static final int BLUETOOTH_CODE = 100;
     private static final int LOCATION_CODE = 101;
-    private LocationManager lm;//【Location management】
+    LocationManager lm;//【Location management】
 
     public void bluetoothRelaPer() {
         android.bluetooth.BluetoothAdapter adapter = android.bluetooth.BluetoothAdapter.getDefaultAdapter();
@@ -358,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 }
 //                        Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(this, "System detects that the GPS location service is not turned on", Toast.LENGTH_SHORT).show();
@@ -375,30 +386,63 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
     }
 
-    private int REQUEST_CODE = 1;
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == 2) {
-            String info = data.getStringExtra("info");
-//            Toast.makeText(MainActivity.this, info, Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         System.exit(0);
+//        finish();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            drawerLayout.closeDrawer(navigationView);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            toolbar.setTitle(getString(R.string.menu_payment));
+            switchFragment(0);
+            drawerLayout.close();
+            exit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private static boolean isExit = false;
+    Handler mHandler = new Handler(Looper.myLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
+
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            mHandler.sendEmptyMessageDelayed(0, 1500);
+        } else {
+            isExit = false;
+            Mydialog.manualExitDialog(MainActivity.this, getString(R.string.msg_exit), new Mydialog.OnMyClickListener() {
+                @Override
+                public void onCancel() {
+                    Mydialog.manualExitDialog.dismiss();
+                }
+
+                @Override
+                public void onConfirm() {
+                    finish();
+
+                    Mydialog.manualExitDialog.dismiss();
+                }
+            });
+        }
+    }
+
+    public static void HideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+
+        }
     }
 
 

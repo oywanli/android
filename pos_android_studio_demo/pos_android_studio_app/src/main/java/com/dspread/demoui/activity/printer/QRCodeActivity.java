@@ -305,7 +305,7 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                         mPrinter.setPrinterSpeed(speedLevel);
                         mPrinter.setPrinterDensity(densityLevel);
                     }
-                    mPrinter.setPrinterGrey(grayLevel);
+//                    mPrinter.setPrinterGrey(grayLevel);
                     mPrinter.setPrintStyle(printLineStyle);
                     Log.w("qrErrorLevel","qrErrorLevel=="+qrErrorLevel);
                     if ("".equals(qrErrorLevel)){
@@ -332,6 +332,13 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
             Log.w("printResult", "int i==" + i);
 
         }
+//        @Override
+//        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
+//            Log.w("printResult", "boolean b==" + b);
+//            Log.w("printResult", "String s==" + s);
+//            Log.w("printResult", "resultType==" + resultType.toString());
+//
+//        }
     }
 
     @Override

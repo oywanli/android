@@ -105,7 +105,7 @@ public class Mydialog {
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 
         Display d = wm.getDefaultDisplay();
-        android.view.WindowManager.LayoutParams p = ErrorDialog.getWindow().getAttributes();
+        WindowManager.LayoutParams p = ErrorDialog.getWindow().getAttributes();
         p.height = WindowManager.LayoutParams.WRAP_CONTENT;
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
         ErrorDialog.getWindow().setAttributes(p);
@@ -149,7 +149,7 @@ public class Mydialog {
         window.setGravity(Gravity.BOTTOM);
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
-        android.view.WindowManager.LayoutParams p = manualExitDialog.getWindow().getAttributes();
+        WindowManager.LayoutParams p = manualExitDialog.getWindow().getAttributes();
         p.height = WindowManager.LayoutParams.WRAP_CONTENT;
         p.width = WindowManager.LayoutParams.MATCH_PARENT;
         manualExitDialog.getWindow().setAttributes(p);
@@ -290,7 +290,7 @@ public class Mydialog {
         window.setGravity(Gravity.BOTTOM);
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
-        android.view.WindowManager.LayoutParams p = onlingDialog.getWindow().getAttributes();
+        WindowManager.LayoutParams p = onlingDialog.getWindow().getAttributes();
 //        p.height = (int) (d.getHeight() * 0.3);
         p.width = (int) (d.getWidth() * 1);
 
@@ -415,7 +415,7 @@ public class Mydialog {
         window.setGravity(Gravity.BOTTOM);
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
-        android.view.WindowManager.LayoutParams p = cashBackPaymentDialog.getWindow().getAttributes();
+        WindowManager.LayoutParams p = cashBackPaymentDialog.getWindow().getAttributes();
 
         p.width = (int) (d.getWidth() * 1);
 

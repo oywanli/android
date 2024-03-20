@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:clickable="true"
@@ -35,6 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
                     android:text="@string/get_pos_id"
                     android:textSize="20sp" />
 
@@ -67,6 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
                     android:text="@string/get_info"
                     android:textSize="20sp" />
 
@@ -98,6 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
                     android:text="@string/get_update_key"
                     android:textSize="20sp" />
 
@@ -130,6 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
                     android:text="@string/get_key_checkvalue"
                     android:textSize="20sp" />
 
@@ -148,9 +152,29 @@
                 android:layout_height="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp" />
+            <RelativeLayout
+                android:id="@+id/show_posinfo"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_item_background"
 
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:id="@+id/tv_pos_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:text=""
+                    />
+
+
+
+            </RelativeLayout>
 
         </LinearLayout>
+
     </ScrollView>
 
 </LinearLayout>

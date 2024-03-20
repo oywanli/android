@@ -1,5 +1,7 @@
 package com.dspread.demoui.ui.fragment;
 
+import static com.dspread.demoui.activity.BaseApplication.pos;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
