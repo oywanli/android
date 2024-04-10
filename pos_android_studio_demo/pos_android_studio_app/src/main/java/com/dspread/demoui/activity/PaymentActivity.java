@@ -3,15 +3,18 @@ package com.dspread.demoui.activity;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 
+import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
 import static com.dspread.demoui.ui.dialog.Mydialog.UART;
 import static com.dspread.demoui.ui.dialog.Mydialog.USB_OTG_CDC_ACM;
 import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
 import static com.dspread.demoui.utils.Utils.getKeyIndex;
+import static com.xuexiang.xutil.resource.ResUtils.getString;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -998,7 +1001,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         super.onError(response);
                         dismissDialog();
                         TRACE.i("onError==");
-                        Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.replied_failed), null);
+                        Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), null);
                     }
                 });
     }
@@ -1630,9 +1633,20 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             super.onError(response);
                             dismissDialog();
                             TRACE.i("onError==");
-                            //8A025A33 //Unable to go online, offline declined
-                            String offlineDeclinedCode="8A025A33";
-                            pos.sendOnlineProcessResult(offlineDeclinedCode);
+
+                            Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
+                                @Override
+                                public void onCancel() {
+
+                                }
+
+                                @Override
+                                public void onConfirm() {
+                                    //8A025A33 //Unable to go online, offline declined
+                                    String offlineDeclinedCode="8A025A33";
+                                    pos.sendOnlineProcessResult(offlineDeclinedCode);
+                                }
+                            });
                         }
                     });
 
