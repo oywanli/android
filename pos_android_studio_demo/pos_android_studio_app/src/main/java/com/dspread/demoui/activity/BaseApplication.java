@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.dspread.demoui.http.OKHttpUpdateHttpService;
 import com.dspread.demoui.utils.TRACE;

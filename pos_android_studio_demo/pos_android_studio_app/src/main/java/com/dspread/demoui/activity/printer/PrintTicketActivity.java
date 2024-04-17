@@ -94,7 +94,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void printtext() {
-        printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD_ITALIC);
+        printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD);
         printLineStyle.setFontSize(10);
         printLineStyle.setAlign(PrintLine.CENTER);
         mPrinter.addPrintLintStyle(printLineStyle);
@@ -123,11 +123,11 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
             mPrinter.addText("RMB:249.00");
             mPrinter.addText("- - - - - - - - - - - - - -");
             mPrinter.addText("Please scan the QRCode for getting more information: ");
-//            mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
-//            mPrinter.addText("Please scan the QRCode for getting more information:");
-//            mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
-//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-//            mPrinter.addBitmap(bitmap);
+            mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
+            mPrinter.addText("Please scan the QRCode for getting more information:");
+            mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
+            /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+            mPrinter.addBitmap(bitmap);*/
             mPrinter.setPrintStyle(printLineStyle);
             mPrinter.setFooter(100);
             mPrinter.print(this);
@@ -175,20 +175,12 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
     }
 
     class MyPrinterListener implements PrintListener {
-
         @Override
-        public void printResult(boolean b, String s, int i) {
+        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
             Log.w("printResult", "boolean b==" + b);
             Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "int i==" + i);
-
+            Log.w("printResult", "resultType==" + resultType.toString());
         }
-//@Override
-//public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
-//    Log.w("printResult", "boolean b==" + b);
-//    Log.w("printResult", "String s==" + s);
-//    Log.w("printResult", "resultType==" + resultType.toString());
-//}
     }
 
     @Override

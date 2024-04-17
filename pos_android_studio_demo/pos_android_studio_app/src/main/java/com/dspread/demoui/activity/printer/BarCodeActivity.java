@@ -3,9 +3,7 @@ package com.dspread.demoui.activity.printer;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -14,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.action.printerservice.barcode.Barcode1D;
 import com.dspread.demoui.R;
@@ -27,6 +23,8 @@ import com.dspread.print.device.PrinterInitListener;
 import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class BarCodeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,16 +56,14 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
     private String brWidth = "";
     private String brGraylevel = "";
     private String brSpeedlevel = "";
-    private String brDensitylevel="";
-    private String brSymbology="";
+    private String brDensitylevel = "";
+    private String brSymbology = "";
     private int printLineAlign;
     private int height;
     private int width;
     private int grayLevel;
     private int speedLevel;
     private int densityLevel;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +87,13 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                 will continue to restart printing.*/
 //              PrinterDevice.PrintTerminationState. PRINT_NORMAL
                 }
+
                 @Override
                 public void disconnected() {
                 }
             });
 
-        }else{
+        } else {
             mPrinter.initPrinter(this);
         }
         MyPrinterListener myPrinterListener = new MyPrinterListener();
@@ -176,20 +173,20 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
 //                        EAN_13,
 //                        UPC_A,
 //                        UPC_E;
-                final String[] symbology = {Barcode1D.CODE_128.name(),Barcode1D.CODABAR.name(),Barcode1D.CODE_39.name(),Barcode1D.EAN_8.name(),
-                Barcode1D.EAN_13.name(),Barcode1D.UPC_A.name(),Barcode1D.UPC_E.name()};
-                 PrintDialog.setDialog(BarCodeActivity.this, getString(R.string.symbology_barcode), symbology, new PrintDialog.PrintClickListener() {
-                     @Override
-                     public void onCancel() {
+                final String[] symbology = {Barcode1D.CODE_128.name(), Barcode1D.CODABAR.name(), Barcode1D.CODE_39.name(), Barcode1D.EAN_8.name(),
+                        Barcode1D.EAN_13.name(), Barcode1D.UPC_A.name(), Barcode1D.UPC_E.name()};
+                PrintDialog.setDialog(BarCodeActivity.this, getString(R.string.symbology_barcode), symbology, new PrintDialog.PrintClickListener() {
+                    @Override
+                    public void onCancel() {
 
-                     }
+                    }
 
-                     @Override
-                     public void onConfirm(String str) {
-                      brcodeTextSymbology.setText(str);
-                      brSymbology = str;
-                     }
-                 });
+                    @Override
+                    public void onConfirm(String str) {
+                        brcodeTextSymbology.setText(str);
+                        brSymbology = str;
+                    }
+                });
 
                 break;
             case R.id.brcode_height:
@@ -343,17 +340,17 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                     }
 //                    mPrinter.setPrinterGrey(grayLevel);
                     mPrinter.setPrintStyle(printLineStyle);
-                    if("".equals(brSymbology)){
-                        brSymbology=brcodeTextSymbology.getText().toString();
+                    if ("".equals(brSymbology)) {
+                        brSymbology = brcodeTextSymbology.getText().toString();
                     }
-                    Log.w("brSymbology","brSymbology=="+brSymbology);
-                    mPrinter.printBarCode(this,brSymbology, width, height, brContent, printLineAlign);
+                    Log.w("brSymbology", "brSymbology==" + brSymbology);
+                    mPrinter.printBarCode(this, brSymbology, width, height, brContent, printLineAlign);
 
                 } catch (Exception e) {
-                    Log.e("Exception","e="+e);
-                  Toast toast=  Toast.makeText(BarCodeActivity.this,"Error: "+e,Toast.LENGTH_SHORT);
-                  toast.setGravity(Gravity.CENTER,0,0);
-                  toast.show();
+                    Log.e("Exception", "e=" + e);
+                    Toast toast = Toast.makeText(BarCodeActivity.this, "Error: " + e, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
                 break;
             default:
@@ -364,21 +361,11 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     class MyPrinterListener implements PrintListener {
-
         @Override
-        public void printResult(boolean b, String s, int i) {
+        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
             Log.w("printResult", "boolean b==" + b);
             Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "int i==" + i);
-
         }
-
-//        @Override
-//        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
-//            Log.w("printResult", "boolean b==" + b);
-//            Log.w("printResult", "String s==" + s);
-//            Log.w("printResult", "resultType==" + resultType.toString());
-//        }
     }
 
     @Override
