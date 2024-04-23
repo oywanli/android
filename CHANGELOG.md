@@ -1,3 +1,24 @@
+## [4.6.7](https://gitlab.com/[secure]/android/compare/v4.6.6...v4.6.7) (2024-04-23)
+
+
+### Bug Fixes
+
+* a non empty check was made when the transaction returned card data ([9cefa61](https://gitlab.com/[secure]/android/commit/9cefa619dbe921ecf43e05c997a6147ddc3254ea))
+* add and handle try another interface error transactions update sdkjar package ([84fc3d6](https://gitlab.com/[secure]/android/commit/84fc3d64b5370ca61863a60dcccbf0f8c48f1aef))
+* add automatic trading function and fix bug ([a2f986d](https://gitlab.com/[secure]/android/commit/a2f986db7fe735a80c02edc19e441bda637e653a))
+* add continuous transactions and fix some bugs ([af93f72](https://gitlab.com/[secure]/android/commit/af93f72bba7e698aa5443130797b79de8d3f04c6))
+* add OnlinePin and offlinePin prompts ([6e3c2f5](https://gitlab.com/[secure]/android/commit/6e3c2f5c929bbc7cd35bec0ce0bd281f89617dc5))
+* added processing for reading locked chip cards in applications ([7933fcb](https://gitlab.com/[secure]/android/commit/7933fcb0bf551a2acf95b747ffc2177ce41eb91b))
+* display of transaction blocking password input and log modification after clearing ([ba2b165](https://gitlab.com/[secure]/android/commit/ba2b165f99f9b60b8e09e77b57f811a05ec88028))
+* fix serial port transaction bugs and optimize transaction processes ([b82c1de](https://gitlab.com/[secure]/android/commit/b82c1de7acec315228b924056a97a3fb8b0cb54b))
+* fix the demo build.gradle issue ([6050c13](https://gitlab.com/[secure]/android/commit/6050c133abb2f52682f529780ebc4c609524ea1e))
+* modify the posinfo display information and optimize the code ([c3d1b31](https://gitlab.com/[secure]/android/commit/c3d1b31068ae36917893efd3b22d536b02215fce))
+* modify the process of obtaining the posid for each transaction to obtain the poid upon opening the serial port, and add the function of clearing logs ([af2a163](https://gitlab.com/[secure]/android/commit/af2a163b78a73f99918e5d3e3a1e8f25316f50e4))
+* modifying bugs in continuous transactions ([9483ebe](https://gitlab.com/[secure]/android/commit/9483ebec3ff6043d49b6109fb09b847347a40f0f))
+* modifying device power display issues ([3b251e3](https://gitlab.com/[secure]/android/commit/3b251e3f8f1d26d363c95b38f3a71806561742aa))
+* optimized the menu button click issue during the trading process and optimized the automatic trading process ([c066a91](https://gitlab.com/[secure]/android/commit/c066a91e4f63e4f7b8e52fcf7b4e8ee84464a3b6))
+* update the package name for activating the scanning function ([8aa85bf](https://gitlab.com/[secure]/android/commit/8aa85bff252116cc431e9e905073c46179faae73))
+
 ## [4.6.6](https://gitlab.com/[secure]/android/compare/v4.6.5...v4.6.6) (2024-03-04)
 
 
