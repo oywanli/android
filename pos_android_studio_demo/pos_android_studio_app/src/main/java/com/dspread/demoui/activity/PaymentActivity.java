@@ -1,20 +1,7 @@
 package com.dspread.demoui.activity;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-
-
-import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
-import static com.dspread.demoui.activity.BaseApplication.pos;
-import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
-import static com.dspread.demoui.ui.dialog.Mydialog.UART;
-import static com.dspread.demoui.ui.dialog.Mydialog.USB_OTG_CDC_ACM;
-import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
-import static com.dspread.demoui.utils.Utils.getKeyIndex;
-import static com.xuexiang.xutil.resource.ResUtils.getString;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -50,18 +37,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.dspread.demoui.R;
+import com.dspread.demoui.beans.BluetoothToolsBean;
 import com.dspread.demoui.beans.Constants;
-import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
-import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
-import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
-import com.dspread.xpos.CQPOSService;
-import com.dspread.xpos.QPOSService;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.DUKPK2009_CBC;
 import com.dspread.demoui.utils.FileUtils;
@@ -69,10 +47,14 @@ import com.dspread.demoui.utils.ParseASN1Util;
 import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.USBClass;
-import com.dspread.demoui.beans.BluetoothToolsBean;
 import com.dspread.demoui.widget.BluetoothAdapter;
 import com.dspread.demoui.widget.pinpad.PinPadDialog;
 import com.dspread.demoui.widget.pinpad.PinPadView;
+import com.dspread.demoui.widget.pinpad.keyboard.KeyBoardNumInterface;
+import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
+import com.dspread.demoui.widget.pinpad.keyboard.MyKeyboardView;
+import com.dspread.xpos.CQPOSService;
+import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.Util;
 import com.dspread.xpos.utils.AESUtil;
 import com.lzy.okgo.OkGo;
@@ -89,10 +71,21 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import pl.droidsonroids.gif.GifImageView;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static com.dspread.demoui.activity.BaseApplication.pos;
+import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
+import static com.dspread.demoui.ui.dialog.Mydialog.UART;
+import static com.dspread.demoui.ui.dialog.Mydialog.USB_OTG_CDC_ACM;
+import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
+import static com.dspread.demoui.utils.Utils.getKeyIndex;
+
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
-//    private QPOSService pos;
     private String blueTootchAddress = "";
     private boolean isNormalBlu = false;//to judge if is normal bluetooth
     private BluetoothAdapter m_Adapter = null;
@@ -536,7 +529,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         setResult(2);
                         finish();
                         return;
-                    }else {
+                    } else {
                         deviceType(BLUETOOTH);
                         refreshAdapter();
                         if (m_Adapter != null) {
@@ -652,12 +645,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
         if (!"".equals(disblue) && disblue != null) {
             mrllayout.setVisibility(View.GONE);
-                try {
-                    Log.w("llll","disconnectBT");
-                    pos.disconnectBT();
-                } catch (Exception e) {
+            try {
+                Log.w("llll", "disconnectBT");
+                pos.disconnectBT();
+            } catch (Exception e) {
 
-                }
+            }
 //            Intent intent = new Intent();
 //            intent.putExtra("info", getString(R.string.blue_disconect));
 //            setResult(2, intent);
@@ -683,12 +676,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //        Toast.makeText(this, "sdkVersion--" + sdkVersion, Toast.LENGTH_SHORT).show();
 
 
-
         if (!"".equals(disbuart) && disbuart != null) {
             mrllayout.setVisibility(View.GONE);
-                try {
-                    pos.closeUart();
-                } catch (Exception e) {
+            try {
+                pos.closeUart();
+            } catch (Exception e) {
 
             }
 //            Intent intent = new Intent();
@@ -968,48 +960,43 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sendRequestToBackend(String data) {
-        OkGo.<String>post(Constants.backendUploadUrl)
-                .tag(this)
-                .headers("X-RapidAPI-Key", Constants.rapidAPIKey)
-                .headers("X-RapidAPI-Host", Constants.rapidAPIHost)
-                .params("data", data)
-                .execute(new AbsCallback<String>() {
-                    @Override
-                    public void onStart(Request<String, ? extends Request> request) {
-                        super.onStart(request);
-                        TRACE.i("onStart==");
-                        Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
-                    }
+        OkGo.<String>post(Constants.backendUploadUrl).tag(this).headers("X-RapidAPI-Key", Constants.rapidAPIKey).headers("X-RapidAPI-Host", Constants.rapidAPIHost).params("data", data).execute(new AbsCallback<String>() {
+            @Override
+            public void onStart(Request<String, ? extends Request> request) {
+                super.onStart(request);
+                TRACE.i("onStart==");
+                Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
+            }
 
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        dismissDialog();
-                        pinpadEditText.setVisibility(View.GONE);
-                        tvTitle.setText(getText(R.string.transaction_result));
-                        mllinfo.setVisibility(View.VISIBLE);
-                        mtvinfo.setText(data);
-                        mllchrccard.setVisibility(View.GONE);
-                    }
+            @Override
+            public void onSuccess(Response<String> response) {
+                dismissDialog();
+                pinpadEditText.setVisibility(View.GONE);
+                tvTitle.setText(getText(R.string.transaction_result));
+                mllinfo.setVisibility(View.VISIBLE);
+                mtvinfo.setText(data);
+                mllchrccard.setVisibility(View.GONE);
+            }
 
-                    @Override
-                    public String convertResponse(okhttp3.Response response) throws Throwable {
-                        return null;
-                    }
+            @Override
+            public String convertResponse(okhttp3.Response response) throws Throwable {
+                return null;
+            }
 
-                    @Override
-                    public void onError(Response<String> response) {
-                        super.onError(response);
-                        dismissDialog();
-                        TRACE.i("onError==");
-                        Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), null);
-                    }
-                });
+            @Override
+            public void onError(Response<String> response) {
+                super.onError(response);
+                dismissDialog();
+                TRACE.i("onError==");
+                Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), null);
+            }
+        });
     }
 
     private List<String> keyBoardList = new ArrayList<>();
     private KeyboardUtil keyboardUtil;
 
-     class MyQposClass extends CQPOSService {
+    class MyQposClass extends CQPOSService {
 
         @Override
         public void onDoTradeResult(QPOSService.DoTradeResult result, Hashtable<String, String> decodeData) {
@@ -1339,7 +1326,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 msg = "CARD BLOCKED";
             } else if (transactionResult == QPOSService.TransactionResult.TRANS_TOKEN_INVALID) {
                 msg = "TOKEN INVALID";
-            }else if (transactionResult == QPOSService.TransactionResult.APP_BLOCKED) {
+            } else if (transactionResult == QPOSService.TransactionResult.APP_BLOCKED) {
                 msg = "APP BLOCKED";
             }
             Log.w("TAG", "transactionResult==" + msg);
@@ -1481,13 +1468,23 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             TRACE.d("onRequestWaitingUser()");
             dismissDialog();
             mllchrccard.setVisibility(View.VISIBLE);
-
         }
 
         @Override
         public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
             super.onQposRequestPinResult(dataList, offlineTime);
-            tvTitle.setText(getString(R.string.input_pin));
+            boolean onlinePin = pos.isOnlinePin();
+            if (onlinePin) {
+                tvTitle.setText(getString(R.string.input_onlinePin));
+            } else {
+                int cvmPinTryLimit = pos.getCvmPinTryLimit();
+                TRACE.d("PinTryLimit:" + cvmPinTryLimit);
+                if (cvmPinTryLimit == 1) {
+                    tvTitle.setText(getString(R.string.input_offlinePin_last));
+                } else {
+                    tvTitle.setText(getString(R.string.input_offlinePin));
+                }
+            }
             dismissDialog();
             mllchrccard.setVisibility(View.GONE);
             keyBoardList = dataList;
@@ -1539,6 +1536,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     transactionType = QPOSService.TransactionType.CASH;
                 } else if (transactionTypeString.equals("CASHBACK")) {
                     transactionType = QPOSService.TransactionType.CASHBACK;
+                } else if (transactionTypeString.equals("PURCHASE_REFUND")) {
+                    transactionType = QPOSService.TransactionType.PURCHASE_REFUND;
                 } else if (transactionTypeString.equals("INQUIRY")) {
                     transactionType = QPOSService.TransactionType.INQUIRY;
                 } else if (transactionTypeString.equals("TRANSFER")) {
@@ -1598,57 +1597,52 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 mllchrccard.setVisibility(View.GONE);
             }
 
-            OkGo.<String>post(Constants.backendUploadUrl)
-                    .tag(this)
-                    .headers("X-RapidAPI-Key", Constants.rapidAPIKey)
-                    .headers("X-RapidAPI-Host", Constants.rapidAPIHost)
-                    .params("tlv", tlv)
-                    .execute(new AbsCallback<String>() {
+            OkGo.<String>post(Constants.backendUploadUrl).tag(this).headers("X-RapidAPI-Key", Constants.rapidAPIKey).headers("X-RapidAPI-Host", Constants.rapidAPIHost).params("tlv", tlv).execute(new AbsCallback<String>() {
+                @Override
+                public void onStart(Request<String, ? extends Request> request) {
+                    super.onStart(request);
+                    TRACE.i("onStart==");
+                    Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
+                }
+
+
+                @Override
+                public void onSuccess(Response<String> response) {
+                    dismissDialog();
+                    String onlineApproveCode = "8A023030";//Currently the default value,
+                    // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
+
+                    // should be assigned to the server to return data,
+                    // the data format is TLV
+                    pos.sendOnlineProcessResult(onlineApproveCode);//Script notification/55domain/ICCDATA
+                }
+
+                @Override
+                public String convertResponse(okhttp3.Response response) throws Throwable {
+                    return null;
+                }
+
+                @Override
+                public void onError(Response<String> response) {
+                    super.onError(response);
+                    dismissDialog();
+                    TRACE.i("onError==");
+
+                    Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
                         @Override
-                        public void onStart(Request<String, ? extends Request> request) {
-                            super.onStart(request);
-                            TRACE.i("onStart==");
-                            Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
+                        public void onCancel() {
+
                         }
 
-
                         @Override
-                        public void onSuccess(Response<String> response) {
-                            dismissDialog();
-                            String onlineApproveCode = "8A023030";//Currently the default value,
-                            // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
-
-                            // should be assigned to the server to return data,
-                            // the data format is TLV
-                            pos.sendOnlineProcessResult(onlineApproveCode);//Script notification/55domain/ICCDATA
-                        }
-
-                        @Override
-                        public String convertResponse(okhttp3.Response response) throws Throwable {
-                            return null;
-                        }
-
-                        @Override
-                        public void onError(Response<String> response) {
-                            super.onError(response);
-                            dismissDialog();
-                            TRACE.i("onError==");
-
-                            Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
-                                @Override
-                                public void onCancel() {
-
-                                }
-
-                                @Override
-                                public void onConfirm() {
-                                    //8A025A33 //Unable to go online, offline declined
-                                    String offlineDeclinedCode="8A025A33";
-                                    pos.sendOnlineProcessResult(offlineDeclinedCode);
-                                }
-                            });
+                        public void onConfirm() {
+                            //8A025A33 //Unable to go online, offline declined
+                            String offlineDeclinedCode = "8A025A33";
+                            pos.sendOnlineProcessResult(offlineDeclinedCode);
                         }
                     });
+                }
+            });
 
         }
 
@@ -1698,7 +1692,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else if (displayMsg == QPOSService.Display.TRANSACTION_TERMINATED) {
                 msg = "transaction terminated";
                 mrllayout.setVisibility(View.GONE);
-            }else if (displayMsg==QPOSService.Display.PlEASE_TAP_CARD_AGAIN){
+            } else if (displayMsg == QPOSService.Display.PlEASE_TAP_CARD_AGAIN) {
                 msg = getString(R.string.please_tap_card_again);
             }
 //            Log.w("displayMsg==", "displayMsg==" + msg);
@@ -1884,10 +1878,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         @Override
-        public void onReturnUpdateKeyByTR_31Result(boolean result, String keyType) {
-            super.onReturnUpdateKeyByTR_31Result(result, keyType);
+        public void onReturnUpdateKeyByTR_31Result(boolean result) {
+            super.onReturnUpdateKeyByTR_31Result(result);
             if (result) {
-                statusEditText.setText("send TR31 key success! The keyType is " + keyType);
+                statusEditText.setText("send TR31 key success!");
             } else {
                 statusEditText.setText("send TR31 key fail");
             }
@@ -2108,9 +2102,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 msg = "update firmware fail";
             } else {
 //                    mhipStatus.setText("");
-               msg ="update firmware success";
+                msg = "update firmware success";
             }
-            mtvinfo.setText("onUpdatePosFirmwareResult" +msg);
+            mtvinfo.setText("onUpdatePosFirmwareResult" + msg);
             mllinfo.setVisibility(View.VISIBLE);
             mbtnNewpay.setVisibility(View.GONE);
             mllchrccard.setVisibility(View.GONE);
@@ -2830,7 +2824,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     ParseASN1Util.parseASN1new(KB);
                     String data = ParseASN1Util.getTr31Data();
                     //the api callback is onReturnupdateKeyByTR_31Result
-                    pos.updateKeyByTR_31(data, 30);
+                    pos.updateKeyByTR_31(1, data);
                 }
             } else {
                 statusEditText.setText("signature verification failed.");
@@ -2876,11 +2870,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private void devicePermissionRequest(UsbManager mManager, UsbDevice usbDevice) {
         PendingIntent mPermissionIntent;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
-                    "com.android.example.USB_PERMISSION"), PendingIntent.FLAG_IMMUTABLE);
+            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.android.example.USB_PERMISSION"), PendingIntent.FLAG_IMMUTABLE);
         } else {
-            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
-                    "com.android.example.USB_PERMISSION"), 0);
+            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.android.example.USB_PERMISSION"), 0);
         }
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         registerReceiver(mUsbReceiver, filter);
@@ -2956,8 +2948,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
         if (!dealDoneflag) {
-            if(pos!=null){
-            pos.cancelTrade();
+            if (pos != null) {
+                pos.cancelTrade();
             }
         }
         finish();

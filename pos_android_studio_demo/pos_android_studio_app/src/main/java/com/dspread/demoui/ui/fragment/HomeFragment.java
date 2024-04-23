@@ -189,7 +189,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private String[] data = {"GOODS", "SERVICES", "CASH", "CASHBACK", "INQUIRY",
+    private String[] data = {"GOODS", "SERVICES", "CASH", "CASHBACK","PURCHASE_REFUND","INQUIRY",
             "TRANSFER", "ADMIN", "CASHDEPOSIT",
             "PAYMENT", "PBOCLOG||ECQ_INQUIRE_LOG", "SALE",
             "PREAUTH", "ECQ_DESIGNATED_LOAD", "ECQ_UNDESIGNATED_LOAD",

@@ -62,6 +62,9 @@
     <string name="getId">获取PosId</string>
     <string name="update">升级</string>
     <string name="input_pin">请输入密码</string>
+    <string name="input_onlinePin">请输入联机密码</string>
+    <string name="input_offlinePin">请输入脱机密码</string>
+    <string name="input_offlinePin_last">请输入最后一次脱机密码</string>
     <string name="setBuzzer">设置蜂鸣器</string>
     <string name="updateIPEK">更新IPEK</string>
     <string name="set_Masterkey">设置主密钥</string>
@@ -121,9 +124,9 @@
     <string name="emv_ksn">EMV KSN:</string>
     <string name="uid">UID：</string>
     <string name="service_code">服务代码: </string>
-    <string name="track_1_length">磁轨1長度 ：</string>
-    <string name="track_2_length">磁轨2長度 ：</string>
-    <string name="track_3_length">磁轨3長度 ：</string>
+    <string name="track_1_length">磁轨1长度 ：</string>
+    <string name="track_2_length">磁轨2长度 ：</string>
+    <string name="track_3_length">磁轨3长度 ：</string>
     <string name="encrypted_tracks">加密磁轨：</string>
     <string name="encrypted_track_1">加密磁轨1：</string>
     <string name="encrypted_track_2">加密磁轨2：</string>
