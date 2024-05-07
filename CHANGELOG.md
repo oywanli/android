@@ -1,3 +1,10 @@
+## [4.6.8](https://gitlab.com/[secure]/android/compare/v4.6.7...v4.6.8) (2024-05-07)
+
+
+### Bug Fixes
+
+* improve the callback "default" logic ([8850f9c](https://gitlab.com/[secure]/android/commit/8850f9cacf8a214edab70a59ef7ec1d9fb367e36))
+
 ## [4.6.7](https://gitlab.com/[secure]/android/compare/v4.6.6...v4.6.7) (2024-04-23)
 
 
