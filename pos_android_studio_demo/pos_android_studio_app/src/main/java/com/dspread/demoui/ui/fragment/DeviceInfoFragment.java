@@ -99,6 +99,10 @@ public class DeviceInfoFragment extends Fragment implements View.OnClickListener
 
 
     }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+    }
 
 
 }

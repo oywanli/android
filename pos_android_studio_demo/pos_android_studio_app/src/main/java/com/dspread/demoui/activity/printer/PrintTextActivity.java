@@ -37,7 +37,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
     private TextView textTextSize;
     private LinearLayout layoutTextSize,layoutMaxHeight;
     private LinearLayout textSet;
-    private EditText editText;
+    private TextView editText;
     private Button btnPrint;
     private LinearLayout textAll;
     private PrinterDevice mPrinter;

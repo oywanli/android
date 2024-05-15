@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.dspread.demoui.R;
 import com.dspread.demoui.activity.BaseApplication;
@@ -37,34 +39,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     View view;
     TitleUpdateListener myListener;
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-//         myListener = (MyListener) getActivity();
-//        myListener.sendValue(getString(R.string.menu_payment));
 
-    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_input_money, null);
-        myListener = (TitleUpdateListener) getActivity();
         getActivity().setTitle(getString(R.string.menu_payment));
         initView(view);
-        initData();
-
         return view;
     }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
-        menu.add(0, 1, 0, "posinfo");
-        menu.add(0, 2, 0, "posid");
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-
     protected void initView(View view) {
         inputMoneyYuanText = view.findViewById(R.id.inputMoneyYuanText);
         inputMoneyFenText = view.findViewById(R.id.inputMoneyFenText);
@@ -99,15 +82,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         connectType = SharedPreferencesUtil.getmInstance(getActivity());
         conType = (String) connectType.get("conType", "");
     }
-
-    protected void initData() {
-        bundle = getActivity().getIntent().getExtras();
-        if (bundle == null) {
-            bundle = new Bundle();
-        }
-    }
-
-
 
     @Override
     public void onClick(View v) {
@@ -156,6 +130,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     canshow = false;
                     showTimer.start();
                     Mydialog.payTypeDialog(getActivity(), amount, inputMoney, data);
+
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.set_amount), Toast.LENGTH_SHORT).show();
                 }
@@ -181,13 +156,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         inputMoney = 0;
         inputMoneySetText();
     }
-
-
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
     }
-
 
     private String[] data = {"GOODS", "SERVICES", "CASH", "CASHBACK","PURCHASE_REFUND","INQUIRY",
             "TRANSFER", "ADMIN", "CASHDEPOSIT",
@@ -209,5 +181,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     };
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().finish();
+    }
 }
 

@@ -94,7 +94,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                         bluetoothRelaPer();
                         conType.put( "conType", "blue");
                         tvConnectType.setText(getString(R.string.setting_blu));
-                        closeUart();
+//                        closeUart();
                         break;
                     case R.id.rbtn_serialport:
                         conType.put( "conType", "uart");
@@ -105,7 +105,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                         conType.put( "conType", "usb");
                         tvConnectType.setText(getString(R.string.setting_usb));
                         disconnectbluetooth();
-                        closeUart();
+//                        closeUart();
                         break;
                     default:
                         break;
@@ -159,6 +159,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+    }
 
     private int REQUEST_CODE = 1;
 

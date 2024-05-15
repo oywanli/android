@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     private MenuItem menuItem;
     private MifareCardsFragment mifareCardsFragment;
     SharedPreferencesUtil connectType;
-
+    ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +84,15 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         deviceConnectType = headerView.findViewById(R.id.device_connect_type);
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
         menuItem = navigationView.getMenu().findItem(R.id.nav_printer);
-
         drawerStateChanged();
+        setSupportActionBar(toolbar);
+        navigationView.bringToFront();
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
         floatingActionButton.setOnClickListener(view -> {
             toolbar.setTitle(getString(R.string.show_log));
             switchFragment(5);
@@ -101,18 +109,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         }
 
         toolbar.setTitle(getString(R.string.menu_payment));
-        switchFragment(0);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setSupportActionBar(toolbar);
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
+//        switchFragment(0);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -123,10 +120,8 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                TRACE.d("onDrawerOpened");
                 HideKeyboard(drawerView);
             }
-
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
             }
@@ -136,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             }
         });
     }
+
 
     String deviceModel = Build.MODEL;
     String deviceManufacturer = Build.MANUFACTURER;
@@ -236,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
 
     private void switchFragment(int i) {
+
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         hideFragemts();
@@ -312,7 +309,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     private void hideFragemts() {
         if (homeFragment != null) {
-            TRACE.d("homeFragment");
             transaction.hide(homeFragment);
         }
         if (settingFragment != null) {

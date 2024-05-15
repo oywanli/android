@@ -49,6 +49,10 @@ public class MifareCardsFragment extends Fragment implements View.OnClickListene
         operateMifareDesfire.setOnClickListener(this);
         return view;
     }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onClick(View v) {

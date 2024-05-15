@@ -42,6 +42,10 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
         myListener = (TitleUpdateListener) getActivity();
         myListener.sendValue(getString(R.string.device_update));
     }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+    }
 
 
     @Override
