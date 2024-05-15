@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         });
     }
 
-
     String deviceModel = Build.MODEL;
     String deviceManufacturer = Build.MANUFACTURER;
 
