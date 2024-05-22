@@ -2,6 +2,7 @@ package com.dspread.demoui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -20,6 +21,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -45,6 +47,7 @@ import com.dspread.demoui.utils.DUKPK2009_CBC;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.ParseASN1Util;
 import com.dspread.demoui.utils.QPOSUtil;
+import com.dspread.demoui.utils.SystemKeyListener;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.USBClass;
 import com.dspread.demoui.widget.BluetoothAdapter;
@@ -78,6 +81,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
 import static com.dspread.demoui.ui.dialog.Mydialog.UART;
@@ -156,7 +160,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private Button btnPowerOnNfc, btnSendApdu, btnPowerOffNfc;
     private boolean dealDoneflag = false;
     private Handler handler;
-
+    private SystemKeyListener systemKeyListener;
+    private boolean isNormal = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +177,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         transactionTypeString = getIntent().getStringExtra("paytype");
         amounts = getIntent().getStringExtra("inputMoney");
         cashbackAmounts = getIntent().getStringExtra("cashbackAmounts");
+        systemKeyListener = new SystemKeyListener(this);
+        systemKeyStart();
+        systemKeyListener.startSystemKeyListener();
+        isNormal = false;
         initView();
         initIntent();
         TRACE.setContext(this);
@@ -261,7 +270,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            updateThread = new UpdateThread();
 //            updateThread.start();
             byte[] data = null;
-            data = FileUtils.readAssetsLine("CR100D(样机-XFLASH)_master.asc", PaymentActivity.this);
+            data = FileUtils.readAssetsLine("A27CAYC_S1(Ecobank)_master.asc", PaymentActivity.this);
             if (data != null) {
                 int a = pos.updatePosFirmware(data, blueTootchAddress);
 //                Mydialog.loading(PaymentActivity.this, progres + "%");
@@ -673,6 +682,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         //init handler
         handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
+
 //        String sdkVersion = pos.getSdkVersion();
 //        Toast.makeText(this, "sdkVersion--" + sdkVersion, Toast.LENGTH_SHORT).show();
 
@@ -715,6 +725,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.iv_back_title:
                 dismissDialog();
+                if(keyboardUtil!=null){
+                    keyboardUtil.hide();
+                }
+                if (type == UART) {
+                    if(!isNormal) {
+                        if (pos != null) {
+                            pos.cancelTrade();
+//                            pos.resetPosStatus();
+                        }
+                    }
+                }
                 finish();
                 break;
             case R.id.iv_blue:
@@ -970,12 +991,13 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onSuccess(Response<String> response) {
-                dismissDialog();
+                isNormal = true;
                 pinpadEditText.setVisibility(View.GONE);
                 tvTitle.setText(getText(R.string.transaction_result));
                 mllinfo.setVisibility(View.VISIBLE);
                 mtvinfo.setText(data);
                 mllchrccard.setVisibility(View.GONE);
+                dismissDialog();
             }
 
             @Override
@@ -994,7 +1016,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private List<String> keyBoardList = new ArrayList<>();
-    private KeyboardUtil keyboardUtil;
+    private static KeyboardUtil keyboardUtil;
 
     class MyQposClass extends CQPOSService {
 
@@ -1125,7 +1147,25 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                mllinfo.setVisibility(View.VISIBLE);
 //                mtvinfo.setText(content);
 //                mllchrccard.setVisibility(View.GONE);
-                sendRequestToBackend(content);
+                if(decodeData.get("maskedPAN")!=null&&!"".equals(decodeData.get("maskedPAN"))){
+                    sendRequestToBackend(content);
+                }else{
+                    Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.trade_returnfailed), new Mydialog.OnMyClickListener() {
+                        @Override
+                        public void onCancel() {
+
+                        }
+
+                        @Override
+                        public void onConfirm() {
+                            if(pos!=null){
+                                pos.cancelTrade();
+                            }
+                              finish();
+                        }
+                    });
+                }
+
             } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
                 nfcLog = decodeData.get("nfcLog");
                 String content = getString(R.string.tap_card);
@@ -1346,6 +1386,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onRequestBatchData(String tlv) {
             dismissDialog();
             dealDoneflag = true;
+            isNormal = true;
             pinpadEditText.setVisibility(View.GONE);
             tvTitle.setText(getText(R.string.transaction_result));
             TRACE.d("ICC trade finished");
@@ -1465,6 +1506,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
             super.onQposRequestPinResult(dataList, offlineTime);
+            if(pos!=null){
             boolean onlinePin = pos.isOnlinePin();
             if (onlinePin) {
                 tvTitle.setText(getString(R.string.input_onlinePin));
@@ -1477,6 +1519,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     tvTitle.setText(getString(R.string.input_offlinePin));
                 }
             }
+            }
             dismissDialog();
             mllchrccard.setVisibility(View.GONE);
             keyBoardList = dataList;
@@ -1484,12 +1527,16 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void getNumberValue(String value) {
 //                    statusEditText.setText("Pls click "+dataList.get(0));
-                    pos.pinMapSync(value, 20);
+                    if(pos!=null) {
+                        pos.pinMapSync(value, 20);
+                    }
                 }
             });
             pinpadEditText.setVisibility(View.VISIBLE);
-            keyboardUtil = new KeyboardUtil(PaymentActivity.this, scvText, dataList);
-            keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, pinpadEditText);//Random keyboard
+              if(pos!=null) {
+                  keyboardUtil = new KeyboardUtil(PaymentActivity.this, scvText, dataList);
+                  keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, pinpadEditText);//Random keyboard
+              }
         }
 
         @Override
@@ -1759,7 +1806,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (MifareCards != null) {
                     operateMifareCards();
                 } else {
+                    if(pos!=null){
                     pos.getQposId();
+                    }
                 }
 
             } else if (type == USB_OTG_CDC_ACM) {
@@ -1770,7 +1819,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (MifareCards != null) {
                     operateMifareCards();
                 } else {
-                    pos.getQposId();
+                    if(pos!=null) {
+                        pos.getQposId();
+                    }
                 }
             } else {
                 tvTitle.setText(getString(R.string.device_connect));
@@ -1813,6 +1864,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 msg = getString(R.string.unknown_error);
             } else if (errorState == QPOSService.Error.DEVICE_BUSY) {
                 msg = getString(R.string.device_busy);
+                if (pos != null) {
+                    pos.resetPosStatus();
+                }
+
             } else if (errorState == QPOSService.Error.INPUT_OUT_OF_RANGE) {
                 msg = getString(R.string.out_of_range);
             } else if (errorState == QPOSService.Error.INPUT_INVALID_FORMAT) {
@@ -2902,6 +2957,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         dismissDialog();
         if (updateThread != null) {
             updateThread.concelSelf();
@@ -2910,12 +2966,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
              pos = null;
          }
 
-//        if (type == UART) {
-//            if (pos != null) {
-//                pos.closeUart();
-//            }
-//        }
-
         if (!dealDoneflag) {
             if (pos != null) {
                 pos.cancelTrade();
@@ -2923,4 +2973,67 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
         finish();
     }
-}
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.w("onKeyDown", "keyCode==" + keyCode);
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            dismissDialog();
+            if(keyboardUtil!=null){
+                Log.w("keyboardUtil","keyboardUtil.hide");
+                keyboardUtil.hide();
+            }
+            if (type == UART) {
+                if(!isNormal) {
+
+                    if (pos != null) {
+                        pos.cancelTrade();
+                    }
+                }
+            }
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    private void systemKeyStart() {
+        systemKeyListener.setOnSystemKeyListener(new SystemKeyListener.OnSystemKeyListener() {
+            @Override
+            public void onHomePressed() {
+                dismissDialog();
+                if(keyboardUtil!=null){
+                    keyboardUtil.hide();
+                }
+                if(!isNormal) {
+                    if (pos != null) {
+                        pos.cancelTrade();
+                    }
+                }
+                finish();
+            }
+            @Override
+            public void onMenuPressed() {
+                dismissDialog();
+                if(keyboardUtil!=null){
+                    keyboardUtil.hide();
+                }
+                if(!isNormal) {
+                    if (pos != null) {
+                        pos.cancelTrade();
+                    }
+                }
+                finish();
+            }
+            @Override
+            public void onScreenOff() {
+            }
+
+
+            @Override
+            public void onScreenOn() {
+            }
+        });
+    }
+
+  }
