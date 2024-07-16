@@ -586,9 +586,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                    Toast.makeText(PaymentActivity.this, "No Permission", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 final CharSequence[] items = deviceList.toArray(new CharSequence[deviceList.size()]);
-
                 Log.w("items", "tiems.length===" + items.length);
                 if (items.length == 1) {
                     String selectedDevice = (String) items[0];
@@ -613,12 +611,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
-                            String selectedDevice = items[item].toString();
-                            dialog.dismiss();
-                            flag = true;
-                            usbDevice = USBClass.getMdevices().get(selectedDevice);
-                            open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
-                            pos.openUsb(usbDevice);
+                            if (items.length > item) {
+                                String selectedDevice = items[item].toString();
+                                dialog.dismiss();
+                                flag = true;
+                                usbDevice = USBClass.getMdevices().get(selectedDevice);
+                                open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
+                                pos.openUsb(usbDevice);
+                            }
                         }
                     });
                     alert = builder.create();
