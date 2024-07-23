@@ -965,14 +965,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             public void onStart(Request<String, ? extends Request> request) {
                 super.onStart(request);
                 TRACE.i("onStart==");
+                pinpadEditText.setVisibility(View.GONE);
+                tvTitle.setText(getText(R.string.transaction_result));
                 Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
             }
 
             @Override
             public void onSuccess(Response<String> response) {
                 dismissDialog();
-                pinpadEditText.setVisibility(View.GONE);
-                tvTitle.setText(getText(R.string.transaction_result));
                 mllinfo.setVisibility(View.VISIBLE);
                 mtvinfo.setText(data);
                 mllchrccard.setVisibility(View.GONE);
