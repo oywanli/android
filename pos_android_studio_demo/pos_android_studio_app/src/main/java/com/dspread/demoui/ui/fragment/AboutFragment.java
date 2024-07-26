@@ -148,6 +148,9 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
                                 String s = readerMethod(new File(absolutePath));
                                 Gson gson = new Gson();
                                 Log.e("download_Success-JSON;", s);
+                                if (s.contains("\"default\"")) {
+                                    s = s.replace("\"default\"", "default");
+                                }
                                 VersionEnty versionEnty = gson.fromJson(s, VersionEnty.class);
                                 String versionCode = (String) versionEnty.getVersionCode();
                                 String replace = versionCode.trim().replace(" ", "");
