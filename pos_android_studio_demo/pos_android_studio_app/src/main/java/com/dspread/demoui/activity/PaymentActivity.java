@@ -2540,7 +2540,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         }
 
-        @Override
+    /*    @Override
         public void onGetDevicePubKey(String clearKeys) {
             dismissDialog();
             TRACE.d("onGetDevicePubKey(clearKeys):" + clearKeys);
@@ -2556,6 +2556,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 sum += bit * Math.pow(16, (3 - i));
             }
             pubModel = clearKeys.substring(4, 4 + sum * 2);
+        }*/
+        @Override
+        public void onGetDevicePubKey(Hashtable<String, String> hashtable) {
+            super.onGetDevicePubKey(hashtable);
+            TRACE.d("onGetDevicePubKey(clearKeys):" + hashtable);
+            dismissDialog();
+            mllinfo.setVisibility(View.VISIBLE);
+            mbtnNewpay.setVisibility(View.GONE);
+            tradeSuccess.setVisibility(View.GONE);
+            pubModel = hashtable.get("modulus");
+            mtvinfo.setText("DevicePubbicKey: \n" + pubModel);
+            mllchrccard.setVisibility(View.GONE);
         }
 
         @Override
