@@ -1220,11 +1220,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else if (result == QPOSService.DoTradeResult.NO_RESPONSE) {
                 statusEditText.setText(getString(R.string.card_no_response));
                 getString(R.string.card_no_response);
+            } else {
+                statusEditText.setText(getString(R.string.unknown_error));
+                msg = getString(R.string.unknown_error);
             }
             if (msg != null && !"".equals(msg)) {
-
                 Mydialog.ErrorDialog(PaymentActivity.this, msg, null);
-
             }
             dealDoneflag = true;
         }
@@ -1328,6 +1329,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 msg = "TOKEN INVALID";
             } else if (transactionResult == QPOSService.TransactionResult.APP_BLOCKED) {
                 msg = "APP BLOCKED";
+            }else {
+                msg = transactionResult.name();
             }
             Log.w("TAG", "transactionResult==" + msg);
             Log.w("transactionResult", "transactionResult==" + transactionResult);
@@ -1537,7 +1540,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (transactionTypeString.equals("CASHBACK")) {
                     transactionType = QPOSService.TransactionType.CASHBACK;
                 } else if (transactionTypeString.equals("PURCHASE_REFUND")) {
-                    transactionType = QPOSService.TransactionType.PURCHASE_REFUND;
+                    transactionType = QPOSService.TransactionType.REFUND;
                 } else if (transactionTypeString.equals("INQUIRY")) {
                     transactionType = QPOSService.TransactionType.INQUIRY;
                 } else if (transactionTypeString.equals("TRANSFER")) {
@@ -1853,6 +1856,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 pos.resetPosStatus();
                 msg = getString(R.string.device_reset);
+            }else {
+                msg = errorState.name();
             }
             Mydialog.ErrorDialog(PaymentActivity.this, msg, new Mydialog.OnMyClickListener() {
                 @Override
@@ -1876,17 +1881,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             TRACE.d("onReturnReversalData(): " + tlv);
             statusEditText.setText(content);
         }
-
-        @Override
-        public void onReturnUpdateKeyByTR_31Result(boolean result) {
-            super.onReturnUpdateKeyByTR_31Result(result);
-            if (result) {
-                statusEditText.setText("send TR31 key success!");
-            } else {
-                statusEditText.setText("send TR31 key fail");
-            }
-        }
-
 
         @Override
         public void onReturnServerCertResult(String serverSignCert, String serverEncryptCert) {
@@ -2565,9 +2559,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mllinfo.setVisibility(View.VISIBLE);
             mbtnNewpay.setVisibility(View.GONE);
             tradeSuccess.setVisibility(View.GONE);
-            pubModel = hashtable.get("modulus");
             mtvinfo.setText("DevicePubbicKey: \n" + pubModel);
             mllchrccard.setVisibility(View.GONE);
+            pubModel = hashtable.get("modulus");
         }
 
         @Override

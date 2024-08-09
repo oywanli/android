@@ -214,6 +214,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                     printLineStyle.setFontSize(textSize);
                     mPrinter.setPrintStyle(printLineStyle);
                     mPrinter.printText(getString(R.string.text_print));
+                    btnPrint.setEnabled(false);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
 
@@ -264,6 +265,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
     class MyPrinterListener implements PrintListener {
         @Override
         public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
+            btnPrint.setEnabled(true);
             Log.w("printResult", "boolean b==" + b);
             Log.w("printResult", "String s==" + s);
             Log.w("printResult", "resultType==" + resultType.toString());
