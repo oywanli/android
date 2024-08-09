@@ -312,7 +312,7 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                         qrErrorLevel = qrcodeTextErrorLevel.getText().toString();
                     }
                     mPrinter.printQRCode(this, qrErrorLevel, qrSize, qrContent, printLineAlign);
-
+                    btnQrcodePrint.setEnabled(false);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
 
@@ -326,6 +326,7 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
     class MyPrinterListener implements PrintListener {
         @Override
         public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
+            btnQrcodePrint.setEnabled(true);
             Log.w("printResult", "boolean b==" + b);
             Log.w("printResult", "String s==" + s);
             Log.w("printResult", "resultType==" + resultType.toString());

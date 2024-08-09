@@ -87,6 +87,7 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
                     mPrinter.setFooter(100);
                     mPrinter.printBitmap(this,bitmap);
+                    btnBitmapPrint.setEnabled(true);
 
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
@@ -100,6 +101,7 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
+            btnBitmapPrint.setEnabled(true);
             Log.w("printResult", "boolean b==" + b);
             Log.w("printResult", "String s==" + s);
             Log.w("printResult", "resultType==" + resultType.toString());

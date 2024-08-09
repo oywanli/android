@@ -586,9 +586,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                    Toast.makeText(PaymentActivity.this, "No Permission", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 final CharSequence[] items = deviceList.toArray(new CharSequence[deviceList.size()]);
-
                 Log.w("items", "tiems.length===" + items.length);
                 if (items.length == 1) {
                     String selectedDevice = (String) items[0];
@@ -613,12 +611,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
-                            String selectedDevice = items[item].toString();
-                            dialog.dismiss();
-                            flag = true;
-                            usbDevice = USBClass.getMdevices().get(selectedDevice);
-                            open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
-                            pos.openUsb(usbDevice);
+                            if (items.length > item) {
+                                String selectedDevice = items[item].toString();
+                                dialog.dismiss();
+                                flag = true;
+                                usbDevice = USBClass.getMdevices().get(selectedDevice);
+                                open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
+                                pos.openUsb(usbDevice);
+                            }
                         }
                     });
                     alert = builder.create();
@@ -965,14 +965,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             public void onStart(Request<String, ? extends Request> request) {
                 super.onStart(request);
                 TRACE.i("onStart==");
+                pinpadEditText.setVisibility(View.GONE);
+                tvTitle.setText(getText(R.string.transaction_result));
                 Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
             }
 
             @Override
             public void onSuccess(Response<String> response) {
                 dismissDialog();
-                pinpadEditText.setVisibility(View.GONE);
-                tvTitle.setText(getText(R.string.transaction_result));
                 mllinfo.setVisibility(View.VISIBLE);
                 mtvinfo.setText(data);
                 mllchrccard.setVisibility(View.GONE);
@@ -2534,7 +2534,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         }
 
-        @Override
+    /*    @Override
         public void onGetDevicePubKey(String clearKeys) {
             dismissDialog();
             TRACE.d("onGetDevicePubKey(clearKeys):" + clearKeys);
@@ -2550,6 +2550,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 sum += bit * Math.pow(16, (3 - i));
             }
             pubModel = clearKeys.substring(4, 4 + sum * 2);
+        }*/
+        @Override
+        public void onGetDevicePubKey(Hashtable<String, String> hashtable) {
+            super.onGetDevicePubKey(hashtable);
+            TRACE.d("onGetDevicePubKey(clearKeys):" + hashtable);
+            dismissDialog();
+            mllinfo.setVisibility(View.VISIBLE);
+            mbtnNewpay.setVisibility(View.GONE);
+            tradeSuccess.setVisibility(View.GONE);
+            mtvinfo.setText("DevicePubbicKey: \n" + pubModel);
+            mllchrccard.setVisibility(View.GONE);
+            pubModel = hashtable.get("modulus");
         }
 
         @Override
