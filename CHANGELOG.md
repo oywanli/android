@@ -1,3 +1,17 @@
+## [4.6.9](https://gitlab.com/[secure]/android/compare/v4.6.8...v4.6.9) (2024-08-09)
+
+
+### Bug Fixes
+
+* fix download apk exception crash issue ([6f33519](https://gitlab.com/[secure]/android/commit/6f33519a2fb99bec9fa970c76d69ae819a7e09e6))
+* fix index out of bounds issue ([635f506](https://gitlab.com/[secure]/android/commit/635f506a57535dce257f7b55d219883ad9354b77))
+* fix network access timeout, still displaying 'Please input onlinePin now' issue ([d243d46](https://gitlab.com/[secure]/android/commit/d243d46668ed42a4ec2805125465d9e804f5ad9f))
+* fix update the trade SDK to version 5.1.9  and  optimize continuous operate printing issues ([9f6758f](https://gitlab.com/[secure]/android/commit/9f6758f454fb05df60c7f7cbf554891e74626903))
+* modify download apk exception crash issue ([1e24183](https://gitlab.com/[secure]/android/commit/1e24183e601262432995c9cdc0840725ff5a1d2f))
+* update and remove unnecessary dependencies ([8dfd91b](https://gitlab.com/[secure]/android/commit/8dfd91bd6c39d4e06cff8b9c7eaf2a7422464573))
+* update trading SDK version 5.1.9 ([48ff25f](https://gitlab.com/[secure]/android/commit/48ff25f1baf0ec5a7f2372dff20165700f8ce405))
+* update versionCode ([0e98df9](https://gitlab.com/[secure]/android/commit/0e98df9a3ca3b0d5c0608f281159f0c9e8764370))
+
 ## [4.6.6](https://gitlab.com/[secure]/android/compare/v4.6.5...v4.6.6) (2024-03-04)
 
 
