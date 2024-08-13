@@ -1,3 +1,10 @@
+## [4.6.10](https://gitlab.com/[secure]/android/compare/v4.6.9...v4.6.10) (2024-08-13)
+
+
+### Bug Fixes
+
+* fix the app crash issue that GPS permission deinal ([be08977](https://gitlab.com/[secure]/android/commit/be0897704ddd8c7005941e3701c858bdf78b33d5))
+
 ## [4.6.9](https://gitlab.com/[secure]/android/compare/v4.6.8...v4.6.9) (2024-08-09)
 
 
