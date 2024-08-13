@@ -201,13 +201,16 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "System detects that the GPS location service is not turned on", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            try {
             ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                 }
             });
             launcher.launch(intent);
-
+            }catch (Exception e){
+                Toast.makeText(getActivity(), "System detects that the GPS location service is no permission to turned on", Toast.LENGTH_SHORT).show();
+            }
 
         }
     }
