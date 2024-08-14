@@ -1,3 +1,10 @@
+## [4.6.11](https://gitlab.com/[secure]/android/compare/v4.6.10...v4.6.11) (2024-08-14)
+
+
+### Bug Fixes
+
+* fix the bug that bluetooth permission grant multiple times ([5ad87e7](https://gitlab.com/[secure]/android/commit/5ad87e77209cc19eeb27f85c8060a419c1d45253))
+
 ## [4.6.10](https://gitlab.com/[secure]/android/compare/v4.6.9...v4.6.10) (2024-08-13)
 
 
