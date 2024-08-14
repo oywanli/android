@@ -33,7 +33,10 @@ import androidx.fragment.app.Fragment;
 import com.dspread.demoui.R;
 import com.dspread.demoui.activity.PaymentActivity;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
+import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.TitleUpdateListener;
+
+import java.util.List;
 
 public class SettingFragment extends Fragment implements View.OnClickListener {
     TitleUpdateListener myListener;
@@ -179,6 +182,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             startActivity(enabler);
         }
         lm = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        List<String> listProvider = lm.getAllProviders();
+        for(String str: listProvider){
+            TRACE.i("provider : "+str);
+        }
         boolean ok = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (ok) {//Location service is on
             if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -195,11 +202,19 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 }
 //                        Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
             } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+                        String[] list = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_ADVERTISE};
+                        ActivityCompat.requestPermissions(getActivity(), list, BLUETOOTH_CODE);
+
+                    }
+                }
 //                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(getActivity(), "System detects that the GPS location service is not turned on", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
+            //ACTION_LOCATION_SOURCE_SETTINGS
             intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             try {
             ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -209,7 +224,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             });
             launcher.launch(intent);
             }catch (Exception e){
-                Toast.makeText(getActivity(), "System detects that the GPS location service is no permission to turned on", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Pls open the LOCATION in your device settings! ", Toast.LENGTH_SHORT).show();
             }
 
         }

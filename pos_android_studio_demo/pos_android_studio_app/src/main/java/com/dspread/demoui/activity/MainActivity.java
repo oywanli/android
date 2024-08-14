@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     ExtendedFloatingActionButton floatingActionButton;
     private MenuItem menuItem;
     private MifareCardsFragment mifareCardsFragment;
-    SharedPreferencesUtil connectType;
+    private SharedPreferencesUtil connectType;
 
 
     @Override
@@ -83,8 +83,10 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         deviceConnectType = headerView.findViewById(R.id.device_connect_type);
         tvAppVersion = headerView.findViewById(R.id.tv_appversion);
         menuItem = navigationView.getMenu().findItem(R.id.nav_printer);
-
+        connectType = SharedPreferencesUtil.getmInstance(this);
+        String conType = (String) connectType.get("conType", "");
         drawerStateChanged();
+
         floatingActionButton.setOnClickListener(view -> {
             toolbar.setTitle(getString(R.string.show_log));
             switchFragment(5);
@@ -96,6 +98,10 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         BaseApplication.getApplicationInstance = this;
         if (!"D20".equals(deviceModel)) {
             menuItem.setVisible(true);
+            if ("".equals(conType) || "blue".equals(conType)) {
+                deviceConnectType.setText(getString(R.string.setting_blu));
+                bluetoothRelaPer();
+            }
         } else {
             menuItem.setVisible(false);
         }
@@ -118,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
                 String packageVersionName = UpdateAppHelper.getPackageVersionName(MainActivity.this, "com.dspread.demoui");
                 tvAppVersion.setText(getString(R.string.app_version) + packageVersionName);
+                TRACE.i("onDrawerSlide == ");
                 drawerStateChanged();
             }
 
@@ -145,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         String conType = (String) connectType.get("conType", "");
         if ("blue".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_blu));
-            bluetoothRelaPer();
+//            bluetoothRelaPer();
         } else if ("uart".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else if ("usb".equals(conType)) {
@@ -154,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             connectType.put("conType", "uart");
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
-            bluetoothRelaPer();
+//            bluetoothRelaPer();
             connectType.put("conType", "blue");
             deviceConnectType.setText(getString(R.string.setting_blu));
         }
@@ -369,9 +376,17 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 }
 //                        Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
             } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED) {
+                        String[] list = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_ADVERTISE};
+                        ActivityCompat.requestPermissions(this, list, BLUETOOTH_CODE);
+
+                    }
+                }
 //                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
             }
-        } else {
+        }
+        else {
             Toast.makeText(this, "System detects that the GPS location service is not turned on", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -383,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                 });
                 launcher.launch(intent);
             }catch (Exception e){
-                Toast.makeText(this, "System detects that the GPS location service is no permission to turned on", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Pls open the LOCATION in your device settings!", Toast.LENGTH_SHORT).show();
             }
 
         }
