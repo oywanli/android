@@ -1,3 +1,15 @@
+# [4.7.0](https://gitlab.com/[secure]/android/compare/v4.6.12...v4.7.0) (2024-08-28)
+
+
+### Bug Fixes
+
+* add the cancelTrade method to the return key on the trading interface ([46c520c](https://gitlab.com/[secure]/android/commit/46c520c866709a7c06e381d63aa6993136196aa1))
+
+
+### Features
+
+* update the network link address ([9625c53](https://gitlab.com/[secure]/android/commit/9625c535f5d543ab9fd51d07a81c10f89742b595))
+
 ## [4.6.12](https://gitlab.com/[secure]/android/compare/v4.6.11...v4.6.12) (2024-08-28)
 
 
