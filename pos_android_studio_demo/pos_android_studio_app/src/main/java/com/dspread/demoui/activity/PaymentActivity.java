@@ -599,7 +599,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                    Toast.makeText(PaymentActivity.this, "No Permission", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 final CharSequence[] items = deviceList.toArray(new CharSequence[deviceList.size()]);
 
                 if (items.length == 1) {
@@ -624,12 +623,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
-                            String selectedDevice = items[item].toString();
-                            dialog.dismiss();
-                            flag = true;
-                            usbDevice = USBClass.getMdevices().get(selectedDevice);
-                            open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
-                            pos.openUsb(usbDevice);
+                            if (items.length > item) {
+                                String selectedDevice = items[item].toString();
+                                dialog.dismiss();
+                                flag = true;
+                                usbDevice = USBClass.getMdevices().get(selectedDevice);
+                                open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
+                                pos.openUsb(usbDevice);
+                            }
                         }
                     });
                     alert = builder.create();
@@ -980,11 +981,15 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sendRequestToBackend(String data) {
-        OkGo.<String>post(Constants.backendUploadUrl).tag(this).headers("X-RapidAPI-Key", Constants.rapidAPIKey).headers("X-RapidAPI-Host", Constants.rapidAPIHost).params("data", data).execute(new AbsCallback<String>() {
+        OkGo.<String>post(Constants.backendUploadUrl).tag(this)
+                .headers("content-type", "application/json")
+                .params("data", data).execute(new AbsCallback<String>() {
             @Override
             public void onStart(Request<String, ? extends Request> request) {
                 super.onStart(request);
                 TRACE.i("onStart==");
+                pinpadEditText.setVisibility(View.GONE);
+                tvTitle.setText(getText(R.string.transaction_result));
                 Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
 
             }
@@ -2568,7 +2573,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         }
 
-        @Override
+    /*    @Override
         public void onGetDevicePubKey(String clearKeys) {
             dismissDialog();
             TRACE.d("onGetDevicePubKey(clearKeys):" + clearKeys);
@@ -2584,6 +2589,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 sum += bit * Math.pow(16, (3 - i));
             }
             pubModel = clearKeys.substring(4, 4 + sum * 2);
+        }*/
+        @Override
+        public void onGetDevicePubKey(Hashtable<String, String> hashtable) {
+            super.onGetDevicePubKey(hashtable);
+            TRACE.d("onGetDevicePubKey(clearKeys):" + hashtable);
+            dismissDialog();
+            mllinfo.setVisibility(View.VISIBLE);
+            mbtnNewpay.setVisibility(View.GONE);
+            tradeSuccess.setVisibility(View.GONE);
+            mtvinfo.setText("DevicePubbicKey: \n" + pubModel);
+            mllchrccard.setVisibility(View.GONE);
+            pubModel = hashtable.get("modulus");
         }
 
         @Override
@@ -2966,6 +2983,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
              pos = null;
          }
 
+
         if (!dealDoneflag) {
             if (pos != null) {
                 pos.cancelTrade();
@@ -2984,13 +3002,13 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 Log.w("keyboardUtil","keyboardUtil.hide");
                 keyboardUtil.hide();
             }
-            if (type == UART) {
+
                 if(!isNormal) {
 
                     if (pos != null) {
                         pos.cancelTrade();
                     }
-                }
+
             }
             finish();
             return true;

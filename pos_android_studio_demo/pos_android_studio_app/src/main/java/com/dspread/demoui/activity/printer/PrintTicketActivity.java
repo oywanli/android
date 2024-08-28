@@ -148,6 +148,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.btn_Print:
                 printtext();
+                btnPrint.setEnabled(false);
                 break;
             case R.id.btn_multi:
                 try {
@@ -177,6 +178,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
     class MyPrinterListener implements PrintListener {
         @Override
         public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
+            btnPrint.setEnabled(true);
             Log.w("printResult", "boolean b==" + b);
             Log.w("printResult", "String s==" + s);
             Log.w("printResult", "resultType==" + resultType.toString());

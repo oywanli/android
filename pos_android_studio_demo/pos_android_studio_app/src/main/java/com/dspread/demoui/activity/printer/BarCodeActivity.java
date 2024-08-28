@@ -345,7 +345,7 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     Log.w("brSymbology", "brSymbology==" + brSymbology);
                     mPrinter.printBarCode(this, brSymbology, width, height, brContent, printLineAlign);
-
+                    btnBrcodePrint.setEnabled(false);
                 } catch (Exception e) {
                     Log.e("Exception", "e=" + e);
                     Toast toast = Toast.makeText(BarCodeActivity.this, "Error: " + e, Toast.LENGTH_SHORT);
@@ -363,6 +363,7 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
     class MyPrinterListener implements PrintListener {
         @Override
         public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
+            btnBrcodePrint.setEnabled(true);
             Log.w("printResult", "boolean b==" + b);
             Log.w("printResult", "String s==" + s);
         }
