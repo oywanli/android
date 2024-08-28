@@ -730,13 +730,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     keyboardUtil.hide();
                 }
 
-                    if(!isNormal) {
-                        if (pos != null) {
-                            pos.cancelTrade();
-//                            pos.resetPosStatus();
-                        }
+                if(!isNormal) {
+                    if (pos != null) {
+                        pos.cancelTrade();
                     }
-
+                }
                 finish();
                 break;
             case R.id.iv_blue:
@@ -983,7 +981,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private void sendRequestToBackend(String data) {
         OkGo.<String>post(Constants.backendUploadUrl).tag(this)
                 .headers("content-type", "application/json")
-                .params("data", data).execute(new AbsCallback<String>() {
+                .params("tlv", data).execute(new AbsCallback<String>() {
             @Override
             public void onStart(Request<String, ? extends Request> request) {
                 super.onStart(request);
@@ -1639,7 +1637,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 mllchrccard.setVisibility(View.GONE);
             }
 
-            OkGo.<String>post(Constants.backendUploadUrl).tag(this).headers("X-RapidAPI-Key", Constants.rapidAPIKey).headers("X-RapidAPI-Host", Constants.rapidAPIHost).params("tlv", tlv).execute(new AbsCallback<String>() {
+            OkGo.<String>post(Constants.backendUploadUrl).tag(this)
+                    .headers("content-type", "application/json")
+                    .params("tlv", tlv).execute(new AbsCallback<String>() {
                 @Override
                 public void onStart(Request<String, ? extends Request> request) {
                     super.onStart(request);
