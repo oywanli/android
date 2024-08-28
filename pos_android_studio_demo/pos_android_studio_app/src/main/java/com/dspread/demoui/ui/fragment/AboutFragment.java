@@ -29,6 +29,7 @@ import com.dspread.demoui.utils.UpdateAppHelper;
 import com.dspread.demoui.widget.CustomDialog;
 import com.dspread.demoui.beans.VersionEnty;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.FileCallback;
 import com.lzy.okgo.model.Progress;
@@ -182,6 +183,7 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
                             }
                         }
 
+
                         @Override
                         public void onStart(Request<File, ? extends Request> request) {
                             super.onStart(request);
@@ -213,6 +215,10 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
         } catch (Exception e) {
             Log.e("downLoad fail;", e.toString() + "");
         }
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
     }
 
     private static String readerMethod(File file) throws IOException {

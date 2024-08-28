@@ -2,6 +2,7 @@ package com.dspread.demoui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -20,6 +21,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -45,6 +47,7 @@ import com.dspread.demoui.utils.DUKPK2009_CBC;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.ParseASN1Util;
 import com.dspread.demoui.utils.QPOSUtil;
+import com.dspread.demoui.utils.SystemKeyListener;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.USBClass;
 import com.dspread.demoui.widget.BluetoothAdapter;
@@ -78,6 +81,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
 import static com.dspread.demoui.ui.dialog.Mydialog.UART;
@@ -156,7 +160,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private Button btnPowerOnNfc, btnSendApdu, btnPowerOffNfc;
     private boolean dealDoneflag = false;
     private Handler handler;
-
+    private SystemKeyListener systemKeyListener;
+    private boolean isNormal = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +177,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         transactionTypeString = getIntent().getStringExtra("paytype");
         amounts = getIntent().getStringExtra("inputMoney");
         cashbackAmounts = getIntent().getStringExtra("cashbackAmounts");
+        systemKeyListener = new SystemKeyListener(this);
+        systemKeyStart();
+        systemKeyListener.startSystemKeyListener();
+        isNormal = false;
         initView();
         initIntent();
         TRACE.setContext(this);
@@ -261,7 +270,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            updateThread = new UpdateThread();
 //            updateThread.start();
             byte[] data = null;
-            data = FileUtils.readAssetsLine("CR100D(样机-XFLASH)_master.asc", PaymentActivity.this);
+            data = FileUtils.readAssetsLine("A27CAYC_S1(Ecobank)_master.asc", PaymentActivity.this);
             if (data != null) {
                 int a = pos.updatePosFirmware(data, blueTootchAddress);
 //                Mydialog.loading(PaymentActivity.this, progres + "%");
@@ -330,7 +339,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             m_Adapter.clearData();
         }
         ArrayList<Map<String, ?>> data = new ArrayList<>();
-        Log.w("data", "data=" + data);
         m_Adapter.setListData(data);
     }
 
@@ -580,6 +588,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //            open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
             if (!flag) {
                 USBClass usb = new USBClass();
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 ArrayList<String> deviceList = usb.GetUSBDevices(getBaseContext());
 
                 if (deviceList == null) {
@@ -587,10 +600,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     return;
                 }
                 final CharSequence[] items = deviceList.toArray(new CharSequence[deviceList.size()]);
-                Log.w("items", "tiems.length===" + items.length);
+
                 if (items.length == 1) {
                     String selectedDevice = (String) items[0];
-                    Log.w("usbmpos", "selectedDevice==" + selectedDevice);
                     flag = true;
                     usbDevice = USBClass.getMdevices().get(selectedDevice);
                     open(QPOSService.CommunicationMode.USB_OTG_CDC_ACM);
@@ -646,7 +658,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (!"".equals(disblue) && disblue != null) {
             mrllayout.setVisibility(View.GONE);
             try {
-                Log.w("llll", "disconnectBT");
                 pos.disconnectBT();
             } catch (Exception e) {
 
@@ -672,6 +683,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         //init handler
         handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
+
 //        String sdkVersion = pos.getSdkVersion();
 //        Toast.makeText(this, "sdkVersion--" + sdkVersion, Toast.LENGTH_SHORT).show();
 
@@ -714,6 +726,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.iv_back_title:
                 dismissDialog();
+                if(keyboardUtil!=null){
+                    keyboardUtil.hide();
+                }
+                if (type == UART) {
+                    if(!isNormal) {
+                        if (pos != null) {
+                            pos.cancelTrade();
+//                            pos.resetPosStatus();
+                        }
+                    }
+                }
                 finish();
                 break;
             case R.id.iv_blue:
@@ -721,7 +744,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.scanQPos2Mode(PaymentActivity.this, 20);
 
                     pos.clearBluetoothBuffer();
-//                        refreshAdapter();
+                        refreshAdapter();
                     if (m_Adapter != null) {
                         m_Adapter.notifyDataSetChanged();
                     }
@@ -736,7 +759,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 if (pos != null) {
                     pos.scanQPos2Mode(PaymentActivity.this, 20);
                     pos.clearBluetoothBuffer();
-//                        refreshAdapter();
+                        refreshAdapter();
                     if (m_Adapter != null) {
                         m_Adapter.notifyDataSetChanged();
                     }
@@ -853,7 +876,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                            statusEditText.set
 //                            Text(progress + "%");
                             progress++;
-                            Log.w("updatefirmware", "" + progress + "%");
                             Message msg = new Message();
                             msg.what = 1003;
                             msg.arg1 = progress;
@@ -910,7 +932,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     tvProgress.setText(progress + " %");
                     progressBar.setProgress(progress);
                     dealDoneflag = true;
-                    Log.w("handlermessage", "progress---" + progress);
                     break;
                 case 8003:
                     try {
@@ -927,8 +948,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     } else {
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + nfcLog;
                     }
-                    Log.w("nfc", "nfc-------------------");
                     sendRequestToBackend(content);
+
                     break;
                 default:
                     break;
@@ -970,14 +991,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 pinpadEditText.setVisibility(View.GONE);
                 tvTitle.setText(getText(R.string.transaction_result));
                 Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
+
             }
 
             @Override
             public void onSuccess(Response<String> response) {
-                dismissDialog();
+                isNormal = true;
+                pinpadEditText.setVisibility(View.GONE);
+                tvTitle.setText(getText(R.string.transaction_result));
                 mllinfo.setVisibility(View.VISIBLE);
                 mtvinfo.setText(data);
                 mllchrccard.setVisibility(View.GONE);
+                dismissDialog();
             }
 
             @Override
@@ -996,7 +1021,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private List<String> keyBoardList = new ArrayList<>();
-    private KeyboardUtil keyboardUtil;
+    private static KeyboardUtil keyboardUtil;
 
     class MyQposClass extends CQPOSService {
 
@@ -1009,30 +1034,23 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if (result == QPOSService.DoTradeResult.NONE) {
 //                statusEditText.setText(getString(R.string.no_card_detected));
                 msg = getString(R.string.no_card_detected);
-                Log.w("paymentActivity", "msg==" + msg);
             } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
                 statusEditText.setText(getString(R.string.try_another_interface));
-                Log.w("paymentActivity", "msg==" + msg);
             } else if (result == QPOSService.DoTradeResult.ICC) {
                 statusEditText.setText(getString(R.string.icc_card_inserted));
-                TRACE.d("EMV ICC Start");
                 pos.doEmvApp(QPOSService.EmvOption.START);
             } else if (result == QPOSService.DoTradeResult.NOT_ICC) {
 //                statusEditText.setText(getString(R.string.card_inserted));
                 msg = getString(R.string.card_inserted);
-                Log.w("paymentActivity", "msg==" + msg);
             } else if (result == QPOSService.DoTradeResult.BAD_SWIPE) {
                 statusEditText.setText(getString(R.string.bad_swipe));
                 msg = getString(R.string.bad_swipe);
-                Log.w("paymentActivity", "msg==" + msg);
             } else if (result == QPOSService.DoTradeResult.CARD_NOT_SUPPORT) {
                 statusEditText.setText("GPO NOT SUPPORT");
                 msg = "GPO NOT SUPPORT";
-                Log.w("paymentActivity", "msg==" + msg);
             } else if (result == QPOSService.DoTradeResult.PLS_SEE_PHONE) {
                 statusEditText.setText("PLS SEE PHONE");
                 msg = "PLS SEE PHONE";
-                Log.w("paymentActivity", "msg==" + msg);
             } else if (result == QPOSService.DoTradeResult.MCR) {//Magnetic card
                 String content = getString(R.string.card_swiped);
                 String formatID = decodeData.get("formatID");
@@ -1134,7 +1152,25 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                mllinfo.setVisibility(View.VISIBLE);
 //                mtvinfo.setText(content);
 //                mllchrccard.setVisibility(View.GONE);
-                sendRequestToBackend(content);
+                if(decodeData.get("maskedPAN")!=null&&!"".equals(decodeData.get("maskedPAN"))){
+                    sendRequestToBackend(content);
+                }else{
+                    Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.trade_returnfailed), new Mydialog.OnMyClickListener() {
+                        @Override
+                        public void onCancel() {
+
+                        }
+
+                        @Override
+                        public void onConfirm() {
+                            if(pos!=null){
+                                pos.cancelTrade();
+                            }
+                              finish();
+                        }
+                    });
+                }
+
             } else if ((result == QPOSService.DoTradeResult.NFC_ONLINE) || (result == QPOSService.DoTradeResult.NFC_OFFLINE)) {
                 nfcLog = decodeData.get("nfcLog");
                 String content = getString(R.string.tap_card);
@@ -1288,7 +1324,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             dismissDialog();
             String msg = "";
             if (transactionResult == QPOSService.TransactionResult.APPROVED) {
-                TRACE.d("TransactionResult.APPROVED");
 //                 msg = getString(R.string.transaction_approved) + "\n" + getString(R.string.amount) + ": $" + amounts + "\n";
 //                if (!cashbackAmounts.equals("")) {
 //                    msg += getString(R.string.cashback_amount) + ": INR" + cashbackAmounts;
@@ -1334,8 +1369,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }else {
                 msg = transactionResult.name();
             }
-            Log.w("TAG", "transactionResult==" + msg);
-            Log.w("transactionResult", "transactionResult==" + transactionResult);
             if (!"".equals(msg)) {
                 Mydialog.ErrorDialog(PaymentActivity.this, msg, new Mydialog.OnMyClickListener() {
                     @Override
@@ -1358,6 +1391,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onRequestBatchData(String tlv) {
             dismissDialog();
             dealDoneflag = true;
+            isNormal = true;
             pinpadEditText.setVisibility(View.GONE);
             tvTitle.setText(getText(R.string.transaction_result));
             TRACE.d("ICC trade finished");
@@ -1420,7 +1454,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         }
                         dealDoneflag = false;
                         isVisiblePosID = true;
-                        pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+//                        pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
                         pos.doTrade(20);
                     }
                 }
@@ -1433,7 +1467,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onRequestSelectEmvApp(ArrayList<String> appList) {
             TRACE.d("onRequestSelectEmvApp():" + appList.toString());
-            TRACE.d("Please select App -- S，emv card config");
             dismissDialog();
             dialog = new Dialog(PaymentActivity.this);
             dialog.setContentView(R.layout.emv_app_dialog);
@@ -1478,6 +1511,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
             super.onQposRequestPinResult(dataList, offlineTime);
+            if(pos!=null){
             boolean onlinePin = pos.isOnlinePin();
             if (onlinePin) {
                 tvTitle.setText(getString(R.string.input_onlinePin));
@@ -1490,6 +1524,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     tvTitle.setText(getString(R.string.input_offlinePin));
                 }
             }
+            }
             dismissDialog();
             mllchrccard.setVisibility(View.GONE);
             keyBoardList = dataList;
@@ -1497,18 +1532,21 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void getNumberValue(String value) {
 //                    statusEditText.setText("Pls click "+dataList.get(0));
-                    pos.pinMapSync(value, 20);
+                    if(pos!=null) {
+                        pos.pinMapSync(value, 20);
+                    }
                 }
             });
             pinpadEditText.setVisibility(View.VISIBLE);
-            keyboardUtil = new KeyboardUtil(PaymentActivity.this, scvText, dataList);
-            keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, pinpadEditText);//Random keyboard
+              if(pos!=null) {
+                  keyboardUtil = new KeyboardUtil(PaymentActivity.this, scvText, dataList);
+                  keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, pinpadEditText);//Random keyboard
+              }
         }
 
         @Override
         public void onReturnGetKeyBoardInputResult(String result) {
             super.onReturnGetKeyBoardInputResult(result);
-            Log.w("checkUactivity", "onReturnGetKeyBoardInputResult");
         }
 
         @Override
@@ -1530,7 +1568,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onRequestSetAmount() {
-            TRACE.d("input amount -- S");
             TRACE.d("onRequestSetAmount()");
             if (transactionTypeString != null) {
                 if (transactionTypeString.equals("GOODS")) {
@@ -1700,7 +1737,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else if (displayMsg == QPOSService.Display.PlEASE_TAP_CARD_AGAIN) {
                 msg = getString(R.string.please_tap_card_again);
             }
-//            Log.w("displayMsg==", "displayMsg==" + msg);
 //            Toast.makeText(CheckActivity.this, msg, Toast.LENGTH_SHORT).show();
             Mydialog.loading(PaymentActivity.this, msg);
         }
@@ -1708,7 +1744,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onRequestFinalConfirm() {
             TRACE.d("onRequestFinalConfirm() ");
-            TRACE.d("onRequestFinalConfirm - S");
             dismissDialog();
             if (!isPinCanceled) {
                 dialog = new Dialog(PaymentActivity.this);
@@ -1745,7 +1780,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             TRACE.d("onRequestNoQposDetected()");
             dismissDialog();
             statusEditText.setText(getString(R.string.no_device_detected));
-            Log.w("onRequestNoQposDetected", "No pos detected.");
         }
 
         @Override
@@ -1777,8 +1811,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (MifareCards != null) {
                     operateMifareCards();
                 } else {
-                    Log.w("type", "type==" + type);
+                    if(pos!=null){
                     pos.getQposId();
+                    }
                 }
 
             } else if (type == USB_OTG_CDC_ACM) {
@@ -1789,7 +1824,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (MifareCards != null) {
                     operateMifareCards();
                 } else {
-                    pos.getQposId();
+                    if(pos!=null) {
+                        pos.getQposId();
+                    }
                 }
             } else {
                 tvTitle.setText(getString(R.string.device_connect));
@@ -1832,6 +1869,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 msg = getString(R.string.unknown_error);
             } else if (errorState == QPOSService.Error.DEVICE_BUSY) {
                 msg = getString(R.string.device_busy);
+                if (pos != null) {
+                    pos.resetPosStatus();
+                }
+
             } else if (errorState == QPOSService.Error.INPUT_OUT_OF_RANGE) {
                 msg = getString(R.string.out_of_range);
             } else if (errorState == QPOSService.Error.INPUT_INVALID_FORMAT) {
@@ -1945,7 +1986,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 calMac = QPOSUtil.byteArray2Hex(calMac.getBytes());
             }
             statusEditText.setText("calMac: " + calMac);
-            TRACE.d("calMac_result: calMac=> e: " + calMac);
         }
 
         @Override
@@ -2111,7 +2151,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onReturnDownloadRsaPublicKey(HashMap<String, String> map) {
             TRACE.d("onReturnDownloadRsaPublicKey(HashMap<String, String> map):" + map.toString());
             if (map == null) {
-                TRACE.d("MainActivity++++++++++++++map == null");
                 return;
             }
             String randomKeyLen = map.get("randomKeyLen");
@@ -2336,7 +2375,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 String name = arg0.getName();
                 name += address + "\n";
                 statusEditText.setText(name);
-                TRACE.d("found new device" + name);
             } else {
                 statusEditText.setText("Don't found new device");
                 TRACE.d("Don't found new device");
@@ -2451,7 +2489,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             String pinKsn = arg0.get("pinKsn");
             String trackKsn = arg0.get("trackKsn");
             String emvKsn = arg0.get("emvKsn");
-            TRACE.d("get the ksn result is :" + "pinKsn" + pinKsn + "\ntrackKsn" + trackKsn + "\nemvKsn" + emvKsn);
             mllinfo.setVisibility(View.VISIBLE);
             mbtnNewpay.setVisibility(View.GONE);
             tradeSuccess.setVisibility(View.GONE);
@@ -2599,7 +2636,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onReadMifareCardResult(Hashtable<String, String> arg0) {
-            TRACE.d("onReadMifareCardResult(Hashtable<String, String> arg0):");
             if (arg0 != null) {
                 TRACE.d("onReadMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
                 String addr = arg0.get("addr");
@@ -2623,7 +2659,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onOperateMifareCardResult(Hashtable<String, String> arg0) {
-            TRACE.d("onOperateMifareCardResult(Hashtable<String, String> arg0):");
             if (arg0 != null) {
                 TRACE.d("onOperateMifareCardResult(Hashtable<String, String> arg0):" + arg0.toString());
                 String cmd = arg0.get("Cmd");
@@ -2939,22 +2974,16 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         dismissDialog();
         if (updateThread != null) {
             updateThread.concelSelf();
         }
+         if (pos!=null){
+             pos = null;
+         }
 
 
-//        if (type == UART) {
-//            if (pos != null) {
-//                pos.closeUart();
-//            }
-//        }
-//        if (type == USB_OTG_CDC_ACM) {
-//            if (pos != null) {
-//                pos.closeUsb();
-//            }
-//        }
         if (!dealDoneflag) {
             if (pos != null) {
                 pos.cancelTrade();
@@ -2962,4 +2991,67 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
         finish();
     }
-}
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.w("onKeyDown", "keyCode==" + keyCode);
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            dismissDialog();
+            if(keyboardUtil!=null){
+                Log.w("keyboardUtil","keyboardUtil.hide");
+                keyboardUtil.hide();
+            }
+
+                if(!isNormal) {
+
+                    if (pos != null) {
+                        pos.cancelTrade();
+                    }
+
+            }
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    private void systemKeyStart() {
+        systemKeyListener.setOnSystemKeyListener(new SystemKeyListener.OnSystemKeyListener() {
+            @Override
+            public void onHomePressed() {
+                dismissDialog();
+                if(keyboardUtil!=null){
+                    keyboardUtil.hide();
+                }
+                if(!isNormal) {
+                    if (pos != null) {
+                        pos.cancelTrade();
+                    }
+                }
+                finish();
+            }
+            @Override
+            public void onMenuPressed() {
+                dismissDialog();
+                if(keyboardUtil!=null){
+                    keyboardUtil.hide();
+                }
+                if(!isNormal) {
+                    if (pos != null) {
+                        pos.cancelTrade();
+                    }
+                }
+                finish();
+            }
+            @Override
+            public void onScreenOff() {
+            }
+
+
+            @Override
+            public void onScreenOn() {
+            }
+        });
+    }
+
+  }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -206,6 +207,7 @@ public class Mydialog {
                             intent.putExtra("paytype", transactionTypeString);
                             intent.putExtra("connect_type", UART);
                             mContext.startActivity(intent);
+
                         } else if (!"".equals(conType) && "usb".equals(conType)) {
                             transactionTypeString = content;
                             Intent intent = new Intent(mContext, PaymentActivity.class);
@@ -228,6 +230,8 @@ public class Mydialog {
                         }
                     }
                     payTypeDialog.dismiss();
+                    payTypeDialog = null;
+                    myAdapter = null;
 
                 }
             }

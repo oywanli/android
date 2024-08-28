@@ -1,30 +1,23 @@
-## [4.6.11](https://gitlab.com/[secure]/android/compare/v4.6.10...v4.6.11) (2024-08-14)
+## [4.6.7](https://gitlab.com/[secure]/android/compare/v4.6.6...v4.6.7) (2024-04-23)
 
 
 ### Bug Fixes
 
-* fix the bug that bluetooth permission grant multiple times ([5ad87e7](https://gitlab.com/[secure]/android/commit/5ad87e77209cc19eeb27f85c8060a419c1d45253))
-
-## [4.6.10](https://gitlab.com/[secure]/android/compare/v4.6.9...v4.6.10) (2024-08-13)
-
-
-### Bug Fixes
-
-* fix the app crash issue that GPS permission deinal ([be08977](https://gitlab.com/[secure]/android/commit/be0897704ddd8c7005941e3701c858bdf78b33d5))
-
-## [4.6.9](https://gitlab.com/[secure]/android/compare/v4.6.8...v4.6.9) (2024-08-09)
-
-
-### Bug Fixes
-
-* fix download apk exception crash issue ([6f33519](https://gitlab.com/[secure]/android/commit/6f33519a2fb99bec9fa970c76d69ae819a7e09e6))
-* fix index out of bounds issue ([635f506](https://gitlab.com/[secure]/android/commit/635f506a57535dce257f7b55d219883ad9354b77))
-* fix network access timeout, still displaying 'Please input onlinePin now' issue ([d243d46](https://gitlab.com/[secure]/android/commit/d243d46668ed42a4ec2805125465d9e804f5ad9f))
-* fix update the trade SDK to version 5.1.9  and  optimize continuous operate printing issues ([9f6758f](https://gitlab.com/[secure]/android/commit/9f6758f454fb05df60c7f7cbf554891e74626903))
-* modify download apk exception crash issue ([1e24183](https://gitlab.com/[secure]/android/commit/1e24183e601262432995c9cdc0840725ff5a1d2f))
-* update and remove unnecessary dependencies ([8dfd91b](https://gitlab.com/[secure]/android/commit/8dfd91bd6c39d4e06cff8b9c7eaf2a7422464573))
-* update trading SDK version 5.1.9 ([48ff25f](https://gitlab.com/[secure]/android/commit/48ff25f1baf0ec5a7f2372dff20165700f8ce405))
-* update versionCode ([0e98df9](https://gitlab.com/[secure]/android/commit/0e98df9a3ca3b0d5c0608f281159f0c9e8764370))
+* a non empty check was made when the transaction returned card data ([9cefa61](https://gitlab.com/[secure]/android/commit/9cefa619dbe921ecf43e05c997a6147ddc3254ea))
+* add and handle try another interface error transactions update sdkjar package ([84fc3d6](https://gitlab.com/[secure]/android/commit/84fc3d64b5370ca61863a60dcccbf0f8c48f1aef))
+* add automatic trading function and fix bug ([a2f986d](https://gitlab.com/[secure]/android/commit/a2f986db7fe735a80c02edc19e441bda637e653a))
+* add continuous transactions and fix some bugs ([af93f72](https://gitlab.com/[secure]/android/commit/af93f72bba7e698aa5443130797b79de8d3f04c6))
+* add OnlinePin and offlinePin prompts ([6e3c2f5](https://gitlab.com/[secure]/android/commit/6e3c2f5c929bbc7cd35bec0ce0bd281f89617dc5))
+* added processing for reading locked chip cards in applications ([7933fcb](https://gitlab.com/[secure]/android/commit/7933fcb0bf551a2acf95b747ffc2177ce41eb91b))
+* display of transaction blocking password input and log modification after clearing ([ba2b165](https://gitlab.com/[secure]/android/commit/ba2b165f99f9b60b8e09e77b57f811a05ec88028))
+* fix serial port transaction bugs and optimize transaction processes ([b82c1de](https://gitlab.com/[secure]/android/commit/b82c1de7acec315228b924056a97a3fb8b0cb54b))
+* fix the demo build.gradle issue ([6050c13](https://gitlab.com/[secure]/android/commit/6050c133abb2f52682f529780ebc4c609524ea1e))
+* modify the posinfo display information and optimize the code ([c3d1b31](https://gitlab.com/[secure]/android/commit/c3d1b31068ae36917893efd3b22d536b02215fce))
+* modify the process of obtaining the posid for each transaction to obtain the poid upon opening the serial port, and add the function of clearing logs ([af2a163](https://gitlab.com/[secure]/android/commit/af2a163b78a73f99918e5d3e3a1e8f25316f50e4))
+* modifying bugs in continuous transactions ([9483ebe](https://gitlab.com/[secure]/android/commit/9483ebec3ff6043d49b6109fb09b847347a40f0f))
+* modifying device power display issues ([3b251e3](https://gitlab.com/[secure]/android/commit/3b251e3f8f1d26d363c95b38f3a71806561742aa))
+* optimized the menu button click issue during the trading process and optimized the automatic trading process ([c066a91](https://gitlab.com/[secure]/android/commit/c066a91e4f63e4f7b8e52fcf7b4e8ee84464a3b6))
+* update the package name for activating the scanning function ([8aa85bf](https://gitlab.com/[secure]/android/commit/8aa85bff252116cc431e9e905073c46179faae73))
 
 ## [4.6.6](https://gitlab.com/[secure]/android/compare/v4.6.5...v4.6.6) (2024-03-04)
 
