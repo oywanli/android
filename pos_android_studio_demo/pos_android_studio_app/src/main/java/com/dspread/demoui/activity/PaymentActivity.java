@@ -960,7 +960,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sendRequestToBackend(String data) {
-        OkGo.<String>post(Constants.backendUploadUrl).tag(this).headers("X-RapidAPI-Key", Constants.rapidAPIKey).headers("X-RapidAPI-Host", Constants.rapidAPIHost).params("data", data).execute(new AbsCallback<String>() {
+        OkGo.<String>post(Constants.backendUploadUrl).tag(this)
+                .headers("content-type", "application/json")
+                .params("data", data).execute(new AbsCallback<String>() {
             @Override
             public void onStart(Request<String, ? extends Request> request) {
                 super.onStart(request);
@@ -2943,16 +2945,16 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
 
 
-        if (type == UART) {
-            if (pos != null) {
-                pos.closeUart();
-            }
-        }
-        if (type == USB_OTG_CDC_ACM) {
-            if (pos != null) {
-                pos.closeUsb();
-            }
-        }
+//        if (type == UART) {
+//            if (pos != null) {
+//                pos.closeUart();
+//            }
+//        }
+//        if (type == USB_OTG_CDC_ACM) {
+//            if (pos != null) {
+//                pos.closeUsb();
+//            }
+//        }
         if (!dealDoneflag) {
             if (pos != null) {
                 pos.cancelTrade();

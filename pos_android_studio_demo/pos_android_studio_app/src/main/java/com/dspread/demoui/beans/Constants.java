@@ -12,7 +12,8 @@ import java.util.logging.Handler;
  * @updateRemark : []
  */
 public class Constants {
-    public static final String backendUploadUrl = "https://demo-project67026.p.rapidapi.com/order/new";
+    public static final String backendUploadUrl = "https://66ce962c901aab24841ee49a.mockapi.io/dspread/api/v1/data";
+//    public static final String backendUploadUrl = "https://demo-project67026.p.rapidapi.com/order/new";
     public static final String rapidAPIKey ="0218743bb8mshc996b4090fff88ap131a86jsn5658a560db57";
     public static final String rapidAPIHost ="demo-project67026.p.rapidapi.com";
 
