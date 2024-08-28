@@ -1,3 +1,11 @@
+## [4.6.12](https://gitlab.com/[secure]/android/compare/v4.6.11...v4.6.12) (2024-08-28)
+
+
+### Bug Fixes
+
+* synchronized master branch code ([fac3963](https://gitlab.com/[secure]/android/commit/fac3963444207f935eef5bd39dd78e8f319fafcf))
+* update the backend network url address ([92ef3c8](https://gitlab.com/[secure]/android/commit/92ef3c84bd7c585bde3a92478faf6cee599d2c46))
+
 ## [4.6.7](https://gitlab.com/[secure]/android/compare/v4.6.6...v4.6.7) (2024-04-23)
 
 
