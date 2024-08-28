@@ -729,14 +729,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 if(keyboardUtil!=null){
                     keyboardUtil.hide();
                 }
-                if (type == UART) {
+
                     if(!isNormal) {
                         if (pos != null) {
                             pos.cancelTrade();
 //                            pos.resetPosStatus();
                         }
                     }
-                }
+
                 finish();
                 break;
             case R.id.iv_blue:
