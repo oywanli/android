@@ -44,12 +44,15 @@ import com.dspread.demoui.beans.BluetoothToolsBean;
 import com.dspread.demoui.beans.Constants;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.DUKPK2009_CBC;
+import com.dspread.demoui.utils.DeviceUtils;
+import com.dspread.demoui.utils.DingTalkTest;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.ParseASN1Util;
 import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.utils.SystemKeyListener;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.USBClass;
+import com.dspread.demoui.utils.Utils;
 import com.dspread.demoui.widget.BluetoothAdapter;
 import com.dspread.demoui.widget.pinpad.PinPadDialog;
 import com.dspread.demoui.widget.pinpad.PinPadView;
@@ -65,15 +68,18 @@ import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.base.Request;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -89,6 +95,8 @@ import static com.dspread.demoui.ui.dialog.Mydialog.USB_OTG_CDC_ACM;
 import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
 import static com.dspread.demoui.utils.Utils.getKeyIndex;
 
+import org.json.JSONObject;
+
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
     private String blueTootchAddress = "";
     private boolean isNormalBlu = false;//to judge if is normal bluetooth
@@ -103,6 +111,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
     private static Dialog dialog;
     private String nfcLog = "";
+    private String nfcData;
     private String cashbackAmounts = "";
     private String amounts = "";
     private String amount = "";
@@ -162,6 +171,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private Handler handler;
     private SystemKeyListener systemKeyListener;
     private boolean isNormal = false;
+    private boolean isICC;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -946,7 +956,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     } else {
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + nfcLog;
                     }
-                    sendRequestToBackend(content);
+                    sendRequestToBackend(nfcData+content);
 
                     break;
                 default:
@@ -978,44 +988,146 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void sendRequestToBackend(String data) {
-        OkGo.<String>post(Constants.backendUploadUrl).tag(this)
-                .headers("content-type", "application/json")
-                .params("tlv", data).execute(new AbsCallback<String>() {
-            @Override
-            public void onStart(Request<String, ? extends Request> request) {
-                super.onStart(request);
-                TRACE.i("onStart==");
-                pinpadEditText.setVisibility(View.GONE);
-                tvTitle.setText(getText(R.string.transaction_result));
-                Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
+    private Handler dingdingHandler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 101:
+                    if(isICC){
+                        dismissDialog();
+                        TRACE.i("onError==");
+
+                        Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
+                            @Override
+                            public void onCancel() {
+
+                            }
+
+                            @Override
+                            public void onConfirm() {
+                                //8A025A33 //Unable to go online, offline declined
+                                String offlineDeclinedCode = "8A025A33";
+                                pos.sendOnlineProcessResult(offlineDeclinedCode);
+                            }
+                        });
+                    }else {
+                        Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), null);
+                    }
+                    break;
+                case 100:
+                    if(isICC){
+                        dismissDialog();
+                        String onlineApproveCode = "8A023030";//Currently the default value,
+                        // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
+
+                        // should be assigned to the server to return data,
+                        // the data format is TLV
+                        pos.sendOnlineProcessResult(onlineApproveCode);//Script notification/55domain/ICCDATA
+                    }else {
+                        isNormal = true;
+                        pinpadEditText.setVisibility(View.GONE);
+                        tvTitle.setText(getText(R.string.transaction_result));
+                        mllinfo.setVisibility(View.VISIBLE);
+                        mtvinfo.setText((String) msg.obj);
+                        mllchrccard.setVisibility(View.GONE);
+                        dismissDialog();
+                    }
+                default:
+                    break;
+            }
+        }
+    };
+
+    private void putInfoToDingding(String tlv, String info){
+        new Thread(() -> {
+            try {
+                boolean isAtAll = false;
+                String content = "issues: "+info;
+                String reqStr = DingTalkTest.buildReqStr(content, isAtAll);
+                String result =DingTalkTest.postJson(Constants.dingdingUrl, reqStr);
+                Message msg = new Message();
+                if(result != null){
+                    System.out.println("result == " + result);
+                    JSONObject object = new JSONObject(result);
+                    String errmsg = object.getString("errmsg");
+                    int errcode = object.getInt("errcode");
+                    if (errcode == 0){
+                        msg.what = 100;
+                        msg.obj = tlv;
+                        dingdingHandler.sendMessage(msg);
+                    }else {
+                        msg.what = 101;
+                        dingdingHandler.sendMessage(msg);
+                        Log.e("Exception","Network fail");
+                    }
+                }else {
+                    msg.what = 101;
+                    dingdingHandler.sendMessage(msg);
+                    Log.e("Exception","Network fail");
+                }
+
+            }catch (Exception e){
+                Log.e("Exception","e:"+e.toString());
+                e.printStackTrace();
 
             }
+        }).start();
+    }
 
-            @Override
-            public void onSuccess(Response<String> response) {
-                isNormal = true;
-                pinpadEditText.setVisibility(View.GONE);
-                tvTitle.setText(getText(R.string.transaction_result));
-                mllinfo.setVisibility(View.VISIBLE);
-                mtvinfo.setText(data);
-                mllchrccard.setVisibility(View.GONE);
-                dismissDialog();
-            }
-
-            @Override
-            public String convertResponse(okhttp3.Response response) throws Throwable {
-                return null;
-            }
-
-            @Override
-            public void onError(Response<String> response) {
-                super.onError(response);
-                dismissDialog();
-                TRACE.i("onError==");
-                Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), null);
-            }
-        });
+    private void sendRequestToBackend(String tlvData) {
+        String requestTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        String data = "{\"createdAt\": "+requestTime + ", \"deviceInfo\": "+DeviceUtils.getPhoneDetail()+", \"countryCode\": "+DeviceUtils.getDevieCountry(PaymentActivity.this)
+                +", \"tlv\": "+tlvData+"}";
+        pinpadEditText.setVisibility(View.GONE);
+        tvTitle.setText(getText(R.string.transaction_result));
+        Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
+        putInfoToDingding(tlvData, data);
+//        OkGo.<String>post(Constants.backendUploadUrl).tag(this)
+//                .headers("content-type", "application/json")
+//                .params("deviceInfo", DeviceUtils.getPhoneDetail())
+//                .params("countryCode",DeviceUtils.getDevieCountry(PaymentActivity.this))
+//                .params("tlv", data)
+//                .execute(new AbsCallback<String>() {
+//            @Override
+//            public void onStart(Request<String, ? extends Request> request) {
+//                super.onStart(request);
+//                TRACE.i("onStart==");
+//                pinpadEditText.setVisibility(View.GONE);
+//                tvTitle.setText(getText(R.string.transaction_result));
+//                Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(Response<String> response) {
+//                try {
+//                    putInfoToDingding(new String(response.getRawResponse().body().bytes()));
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                isNormal = true;
+//                pinpadEditText.setVisibility(View.GONE);
+//                tvTitle.setText(getText(R.string.transaction_result));
+//                mllinfo.setVisibility(View.VISIBLE);
+//                mtvinfo.setText(data);
+//                mllchrccard.setVisibility(View.GONE);
+//                dismissDialog();
+//            }
+//
+//            @Override
+//            public String convertResponse(okhttp3.Response response) throws Throwable {
+//                return null;
+//            }
+//
+//            @Override
+//            public void onError(Response<String> response) {
+//                super.onError(response);
+//                dismissDialog();
+//                TRACE.i("onError==");
+//                Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), null);
+//            }
+//        });
     }
 
     private List<String> keyBoardList = new ArrayList<>();
@@ -1029,12 +1141,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             dismissDialog();
             String cardNo = "";
             String msg = "";
+            isICC = false;
             if (result == QPOSService.DoTradeResult.NONE) {
 //                statusEditText.setText(getString(R.string.no_card_detected));
                 msg = getString(R.string.no_card_detected);
             } else if (result == QPOSService.DoTradeResult.TRY_ANOTHER_INTERFACE) {
                 statusEditText.setText(getString(R.string.try_another_interface));
             } else if (result == QPOSService.DoTradeResult.ICC) {
+                isICC = true;
                 statusEditText.setText(getString(R.string.icc_card_inserted));
                 pos.doEmvApp(QPOSService.EmvOption.START);
             } else if (result == QPOSService.DoTradeResult.NOT_ICC) {
@@ -1249,6 +1363,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                mllinfo.setVisibility(View.VISIBLE);
 //                mtvinfo.setText(content);
 //                mllchrccard.setVisibility(View.GONE);
+                nfcData = content;
                 sendMsg(8003);
             } else if ((result == QPOSService.DoTradeResult.NFC_DECLINED)) {
                 statusEditText.setText(getString(R.string.transaction_declined));
@@ -1628,7 +1743,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             tvTitle.setText(getString(R.string.online_process_requested));
             dismissDialog();
 
-
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
             TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
             if (isPinCanceled) {
@@ -1636,55 +1750,61 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 mllchrccard.setVisibility(View.GONE);
             }
-
-            OkGo.<String>post(Constants.backendUploadUrl).tag(this)
-                    .headers("content-type", "application/json")
-                    .params("tlv", tlv).execute(new AbsCallback<String>() {
-                @Override
-                public void onStart(Request<String, ? extends Request> request) {
-                    super.onStart(request);
-                    TRACE.i("onStart==");
-                    Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
-                }
-
-
-                @Override
-                public void onSuccess(Response<String> response) {
-                    dismissDialog();
-                    String onlineApproveCode = "8A023030";//Currently the default value,
-                    // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
-
-                    // should be assigned to the server to return data,
-                    // the data format is TLV
-                    pos.sendOnlineProcessResult(onlineApproveCode);//Script notification/55domain/ICCDATA
-                }
-
-                @Override
-                public String convertResponse(okhttp3.Response response) throws Throwable {
-                    return null;
-                }
-
-                @Override
-                public void onError(Response<String> response) {
-                    super.onError(response);
-                    dismissDialog();
-                    TRACE.i("onError==");
-
-                    Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
-                        @Override
-                        public void onCancel() {
-
-                        }
-
-                        @Override
-                        public void onConfirm() {
-                            //8A025A33 //Unable to go online, offline declined
-                            String offlineDeclinedCode = "8A025A33";
-                            pos.sendOnlineProcessResult(offlineDeclinedCode);
-                        }
-                    });
-                }
-            });
+            String requestTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+            String data = "{\"createdAt\": "+requestTime + ", \"deviceInfo\": "+DeviceUtils.getPhoneDetail()+", \"countryCode\": "+DeviceUtils.getDevieCountry(PaymentActivity.this)
+                    +", \"tlv\": "+tlv+"}";
+            Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
+            putInfoToDingding(tlv, data);
+//            OkGo.<String>post(Constants.backendUploadUrl).tag(this)
+//                    .headers("content-type", "application/json")
+//                    .params("deviceInfo", DeviceUtils.getPhoneDetail())
+//                    .params("countryCode",DeviceUtils.getDevieCountry(PaymentActivity.this))
+//                    .params("tlv", tlv).execute(new AbsCallback<String>() {
+//                @Override
+//                public void onStart(Request<String, ? extends Request> request) {
+//                    super.onStart(request);
+//                    TRACE.i("onStart==");
+//                    Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
+//                }
+//
+//
+//                @Override
+//                public void onSuccess(Response<String> response) {
+//                    dismissDialog();
+//                    String onlineApproveCode = "8A023030";//Currently the default value,
+//                    // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
+//
+//                    // should be assigned to the server to return data,
+//                    // the data format is TLV
+//                    pos.sendOnlineProcessResult(onlineApproveCode);//Script notification/55domain/ICCDATA
+//                }
+//
+//                @Override
+//                public String convertResponse(okhttp3.Response response) throws Throwable {
+//                    return null;
+//                }
+//
+//                @Override
+//                public void onError(Response<String> response) {
+//                    super.onError(response);
+//                    dismissDialog();
+//                    TRACE.i("onError==");
+//
+//                    Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
+//                        @Override
+//                        public void onCancel() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onConfirm() {
+//                            //8A025A33 //Unable to go online, offline declined
+//                            String offlineDeclinedCode = "8A025A33";
+//                            pos.sendOnlineProcessResult(offlineDeclinedCode);
+//                        }
+//                    });
+//                }
+//            });
 
         }
 
