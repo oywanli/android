@@ -1,3 +1,10 @@
+## [4.7.1](https://gitlab.com/[secure]/android/compare/v4.7.0...v4.7.1) (2024-09-04)
+
+
+### Bug Fixes
+
+* update the online request url to dingding ([d1882b7](https://gitlab.com/[secure]/android/commit/d1882b7b7fb821a874e4a732f07d7dc555aa74af))
+
 # [4.7.0](https://gitlab.com/[secure]/android/compare/v4.6.12...v4.7.0) (2024-08-28)
 
 
