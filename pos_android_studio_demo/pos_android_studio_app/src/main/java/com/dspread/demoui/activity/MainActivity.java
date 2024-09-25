@@ -47,6 +47,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        switchFragment(0);
         floatingActionButton.setOnClickListener(view -> {
             toolbar.setTitle(getString(R.string.show_log));
             switchFragment(5);
@@ -408,6 +409,10 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (homeFragment != null) {
+            homeFragment.onKeyDown(keyCode, event);  // 让 Fragment 处理按键事件
+        }
+        TRACE.i("main keyode = "+keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             toolbar.setTitle(getString(R.string.menu_payment));
             switchFragment(0);

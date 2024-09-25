@@ -11,8 +11,8 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 22,
-      "versionName": "4.4.2",
+      "versionCode": 34,
+      "versionName": "4.5.5",
       "outputFile": "pos_android_studio_app-release.apk"
     }
   ],

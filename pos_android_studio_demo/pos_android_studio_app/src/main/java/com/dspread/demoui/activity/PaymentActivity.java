@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -258,10 +259,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             tvTitle.setText(getString(R.string.update_WorkKey));
             Mydialog.loading(PaymentActivity.this, getString(R.string.update_WorkKey));
             int keyIndex = getKeyIndex();
-            pos.updateWorkKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",//PIN KEY
-                    "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",  //TRACK KEY
-                    "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
-                    keyIndex, 5);
+//            pos.updateWorkKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",//PIN KEY
+//                    "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",  //TRACK KEY
+//                    "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
+//                    keyIndex, 5);
         } else if ("updateFirmware".equals(updatePosInfo)) {
             tvTitle.setText(getString(R.string.updateFirmware));
             updateFirmware();
@@ -689,7 +690,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             pos.setD20Trade(false);
         }
 
-        pos.setConext(this);
+        pos.setContext(this);
         //init handler
         handler = new Handler(Looper.myLooper());
         pos.initListener(handler, listener);
@@ -829,18 +830,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 pos.readMifareCard(QPOSService.MifareCardType.CLASSIC, blockaddr, 20);
                 break;
             case R.id.btn_powerOnNfc:
-                pos.powerOnNFC(false, 20);
+                pos.powerOnNFC( 20);
                 break;
             case R.id.btn_sendApdu:
                 String apduString = etSendApdu.getText().toString();
                 if (apduString != null && !"".equals(apduString)) {
-                    pos.sendApduByNFC(apduString, 20);
+                    pos.sendApduByNFC(apduString);
                 } else {
                     Toast.makeText(this, getString(R.string.please_send_apdu_data), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btn_powerOffNfc:
-                pos.powerOffNFC(20);
+                pos.powerOffNFC();
                 break;
             default:
                 break;
@@ -956,7 +957,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     } else {
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + nfcLog;
                     }
-                    sendRequestToBackend(nfcData+content);
+                        sendRequestToBackend(nfcData + content);
+
 
                     break;
                 default:
@@ -1016,7 +1018,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     break;
                 case 100:
-                    if(isICC){
+                    if(isICC || "D300".equals(Build.MODEL) ||"D70".equals(Build.MODEL)){
                         dismissDialog();
                         String onlineApproveCode = "8A023030";//Currently the default value,
                         // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
@@ -1076,11 +1078,23 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sendRequestToBackend(String tlvData) {
+
+        if("D300".equals(Build.MODEL) ||"D70".equals(Build.MODEL)) {
+            isNormal = true;
+            pinpadEditText.setVisibility(View.GONE);
+            tvTitle.setText(getText(R.string.transaction_result));
+            mllinfo.setVisibility(View.VISIBLE);
+            mtvinfo.setText(tlvData);
+            mllchrccard.setVisibility(View.GONE);
+            dismissDialog();
+            return;
+        }
+        pinpadEditText.setVisibility(View.GONE);
+        tvTitle.setText(getText(R.string.transaction_result));
         String requestTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         String data = "{\"createdAt\": "+requestTime + ", \"deviceInfo\": "+DeviceUtils.getPhoneDetail()+", \"countryCode\": "+DeviceUtils.getDevieCountry(PaymentActivity.this)
                 +", \"tlv\": "+tlvData+"}";
-        pinpadEditText.setVisibility(View.GONE);
-        tvTitle.setText(getText(R.string.transaction_result));
+
         Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
         putInfoToDingding(tlvData, data);
 //        OkGo.<String>post(Constants.backendUploadUrl).tag(this)
@@ -1264,7 +1278,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                mllinfo.setVisibility(View.VISIBLE);
 //                mtvinfo.setText(content);
 //                mllchrccard.setVisibility(View.GONE);
-                if(decodeData.get("maskedPAN")!=null&&!"".equals(decodeData.get("maskedPAN"))){
+                if("D300".equals(Build.MODEL)||"D70".equals(Build.MODEL)){
+                    sendRequestToBackend(content);
+                }
+                else if(decodeData.get("maskedPAN")!=null&&!"".equals(decodeData.get("maskedPAN"))){
                     sendRequestToBackend(content);
                 }else{
                     Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.trade_returnfailed), new Mydialog.OnMyClickListener() {
@@ -1556,6 +1573,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         }
                         isVisiblePosID = true;
                         dealDoneflag = false;
+                        pos.setDelayCheckingCardTime(500);
                         pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
                         pos.doTrade(20);
 
@@ -1666,6 +1684,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         public void onReturnGetPinInputResult(int num) {
             super.onReturnGetPinInputResult(num);
             String s = "";
+            pinpadEditText.setVisibility(View.VISIBLE);
             if (num == -1) {
                 if (keyboardUtil != null) {
                     keyboardUtil.hide();
@@ -1744,7 +1763,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             dismissDialog();
 
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-            TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
+            if(decodeData != null) {
+                TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
+            }
             if (isPinCanceled) {
                 mllchrccard.setVisibility(View.GONE);
             } else {
@@ -1932,7 +1953,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     operateMifareCards();
                 } else {
                     if(pos!=null){
-                    pos.getQposId();
+                        if(!"D300".equals(Build.MODEL)||"D70".equals(Build.MODEL)){
+                            pos.getQposId();
+                        }else {
+                            tvTitle.setText(getString(R.string.waiting_for_card));
+                            isVisiblePosID = false;
+                            dealDoneflag = false;
+                            pos.setDelayCheckingCardTime(500);
+                            pos.setCardTradeMode(QPOSService.CardTradeMode.SWIPE_TAP_INSERT_CARD_NOTUP);
+                            pos.doTrade(20);
+                        }
+
                     }
                 }
 
@@ -2148,6 +2179,15 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mbtnNewpay.setVisibility(View.GONE);
             mllchrccard.setVisibility(View.GONE);
             tradeSuccess.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onRequestSetPin(boolean isOfflinePin, int tryNum) {
+            super.onRequestSetPin(isOfflinePin, tryNum);
+            TRACE.i("onRequestSetPin() in D70");
+            tvTitle.setText(getString(R.string.input_pin));
+            dismissDialog();
+            mllchrccard.setVisibility(View.GONE);
         }
 
         @Override
@@ -2553,7 +2593,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             TRACE.d("onReturnGetQuickEmvResult(boolean arg0):" + arg0);
             if (arg0) {
                 statusEditText.setText("emv configed");
-                pos.setQuickEmv(true);
+//                pos.setQuickEmv(true);
             } else {
                 statusEditText.setText("emv don't configed");
             }
@@ -2953,45 +2993,45 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onReturnAnalyseDigEnvelop(String result) {
             super.onReturnAnalyseDigEnvelop(result);
-            verifySignatureCommand = ParseASN1Util.addTagToCommand(verifySignatureCommand, "KA", result);
-            if (pedvVerifySignatureCommand != null) {
-                pedvVerifySignatureCommand = ParseASN1Util.addTagToCommand(pedvVerifySignatureCommand, "KA", result);
-                TRACE.i("send key encryption command to RMKS is " + pedvVerifySignatureCommand);
-            }
-            TRACE.i("send key encryption command to RMKS is " + verifySignatureCommand);
-            String response = "[AOPEDK;ANY;KN0;KB30819D0201013181973081941370413031313242315458303045303130304B5331384646464630303030303030303031453030303030414332313038323435443442443733373445443932464142363838373438314544363034344137453635433239463132393739383931384441394434353631443235324143414641020102040AFFFF0000000001E00000020100130A4473707265616442444B04021D58;KA0D0B2F2F3178D4045C1363274890494664B23D32BABEA47E5DB42F15C06816107FD293BAFF7371119F0B11B685A29D40DE78D397F9629A56112629452A9525F5261F8BDCA168328C49ACCFF0133C90E91AFCCA1E18178EBBA5E0BFA054B09514BA87EE05F2E4837D2C74E00BFD3B14EB708598517F357F79AA34C89DFEA9F59B6D3CECABA6C211809400DE9D0B0CA09384FDD834B8BFD416C4B09D32B3F5E45001F18E5C3116A0FFD8E0C6ACE567FCCE1AC909FD038FB58F16BB32163866CD9DCB4B131A394757638111B2CF3DC968D58CBAA95279BEFF697C0D92C6A42248B53A3E56E595AD128EDB50710BDBFFCB113A7DC4ECBCE8668482CBFD22CD7B2E42;RDB077A03C07C94F161842AA0C4831E0EF;CE1;AP308205A906092A864886F70D010702A082059A30820596020149310D300B06096086480165030402013082032506092A864886F70D010703A082031604820312020100318201FB308201F70201003081A830819C310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A56697274754372797074311B3019060355040C0C12447370726561642044657669636573204341311B301906035504410C12447370726561642044657669636573204341311B301906035504030C1244737072656164204465766963657320434102074EB0D600009880304306092A864886F70D0101073036300B0609608648016503040201301806092A864886F70D010108300B0609608648016503040201300D06092A864886F70D01010904000482010092583A07F6280625EE4CA043E3245F2CD6CCA8BAE6E198F4046A5DDE055723D2591A84DDCA4D7F7BB1B179881FD9EC4E33ED22333A9008DAEB3C3B1D7143D1953F2363BEA4C0D2592667C3468F228F856A95A6DCA1FA9CA0AB05D25DC612E7E2BF2AE3012D22C78BB7224C8C8E02146929937C3DF9FA3589B2A486C132477ACFA50BE09528FCBFDA43079AF54C050843BE4BDE701D246D8D8A4C947F12AFD97A66010459BBAE4ED627F687CC3E6DC30B5B35FE3564D9FB07F501B57A73A70AB9C3398E14391B16A5FE45C374984219F0B3A3265A82D3F5A48CEEF3998DCEA59F1CC5821B51605C66C8FD2687778C84B51CCE51C1FBFA876F978E0A9546C425FF3082010C06092A864886F70D010701301406082A864886F70D03070408C8FA8F2094E103118081E85816DF38AEC7C0E569C011DB7212278A767C8934770C7E994E9508E256B693973FBB4B47A78A9F6B1AB2D326CC2A76A53E3731B8A8128B1DE4BEDCCA51E0E740C1A474C21C8CF4A4726F4FBE0DC5CE41C4DB7A2CDBB2EF7B2C0F61B50E34A1A327A5069EB23524DB0D8119C4C407B90277B806288ECAC2826AF8AF6D092B29E90C03554986F38345B6BB247BC1498C2185661BDE318ADECAF199E798D70A058305F686ECC3A267D28EED6052483401EB5B5B84F897CAEA7968B8EEAB23F465CE3F1E7F7F7E402D1AA681D76D34CF9EC0B6BBBE9A513B8C42E5EA5319E218AC996F87767966DBD8F8318202573082025302014930819C308190310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A5669727475437279707431173015060355040C0C0E44737072656164204B44482043413117301506035504410C0E44737072656164204B44482043413117301506035504030C0E44737072656164204B444820434102074EB0D60000987E300B0609608648016503040201A0818E301806092A864886F70D010903310B06092A864886F70D0107033020060A2A864886F70D01091903311204104CDCEDD916AAACEEAE548A1C5B0A0EAA301F06092A864886F70D0107013112041041303031364B30544E30304530303030302F06092A864886F70D01090431220420A0E06A133DA8D4A5EC5A2E51E468B470B19E13834019A0C2563BA39308660A1F300D06092A864886F70D0101010500048201003BA0F51DC5B3400E5CD29429663008713C3B61DE0C053590296421635218AEB228A1802C971B18CCF0A137D66FE07B08A0B2A592F11557CC401C353C859E1B82C4BAE146F8AC2955BD1326A3482B173E5589B321FBA0517DCA071F120D0940DC7B8CD33C861E1403CCBD7C3203F1609D261D38B415A0BF234CC9370D18B1004D89BE4C7C4631C7A5D3A1010F0371E25F70B8000D5B94C946571D0F6A730DEF57950AED18839B38B0FF6497D03E960194CF3F113C57575F62E8299FCDE855A1BD36ECE5CAF3DC9F942387A76A329715EC09FDBED3C4FACA06160D538EC00D0166D46152D61F6C665F749E91A0E70E532CE726525B946ACD81510FF47146F00994;]";
-            String KA = ParseASN1Util.parseToken(response, "KA");
-
-            KB = ParseASN1Util.parseToken(response, "KB");
-            String signatureData = "a57e821386de1038b1a12dc22fa59ce317625680c523bd66bf2b9f840aebe52d020e07105d4107eeb05edd560d0345cd73ce2b68dbf19c61f9d56fbd1ddf9222c47956595b773c88eb7ec4577fb17053d42acf64f3e5c38ff325cdac7b689df029299087b69211e61bdfc22e329eb287456f83ef6c25e84fe1324e36ee85ba7e3accb79eb8ab7b270916a28a42a867e0e050c6950100c90daddb1f421444d16accb6005a312c3273c2f1b28f0c77456ae875081ae594d26139efd267c8dafa15e1b6cf961f3acdb92b26777127f474d24d57611b29f01dec062c02d720c4e759e1757f85ee39e74e05e23aa0aed53d62d05a902a6539a3e986e6dd237888ff92";
-            boolean verifyResult = pos.authenticServerResponse(HexStringToByteArray(KA), signatureData);
-            verifyResult = true;
-            if (verifyResult) {
-                if (response.contains("AP")) {
-                    String AP = ParseASN1Util.parseToken(response, "AP");
-                    ParseASN1Util.parseASN1new(AP.replace("A081", "3081"));
-                    String nonce = ParseASN1Util.getNonce();
-                    String header = ParseASN1Util.getHeader();
-                    String digist = ParseASN1Util.getDigest();
-                    String encryptData = ParseASN1Util.getEncryptData();
-                    ParseASN1Util.parseASN1new(encryptData.substring(6));
-                    String signData = ParseASN1Util.getSignData();
-                    String encryptDataWith3des = ParseASN1Util.getEncryptDataWith3Des();
-                    String IV = ParseASN1Util.getIVStr();
-                    String clearData = "A0818e301806092a864886f70d010903310b06092a864886f70d0107033020060a2a864886f70d01091903311204104cdcedd916aaaceeae548a1c5b0a0eaa301f06092a864886f70d0107013112041041303031364b30544e30304530303030302f06092a864886f70d01090431220420a0e06a133da8d4a5ec5a2e51e468b470b19e13834019a0c2563ba39308660a1f";
-                    String envelop = getDigitalEnvelopStr(encryptData, encryptDataWith3des, "01", clearData, signData, IV);
-                    //the api callback is onRequestUpdateWorkKeyResult
-                    pos.loadSessionKeyByTR_34(envelop);
-                } else {
-                    statusEditText.setText("signature verification successful.");
-                    ParseASN1Util.parseASN1new(KB);
-                    String data = ParseASN1Util.getTr31Data();
-                    //the api callback is onReturnupdateKeyByTR_31Result
-                    pos.updateKeyByTR_31(1, data);
-                }
-            } else {
-                statusEditText.setText("signature verification failed.");
-            }
+//            verifySignatureCommand = ParseASN1Util.addTagToCommand(verifySignatureCommand, "KA", result);
+//            if (pedvVerifySignatureCommand != null) {
+//                pedvVerifySignatureCommand = ParseASN1Util.addTagToCommand(pedvVerifySignatureCommand, "KA", result);
+//                TRACE.i("send key encryption command to RMKS is " + pedvVerifySignatureCommand);
+//            }
+//            TRACE.i("send key encryption command to RMKS is " + verifySignatureCommand);
+//            String response = "[AOPEDK;ANY;KN0;KB30819D0201013181973081941370413031313242315458303045303130304B5331384646464630303030303030303031453030303030414332313038323435443442443733373445443932464142363838373438314544363034344137453635433239463132393739383931384441394434353631443235324143414641020102040AFFFF0000000001E00000020100130A4473707265616442444B04021D58;KA0D0B2F2F3178D4045C1363274890494664B23D32BABEA47E5DB42F15C06816107FD293BAFF7371119F0B11B685A29D40DE78D397F9629A56112629452A9525F5261F8BDCA168328C49ACCFF0133C90E91AFCCA1E18178EBBA5E0BFA054B09514BA87EE05F2E4837D2C74E00BFD3B14EB708598517F357F79AA34C89DFEA9F59B6D3CECABA6C211809400DE9D0B0CA09384FDD834B8BFD416C4B09D32B3F5E45001F18E5C3116A0FFD8E0C6ACE567FCCE1AC909FD038FB58F16BB32163866CD9DCB4B131A394757638111B2CF3DC968D58CBAA95279BEFF697C0D92C6A42248B53A3E56E595AD128EDB50710BDBFFCB113A7DC4ECBCE8668482CBFD22CD7B2E42;RDB077A03C07C94F161842AA0C4831E0EF;CE1;AP308205A906092A864886F70D010702A082059A30820596020149310D300B06096086480165030402013082032506092A864886F70D010703A082031604820312020100318201FB308201F70201003081A830819C310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A56697274754372797074311B3019060355040C0C12447370726561642044657669636573204341311B301906035504410C12447370726561642044657669636573204341311B301906035504030C1244737072656164204465766963657320434102074EB0D600009880304306092A864886F70D0101073036300B0609608648016503040201301806092A864886F70D010108300B0609608648016503040201300D06092A864886F70D01010904000482010092583A07F6280625EE4CA043E3245F2CD6CCA8BAE6E198F4046A5DDE055723D2591A84DDCA4D7F7BB1B179881FD9EC4E33ED22333A9008DAEB3C3B1D7143D1953F2363BEA4C0D2592667C3468F228F856A95A6DCA1FA9CA0AB05D25DC612E7E2BF2AE3012D22C78BB7224C8C8E02146929937C3DF9FA3589B2A486C132477ACFA50BE09528FCBFDA43079AF54C050843BE4BDE701D246D8D8A4C947F12AFD97A66010459BBAE4ED627F687CC3E6DC30B5B35FE3564D9FB07F501B57A73A70AB9C3398E14391B16A5FE45C374984219F0B3A3265A82D3F5A48CEEF3998DCEA59F1CC5821B51605C66C8FD2687778C84B51CCE51C1FBFA876F978E0A9546C425FF3082010C06092A864886F70D010701301406082A864886F70D03070408C8FA8F2094E103118081E85816DF38AEC7C0E569C011DB7212278A767C8934770C7E994E9508E256B693973FBB4B47A78A9F6B1AB2D326CC2A76A53E3731B8A8128B1DE4BEDCCA51E0E740C1A474C21C8CF4A4726F4FBE0DC5CE41C4DB7A2CDBB2EF7B2C0F61B50E34A1A327A5069EB23524DB0D8119C4C407B90277B806288ECAC2826AF8AF6D092B29E90C03554986F38345B6BB247BC1498C2185661BDE318ADECAF199E798D70A058305F686ECC3A267D28EED6052483401EB5B5B84F897CAEA7968B8EEAB23F465CE3F1E7F7F7E402D1AA681D76D34CF9EC0B6BBBE9A513B8C42E5EA5319E218AC996F87767966DBD8F8318202573082025302014930819C308190310B3009060355040613025553310B300906035504080C0254583114301206035504070C0B53414E20414E544F4E494F31133011060355040A0C0A5669727475437279707431173015060355040C0C0E44737072656164204B44482043413117301506035504410C0E44737072656164204B44482043413117301506035504030C0E44737072656164204B444820434102074EB0D60000987E300B0609608648016503040201A0818E301806092A864886F70D010903310B06092A864886F70D0107033020060A2A864886F70D01091903311204104CDCEDD916AAACEEAE548A1C5B0A0EAA301F06092A864886F70D0107013112041041303031364B30544E30304530303030302F06092A864886F70D01090431220420A0E06A133DA8D4A5EC5A2E51E468B470B19E13834019A0C2563BA39308660A1F300D06092A864886F70D0101010500048201003BA0F51DC5B3400E5CD29429663008713C3B61DE0C053590296421635218AEB228A1802C971B18CCF0A137D66FE07B08A0B2A592F11557CC401C353C859E1B82C4BAE146F8AC2955BD1326A3482B173E5589B321FBA0517DCA071F120D0940DC7B8CD33C861E1403CCBD7C3203F1609D261D38B415A0BF234CC9370D18B1004D89BE4C7C4631C7A5D3A1010F0371E25F70B8000D5B94C946571D0F6A730DEF57950AED18839B38B0FF6497D03E960194CF3F113C57575F62E8299FCDE855A1BD36ECE5CAF3DC9F942387A76A329715EC09FDBED3C4FACA06160D538EC00D0166D46152D61F6C665F749E91A0E70E532CE726525B946ACD81510FF47146F00994;]";
+//            String KA = ParseASN1Util.parseToken(response, "KA");
+//
+//            KB = ParseASN1Util.parseToken(response, "KB");
+//            String signatureData = "a57e821386de1038b1a12dc22fa59ce317625680c523bd66bf2b9f840aebe52d020e07105d4107eeb05edd560d0345cd73ce2b68dbf19c61f9d56fbd1ddf9222c47956595b773c88eb7ec4577fb17053d42acf64f3e5c38ff325cdac7b689df029299087b69211e61bdfc22e329eb287456f83ef6c25e84fe1324e36ee85ba7e3accb79eb8ab7b270916a28a42a867e0e050c6950100c90daddb1f421444d16accb6005a312c3273c2f1b28f0c77456ae875081ae594d26139efd267c8dafa15e1b6cf961f3acdb92b26777127f474d24d57611b29f01dec062c02d720c4e759e1757f85ee39e74e05e23aa0aed53d62d05a902a6539a3e986e6dd237888ff92";
+//            boolean verifyResult = pos.authenticServerResponse(HexStringToByteArray(KA), signatureData);
+//            verifyResult = true;
+//            if (verifyResult) {
+//                if (response.contains("AP")) {
+//                    String AP = ParseASN1Util.parseToken(response, "AP");
+//                    ParseASN1Util.parseASN1new(AP.replace("A081", "3081"));
+//                    String nonce = ParseASN1Util.getNonce();
+//                    String header = ParseASN1Util.getHeader();
+//                    String digist = ParseASN1Util.getDigest();
+//                    String encryptData = ParseASN1Util.getEncryptData();
+//                    ParseASN1Util.parseASN1new(encryptData.substring(6));
+//                    String signData = ParseASN1Util.getSignData();
+//                    String encryptDataWith3des = ParseASN1Util.getEncryptDataWith3Des();
+//                    String IV = ParseASN1Util.getIVStr();
+//                    String clearData = "A0818e301806092a864886f70d010903310b06092a864886f70d0107033020060a2a864886f70d01091903311204104cdcedd916aaaceeae548a1c5b0a0eaa301f06092a864886f70d0107013112041041303031364b30544e30304530303030302f06092a864886f70d01090431220420a0e06a133da8d4a5ec5a2e51e468b470b19e13834019a0c2563ba39308660a1f";
+//                    String envelop = getDigitalEnvelopStr(encryptData, encryptDataWith3des, "01", clearData, signData, IV);
+//                    //the api callback is onRequestUpdateWorkKeyResult
+////                    pos.loadSessionKeyByTR_34(envelop);
+//                } else {
+//                    statusEditText.setText("signature verification successful.");
+//                    ParseASN1Util.parseASN1new(KB);
+//                    String data = ParseASN1Util.getTr31Data();
+//                    //the api callback is onReturnupdateKeyByTR_31Result
+//                    pos.updateKeyByTR_31(1, data);
+//                }
+//            } else {
+//                statusEditText.setText("signature verification failed.");
+//            }
         }
 
         private String buildCvmPinBlock(Hashtable<String, String> value, String pin) {

@@ -167,4 +167,7 @@
     <color name="blue_03A9F4">#03A9F4</color>
     <color name="navigationBarColor">#f46444</color>
     <color name="darkRed">#DD2C00</color>
+
+    <color name="key_ok_color">#1280FA</color>
+    <color name="key_ok_color_pressed">#0174f2</color>
 </resources>
