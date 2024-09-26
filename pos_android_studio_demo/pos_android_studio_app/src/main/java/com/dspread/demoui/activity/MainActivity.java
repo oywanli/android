@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (homeFragment != null) {
-            homeFragment.onKeyDown(keyCode, event);  // 让 Fragment 处理按键事件
+            return homeFragment.onKeyDown(keyCode, event);  // 让 Fragment 处理按键事件
         }
         TRACE.i("main keyode = "+keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {

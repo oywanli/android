@@ -108,17 +108,17 @@ public class HomeFragment extends Fragment {
         getActivity().finish();
     }
 
-    public void onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         TRACE.i("home on keydown = "+keyCode);
+
         if(keyCode == KeyEvent.KEYCODE_ENTER){
             BaseApplication.getApplicationInstance=getActivity();
             Double dAmount = Double.parseDouble(edt_amount.getText().toString().substring(1));
+            TRACE.i("dAmount = "+dAmount);
             if(dAmount > 0){
                 inputMoney = (long) (dAmount*100);
-            }
-            if (inputMoney> 0) {
                 if (!canshow) {
-                    return;
+                    return false;
                 }
                 canshow = false;
                 showTimer.start();
@@ -129,8 +129,7 @@ public class HomeFragment extends Fragment {
             }
         }
         keyboardUtil.getmOnKeyboardActionListener().onKey(keyCode, null);
-
-
+        return true;
     }
 }
 

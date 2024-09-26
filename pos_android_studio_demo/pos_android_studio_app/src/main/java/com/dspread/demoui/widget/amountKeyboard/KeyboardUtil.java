@@ -71,6 +71,7 @@ public class KeyboardUtil {
         } else {
             mKeyboardView.setKeyboard(mKeyboardNumber);
         }
+        mKeyboardView.requestFocus();
         mKeyboardView.setEnabled(true);
         mKeyboardView.setPreviewEnabled(false);
         mKeyboardView.setVisibility(View.VISIBLE);
