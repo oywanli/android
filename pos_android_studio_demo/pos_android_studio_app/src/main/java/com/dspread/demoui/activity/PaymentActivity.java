@@ -1953,7 +1953,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     operateMifareCards();
                 } else {
                     if(pos!=null){
-                        if(!"D300".equals(Build.MODEL)||"D70".equals(Build.MODEL)){
+                        if(!"D300".equals(Build.MODEL)&&!"D70".equals(Build.MODEL)){
                             pos.getQposId();
                         }else {
                             tvTitle.setText(getString(R.string.waiting_for_card));

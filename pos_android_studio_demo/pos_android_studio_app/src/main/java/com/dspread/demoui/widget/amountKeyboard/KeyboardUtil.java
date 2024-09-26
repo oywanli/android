@@ -109,6 +109,9 @@ public class KeyboardUtil {
                 }
             }  else if (primaryCode == 66) {// confirm
                 number.delete(0, number.length());
+                if (mOnOkClick != null) {
+                    mOnOkClick.onOkClick();
+                }
                 return;
             } else {
                 for (Keyboard.Key key : mKeyboardNumber.getKeys()) {

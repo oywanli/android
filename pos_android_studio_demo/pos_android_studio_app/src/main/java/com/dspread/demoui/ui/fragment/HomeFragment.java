@@ -26,6 +26,7 @@ import com.dspread.demoui.utils.SharedPreferencesUtil;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.demoui.widget.amountKeyboard.KeyboardUtil;
+import com.dspread.demoui.widget.amountKeyboard.KeyboardUtil.OnOkClick;
 
 import cn.hutool.core.collection.EnumerationIter;
 
@@ -58,6 +59,26 @@ public class HomeFragment extends Fragment {
             keyboardUtil = new KeyboardUtil(getActivity(),view,false);
             keyboardUtil.attachTo(edt_amount);
         }
+        keyboardUtil.setOnOkClick(new OnOkClick() {
+            @Override
+            public void onOkClick() {
+                BaseApplication.getApplicationInstance=getActivity();
+                Double dAmount = Double.parseDouble(edt_amount.getText().toString().substring(1));
+                TRACE.i("dAmount = "+dAmount);
+                if(dAmount > 0){
+                    inputMoney = (long) (dAmount*100);
+                    if (!canshow) {
+                        return;
+                    }
+                    canshow = false;
+                    showTimer.start();
+                    Mydialog.payTypeDialog(getActivity(), "", inputMoney, data);
+
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.set_amount), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         connectType = SharedPreferencesUtil.getmInstance(getActivity());
         conType = (String) connectType.get("conType", "");
     }
@@ -110,24 +131,6 @@ public class HomeFragment extends Fragment {
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         TRACE.i("home on keydown = "+keyCode);
-
-        if(keyCode == KeyEvent.KEYCODE_ENTER){
-            BaseApplication.getApplicationInstance=getActivity();
-            Double dAmount = Double.parseDouble(edt_amount.getText().toString().substring(1));
-            TRACE.i("dAmount = "+dAmount);
-            if(dAmount > 0){
-                inputMoney = (long) (dAmount*100);
-                if (!canshow) {
-                    return false;
-                }
-                canshow = false;
-                showTimer.start();
-                Mydialog.payTypeDialog(getActivity(), "", inputMoney, data);
-
-            } else {
-                Toast.makeText(getActivity(), getString(R.string.set_amount), Toast.LENGTH_SHORT).show();
-            }
-        }
         keyboardUtil.getmOnKeyboardActionListener().onKey(keyCode, null);
         return true;
     }

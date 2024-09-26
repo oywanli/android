@@ -46,7 +46,7 @@ public class MyKeyBoardView extends KeyboardView {
         if (keys != null) {
             for (Key key : keys) {
                 // 数字键盘的处理
-                if (key.codes[0] == -4) {
+                if (key.codes[0] == 66) {
                     drawKeyBackground(R.drawable.bg_keyboardview_yes, canvas, key);
                     drawText(canvas, key);
                 }
