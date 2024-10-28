@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
-        } else if ("Dspread".equals(deviceManufacturer) || "D20".equals(deviceModel) || "D30".equals(deviceModel) || "mp600".equals(deviceModel) || "D60".equals(deviceModel)) {
+        } else if ("Dspread".equals(deviceManufacturer) || "D20".equals(deviceModel) || "D30".equals(deviceModel) || "mp600".equals(deviceModel) || "D60".equals(deviceModel)|| "D70".equals(deviceModel)) {
             connectType.put("conType", "uart");
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
@@ -409,10 +409,6 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (homeFragment != null) {
-            return homeFragment.onKeyDown(keyCode, event);  // 让 Fragment 处理按键事件
-        }
-        TRACE.i("main keyode = "+keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             toolbar.setTitle(getString(R.string.menu_payment));
             switchFragment(0);
@@ -420,6 +416,11 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             exit();
             return true;
         }
+        else if (homeFragment != null) {
+            return homeFragment.onKeyDown(keyCode, event);  // 让 Fragment 处理按键事件
+        }
+        TRACE.i("main keyode = "+keyCode);
+
         return super.onKeyDown(keyCode, event);
     }
 

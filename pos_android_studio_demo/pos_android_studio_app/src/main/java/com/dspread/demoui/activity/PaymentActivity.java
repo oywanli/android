@@ -269,7 +269,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         } else if ("updateEmvByXml".equals(updatePosInfo)) {
             tvTitle.setText(getString(R.string.updateEMVByXml));
             Mydialog.loading(PaymentActivity.this, getString(R.string.updateEMVByXml));
-            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv_cit.xml", PaymentActivity.this)));
+            pos.updateEMVConfigByXml(new String(FileUtils.readAssetsLine("emv_profile_tlv.xml", PaymentActivity.this)));
         }
     }
 

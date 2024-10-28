@@ -107,7 +107,7 @@ public class KeyboardUtil {
                 if(number.length() >=1) {
                     number.deleteCharAt(number.length() - 1);
                 }
-            }  else if (primaryCode == 66) {// confirm
+            } else if (primaryCode == 66) {// confirm
                 number.delete(0, number.length());
                 if (mOnOkClick != null) {
                     mOnOkClick.onOkClick();
