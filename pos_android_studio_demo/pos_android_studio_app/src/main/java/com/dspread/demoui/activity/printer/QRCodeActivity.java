@@ -73,13 +73,6 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void connected() {
                     mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
-                /*When no paper, the
-                printer terminates printing and cancels the printing task.*/
-//              PrinterDevice.PrintTerminationState.PRINT_STOP
-               /* When no paper, the
-                printer will prompt that no paper. After loading the paper, the printer
-                will continue to restart printing.*/
-//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
                 }
 
                 @Override
@@ -115,15 +108,8 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         qrcodeDensitylevel = findViewById(R.id.qrcode_densitylevel);
         qrcodeErrorLevel = findViewById(R.id.qrcode_errorLevel);
         qrcodeTextErrorLevel = findViewById(R.id.qrcode_text_errorLevel);
-        String deviceModel = Build.MODEL;
-        if ("mp600".equals(deviceModel)) {
-            qrcodeDensitylevel.setVisibility(View.VISIBLE);
-            qrcodeSpeedlevel.setVisibility(View.VISIBLE);
-        } else {
-            qrcodeSpeedlevel.setVisibility(View.GONE);
-            qrcodeDensitylevel.setVisibility(View.GONE);
-        }
-
+        qrcodeSpeedlevel.setVisibility(View.GONE);
+        qrcodeDensitylevel.setVisibility(View.GONE);
         ivBackTitle.setOnClickListener(this);
         qrcodeContent.setOnClickListener(this);
         qrcodeSize.setOnClickListener(this);
@@ -206,11 +192,11 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                     public void onConfirm(String content) {
                         alignText = content;
                         qrTextAlign.setText(content);
-                        if ("LEFT".equals(content) || "居左".equals(content)) {
+                        if ("LEFT".equals(content)) {
                             alignText = "LEFT";
-                        } else if ("RIGHT".equals(content) || "居右".equals(content)) {
+                        } else if ("RIGHT".equals(content)) {
                             alignText = "RIGHT";
-                        } else if ("CENTER".equals(content) || "居中".equals(content)) {
+                        } else if ("CENTER".equals(content)) {
                             alignText = "CENTER";
                         }
                     }
@@ -301,16 +287,12 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                     }
                     Bitmap bitmap = QRCodeUtil.getQrcodeBM(qrContent, qrSize);
                     qrcodeImage.setImageBitmap(bitmap);
-                    if ("mp600".equals(Build.MODEL)) {
-                        mPrinter.setPrinterSpeed(speedLevel);
-                        mPrinter.setPrinterDensity(densityLevel);
-                    }
-//                    mPrinter.setPrinterGrey(grayLevel);
                     mPrinter.setPrintStyle(printLineStyle);
                     Log.w("qrErrorLevel", "qrErrorLevel==" + qrErrorLevel);
                     if ("".equals(qrErrorLevel)) {
                         qrErrorLevel = qrcodeTextErrorLevel.getText().toString();
                     }
+                    mPrinter.setFooter(30);
                     mPrinter.printQRCode(this, qrErrorLevel, qrSize, qrContent, printLineAlign);
                     btnQrcodePrint.setEnabled(false);
                 } catch (Exception e) {

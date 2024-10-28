@@ -1,5 +1,6 @@
 package com.dspread.demoui.activity.printer;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,32 +39,32 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
     private TextView tvGetSpeed;
     private TextView tvGetTemperature;
     private TextView tvGetVoltage;
-    private final  int PRINTER_DENSITY=3;
-    private final  int PRINTER_SPEED=5;
-    private final  int PRINTER_TEMPERATURE=6;
-    private final  int PRINTER_VOLTAGE=7;
-    private final  int PRINTER_STATUS=8;
+    private final int PRINTER_DENSITY = 3;
+    private final int PRINTER_SPEED = 5;
+    private final int PRINTER_TEMPERATURE = 6;
+    private final int PRINTER_VOLTAGE = 7;
+    private final int PRINTER_STATUS = 8;
 
-    private  final Handler handler = new Handler(Looper.myLooper()){
+    private final Handler handler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case PRINTER_DENSITY:
-                    tvGetDesity.setText(getString(R.string.get_printer_density)+": "+msg.obj);
-                  break;
+                    tvGetDesity.setText(getString(R.string.get_printer_density) + ": " + msg.obj);
+                    break;
                 case PRINTER_SPEED:
-                    tvGetSpeed.setText(getString(R.string.get_printer_speed)+": "+msg.obj);
-                  break;
+                    tvGetSpeed.setText(getString(R.string.get_printer_speed) + ": " + msg.obj);
+                    break;
                 case PRINTER_TEMPERATURE:
-                    tvGetTemperature.setText(getString(R.string.get_printer_temperature)+": "+msg.obj);
-                  break;
+                    tvGetTemperature.setText(getString(R.string.get_printer_temperature) + ": " + msg.obj);
+                    break;
                 case PRINTER_VOLTAGE:
-                    tvGetVoltage.setText(getString(R.string.get_printer_voltage)+": "+msg.obj);
-                  break;
+                    tvGetVoltage.setText(getString(R.string.get_printer_voltage) + ": " + msg.obj);
+                    break;
                 case PRINTER_STATUS:
-                    tvPrintStatusInfo.setText(getString(R.string.get_printer_status)+": "+msg.obj);
-                  break;
+                    tvPrintStatusInfo.setText(getString(R.string.get_printer_status) + ": " + msg.obj);
+                    break;
 
             }
         }
@@ -109,6 +110,12 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
         tvGetTemperature.setText("");
         tvGetVoltage.setText("");
         tvPrintStatusInfo.setText("");
+        if (Build.MODEL.equalsIgnoreCase("D70") || Build.MODEL.equalsIgnoreCase("D30") ) {
+            btnGetDensity.setVisibility(View.GONE);
+            btnGetSpeed.setVisibility(View.GONE);
+            btnGetTemperature.setVisibility(View.GONE);
+            btnGetVoltage.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -136,7 +143,7 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
                 try {
                     mPrinter.getPrinterSpeed();
                 } catch (RemoteException e) {
-                   e.printStackTrace();
+                    e.printStackTrace();
                 }
                 break;
             case R.id.btn_get_temperature:
@@ -166,9 +173,9 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
             Log.w("printResult", "resultType==" + resultType.toString());
 
             Message msg = new Message();
-                msg.what = resultType.getValue();
-                msg.obj = s;
-                handler.sendMessage(msg);
+            msg.what = resultType.getValue();
+            msg.obj = s;
+            handler.sendMessage(msg);
         }
     }
 

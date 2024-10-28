@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:divider="@drawable/account_line"
-    android:dividerPadding="1dp"
+    android:dividerPadding="@dimen/dp_1"
     android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+    android:paddingLeft="@dimen/dp_16"
+    android:paddingRight="@dimen/dp_16"
     android:background="@color/white"
     android:showDividers="middle|end|beginning">
 
@@ -25,9 +25,9 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/print_button_background"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:text="@string/get_printer_status"
-            android:textSize="18sp"
+            android:textSize="@dimen/sp_18"
             tools:ignore="VisualLintButtonSize" />
 
         <Button
@@ -37,9 +37,9 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/print_button_background"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:text="@string/get_printer_density"
-            android:textSize="18sp"
+            android:textSize="@dimen/sp_18"
             tools:ignore="VisualLintButtonSize" />
 
 
@@ -50,9 +50,9 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/print_button_background"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:text="@string/get_printer_speed"
-            android:textSize="18sp"
+            android:textSize="@dimen/sp_18"
             tools:ignore="VisualLintButtonSize" />
 
         <Button
@@ -62,9 +62,9 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/print_button_background"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:text="@string/get_printer_temperature"
-            android:textSize="18sp"
+            android:textSize="@dimen/sp_18"
             tools:ignore="VisualLintButtonSize" />
 
 
@@ -75,9 +75,9 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/print_button_background"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:text="@string/get_printer_voltage"
-            android:textSize="18sp"
+            android:textSize="@dimen/sp_18"
             tools:ignore="VisualLintButtonSize" />
 
         <ScrollView

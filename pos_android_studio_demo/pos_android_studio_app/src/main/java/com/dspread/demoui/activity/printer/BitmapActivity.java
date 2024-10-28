@@ -85,7 +85,7 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_bitmap_print:
                 try {
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-                    mPrinter.setFooter(100);
+                    mPrinter.setFooter(30);
                     mPrinter.printBitmap(this,bitmap);
                     btnBitmapPrint.setEnabled(true);
 

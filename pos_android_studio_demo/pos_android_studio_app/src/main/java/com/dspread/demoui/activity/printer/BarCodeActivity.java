@@ -344,6 +344,7 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                         brSymbology = brcodeTextSymbology.getText().toString();
                     }
                     Log.w("brSymbology", "brSymbology==" + brSymbology);
+                    mPrinter.setFooter(30);
                     mPrinter.printBarCode(this, brSymbology, width, height, brContent, printLineAlign);
                     btnBrcodePrint.setEnabled(false);
                 } catch (Exception e) {

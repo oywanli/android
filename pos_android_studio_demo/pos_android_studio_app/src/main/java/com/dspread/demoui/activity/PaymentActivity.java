@@ -2,7 +2,6 @@ package com.dspread.demoui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -52,7 +51,6 @@ import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.utils.SystemKeyListener;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.USBClass;
-import com.dspread.demoui.utils.Utils;
 import com.dspread.demoui.widget.BluetoothAdapter;
 import com.dspread.demoui.widget.pinpad.PinPadDialog;
 import com.dspread.demoui.widget.pinpad.PinPadView;
@@ -63,16 +61,12 @@ import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
 import com.dspread.xpos.Util;
 import com.dspread.xpos.utils.AESUtil;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.AbsCallback;
-import com.lzy.okgo.model.Response;
-import com.lzy.okgo.request.base.Request;
 
-import java.io.IOException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
@@ -87,15 +81,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.dspread.demoui.activity.BaseApplication.getApplicationInstance;
 import static com.dspread.demoui.activity.BaseApplication.pos;
 import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
 import static com.dspread.demoui.ui.dialog.Mydialog.UART;
 import static com.dspread.demoui.ui.dialog.Mydialog.USB_OTG_CDC_ACM;
 import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
 import static com.dspread.demoui.utils.Utils.getKeyIndex;
-
-import org.json.JSONObject;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
     private String blueTootchAddress = "";
@@ -172,6 +163,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private SystemKeyListener systemKeyListener;
     private boolean isNormal = false;
     private boolean isICC;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -736,11 +728,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.iv_back_title:
                 dismissDialog();
-                if(keyboardUtil!=null){
+                if (keyboardUtil != null) {
                     keyboardUtil.hide();
                 }
 
-                if(!isNormal) {
+                if (!isNormal) {
                     if (pos != null) {
                         pos.cancelTrade();
                     }
@@ -752,7 +744,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     pos.scanQPos2Mode(PaymentActivity.this, 20);
 
                     pos.clearBluetoothBuffer();
-                        refreshAdapter();
+                    refreshAdapter();
                     if (m_Adapter != null) {
                         m_Adapter.notifyDataSetChanged();
                     }
@@ -767,7 +759,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 if (pos != null) {
                     pos.scanQPos2Mode(PaymentActivity.this, 20);
                     pos.clearBluetoothBuffer();
-                        refreshAdapter();
+                    refreshAdapter();
                     if (m_Adapter != null) {
                         m_Adapter.notifyDataSetChanged();
                     }
@@ -956,7 +948,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     } else {
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + nfcLog;
                     }
-                    sendRequestToBackend(nfcData+content);
+                    sendRequestToBackend(nfcData + content);
 
                     break;
                 default:
@@ -988,13 +980,13 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private Handler dingdingHandler = new Handler(){
+    private Handler dingdingHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 101:
-                    if(isICC){
+                    if (isICC) {
                         dismissDialog();
                         TRACE.i("onError==");
 
@@ -1011,12 +1003,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                                 pos.sendOnlineProcessResult(offlineDeclinedCode);
                             }
                         });
-                    }else {
+                    } else {
                         Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), null);
                     }
                     break;
                 case 100:
-                    if(isICC){
+                    if (isICC) {
                         dismissDialog();
                         String onlineApproveCode = "8A023030";//Currently the default value,
                         // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
@@ -1024,7 +1016,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         // should be assigned to the server to return data,
                         // the data format is TLV
                         pos.sendOnlineProcessResult(onlineApproveCode);//Script notification/55domain/ICCDATA
-                    }else {
+                    } else {
                         isNormal = true;
                         pinpadEditText.setVisibility(View.GONE);
                         tvTitle.setText(getText(R.string.transaction_result));
@@ -1039,36 +1031,36 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
     };
 
-    private void putInfoToDingding(String tlv, String info){
+    private void putInfoToDingding(String tlv, String info) {
         new Thread(() -> {
             try {
                 boolean isAtAll = false;
-                String content = "issues: "+info;
+                String content = "issues: " + info;
                 String reqStr = DingTalkTest.buildReqStr(content, isAtAll);
-                String result =DingTalkTest.postJson(Constants.dingdingUrl, reqStr);
+                String result = DingTalkTest.postJson(Constants.dingdingUrl, reqStr);
                 Message msg = new Message();
-                if(result != null){
+                if (result != null) {
                     System.out.println("result == " + result);
                     JSONObject object = new JSONObject(result);
                     String errmsg = object.getString("errmsg");
                     int errcode = object.getInt("errcode");
-                    if (errcode == 0){
+                    if (errcode == 0) {
                         msg.what = 100;
                         msg.obj = tlv;
                         dingdingHandler.sendMessage(msg);
-                    }else {
+                    } else {
                         msg.what = 101;
                         dingdingHandler.sendMessage(msg);
-                        Log.e("Exception","Network fail");
+                        Log.e("Exception", "Network fail");
                     }
-                }else {
+                } else {
                     msg.what = 101;
                     dingdingHandler.sendMessage(msg);
-                    Log.e("Exception","Network fail");
+                    Log.e("Exception", "Network fail");
                 }
 
-            }catch (Exception e){
-                Log.e("Exception","e:"+e.toString());
+            } catch (Exception e) {
+                Log.e("Exception", "e:" + e.toString());
                 e.printStackTrace();
 
             }
@@ -1077,8 +1069,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void sendRequestToBackend(String tlvData) {
         String requestTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-        String data = "{\"createdAt\": "+requestTime + ", \"deviceInfo\": "+DeviceUtils.getPhoneDetail()+", \"countryCode\": "+DeviceUtils.getDevieCountry(PaymentActivity.this)
-                +", \"tlv\": "+tlvData+"}";
+        String data = "{\"createdAt\": " + requestTime + ", \"deviceInfo\": " + DeviceUtils.getPhoneDetail() + ", \"countryCode\": " + DeviceUtils.getDevieCountry(PaymentActivity.this)
+                + ", \"tlv\": " + tlvData + "}";
         pinpadEditText.setVisibility(View.GONE);
         tvTitle.setText(getText(R.string.transaction_result));
         Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
@@ -1264,9 +1256,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 //                mllinfo.setVisibility(View.VISIBLE);
 //                mtvinfo.setText(content);
 //                mllchrccard.setVisibility(View.GONE);
-                if(decodeData.get("maskedPAN")!=null&&!"".equals(decodeData.get("maskedPAN"))){
+                if (decodeData.get("maskedPAN") != null && !"".equals(decodeData.get("maskedPAN"))) {
                     sendRequestToBackend(content);
-                }else{
+                } else {
                     Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.trade_returnfailed), new Mydialog.OnMyClickListener() {
                         @Override
                         public void onCancel() {
@@ -1275,10 +1267,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                         @Override
                         public void onConfirm() {
-                            if(pos!=null){
+                            if (pos != null) {
                                 pos.cancelTrade();
                             }
-                              finish();
+                            finish();
                         }
                     });
                 }
@@ -1479,7 +1471,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 msg = "TOKEN INVALID";
             } else if (transactionResult == QPOSService.TransactionResult.APP_BLOCKED) {
                 msg = "APP BLOCKED";
-            }else {
+            } else {
                 msg = transactionResult.name();
             }
             if (!"".equals(msg)) {
@@ -1624,19 +1616,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onQposRequestPinResult(List<String> dataList, int offlineTime) {
             super.onQposRequestPinResult(dataList, offlineTime);
-            if(pos!=null){
-            boolean onlinePin = pos.isOnlinePin();
-            if (onlinePin) {
-                tvTitle.setText(getString(R.string.input_onlinePin));
-            } else {
-                int cvmPinTryLimit = pos.getCvmPinTryLimit();
-                TRACE.d("PinTryLimit:" + cvmPinTryLimit);
-                if (cvmPinTryLimit == 1) {
-                    tvTitle.setText(getString(R.string.input_offlinePin_last));
+            if (pos != null) {
+                boolean onlinePin = pos.isOnlinePin();
+                if (onlinePin) {
+                    tvTitle.setText(getString(R.string.input_onlinePin));
                 } else {
-                    tvTitle.setText(getString(R.string.input_offlinePin));
+                    int cvmPinTryLimit = pos.getCvmPinTryLimit();
+                    TRACE.d("PinTryLimit:" + cvmPinTryLimit);
+                    if (cvmPinTryLimit == 1) {
+                        tvTitle.setText(getString(R.string.input_offlinePin_last));
+                    } else {
+                        tvTitle.setText(getString(R.string.input_offlinePin));
+                    }
                 }
-            }
             }
             dismissDialog();
             mllchrccard.setVisibility(View.GONE);
@@ -1645,16 +1637,16 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void getNumberValue(String value) {
 //                    statusEditText.setText("Pls click "+dataList.get(0));
-                    if(pos!=null) {
+                    if (pos != null) {
                         pos.pinMapSync(value, 20);
                     }
                 }
             });
             pinpadEditText.setVisibility(View.VISIBLE);
-              if(pos!=null) {
-                  keyboardUtil = new KeyboardUtil(PaymentActivity.this, scvText, dataList);
-                  keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, pinpadEditText);//Random keyboard
-              }
+            if (pos != null) {
+                keyboardUtil = new KeyboardUtil(PaymentActivity.this, scvText, dataList);
+                keyboardUtil.initKeyboard(MyKeyboardView.KEYBOARDTYPE_Only_Num_Pwd, pinpadEditText);//Random keyboard
+            }
         }
 
         @Override
@@ -1751,8 +1743,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 mllchrccard.setVisibility(View.GONE);
             }
             String requestTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-            String data = "{\"createdAt\": "+requestTime + ", \"deviceInfo\": "+DeviceUtils.getPhoneDetail()+", \"countryCode\": "+DeviceUtils.getDevieCountry(PaymentActivity.this)
-                    +", \"tlv\": "+tlv+"}";
+            String data = "{\"createdAt\": " + requestTime + ", \"deviceInfo\": " + DeviceUtils.getPhoneDetail() + ", \"countryCode\": " + DeviceUtils.getDevieCountry(PaymentActivity.this)
+                    + ", \"tlv\": " + tlv + "}";
             Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
             putInfoToDingding(tlv, data);
 //            OkGo.<String>post(Constants.backendUploadUrl).tag(this)
@@ -1931,8 +1923,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (MifareCards != null) {
                     operateMifareCards();
                 } else {
-                    if(pos!=null){
-                    pos.getQposId();
+                    if (pos != null) {
+                        pos.getQposId();
                     }
                 }
 
@@ -1944,7 +1936,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (MifareCards != null) {
                     operateMifareCards();
                 } else {
-                    if(pos!=null) {
+                    if (pos != null) {
                         pos.getQposId();
                     }
                 }
@@ -2019,7 +2011,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 pos.resetPosStatus();
                 msg = getString(R.string.device_reset);
-            }else {
+            } else {
                 msg = errorState.name();
             }
             Mydialog.ErrorDialog(PaymentActivity.this, msg, new Mydialog.OnMyClickListener() {
@@ -2693,23 +2685,23 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         }
 
-    /*    @Override
-        public void onGetDevicePubKey(String clearKeys) {
-            dismissDialog();
-            TRACE.d("onGetDevicePubKey(clearKeys):" + clearKeys);
-            mllinfo.setVisibility(View.VISIBLE);
-            mbtnNewpay.setVisibility(View.GONE);
-            tradeSuccess.setVisibility(View.GONE);
-            mtvinfo.setText("DevicePubbicKey: \n" + clearKeys);
-            mllchrccard.setVisibility(View.GONE);
-            String lenStr = clearKeys.substring(0, 4);
-            int sum = 0;
-            for (int i = 0; i < 4; i++) {
-                int bit = Integer.parseInt(lenStr.substring(i, i + 1));
-                sum += bit * Math.pow(16, (3 - i));
-            }
-            pubModel = clearKeys.substring(4, 4 + sum * 2);
-        }*/
+        /*    @Override
+            public void onGetDevicePubKey(String clearKeys) {
+                dismissDialog();
+                TRACE.d("onGetDevicePubKey(clearKeys):" + clearKeys);
+                mllinfo.setVisibility(View.VISIBLE);
+                mbtnNewpay.setVisibility(View.GONE);
+                tradeSuccess.setVisibility(View.GONE);
+                mtvinfo.setText("DevicePubbicKey: \n" + clearKeys);
+                mllchrccard.setVisibility(View.GONE);
+                String lenStr = clearKeys.substring(0, 4);
+                int sum = 0;
+                for (int i = 0; i < 4; i++) {
+                    int bit = Integer.parseInt(lenStr.substring(i, i + 1));
+                    sum += bit * Math.pow(16, (3 - i));
+                }
+                pubModel = clearKeys.substring(4, 4 + sum * 2);
+            }*/
         @Override
         public void onGetDevicePubKey(Hashtable<String, String> hashtable) {
             super.onGetDevicePubKey(hashtable);
@@ -3099,9 +3091,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         if (updateThread != null) {
             updateThread.concelSelf();
         }
-         if (pos!=null){
-             pos = null;
-         }
+        if (pos != null) {
+            pos = null;
+        }
 
 
         if (!dealDoneflag) {
@@ -3118,16 +3110,16 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             dismissDialog();
-            if(keyboardUtil!=null){
-                Log.w("keyboardUtil","keyboardUtil.hide");
+            if (keyboardUtil != null) {
+                Log.w("keyboardUtil", "keyboardUtil.hide");
                 keyboardUtil.hide();
             }
 
-                if(!isNormal) {
+            if (!isNormal) {
 
-                    if (pos != null) {
-                        pos.cancelTrade();
-                    }
+                if (pos != null) {
+                    pos.cancelTrade();
+                }
 
             }
             finish();
@@ -3135,34 +3127,37 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
         return super.onKeyDown(keyCode, event);
     }
+
     private void systemKeyStart() {
         systemKeyListener.setOnSystemKeyListener(new SystemKeyListener.OnSystemKeyListener() {
             @Override
             public void onHomePressed() {
                 dismissDialog();
-                if(keyboardUtil!=null){
+                if (keyboardUtil != null) {
                     keyboardUtil.hide();
                 }
-                if(!isNormal) {
+                if (!isNormal) {
                     if (pos != null) {
                         pos.cancelTrade();
                     }
                 }
                 finish();
             }
+
             @Override
             public void onMenuPressed() {
                 dismissDialog();
-                if(keyboardUtil!=null){
+                if (keyboardUtil != null) {
                     keyboardUtil.hide();
                 }
-                if(!isNormal) {
+                if (!isNormal) {
                     if (pos != null) {
                         pos.cancelTrade();
                     }
                 }
                 finish();
             }
+
             @Override
             public void onScreenOff() {
             }
@@ -3174,4 +3169,4 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-  }
+}

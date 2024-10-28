@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +62,7 @@ public class PrinterHelperFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_printer_helper, container, false);
     }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
 //        super.onSaveInstanceState(outState);
@@ -69,7 +72,17 @@ public class PrinterHelperFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         printerWorkList = view.findViewById(R.id.printerWork_list);
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+        Log.e("device:", +width + "--" + height);
+        int size = 2;
+        if (Build.MODEL.equalsIgnoreCase("D70")) {
+            size = 4;
+        }
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), size);
         printerWorkList.setLayoutManager(layoutManager);
         printerWorkList.setAdapter(new PrinterWordListAdapter());
 //        if ("D30".equals(Build.MODEL)) {
