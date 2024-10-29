@@ -74,18 +74,15 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
         initView();
         PrinterManager instance = PrinterManager.getInstance();
         mPrinter = instance.getPrinter();
-        if ("D30".equals(Build.MODEL)) {
+        if (mPrinter == null) {
+            PrinterAlertDialog.showAlertDialog(this);
+            return;
+        }
+        if ("D30".equalsIgnoreCase(Build.MODEL)) {
             mPrinter.initPrinter(BarCodeActivity.this, new PrinterInitListener() {
                 @Override
                 public void connected() {
                     mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
-                /*When no paper, the
-                printer terminates printing and cancels the printing task.*/
-//              PrinterDevice.PrintTerminationState.PRINT_STOP
-               /* When no paper, the
-                printer will prompt that no paper. After loading the paper, the printer
-                will continue to restart printing.*/
-//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
                 }
 
                 @Override
@@ -344,6 +341,7 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                         brSymbology = brcodeTextSymbology.getText().toString();
                     }
                     Log.w("brSymbology", "brSymbology==" + brSymbology);
+                    mPrinter.setFooter(30);
                     mPrinter.printBarCode(this, brSymbology, width, height, brContent, printLineAlign);
                     btnBrcodePrint.setEnabled(false);
                 } catch (Exception e) {

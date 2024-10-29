@@ -40,7 +40,11 @@ public class PrintFunctionMultiActivity extends AppCompatActivity {
         tvTitle.setText(getString(R.string.function_multi));
         PrinterManager instance = PrinterManager.getInstance();
         mPrinter = instance.getPrinter();
-        if ("D30".equals(Build.MODEL)) {
+        if (mPrinter == null) {
+            PrinterAlertDialog.showAlertDialog(this);
+            return;
+        }
+        if ("D30".equalsIgnoreCase(Build.MODEL)) {
             mPrinter.initPrinter(PrintFunctionMultiActivity.this, new PrinterInitListener() {
                 @Override
                 public void connected() {
@@ -83,6 +87,7 @@ public class PrintFunctionMultiActivity extends AppCompatActivity {
 
     public void printFunctionMulti() {
         try {
+            mPrinter.setFooter(30);
             mPrinter.addTexts(new String[]{"TEST1"}, new int[]{1}, new int[]{PrintStyle.Alignment.NORMAL});
             mPrinter.addTexts(new String[]{"TEST1", "TEST2"}, new int[]{1, 4}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
             mPrinter.addTexts(new String[]{"TEST1", "TEST2", "TEST3"}, new int[]{1, 2, 2}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER, PrintStyle.Alignment.ALIGN_OPPOSITE});

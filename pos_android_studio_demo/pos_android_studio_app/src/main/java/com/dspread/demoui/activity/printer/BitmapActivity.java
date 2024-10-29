@@ -38,19 +38,15 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
         initView();
         PrinterManager instance = PrinterManager.getInstance();
         mPrinter = instance.getPrinter();
+        if (mPrinter == null) {
+            PrinterAlertDialog.showAlertDialog(this);
+            return;
+        }
         if ("D30".equalsIgnoreCase(Build.MODEL)) {
             mPrinter.initPrinter(BitmapActivity.this, new PrinterInitListener() {
                 @Override
                 public void connected() {
-                    Log.w("MODEL","modeD30");
-//                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_NORMAL);
-                /*When no paper, the
-                printer terminates printing and cancels the printing task.*/
-//              PrinterDevice.PrintTerminationState.PRINT_STOP
-               /* When no paper, the
-                printer will prompt that no paper. After loading the paper, the printer
-                will continue to restart printing.*/
-//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
+                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
                 }
                 @Override
                 public void disconnected() {
@@ -85,7 +81,7 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_bitmap_print:
                 try {
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-                    mPrinter.setFooter(100);
+                    mPrinter.setFooter(30);
                     mPrinter.printBitmap(this,bitmap);
                     btnBitmapPrint.setEnabled(true);
 

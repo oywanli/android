@@ -3,6 +3,7 @@ package com.dspread.demoui.activity.printer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.os.Trace;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -26,8 +27,6 @@ import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
 
 public class PrintTextActivity extends AppCompatActivity implements View.OnClickListener {
-
-
     private ImageView ivBackTitle;
     private TextView tvTitle;
     private TextView textTextAlign;
@@ -35,7 +34,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
     private TextView textSetFontStyle;
     private LinearLayout layoutSetFontStyle;
     private TextView textTextSize;
-    private LinearLayout layoutTextSize,layoutMaxHeight;
+    private LinearLayout layoutTextSize, layoutMaxHeight;
     private LinearLayout textSet;
     private TextView editText;
     private Button btnPrint;
@@ -47,7 +46,8 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
     private String textSizeStr = "";
     private String textMaxHeightStr = "";
     private int textSize;
-   private TextView textContentMaxHeight;
+    private TextView textContentMaxHeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,25 +57,23 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
         initView();
         PrinterManager instance = PrinterManager.getInstance();
         mPrinter = instance.getPrinter();
-        if ("D30".equals(Build.MODEL)) {
+        if (mPrinter == null) {
+            PrinterAlertDialog.showAlertDialog(this);
+            return;
+        }
+        if ("D30".equalsIgnoreCase(Build.MODEL)) {
             mPrinter.initPrinter(PrintTextActivity.this, new PrinterInitListener() {
                 @Override
                 public void connected() {
                     mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
-                /*When no paper, the
-                printer terminates printing and cancels the printing task.*/
-//              PrinterDevice.PrintTerminationState.PRINT_STOP
-               /* When no paper, the
-                printer will prompt that no paper. After loading the paper, the printer
-                will continue to restart printing.*/
-//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
                 }
+
                 @Override
                 public void disconnected() {
                 }
             });
 
-        }else{
+        } else {
             mPrinter.initPrinter(this);
         }
         MyPrinterListener myPrinterListener = new MyPrinterListener();
@@ -93,7 +91,10 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
         layoutSetFontStyle = findViewById(R.id.layout_setFontStyle);
         textTextSize = findViewById(R.id.text_text_size);
         layoutTextSize = findViewById(R.id.Layout_textSize);
-        layoutMaxHeight = findViewById(R.id.Layout_maxHeight);;
+        layoutMaxHeight = findViewById(R.id.Layout_maxHeight);
+        if (Build.MODEL.equalsIgnoreCase("D70")) {
+            layoutMaxHeight.setVisibility(View.GONE);
+        }
         textContentMaxHeight = findViewById(R.id.text_content_maxHeight);
         textSet = findViewById(R.id.text_set);
         editText = findViewById(R.id.edit_text);
@@ -116,9 +117,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                 finish();
                 break;
             case R.id.layout_setAlign:
-                final String[] alignStrings = new String[]{getResources().getString(R.string.at_the_left),
-                        getResources().getString(R.string.at_the_right),
-                        getResources().getString(R.string.at_the_center)};
+                final String[] alignStrings = new String[]{getResources().getString(R.string.at_the_left), getResources().getString(R.string.at_the_right), getResources().getString(R.string.at_the_center)};
 
                 PrintDialog.setDialog(this, getString(R.string.set_align), alignStrings, new PrintDialog.PrintClickListener() {
                     @Override
@@ -142,10 +141,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
 
                 break;
             case R.id.layout_setFontStyle:
-                final String[] fontStrings = new String[]{getResources().getString(R.string.fontStyle_normal),
-                        getResources().getString(R.string.fontStyle_bold),
-                        getResources().getString(R.string.fontStyle_italic),
-                        getResources().getString(R.string.fontStyle_bold_italic)};
+                final String[] fontStrings = new String[]{getResources().getString(R.string.fontStyle_normal), getResources().getString(R.string.fontStyle_bold), getResources().getString(R.string.fontStyle_italic), getResources().getString(R.string.fontStyle_bold_italic)};
                 PrintDialog.setDialog(this, getString(R.string.set_font_style), fontStrings, new PrintDialog.PrintClickListener() {
                     @Override
                     public void onCancel() {
@@ -213,6 +209,7 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
 
                     printLineStyle.setFontSize(textSize);
                     mPrinter.setPrintStyle(printLineStyle);
+                    mPrinter.setFooter(30);
                     mPrinter.printText(getString(R.string.text_print));
                     btnPrint.setEnabled(false);
                 } catch (RemoteException e) {

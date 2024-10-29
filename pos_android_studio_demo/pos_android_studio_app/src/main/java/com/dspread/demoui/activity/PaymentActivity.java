@@ -1847,7 +1847,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             if (displayMsg == QPOSService.Display.CLEAR_DISPLAY_MSG) {
                 msg = "";
             } else if (displayMsg == QPOSService.Display.MSR_DATA_READY) {
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PaymentActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
                 builder.setTitle("Audio");
                 builder.setMessage("Success,Contine ready");
                 builder.setPositiveButton("Confirm", null);
@@ -3072,7 +3072,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void devicePermissionRequest(UsbManager mManager, UsbDevice usbDevice) {
         PendingIntent mPermissionIntent;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.android.example.USB_PERMISSION"), PendingIntent.FLAG_IMMUTABLE);
         } else {
             mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent("com.android.example.USB_PERMISSION"), 0);
