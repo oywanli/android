@@ -43,6 +43,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         setContentView(R.layout.activity_print_ticket);
         PrinterManager instance = PrinterManager.getInstance();
+        initView();
         mPrinter = instance.getPrinter();
         if (mPrinter == null) {
             PrinterAlertDialog.showAlertDialog(this);
@@ -73,7 +74,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
         MyPrinterListener myPrinterListener = new MyPrinterListener();
         mPrinter.setPrintListener(myPrinterListener);
         printLineStyle = new PrintLineStyle();
-        initView();
+
     }
 
     private void initView() {
@@ -83,56 +84,50 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
         btnComposite = findViewById(R.id.btn_composite);
         btnMulti = findViewById(R.id.btn_multi);
         btnStopPrint = findViewById(R.id.btn_stopprint);
-        String deviceModel = Build.MODEL;
         btnPrint = findViewById(R.id.btn_Print);
-        if ("mp600".equals(deviceModel)) {
-            btnStopPrint.setVisibility(View.VISIBLE);
-        } else {
-            btnStopPrint.setVisibility(View.GONE);
-        }
         ivBackTitle.setOnClickListener(this);
         btnComposite.setOnClickListener(this);
         btnMulti.setOnClickListener(this);
         btnStopPrint.setOnClickListener(this);
-//        printtext();
     }
 
     private void printtext() {
         try {
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 16));
-
-            mPrinter.addText("Testing");
-            mPrinter.addText("POS Signing of purchase orders");
-            mPrinter.addText("MERCHANT COPY");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 14));
-            mPrinter.addText("- - - - - - - - - - - - - -");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
-            mPrinter.addText("ISSUER Agricultural Bank of China");
-            mPrinter.addText("ACQ 48873110");
-            mPrinter.addText("CARD number.");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
-            mPrinter.addText("6228 48******8 116 S");
-            mPrinter.addText("TYPE of transaction(TXN TYPE)");
-            mPrinter.addText("SALE");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 14));
-            mPrinter.addText("- - - - - - - - - - - - - -");
-            mPrinter.addTexts(new String[]{"BATCH NO", "000043"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"VOUCHER NO", "000509"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"AUTH NO", "000786"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"DATE/TIME", "2010/12/07 16:15:17"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"REF NO", "000001595276"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"2014/12/07 16:12:17", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"AMOUNT:", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addText("RMB:249.00");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 12));
-            mPrinter.addText("- - - - - - - - - - - - - -");
-            mPrinter.addText("Please scan the QRCode for getting more information: ");
-            mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
-            mPrinter.addText("Please scan the QRCode for getting more information:");
-            mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
-            mPrinter.setPrintStyle(printLineStyle);
-            mPrinter.setFooter(30);
-            mPrinter.print(this);
+            if (mPrinter != null) {
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 16));
+                mPrinter.addText("Testing");
+                mPrinter.addText("POS Signing of purchase orders");
+                mPrinter.addText("MERCHANT COPY");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 14));
+                mPrinter.addText("- - - - - - - - - - - - - -");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
+                mPrinter.addText("ISSUER Agricultural Bank of China");
+                mPrinter.addText("ACQ 48873110");
+                mPrinter.addText("CARD number.");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
+                mPrinter.addText("6228 48******8 116 S");
+                mPrinter.addText("TYPE of transaction(TXN TYPE)");
+                mPrinter.addText("SALE");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 14));
+                mPrinter.addText("- - - - - - - - - - - - - -");
+                mPrinter.addTexts(new String[]{"BATCH NO", "000043"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"VOUCHER NO", "000509"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"AUTH NO", "000786"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"DATE/TIME", "2010/12/07 16:15:17"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"REF NO", "000001595276"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"2014/12/07 16:12:17", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"AMOUNT:", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addText("RMB:249.00");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 12));
+                mPrinter.addText("- - - - - - - - - - - - - -");
+                mPrinter.addText("Please scan the QRCode for getting more information: ");
+                mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
+                mPrinter.addText("Please scan the QRCode for getting more information:");
+                mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
+                mPrinter.setPrintStyle(printLineStyle);
+                mPrinter.setFooter(30);
+                mPrinter.print(this);
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -149,6 +144,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
                 printtext();
                 break;
             case R.id.btn_Print:
+
                 printtext();
                 btnPrint.setEnabled(false);
                 break;
@@ -190,6 +186,8 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPrinter.close();
+        if (mPrinter != null) {
+            mPrinter.close();
+        }
     }
 }

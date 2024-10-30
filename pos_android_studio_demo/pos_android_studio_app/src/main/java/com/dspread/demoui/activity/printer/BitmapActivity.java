@@ -29,6 +29,7 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
     private Button btnBitmapPrint;
     private PrinterDevice mPrinter;
     private PrintLineStyle printLineStyle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +49,13 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
                 public void connected() {
                     mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
                 }
+
                 @Override
                 public void disconnected() {
                 }
             });
 
-        }else{
+        } else {
             mPrinter.initPrinter(this);
         }
         MyPrinterListener myPrinterListener = new MyPrinterListener();
@@ -69,7 +71,6 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
         btnBitmapPrint = findViewById(R.id.btn_bitmap_print);
         ivBackTitle.setOnClickListener(this);
         btnBitmapPrint.setOnClickListener(this);
-
     }
 
     @Override
@@ -80,19 +81,23 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.btn_bitmap_print:
                 try {
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-                    mPrinter.setFooter(30);
-                    mPrinter.printBitmap(this,bitmap);
-                    btnBitmapPrint.setEnabled(true);
-
+                    if (mPrinter != null) {
+                        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+                        mPrinter.setFooter(30);
+                        mPrinter.printBitmap(this, bitmap);
+                        btnBitmapPrint.setEnabled(true);
+                    }
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
 
                 }
                 break;
+            default:
+                break;
 
         }
     }
+
     class MyPrinterListener implements PrintListener {
 
         @Override
@@ -107,6 +112,8 @@ public class BitmapActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPrinter.close();
+        if (mPrinter != null) {
+            mPrinter.close();
+        }
     }
 }

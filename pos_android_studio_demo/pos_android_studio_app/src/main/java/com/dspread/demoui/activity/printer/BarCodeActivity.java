@@ -233,11 +233,11 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                     public void onConfirm(String content) {
                         bcTextAlign.setText(content);
                         alignText = content;
-                        if ("LEFT".equals(content) || "居左".equals(content)) {
+                        if ("LEFT".equals(content)) {
                             alignText = "LEFT";
-                        } else if ("RIGHT".equals(content) || "居右".equals(content)) {
+                        } else if ("RIGHT".equals(content)) {
                             alignText = "RIGHT";
-                        } else if ("CENTER".equals(content) || "居中".equals(content)) {
+                        } else if ("CENTER".equals(content)) {
                             alignText = "CENTER";
                         }
                     }
@@ -278,7 +278,6 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                 PrintDialog.setDialog(BarCodeActivity.this, getString(R.string.density_level), densitylevels, new PrintDialog.PrintClickListener() {
                     @Override
                     public void onCancel() {
-
                     }
 
                     @Override
@@ -290,60 +289,59 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.btn_brcode_print:
                 try {
-                    if (!"".equals(alignText)) {
-                        if ("LEFT".equals(alignText)) {
-                            printLineAlign = PrintLine.LEFT;
-                        } else if ("RIGHT".equals(alignText)) {
-                            printLineAlign = PrintLine.RIGHT;
-                        } else if ("CENTER".equals(alignText)) {
-                            printLineAlign = PrintLine.CENTER;
+                    if (mPrinter != null) {
+                        if (!"".equals(alignText)) {
+                            if ("LEFT".equals(alignText)) {
+                                printLineAlign = PrintLine.LEFT;
+                            } else if ("RIGHT".equals(alignText)) {
+                                printLineAlign = PrintLine.RIGHT;
+                            } else if ("CENTER".equals(alignText)) {
+                                printLineAlign = PrintLine.CENTER;
+                            }
                         }
+                        if (!"".equals(brHeight)) {
+                            height = Integer.parseInt(brHeight);
+                        } else {
+                            height = Integer.parseInt(brcodeTextHeight.getText().toString());
+                        }
+                        if (!"".equals(brWidth)) {
+                            width = Integer.parseInt(brWidth);
+                        } else {
+                            width = Integer.parseInt(brcodeTextWidth.getText().toString());
+                        }
+                        if (!"".equals(brGraylevel)) {
+                            grayLevel = Integer.parseInt(brGraylevel);
+                        } else {
+                            grayLevel = Integer.parseInt(bcTextGraylevel.getText().toString());
+                        }
+                        if (!"".equals(brSpeedlevel)) {
+                            speedLevel = Integer.parseInt(brSpeedlevel);
+                        } else {
+                            speedLevel = Integer.parseInt(bcTextSpeedlevels.getText().toString());
+                        }
+                        if (!"".equals(brDensitylevel)) {
+                            densityLevel = Integer.parseInt(brDensitylevel);
+                        } else {
+                            densityLevel = Integer.parseInt(brTextDensitylevel.getText().toString());
+                        }
+                        if ("".equals(brContent)) {
+                            brContent = brcodeTextContent.getText().toString();
+                        }
+                        Bitmap bitmap = QRCodeUtil.getBarCodeBM(brContent, width, height);
+                        brcodeImage.setImageBitmap(bitmap);
+                        if ("mp600".equals(Build.MODEL)) {
+                            mPrinter.setPrinterSpeed(speedLevel);
+                            mPrinter.setPrinterDensity(densityLevel);
+                        }
+                        mPrinter.setPrintStyle(printLineStyle);
+                        if ("".equals(brSymbology)) {
+                            brSymbology = brcodeTextSymbology.getText().toString();
+                        }
+                        Log.w("brSymbology", "brSymbology==" + brSymbology);
+                        mPrinter.setFooter(30);
+                        mPrinter.printBarCode(this, brSymbology, width, height, brContent, printLineAlign);
+                        btnBrcodePrint.setEnabled(false);
                     }
-                    if (!"".equals(brHeight)) {
-                        height = Integer.parseInt(brHeight);
-                    } else {
-                        height = Integer.parseInt(brcodeTextHeight.getText().toString());
-                    }
-                    if (!"".equals(brWidth)) {
-                        width = Integer.parseInt(brWidth);
-                    } else {
-                        width = Integer.parseInt(brcodeTextWidth.getText().toString());
-                    }
-                    if (!"".equals(brGraylevel)) {
-                        grayLevel = Integer.parseInt(brGraylevel);
-                    } else {
-                        grayLevel = Integer.parseInt(bcTextGraylevel.getText().toString());
-                    }
-                    if (!"".equals(brSpeedlevel)) {
-                        speedLevel = Integer.parseInt(brSpeedlevel);
-                    } else {
-                        speedLevel = Integer.parseInt(bcTextSpeedlevels.getText().toString());
-                    }
-                    if (!"".equals(brDensitylevel)) {
-                        densityLevel = Integer.parseInt(brDensitylevel);
-                    } else {
-                        densityLevel = Integer.parseInt(brTextDensitylevel.getText().toString());
-                    }
-
-                    if ("".equals(brContent)) {
-                        brContent = brcodeTextContent.getText().toString();
-                    }
-                    Bitmap bitmap = QRCodeUtil.getBarCodeBM(brContent, width, height);
-                    brcodeImage.setImageBitmap(bitmap);
-                    if ("mp600".equals(Build.MODEL)) {
-                        mPrinter.setPrinterSpeed(speedLevel);
-                        mPrinter.setPrinterDensity(densityLevel);
-
-                    }
-//                    mPrinter.setPrinterGrey(grayLevel);
-                    mPrinter.setPrintStyle(printLineStyle);
-                    if ("".equals(brSymbology)) {
-                        brSymbology = brcodeTextSymbology.getText().toString();
-                    }
-                    Log.w("brSymbology", "brSymbology==" + brSymbology);
-                    mPrinter.setFooter(30);
-                    mPrinter.printBarCode(this, brSymbology, width, height, brContent, printLineAlign);
-                    btnBrcodePrint.setEnabled(false);
                 } catch (Exception e) {
                     Log.e("Exception", "e=" + e);
                     Toast toast = Toast.makeText(BarCodeActivity.this, "Error: " + e, Toast.LENGTH_SHORT);
@@ -353,8 +351,6 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             default:
                 break;
-
-
         }
     }
 
@@ -370,6 +366,8 @@ public class BarCodeActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPrinter.close();
+        if (mPrinter != null) {
+            mPrinter.close();
+        }
     }
 }

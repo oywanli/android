@@ -130,14 +130,16 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.btn_getstatus:
                 try {
-                    mPrinter.getPrinterStatus();
+                    if(mPrinter!=null){ mPrinter.getPrinterStatus();}
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.btn_get_density:
                 try {
-                    mPrinter.getPrinterDensity();
+                    if(mPrinter!=null){  mPrinter.getPrinterDensity();}
+
 
                 } catch (RemoteException e) {
                     e.printStackTrace();
@@ -145,21 +147,24 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.btn_get_speed:
                 try {
-                    mPrinter.getPrinterSpeed();
+                    if(mPrinter!=null){mPrinter.getPrinterSpeed();}
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.btn_get_temperature:
                 try {
-                    mPrinter.getPrinterTemperature();
+                    if(mPrinter!=null){mPrinter.getPrinterTemperature();}
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.btn_get_voltage:
                 try {
-                    mPrinter.getPrinterVoltage();
+                    if(mPrinter!=null){mPrinter.getPrinterVoltage();}
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -186,6 +191,8 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPrinter.close();
+        if(mPrinter!=null) {
+            mPrinter.close();
+        }
     }
 }

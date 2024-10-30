@@ -171,35 +171,36 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.btn_Print:
                 try {
-                    if (!"".equals(alignText)) {
-                        if ("LEFT".equals(alignText)) {
-                            printLineStyle.setAlign(PrintLine.LEFT);
-                        } else if ("RIGHT".equals(alignText)) {
-                            printLineStyle.setAlign(PrintLine.RIGHT);
-                        } else if ("CENTER".equals(alignText)) {
-                            printLineStyle.setAlign(PrintLine.CENTER);
+                    if (mPrinter != null) {
+                        if (!"".equals(alignText)) {
+                            if ("LEFT".equals(alignText)) {
+                                printLineStyle.setAlign(PrintLine.LEFT);
+                            } else if ("RIGHT".equals(alignText)) {
+                                printLineStyle.setAlign(PrintLine.RIGHT);
+                            } else if ("CENTER".equals(alignText)) {
+                                printLineStyle.setAlign(PrintLine.CENTER);
+                            }
                         }
-                    }
-                    if (!"".equals(fontText)) {
-                        if ("NORMAL".equals(fontText)) {
-                            printLineStyle.setFontStyle(PrintStyle.FontStyle.NORMAL);
-                            printLineStyle.setFontStyle(PrintStyle.Key.ALIGNMENT);
-                        } else if ("BOLD".equals(fontText)) {
-                            printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD);
-                        } else if ("ITALIC".equals(fontText)) {
-                            printLineStyle.setFontStyle(PrintStyle.FontStyle.ITALIC);
+                        if (!"".equals(fontText)) {
+                            if ("NORMAL".equals(fontText)) {
+                                printLineStyle.setFontStyle(PrintStyle.FontStyle.NORMAL);
+                                printLineStyle.setFontStyle(PrintStyle.Key.ALIGNMENT);
+                            } else if ("BOLD".equals(fontText)) {
+                                printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD);
+                            } else if ("ITALIC".equals(fontText)) {
+                                printLineStyle.setFontStyle(PrintStyle.FontStyle.ITALIC);
 
-                        } else if ("BOLD_ITALIC".equals(fontText)) {
-                            printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD_ITALIC);
+                            } else if ("BOLD_ITALIC".equals(fontText)) {
+                                printLineStyle.setFontStyle(PrintStyle.FontStyle.BOLD_ITALIC);
+                            }
                         }
-                    }
-                    if ("".equals(textSizeStr)) {
-                        textSizeStr = textTextSize.getText().toString();
-                        textSize = Integer.parseInt(textSizeStr);
-                    } else {
-                        textSize = Integer.parseInt(textSizeStr);
+                        if ("".equals(textSizeStr)) {
+                            textSizeStr = textTextSize.getText().toString();
+                            textSize = Integer.parseInt(textSizeStr);
+                        } else {
+                            textSize = Integer.parseInt(textSizeStr);
 
-                    }
+                        }
 //                    if("".equals(textMaxHeightStr)){
 //                        textMaxHeightStr = textContentMaxHeight.getText().toString();
 //                        mPrinter.setMaxHeight(Integer.parseInt(textMaxHeightStr));
@@ -207,11 +208,12 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
 //                        mPrinter.setMaxHeight(Integer.parseInt(textMaxHeightStr));
 //                    }
 
-                    printLineStyle.setFontSize(textSize);
-                    mPrinter.setPrintStyle(printLineStyle);
-                    mPrinter.setFooter(30);
-                    mPrinter.printText(getString(R.string.text_print));
-                    btnPrint.setEnabled(false);
+                        printLineStyle.setFontSize(textSize);
+                        mPrinter.setPrintStyle(printLineStyle);
+                        mPrinter.setFooter(30);
+                        mPrinter.printText(getString(R.string.text_print));
+                        btnPrint.setEnabled(false);
+                    }
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
 
@@ -272,7 +274,9 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPrinter.close();
+        if (mPrinter != null) {
+            mPrinter.close();
+        }
     }
 }
 
