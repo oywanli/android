@@ -1,26 +1,18 @@
 package com.dspread.demoui.activity.printer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.action.printerservice.PrintStyle;
 import com.dspread.demoui.R;
-import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
-import com.dspread.print.device.PrinterInitListener;
-import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 
-public class PrintFunctionMultiActivity extends AppCompatActivity implements View.OnClickListener {
-    private PrinterDevice mPrinter;
+public class PrintFunctionMultiActivity extends BaseActivity implements View.OnClickListener {
     private PrintLineStyle printLineStyle;
     private TextView tvInfo;
     private Button btnPrint;
@@ -30,9 +22,6 @@ public class PrintFunctionMultiActivity extends AppCompatActivity implements Vie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        setContentView(R.layout.activity_print_function_multi);
         btnPrint = findViewById(R.id.btn_Print);
         tvInfo = findViewById(R.id.tvInfo);
         ivBackTitle = findViewById(R.id.iv_back_title);
@@ -40,32 +29,20 @@ public class PrintFunctionMultiActivity extends AppCompatActivity implements Vie
         tvTitle.setText(getString(R.string.function_multi));
         btnPrint.setOnClickListener(this);
         ivBackTitle.setOnClickListener(this);
-        PrinterManager instance = PrinterManager.getInstance();
-        mPrinter = instance.getPrinter();
-
-        if (mPrinter == null) {
-            PrinterAlertDialog.showAlertDialog(this);
-            return;
-        }
-        if ("D30".equalsIgnoreCase(Build.MODEL)) {
-            mPrinter.initPrinter(PrintFunctionMultiActivity.this, new PrinterInitListener() {
-                @Override
-                public void connected() {
-                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
-                }
-
-                @Override
-                public void disconnected() {
-                }
-            });
-
-        } else {
-            mPrinter.initPrinter(this);
-        }
-        MyPrinterListener myPrinterListener = new MyPrinterListener();
-        mPrinter.setPrintListener(myPrinterListener);
         printLineStyle = new PrintLineStyle();
-        mPrinter = instance.getPrinter();
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_print_function_multi;
+    }
+
+    @Override
+    protected void onReturnPrintResult(boolean isSuccess, String status, PrinterDevice.ResultType resultType) {
+        btnPrint.setEnabled(true);
+        Log.w("printResult", "boolean b==" + isSuccess);
+        Log.w("printResult", "String s==" + status);
+        Log.w("printResult", "resultType==" + resultType.toString());
     }
 
     public void printFunctionMulti() {
@@ -96,16 +73,6 @@ public class PrintFunctionMultiActivity extends AppCompatActivity implements Vie
                 printFunctionMulti();
                 btnPrint.setEnabled(false);
                 break;
-        }
-    }
-
-    class MyPrinterListener implements PrintListener {
-        @Override
-        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
-            btnPrint.setEnabled(true);
-            Log.w("printResult", "boolean b==" + b);
-            Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "resultType==" + resultType.toString());
         }
     }
 

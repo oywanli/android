@@ -1,11 +1,9 @@
 package com.dspread.demoui.activity.printer;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,14 +15,10 @@ import com.dspread.demoui.ui.dialog.PrintDialog;
 import com.dspread.demoui.utils.QRCodeUtil;
 import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
-import com.dspread.print.device.PrinterInitListener;
-import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class QRCodeActivity extends AppCompatActivity implements View.OnClickListener {
+public class QRCodeActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView ivBackTitle;
     private TextView tvTitle;
@@ -44,7 +38,6 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayout qrcodeDensitylevel;
     private LinearLayout qrcodeErrorLevel;
     private TextView qrcodeTextErrorLevel;
-    private PrinterDevice mPrinter;
     private PrintLineStyle printLineStyle;
     private String qrCodeSize = "";
     private int qrSize;
@@ -62,37 +55,16 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        setContentView(R.layout.activity_qrcode);
-        initView();
-        PrinterManager instance = PrinterManager.getInstance();
-        mPrinter = instance.getPrinter();
-        if (mPrinter == null) {
-            PrinterAlertDialog.showAlertDialog(this);
-            return;
-        }
-        if ("D30".equalsIgnoreCase(Build.MODEL)) {
-            mPrinter.initPrinter(QRCodeActivity.this, new PrinterInitListener() {
-                @Override
-                public void connected() {
-                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
-                }
-
-                @Override
-                public void disconnected() {
-                }
-            });
-
-        } else {
-            mPrinter.initPrinter(this);
-        }
-        MyPrinterListener myPrinterListener = new MyPrinterListener();
-        mPrinter.setPrintListener(myPrinterListener);
-        printLineStyle = new PrintLineStyle();
     }
 
-    private void initView() {
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_qrcode;
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         ivBackTitle = findViewById(R.id.iv_back_title);
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setText(getString(R.string.print_qrcode));
@@ -123,6 +95,14 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         qrcodeSpeedlevel.setOnClickListener(this);
         qrcodeDensitylevel.setOnClickListener(this);
         qrcodeErrorLevel.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onReturnPrintResult(boolean isSuccess, String status, PrinterDevice.ResultType resultType) {
+        btnQrcodePrint.setEnabled(true);
+        Log.w("printResult", "boolean b==" + isSuccess);
+        Log.w("printResult", "String s==" + status);
+        Log.w("printResult", "resultType==" + resultType.toString());
     }
 
     @Override
@@ -255,6 +235,7 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_qrcode_print:
                 try {
                     if (mPrinter != null) {
+                        printLineStyle = new PrintLineStyle();
                         if (!"".equals(alignText)) {
                             if ("LEFT".equals(alignText)) {
                                 printLineAlign = PrintLine.LEFT;
@@ -308,17 +289,6 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             default:
                 break;
-        }
-    }
-
-    class MyPrinterListener implements PrintListener {
-        @Override
-        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
-            btnQrcodePrint.setEnabled(true);
-            Log.w("printResult", "boolean b==" + b);
-            Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "resultType==" + resultType.toString());
-
         }
     }
 

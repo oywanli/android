@@ -1,7 +1,9 @@
 package com.dspread.demoui.activity.printer;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+
 public class PrinterAlertDialog {
     public static void showAlertDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

@@ -26,7 +26,7 @@ import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
 
-public class PrintTextActivity extends AppCompatActivity implements View.OnClickListener {
+public class PrintTextActivity extends BaseActivity implements View.OnClickListener {
     private ImageView ivBackTitle;
     private TextView tvTitle;
     private TextView textTextAlign;
@@ -39,7 +39,6 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
     private TextView editText;
     private Button btnPrint;
     private LinearLayout textAll;
-    private PrinterDevice mPrinter;
     private PrintLineStyle printLineStyle;
     private String alignText = "";
     private String fontText = "";
@@ -51,37 +50,25 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        setContentView(R.layout.activity_print_text);
-        initView();
-        PrinterManager instance = PrinterManager.getInstance();
-        mPrinter = instance.getPrinter();
-        if (mPrinter == null) {
-            PrinterAlertDialog.showAlertDialog(this);
-            return;
-        }
-        if ("D30".equalsIgnoreCase(Build.MODEL)) {
-            mPrinter.initPrinter(PrintTextActivity.this, new PrinterInitListener() {
-                @Override
-                public void connected() {
-                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
-                }
-
-                @Override
-                public void disconnected() {
-                }
-            });
-
-        } else {
-            mPrinter.initPrinter(this);
-        }
-        MyPrinterListener myPrinterListener = new MyPrinterListener();
-        mPrinter.setPrintListener(myPrinterListener);
         printLineStyle = new PrintLineStyle();
     }
 
-    private void initView() {
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_print_text;
+    }
+
+    @Override
+    protected void onReturnPrintResult(boolean isSuccess, String status, PrinterDevice.ResultType resultType) {
+        btnPrint.setEnabled(true);
+        Log.w("printResult", "boolean b==" + isSuccess);
+        Log.w("printResult", "String s==" + status);
+        Log.w("printResult", "resultType==" + resultType.toString());
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         ivBackTitle = findViewById(R.id.iv_back_title);
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setText(getString(R.string.print_text));
@@ -106,7 +93,6 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
         btnPrint.setOnClickListener(this);
         layoutTextSize.setOnClickListener(this);
         layoutMaxHeight.setOnClickListener(this);
-
     }
 
 
@@ -118,7 +104,6 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.layout_setAlign:
                 final String[] alignStrings = new String[]{getResources().getString(R.string.at_the_left), getResources().getString(R.string.at_the_right), getResources().getString(R.string.at_the_center)};
-
                 PrintDialog.setDialog(this, getString(R.string.set_align), alignStrings, new PrintDialog.PrintClickListener() {
                     @Override
                     public void onCancel() {
@@ -129,11 +114,11 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                     public void onConfirm(String content) {
                         textTextAlign.setText(content);
                         alignText = content;
-                        if ("LEFT".equals(content) || "居左".equals(content)) {
+                        if ("LEFT".equals(content)) {
                             alignText = "LEFT";
-                        } else if ("RIGHT".equals(content) || "居右".equals(content)) {
+                        } else if ("RIGHT".equals(content)) {
                             alignText = "RIGHT";
-                        } else if ("CENTER".equals(content) || "居中".equals(content)) {
+                        } else if ("CENTER".equals(content)) {
                             alignText = "CENTER";
                         }
                     }
@@ -145,7 +130,6 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                 PrintDialog.setDialog(this, getString(R.string.set_font_style), fontStrings, new PrintDialog.PrintClickListener() {
                     @Override
                     public void onCancel() {
-
                     }
 
                     @Override
@@ -201,13 +185,6 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                             textSize = Integer.parseInt(textSizeStr);
 
                         }
-//                    if("".equals(textMaxHeightStr)){
-//                        textMaxHeightStr = textContentMaxHeight.getText().toString();
-//                        mPrinter.setMaxHeight(Integer.parseInt(textMaxHeightStr));
-//                    }else{
-//                        mPrinter.setMaxHeight(Integer.parseInt(textMaxHeightStr));
-//                    }
-
                         printLineStyle.setFontSize(textSize);
                         mPrinter.setPrintStyle(printLineStyle);
                         mPrinter.setFooter(30);
@@ -257,17 +234,6 @@ public class PrintTextActivity extends AppCompatActivity implements View.OnClick
                 break;
 
 
-        }
-    }
-
-
-    class MyPrinterListener implements PrintListener {
-        @Override
-        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
-            btnPrint.setEnabled(true);
-            Log.w("printResult", "boolean b==" + b);
-            Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "resultType==" + resultType.toString());
         }
     }
 
