@@ -200,7 +200,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 startActivity(enabler);
                 TRACE.i("Bluetooth open");
             } else {
-                TRACE.i("Bluetooth can not open");
+                TRACE.i("Bluetooth already is opened");
                 return;
             }
         } else {
