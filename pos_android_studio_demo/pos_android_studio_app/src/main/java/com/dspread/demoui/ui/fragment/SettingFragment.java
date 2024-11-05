@@ -5,6 +5,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.dspread.demoui.ui.dialog.Mydialog.BLUETOOTH;
 import static com.dspread.demoui.ui.dialog.Mydialog.UART;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -183,9 +184,9 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     LocationManager lm;//【Location management】
 
     private boolean bluePermission() {
-        if (Build.VERSION.SDK_INT > 30) {
-            if (ContextCompat.checkSelfPermission(getContext(), "android.permission.BLUETOOTH_SCAN") != PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getContext(), "android.permission.BLUETOOTH_ADVERTISE") != PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getContext(), "android.permission.BLUETOOTH_CONNECT") != PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{"android.permission.BLUETOOTH_SCAN", "android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_CONNECT"}, 1);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_ADVERTISE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT}, 1);
                 return false;
             }
         }
@@ -218,10 +219,12 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 // Permission denied
                 // Request authorization
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1003);
+                    }
                     if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.BLUETOOTH_SCAN) != PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.BLUETOOTH_CONNECT) != PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.BLUETOOTH_ADVERTISE) != PERMISSION_GRANTED) {
                         String[] list = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_ADVERTISE};
                         ActivityCompat.requestPermissions(getActivity(), list, BLUETOOTH_CODE);
-
                     }
                 } else {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
@@ -232,7 +235,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                     if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.BLUETOOTH_SCAN) != PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.BLUETOOTH_CONNECT) != PERMISSION_GRANTED || ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.BLUETOOTH_ADVERTISE) != PERMISSION_GRANTED) {
                         String[] list = new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.BLUETOOTH_SCAN, android.Manifest.permission.BLUETOOTH_CONNECT, android.Manifest.permission.BLUETOOTH_ADVERTISE};
                         ActivityCompat.requestPermissions(getActivity(), list, BLUETOOTH_CODE);
-
                     }
                 }
 //                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
@@ -246,6 +248,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
+                        bluetoothRelaPer();
                     }
                 });
                 launcher.launch(intent);

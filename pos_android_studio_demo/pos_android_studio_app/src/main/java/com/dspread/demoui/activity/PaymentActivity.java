@@ -89,6 +89,7 @@ import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
 import static com.dspread.demoui.utils.Utils.getKeyIndex;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final int REQUEST_CODE_STORAGE_PERMISSION = 10006;
     private String blueTootchAddress = "";
     private boolean isNormalBlu = false;//to judge if is normal bluetooth
     private BluetoothAdapter m_Adapter = null;
@@ -267,36 +268,28 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     public void updateFirmware() {
         if (ActivityCompat.checkSelfPermission(PaymentActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             //request permission
-            ActivityCompat.requestPermissions(PaymentActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, REQUEST_CODE_STORAGE_PERMISSION);
         } else {
-//            updateThread = new UpdateThread();
+            updateFW();
+        }
+    }
+
+    private void updateFW() {
+        //            updateThread = new UpdateThread();
 //            updateThread.start();
-            byte[] data = null;
-            data = FileUtils.readAssetsLine("A27CAYC_S1(Ecobank)_master.asc", PaymentActivity.this);
-            if (data != null) {
-                int a = pos.updatePosFirmware(data, blueTootchAddress);
+        byte[] data = null;
+        data = FileUtils.readAssetsLine("A29DWJ_master.asc", PaymentActivity.this);
+        if (data != null) {
+            int a = pos.updatePosFirmware(data, blueTootchAddress);
 //                Mydialog.loading(PaymentActivity.this, progres + "%");
-                if (a == -1) {
-                    Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.charging_warning), new Mydialog.OnMyClickListener() {
-                        @Override
-                        public void onCancel() {
-
-                        }
-
-                        @Override
-                        public void onConfirm() {
-                            finish();
-                        }
-                    });
-                    return;
-                }
-                updateThread = new UpdateThread();
-                updateThread.start();
-            } else {
-                Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.does_the_file_exist), new Mydialog.OnMyClickListener() {
+            if (a == -1) {
+                Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.charging_warning), new Mydialog.OnMyClickListener() {
                     @Override
                     public void onCancel() {
-
+                        //
                     }
 
                     @Override
@@ -305,8 +298,23 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
                 return;
-
             }
+            updateThread = new UpdateThread();
+            updateThread.start();
+        } else {
+            Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.does_the_file_exist), new Mydialog.OnMyClickListener() {
+                @Override
+                public void onCancel() {
+                    //
+                }
+
+                @Override
+                public void onConfirm() {
+                    finish();
+                }
+            });
+            return;
+
         }
     }
 
@@ -734,6 +742,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
                 if (!isNormal) {
                     if (pos != null) {
+                        TRACE.d("on Press");
                         pos.cancelTrade();
                     }
                 }
@@ -2176,6 +2185,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         @Override
+        public void onReturnSetMasterKeyResult(boolean isSuccess, Hashtable<String, String> result) {
+            super.onReturnSetMasterKeyResult(isSuccess, result);
+        }
+/*
+        @Override
         public void onReturnSetMasterKeyResult(boolean isSuccess) {
             tvTitle.setText(getString(R.string.set_Masterkey));
             dismissDialog();
@@ -2187,7 +2201,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mtvinfo.setText("SetMasterkeyResult: " + isSuccess);
             mllchrccard.setVisibility(View.GONE);
             tradeSuccess.setVisibility(View.GONE);
-        }
+        }*/
 
         @Override
         public void onReturnBatchSendAPDUResult(LinkedHashMap<Integer, String> batchAPDUResult) {
@@ -3167,6 +3181,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             public void onScreenOn() {
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_STORAGE_PERMISSION) {
+           updateFW();
+        }
     }
 
 }
