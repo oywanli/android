@@ -1,10 +1,8 @@
-package com.dspread.demoui.ui.fragment;
+package com.dspread.demoui.fragment;
 
-import static com.dspread.demoui.activity.BaseApplication.pos;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.DrawableRes;

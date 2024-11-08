@@ -1,13 +1,9 @@
-package com.dspread.demoui.ui.fragment;
+package com.dspread.demoui.fragment;
 
-import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,10 +13,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.dspread.demoui.R;
-import com.dspread.demoui.activity.BaseApplication;
+import com.dspread.demoui.BaseApplication;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.MoneyUtil;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
@@ -37,8 +32,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     SharedPreferencesUtil connectType;
     String conType;
     View view;
-    TitleUpdateListener myListener;
-
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -79,7 +72,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mConfirm = view.findViewById(R.id.btn_confirm);
         mConfirm.setOnClickListener(this);
         mAmount = view.findViewById(R.id.tv_amount);
-        connectType = SharedPreferencesUtil.getmInstance(getActivity());
+        connectType = SharedPreferencesUtil.getInstance(getActivity());
         conType = (String) connectType.get("conType", "");
     }
 
@@ -155,10 +148,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         inputMoney = 0;
         inputMoneySetText();
-    }
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-//        super.onSaveInstanceState(outState);
     }
 
     private String[] data = {"GOODS", "SERVICES", "CASH", "CASHBACK","PURCHASE_REFUND","INQUIRY",

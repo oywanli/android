@@ -1,4 +1,4 @@
-package com.dspread.demoui.ui.fragment;
+package com.dspread.demoui.fragment;
 
 import static android.app.Activity.RESULT_OK;
 

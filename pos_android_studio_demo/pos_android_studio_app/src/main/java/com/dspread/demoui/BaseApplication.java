@@ -1,11 +1,16 @@
-package com.dspread.demoui.activity;
+package com.dspread.demoui;
 
 import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.dspread.demoui.activity.MyQposClass;
 import com.dspread.demoui.http.OKHttpUpdateHttpService;
+import com.dspread.demoui.interfaces.BluetoothConnectCallback;
+import com.dspread.demoui.interfaces.ConnectStateCallback;
+import com.dspread.demoui.interfaces.PosInfoCallback;
+import com.dspread.demoui.interfaces.TransactionCallback;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.xpos.QPOSService;
 import com.lzy.okgo.OkGo;
@@ -24,13 +29,29 @@ import okhttp3.OkHttpClient;
 
 import static com.xuexiang.xupdate.entity.UpdateError.ERROR.CHECK_NO_NEW_VERSION;
 
+import org.bouncycastle.jcajce.provider.symmetric.ARC4;
+
 /**
  * @author user
  */
 public class BaseApplication extends Application {
     public static Context getApplicationInstance;
-    public static QPOSService pos;
+    private BaseApplication baseApplication;
+    private QPOSService pos;
     public static Handler handler;
+
+
+    public QPOSService getQposService(){
+        if(pos != null){
+            return pos;
+        }
+        return null;
+    }
+
+    public void setQposService(QPOSService pos){
+      this.pos = pos;
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -46,7 +67,6 @@ public class BaseApplication extends Application {
         initOKHttpUtils();
         initAppUpDate();
     }
-
 
     private void initOKHttpUtils() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -100,7 +120,7 @@ public class BaseApplication extends Application {
     }
     public void open(QPOSService.CommunicationMode mode,Context context) {
         TRACE.d("open");
-//       MyQposClass listener = new MyQposClass();
+       MyQposClass listener = new MyQposClass();
         pos = QPOSService.getInstance(context, mode);
         if (pos == null) {
             return;
@@ -114,7 +134,7 @@ public class BaseApplication extends Application {
 
         handler = new Handler(Looper.myLooper());
 //        pos.initListener(handler, listener);
-
+        pos.initListener(listener);
 
     }
 }

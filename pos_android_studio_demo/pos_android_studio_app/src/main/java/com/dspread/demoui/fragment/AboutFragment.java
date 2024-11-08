@@ -1,4 +1,4 @@
-package com.dspread.demoui.ui.fragment;
+package com.dspread.demoui.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,14 +29,11 @@ import com.dspread.demoui.utils.UpdateAppHelper;
 import com.dspread.demoui.widget.CustomDialog;
 import com.dspread.demoui.beans.VersionEnty;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.FileCallback;
 import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.request.base.Request;
 import com.xuexiang.xutil.app.PathUtils;
-
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,7 +62,7 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         myListener = (TitleUpdateListener) getActivity();
-        myListener.sendValue(getString(R.string.about));
+        myListener.setFragmentTitle(getString(R.string.about));
     }
 
     @Override

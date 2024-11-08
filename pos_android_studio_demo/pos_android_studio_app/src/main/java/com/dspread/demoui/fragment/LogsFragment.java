@@ -1,4 +1,4 @@
-package com.dspread.demoui.ui.fragment;
+package com.dspread.demoui.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -51,7 +51,7 @@ public class LogsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         myListener = (TitleUpdateListener) getActivity();
-        myListener.sendValue(getString(R.string.show_log));
+        myListener.setFragmentTitle(getString(R.string.show_log));
         TRACE.setContext(getContext());
     }
 
