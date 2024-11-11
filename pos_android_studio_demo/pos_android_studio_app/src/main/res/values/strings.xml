@@ -509,6 +509,7 @@
     <string name="network_failed">Network request fail</string>
     <string name="auto_trade">AutoTrade</string>
     <string name="trade_returnfailed">Trade data return failed</string>
+    <string name="msg_upload_log_success" translatable="false">Has sent the log to Dspread technical team, if there are any issues, they will contact %s</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 </resources>

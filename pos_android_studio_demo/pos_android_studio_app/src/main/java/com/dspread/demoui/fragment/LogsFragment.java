@@ -33,6 +33,8 @@ import com.dspread.demoui.utils.LogFileConfig;
 import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.TitleUpdateListener;
 
+import org.json.JSONObject;
+
 /**
  * [一句话描述该类的功能]
  *
@@ -45,6 +47,7 @@ public class LogsFragment extends Fragment {
     private TextView tv_log;
     private static LogFileConfig logFileConfig;
     private ProgressBar progress_loading;
+    private String email;
 
 
     @Override
@@ -99,11 +102,16 @@ public class LogsFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
     private final int ErrorCode = 1001;
+    private final int SuccessCode = 1000;
    private Handler handler = new Handler(Looper.myLooper()){
        @Override
        public void handleMessage(@NonNull Message msg) {
            super.handleMessage(msg);
+           progress_loading.setVisibility(View.GONE);
            switch (msg.what){
+               case SuccessCode:
+                   Toast.makeText(getContext(),getString(R.string.msg_upload_log_success,email),Toast.LENGTH_LONG).show();
+                   break;
                case ErrorCode:
                    Mydialog.ErrorDialog(getActivity(), getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
                        @Override
@@ -125,6 +133,7 @@ public class LogsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == 1){
+            progress_loading.setVisibility(View.VISIBLE);
             EditText editText = new EditText(getContext());
             editText.setHint(getString(R.string.input_email));
             AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
@@ -133,7 +142,7 @@ public class LogsFragment extends Fragment {
             dialog.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    String email = editText.getText().toString();
+                    email = editText.getText().toString();
                     if("Empty logs".equals(tv_log.getText().toString())){
                         Toast.makeText(getContext(),"Empty logs",Toast.LENGTH_SHORT).show();
                     }else {
@@ -165,10 +174,22 @@ public class LogsFragment extends Fragment {
             String result =DingTalkTest.postJson(Constants.dingdingUrl, reqStr);
 
             System.out.println("result == " + result);
+            Message msg = new Message();
             if (result==null){
-                Message msg = new Message();
                  msg.what = ErrorCode;
                  handler.sendMessage(msg);
+            }else {
+                JSONObject object = new JSONObject(result);
+                String errmsg = object.getString("errmsg");
+                int errcode = object.getInt("errcode");
+                if (errcode == 0){
+                    msg.what = SuccessCode;
+                    handler.sendMessage(msg);
+                }else {
+                    msg.what = ErrorCode;
+                    handler.sendMessage(msg);
+                    Log.e("Exception","Network fail");
+                }
             }
         }catch (Exception e){
             Log.e("Exception","e:"+e.toString());

@@ -121,8 +121,8 @@ release:
   image: node:lts
   script:
     - cd ..
-    - npm install -p semantic-release -p @semantic-release/git @semantic-release/gitlab @semantic-release/exec -p @semantic-release/changelog conventional-changelog-conventionalcommits --force
-    - npx semantic-release@latest
+    - npm install -p semantic-release -p @semantic-release/git @semantic-release/gitlab -p @semantic-release/changelog conventional-changelog-conventionalcommits --force
+    - npx semantic-release@20
   only:
     - master
 
