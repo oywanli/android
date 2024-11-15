@@ -391,6 +391,11 @@ public class SettingFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+//                    if(posType != null && posType == POS_TYPE.BLUETOOTH){
+//                        rBtnBlue.setChecked(false);
+//                        posType = null;
+//                        tvConnectType.setText(getString(R.string.setting_connectiontype));
+//                    }
                     clearConnectStatus();
                     Toast.makeText(getContext(),"Device disconnect!", Toast.LENGTH_LONG).show();
                 }
