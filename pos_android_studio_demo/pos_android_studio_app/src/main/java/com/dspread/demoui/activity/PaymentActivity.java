@@ -699,18 +699,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     content += "pinRandomNumber:" + " " + pinRandomNumber + "\n";
                     cardNo = maskedPAN;
                     String realPan = null;
-                    if (!TextUtils.isEmpty(trackksn) && !TextUtils.isEmpty(encTrack2)) {
-                        String clearPan = DUKPK2009_CBC.getData(trackksn, encTrack2, DUKPK2009_CBC.Enum_key.DATA, DUKPK2009_CBC.Enum_mode.CBC);
-                        content += "encTrack2:" + " " + clearPan + "\n";
-                        realPan = clearPan.substring(0, maskedPAN.length());
-                        content += "realPan:" + " " + realPan + "\n";
-                    }
-                    if (!TextUtils.isEmpty(pinKsn) && !TextUtils.isEmpty(pinBlock) && !TextUtils.isEmpty(realPan)) {
-                        String date = DUKPK2009_CBC.getData(pinKsn, pinBlock, DUKPK2009_CBC.Enum_key.PIN, DUKPK2009_CBC.Enum_mode.CBC);
-                        String parsCarN = "0000" + realPan.substring(realPan.length() - 13, realPan.length() - 1);
-                        String s = DUKPK2009_CBC.xor(parsCarN, date);
-                        content += "PIN:" + " " + s + "\n";
-                    }
+
                 }
                 if(decodeData.get("maskedPAN")!=null&&!"".equals(decodeData.get("maskedPAN"))){
                     sendRequestToBackend(content);
