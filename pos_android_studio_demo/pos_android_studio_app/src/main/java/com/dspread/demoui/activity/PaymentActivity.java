@@ -693,8 +693,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         pos.setContext(this);
         //init handler
         handler = new Handler(Looper.myLooper());
-        pos.initListener(handler, listener);
-
+        pos.initListener(listener);
+//        pos.initListener(handler, listener);
+//
 //        String sdkVersion = pos.getSdkVersion();
 //        Toast.makeText(this, "sdkVersion--" + sdkVersion, Toast.LENGTH_SHORT).show();
 
@@ -1151,6 +1152,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onDoTradeResult(QPOSService.DoTradeResult result, Hashtable<String, String> decodeData) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             TRACE.d("(DoTradeResult result, Hashtable<String, String> decodeData) " + result.toString() + TRACE.NEW_LINE + "decodeData:" + decodeData);
             dismissDialog();
             String cardNo = "";
@@ -1396,10 +1402,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 Mydialog.ErrorDialog(PaymentActivity.this, msg, null);
             }
             dealDoneflag = true;
+                }
+            });
         }
 
         @Override
         public void onQposInfoResult(Hashtable<String, String> posInfoData) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             tvTitle.setText(getString(R.string.get_info));
             dismissDialog();
             TRACE.d("onQposInfoResult" + posInfoData.toString());
@@ -1440,13 +1453,19 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mbtnNewpay.setVisibility(View.GONE);
             mtvinfo.setText(content);
             mllchrccard.setVisibility(View.GONE);
+                }
+            });
         }
 
         /**
-         * @see QPOSService.QPOSServiceListener#onRequestTransactionResult(QPOSService.TransactionResult)
          */
         @Override
         public void onRequestTransactionResult(QPOSService.TransactionResult transactionResult) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             TRACE.d("onRequestTransactionResult()" + transactionResult.toString());
             if (transactionResult == QPOSService.TransactionResult.CARD_REMOVED) {
             }
@@ -1515,10 +1534,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
             amounts = "";
             cashbackAmounts = "";
+                }
+            });
         }
 
         @Override
         public void onRequestBatchData(String tlv) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             dismissDialog();
             dealDoneflag = true;
             isNormal = true;
@@ -1530,6 +1556,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mllinfo.setVisibility(View.VISIBLE);
             mtvinfo.setText(content);
             mllchrccard.setVisibility(View.GONE);
+                }
+            });
         }
 
         @Override
@@ -1543,6 +1571,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onQposIdResult(Hashtable<String, String> posIdTable) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             dismissDialog();
             dealDoneflag = true;
             TRACE.w("onQposIdResult():" + posIdTable.toString());
@@ -1593,10 +1626,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 isVisiblePosID = false;
             }
+                }
+            });
         }
 
         @Override
         public void onRequestSelectEmvApp(ArrayList<String> appList) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             TRACE.d("onRequestSelectEmvApp():" + appList.toString());
             dismissDialog();
             dialog = new Dialog(PaymentActivity.this);
@@ -1629,14 +1669,22 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
             });
             dialog.show();
-
+                }
+            });
         }
 
         @Override
         public void onRequestWaitingUser() {//wait user to insert/swipe/tap card
             TRACE.d("onRequestWaitingUser()");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             dismissDialog();
             mllchrccard.setVisibility(View.VISIBLE);
+                }
+            });
         }
 
         @Override
@@ -1683,6 +1731,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onReturnGetPinInputResult(int num) {
             super.onReturnGetPinInputResult(num);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             String s = "";
             pinpadEditText.setVisibility(View.VISIBLE);
             if (num == -1) {
@@ -1696,10 +1749,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 pinpadEditText.setText(s);
             }
+                }
+            });
         }
 
         @Override
         public void onRequestSetAmount() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             TRACE.d("onRequestSetAmount()");
             if (transactionTypeString != null) {
                 if (transactionTypeString.equals("GOODS")) {
@@ -1745,6 +1805,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 pos.setAmount(amounts, cashbackAmounts, "643", transactionType);
             }
+                }
+            });
         }
 
         /**
@@ -1759,6 +1821,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onRequestOnlineProcess(final String tlv) {
             TRACE.d("onRequestOnlineProcess" + tlv);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             tvTitle.setText(getString(R.string.online_process_requested));
             dismissDialog();
 
@@ -1776,71 +1843,32 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     +", \"tlv\": "+tlv+"}";
             Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
             putInfoToDingding(tlv, data);
-//            OkGo.<String>post(Constants.backendUploadUrl).tag(this)
-//                    .headers("content-type", "application/json")
-//                    .params("deviceInfo", DeviceUtils.getPhoneDetail())
-//                    .params("countryCode",DeviceUtils.getDevieCountry(PaymentActivity.this))
-//                    .params("tlv", tlv).execute(new AbsCallback<String>() {
-//                @Override
-//                public void onStart(Request<String, ? extends Request> request) {
-//                    super.onStart(request);
-//                    TRACE.i("onStart==");
-//                    Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
-//                }
-//
-//
-//                @Override
-//                public void onSuccess(Response<String> response) {
-//                    dismissDialog();
-//                    String onlineApproveCode = "8A023030";//Currently the default value,
-//                    // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
-//
-//                    // should be assigned to the server to return data,
-//                    // the data format is TLV
-//                    pos.sendOnlineProcessResult(onlineApproveCode);//Script notification/55domain/ICCDATA
-//                }
-//
-//                @Override
-//                public String convertResponse(okhttp3.Response response) throws Throwable {
-//                    return null;
-//                }
-//
-//                @Override
-//                public void onError(Response<String> response) {
-//                    super.onError(response);
-//                    dismissDialog();
-//                    TRACE.i("onError==");
-//
-//                    Mydialog.ErrorDialog(PaymentActivity.this, getString(R.string.network_failed), new Mydialog.OnMyClickListener() {
-//                        @Override
-//                        public void onCancel() {
-//
-//                        }
-//
-//                        @Override
-//                        public void onConfirm() {
-//                            //8A025A33 //Unable to go online, offline declined
-//                            String offlineDeclinedCode = "8A025A33";
-//                            pos.sendOnlineProcessResult(offlineDeclinedCode);
-//                        }
-//                    });
-//                }
-//            });
-
+                }
+            });
         }
 
         @Override
         public void onRequestTime() {
             TRACE.d("onRequestTime");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             dismissDialog();
             String terminalTime = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
             pos.sendTime(terminalTime);
-//            statusEditText.setText(getString(R.string.request_terminal_time) + " " + terminalTime);
+                }
+            });
         }
 
 
         @Override
         public void onRequestDisplay(QPOSService.Display displayMsg) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
             TRACE.d("onRequestDisplay(Display displayMsg):" + displayMsg.toString());
             dismissDialog();
             String msg = "";
@@ -1880,6 +1908,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             }
 //            Toast.makeText(CheckActivity.this, msg, Toast.LENGTH_SHORT).show();
             Mydialog.loading(PaymentActivity.this, msg);
+
+                }
+            });
         }
 
         @Override
@@ -2004,6 +2035,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onError(QPOSService.Error errorState) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
             if (updateThread != null) {
                 updateThread.concelSelf();
             }
@@ -2065,15 +2100,26 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     Mydialog.ErrorDialog.dismiss();
                 }
             });
+
+                }
+            });
         }
 
         @Override
         public void onReturnReversalData(String tlv) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             dealDoneflag = true;
             String content = getString(R.string.reversal_data);
             content += tlv;
             TRACE.d("onReturnReversalData(): " + tlv);
             statusEditText.setText(content);
+
+                }
+            });
         }
 
         @Override
@@ -2083,6 +2129,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onReturnGetPinResult(Hashtable<String, String> result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             TRACE.d("onReturnGetPinResult(Hashtable<String, String> result):" + result.toString());
             String pinBlock = result.get("pinBlock");
             String pinKsn = result.get("pinKsn");
@@ -2091,6 +2142,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             content += getString(R.string.pinBlock) + " " + pinBlock + "\n";
             statusEditText.setText(content);
             TRACE.i(content);
+                }
+            });
         }
 
         @Override
@@ -2146,6 +2199,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onRequestUpdateWorkKeyResult(QPOSService.UpdateInformationResult result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             tvTitle.setText(getString(R.string.update_WorkKey));
             dismissDialog();
             dealDoneflag = true;
@@ -2164,11 +2222,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mbtnNewpay.setVisibility(View.GONE);
             mllchrccard.setVisibility(View.GONE);
             tradeSuccess.setVisibility(View.GONE);
-
+                }
+            });
         }
 
         @Override
         public void onReturnCustomConfigResult(boolean isSuccess, String result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             tvTitle.setText(getString(R.string.updateEMVByXml));
             dismissDialog();
             dealDoneflag = true;
@@ -2179,20 +2243,33 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mbtnNewpay.setVisibility(View.GONE);
             mllchrccard.setVisibility(View.GONE);
             tradeSuccess.setVisibility(View.GONE);
+                }
+            });
         }
 
         @Override
         public void onRequestSetPin(boolean isOfflinePin, int tryNum) {
             super.onRequestSetPin(isOfflinePin, tryNum);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             TRACE.i("onRequestSetPin() in D70");
             tvTitle.setText(getString(R.string.input_pin));
             dismissDialog();
             mllchrccard.setVisibility(View.GONE);
+                }
+            });
         }
 
         @Override
         public void onRequestSetPin() {
             TRACE.i("onRequestSetPin()");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
             tvTitle.setText(getString(R.string.input_pin));
             dismissDialog();
             mllchrccard.setVisibility(View.GONE);
@@ -2221,10 +2298,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
 
             });
+
+                }
+            });
         }
 
         @Override
         public void onReturnSetMasterKeyResult(boolean isSuccess) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             tvTitle.setText(getString(R.string.set_Masterkey));
             dismissDialog();
             dealDoneflag = true;
@@ -2235,6 +2320,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mtvinfo.setText("SetMasterkeyResult: " + isSuccess);
             mllchrccard.setVisibility(View.GONE);
             tradeSuccess.setVisibility(View.GONE);
+                }
+            });
         }
 
         @Override
@@ -2288,6 +2375,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onUpdatePosFirmwareResult(QPOSService.UpdateInformationResult arg0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             tvTitle.setText(getString(R.string.updateFirmware));
             dismissDialog();
             String msg = "";
@@ -2305,6 +2397,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mbtnNewpay.setVisibility(View.GONE);
             mllchrccard.setVisibility(View.GONE);
             tradeSuccess.setVisibility(View.GONE);
+                }
+            });
         }
 
         @Override
@@ -2474,6 +2568,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onReturnUpdateIPEKResult(boolean arg0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             dealDoneflag = true;
             tvTitle.setText(getString(R.string.updateIPEK));
             dismissDialog();
@@ -2489,6 +2588,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             mbtnNewpay.setVisibility(View.GONE);
             tradeSuccess.setVisibility(View.GONE);
             mllchrccard.setVisibility(View.GONE);
+                }
+            });
         }
 
         @Override
@@ -2573,6 +2674,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onRequestUpdateKey(String arg0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
             tvTitle.setText(getString(R.string.get_update_key));
             dismissDialog();
             dealDoneflag = true;
@@ -2586,6 +2692,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             tradeSuccess.setVisibility(View.GONE);
             mtvinfo.setText("update checkvalue : " + arg0);
             mllchrccard.setVisibility(View.GONE);
+                }
+            });
         }
 
         @Override
