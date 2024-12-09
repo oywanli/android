@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -39,6 +41,7 @@ public class PinPadView extends RelativeLayout {
     private boolean isRandom;
     private EditText mEtinputpin;
     private QPOSService pos;
+    private String pinData = "";
 
     public static interface OnPayClickListener {
 
@@ -47,6 +50,7 @@ public class PinPadView extends RelativeLayout {
         void onPaypass();
 
         void onConfirm(String password);
+
     }
 
     private OnPayClickListener mPayClickListener;
@@ -60,29 +64,36 @@ public class PinPadView extends RelativeLayout {
         super(context);
     }
 
-
     public PinPadView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-
     public PinPadView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.mContext = (Activity) context;
-
         initView();
         this.addView(mPassLayout);
     }
 
-
     private void initView() {
         mPassLayout = LayoutInflater.from(mContext).inflate(R.layout.view_paypass_layout, null);
-
         mEtinputpin = mPassLayout.findViewById(R.id.et_inputpin);
         mGridView = mPassLayout.findViewById(R.id.gv_pass);
-
+        mEtinputpin.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
+                        || actionId == EditorInfo.IME_ACTION_DONE) {
+                    pinData = mEtinputpin.getText().toString().trim();
+                    mPayClickListener.onConfirm(pinData);
+                    return true;
+                }
+                return false;
+            }
+        });
         initData();
     }
+
 
     /**
      * Is isRandom enabled for random numbers
@@ -120,11 +131,9 @@ public class PinPadView extends RelativeLayout {
         mGridView.setAdapter(adapter);
     }
 
-
     /**
      * Adapters for GridView
      */
-
     BaseAdapter adapter = new BaseAdapter() {
         @Override
         public int getCount() {
@@ -213,16 +222,15 @@ public class PinPadView extends RelativeLayout {
                         if (savePwd.length() == 12) {
                             return;
                         } else {
-//                            savePwd = savePwd + listNumber.get(position);
-                            String SavePwds =""+listNumber.get(position);
+                            String SavePwds = String.valueOf(listNumber.get(position));
                             if (pos.getCvmKeyList() != null && !("").equals(pos.getCvmKeyList())) {
                                 String keyList = Util.convertHexToString(pos.getCvmKeyList());
-                                    for (int j = 0; j < keyList.length(); j++) {
-                                        if (keyList.charAt(j) == SavePwds.charAt(0)) {
-                                            savePwd = savePwd + Integer.toHexString(j) + "";
-                                            break;
-                                        }
+                                for (int j = 0; j < keyList.length(); j++) {
+                                    if (keyList.charAt(j) == SavePwds.charAt(0)) {
+                                        savePwd = savePwd + Integer.toHexString(j);
+                                        break;
                                     }
+                                }
                             }
                             mEtinputpin.setText(savePwd);
                         }
@@ -242,12 +250,12 @@ public class PinPadView extends RelativeLayout {
                     } else if (position == 13) {//cancel
                         mPayClickListener.onCencel();
                     } else if (position == 14) {//confirm
-                        if (savePwd.length() >= 4 && savePwd.length() <= 12) {
-                            mPayClickListener.onConfirm(savePwd);
+                        pinData = mEtinputpin.getText().toString().trim();
+                        if (pinData.length() >= 4 && pinData.length() <= 12) {
+                            mPayClickListener.onConfirm(pinData);
                         } else {
                             Toast.makeText(mContext, "The length just can input 4 - 12 digits", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 }
             });
