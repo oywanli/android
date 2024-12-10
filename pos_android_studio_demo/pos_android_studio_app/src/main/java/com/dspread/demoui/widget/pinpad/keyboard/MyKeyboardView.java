@@ -17,6 +17,7 @@ import com.dspread.demoui.utils.QPOSUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * ****************************************************************
@@ -246,17 +247,21 @@ public class MyKeyboardView extends KeyboardView {
      */
     public void randomKey(Keyboard pLatinKeyboard) {
         int[] ayRandomKey = new int[13];
-        for (int i = 0; i < dataList.size(); i++) {
-            ayRandomKey[i] = Integer.valueOf(dataList.get(i), 16);
+        if(dataList.size() == 0){
+            ayRandomKey = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, -3, 0, -4, -5};
+//            Random random = new Random();
+//            for (int i = 0; i < ayRandomKey.length; i++) {
+//                int a = random.nextInt(ayRandomKey.length);
+//                int temp = ayRandomKey[i];
+//                ayRandomKey[i] = ayRandomKey[a];
+//                ayRandomKey[a] = temp;
+//            }
+        }else {
+            for (int i = 0; i < dataList.size(); i++) {
+                ayRandomKey[i] = Integer.valueOf(dataList.get(i), 16);
+            }
         }
-//        int[] ayRandomKey = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-//        Random random = new Random();
-//        for (int i = 0; i < ayRandomKey.length; i++) {
-//            int a = random.nextInt(ayRandomKey.length);
-//            int temp = ayRandomKey[i];
-//            ayRandomKey[i] = ayRandomKey[a];
-//            ayRandomKey[a] = temp;
-//        }
+
         List<Keyboard.Key> pKeyLis = pLatinKeyboard.getKeys();
         int index = 0;
         int sy = mHeightPixels - pLatinKeyboard.getHeight();

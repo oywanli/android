@@ -24,15 +24,9 @@ import com.dspread.demoui.interfaces.TransactionCallback;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.utils.TRACE;
-import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
-import com.dspread.xpos.Util;
-import com.dspread.xpos.utils.AESUtil;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.AbsCallback;
-import com.lzy.okgo.model.Response;
-import com.lzy.okgo.request.base.Request;
+
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -92,7 +86,6 @@ public class MyQposClass extends CQPOSService {
     }
 
     /**
-     * @see QPOSService.QPOSServiceListener#onRequestTransactionResult(QPOSService.TransactionResult)
      */
     @Override
     public void onRequestTransactionResult(QPOSService.TransactionResult transactionResult) {
@@ -373,6 +366,14 @@ public class MyQposClass extends CQPOSService {
         TRACE.d("onReturnCustomConfigResult(boolean isSuccess, String result):" + isSuccess + "--result--" + result);
         if(posUpdateCallback != null){
             posUpdateCallback.onReturnCustomConfigResult(isSuccess, result);
+        }
+    }
+
+    @Override
+    public void onRequestSetPin(boolean isOfflinePin, int tryNum) {
+        super.onRequestSetPin(isOfflinePin, tryNum);
+        if(transactionCallback != null){
+            transactionCallback.onRequestSetPin(isOfflinePin,tryNum);
         }
     }
 

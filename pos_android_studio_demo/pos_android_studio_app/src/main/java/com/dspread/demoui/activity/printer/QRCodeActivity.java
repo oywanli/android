@@ -1,11 +1,9 @@
 package com.dspread.demoui.activity.printer;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,14 +15,10 @@ import com.dspread.demoui.ui.dialog.PrintDialog;
 import com.dspread.demoui.utils.QRCodeUtil;
 import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
-import com.dspread.print.device.PrinterInitListener;
-import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class QRCodeActivity extends AppCompatActivity implements View.OnClickListener {
+public class QRCodeActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView ivBackTitle;
     private TextView tvTitle;
@@ -44,7 +38,6 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayout qrcodeDensitylevel;
     private LinearLayout qrcodeErrorLevel;
     private TextView qrcodeTextErrorLevel;
-    private PrinterDevice mPrinter;
     private PrintLineStyle printLineStyle;
     private String qrCodeSize = "";
     private int qrSize;
@@ -62,40 +55,16 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        setContentView(R.layout.activity_qrcode);
-        initView();
-        PrinterManager instance = PrinterManager.getInstance();
-        mPrinter = instance.getPrinter();
-        if ("D30".equals(Build.MODEL)) {
-            mPrinter.initPrinter(QRCodeActivity.this, new PrinterInitListener() {
-                @Override
-                public void connected() {
-                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
-                /*When no paper, the
-                printer terminates printing and cancels the printing task.*/
-//              PrinterDevice.PrintTerminationState.PRINT_STOP
-               /* When no paper, the
-                printer will prompt that no paper. After loading the paper, the printer
-                will continue to restart printing.*/
-//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
-                }
-
-                @Override
-                public void disconnected() {
-                }
-            });
-
-        } else {
-            mPrinter.initPrinter(this);
-        }
-        MyPrinterListener myPrinterListener = new MyPrinterListener();
-        mPrinter.setPrintListener(myPrinterListener);
-        printLineStyle = new PrintLineStyle();
     }
 
-    private void initView() {
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_qrcode;
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         ivBackTitle = findViewById(R.id.iv_back_title);
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setText(getString(R.string.print_qrcode));
@@ -115,15 +84,8 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         qrcodeDensitylevel = findViewById(R.id.qrcode_densitylevel);
         qrcodeErrorLevel = findViewById(R.id.qrcode_errorLevel);
         qrcodeTextErrorLevel = findViewById(R.id.qrcode_text_errorLevel);
-        String deviceModel = Build.MODEL;
-        if ("mp600".equals(deviceModel)) {
-            qrcodeDensitylevel.setVisibility(View.VISIBLE);
-            qrcodeSpeedlevel.setVisibility(View.VISIBLE);
-        } else {
-            qrcodeSpeedlevel.setVisibility(View.GONE);
-            qrcodeDensitylevel.setVisibility(View.GONE);
-        }
-
+        qrcodeSpeedlevel.setVisibility(View.GONE);
+        qrcodeDensitylevel.setVisibility(View.GONE);
         ivBackTitle.setOnClickListener(this);
         qrcodeContent.setOnClickListener(this);
         qrcodeSize.setOnClickListener(this);
@@ -133,6 +95,14 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         qrcodeSpeedlevel.setOnClickListener(this);
         qrcodeDensitylevel.setOnClickListener(this);
         qrcodeErrorLevel.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onReturnPrintResult(boolean isSuccess, String status, PrinterDevice.ResultType resultType) {
+        btnQrcodePrint.setEnabled(true);
+        Log.w("printResult", "boolean b==" + isSuccess);
+        Log.w("printResult", "String s==" + status);
+        Log.w("printResult", "resultType==" + resultType.toString());
     }
 
     @Override
@@ -206,11 +176,11 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
                     public void onConfirm(String content) {
                         alignText = content;
                         qrTextAlign.setText(content);
-                        if ("LEFT".equals(content) || "居左".equals(content)) {
+                        if ("LEFT".equals(content)) {
                             alignText = "LEFT";
-                        } else if ("RIGHT".equals(content) || "居右".equals(content)) {
+                        } else if ("RIGHT".equals(content)) {
                             alignText = "RIGHT";
-                        } else if ("CENTER".equals(content) || "居中".equals(content)) {
+                        } else if ("CENTER".equals(content)) {
                             alignText = "CENTER";
                         }
                     }
@@ -264,55 +234,54 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
 
             case R.id.btn_qrcode_print:
                 try {
-                    if (!"".equals(alignText)) {
-                        if ("LEFT".equals(alignText)) {
-                            printLineAlign = PrintLine.LEFT;
-                        } else if ("RIGHT".equals(alignText)) {
-                            printLineAlign = PrintLine.RIGHT;
-                        } else if ("CENTER".equals(alignText)) {
-                            printLineAlign = PrintLine.CENTER;
+                    if (mPrinter != null) {
+                        printLineStyle = new PrintLineStyle();
+                        if (!"".equals(alignText)) {
+                            if ("LEFT".equals(alignText)) {
+                                printLineAlign = PrintLine.LEFT;
+                            } else if ("RIGHT".equals(alignText)) {
+                                printLineAlign = PrintLine.RIGHT;
+                            } else if ("CENTER".equals(alignText)) {
+                                printLineAlign = PrintLine.CENTER;
+                            }
                         }
-                    }
 
-                    if (!"".equals(qrCodeSize)) {
-                        qrSize = Integer.parseInt(qrCodeSize);
-                    } else {
-                        qrSize = Integer.parseInt(qrcodeTextSize.getText().toString());
-                    }
-                    if (!"".equals(qrGraylevel)) {
-                        grayLevel = Integer.parseInt(qrGraylevel);
-                    } else {
-                        grayLevel = Integer.parseInt(qrTextGraylevel.getText().toString());
-                    }
+                        if (!"".equals(qrCodeSize)) {
+                            qrSize = Integer.parseInt(qrCodeSize);
+                        } else {
+                            qrSize = Integer.parseInt(qrcodeTextSize.getText().toString());
+                        }
+                        if (!"".equals(qrGraylevel)) {
+                            grayLevel = Integer.parseInt(qrGraylevel);
+                        } else {
+                            grayLevel = Integer.parseInt(qrTextGraylevel.getText().toString());
+                        }
 
-                    if (!"".equals(qrSpeedlevel)) {
-                        speedLevel = Integer.parseInt(qrSpeedlevel);
-                    } else {
-                        speedLevel = Integer.parseInt(qrTextSpeedlevel.getText().toString());
-                    }
+                        if (!"".equals(qrSpeedlevel)) {
+                            speedLevel = Integer.parseInt(qrSpeedlevel);
+                        } else {
+                            speedLevel = Integer.parseInt(qrTextSpeedlevel.getText().toString());
+                        }
 
-                    if (!"".equals(qrDensitylevel)) {
-                        densityLevel = Integer.parseInt(qrDensitylevel);
-                    } else {
-                        densityLevel = Integer.parseInt(qrTextDensitylevel.getText().toString());
+                        if (!"".equals(qrDensitylevel)) {
+                            densityLevel = Integer.parseInt(qrDensitylevel);
+                        } else {
+                            densityLevel = Integer.parseInt(qrTextDensitylevel.getText().toString());
+                        }
+                        if ("".equals(qrContent)) {
+                            qrContent = qrcodeTextContent.getText().toString();
+                        }
+                        Bitmap bitmap = QRCodeUtil.getQrcodeBM(qrContent, qrSize);
+                        qrcodeImage.setImageBitmap(bitmap);
+                        mPrinter.setPrintStyle(printLineStyle);
+                        Log.w("qrErrorLevel", "qrErrorLevel==" + qrErrorLevel);
+                        if ("".equals(qrErrorLevel)) {
+                            qrErrorLevel = qrcodeTextErrorLevel.getText().toString();
+                        }
+                        mPrinter.setFooter(30);
+                        mPrinter.printQRCode(this, qrErrorLevel, qrSize, qrContent, printLineAlign);
+                        btnQrcodePrint.setEnabled(false);
                     }
-                    if ("".equals(qrContent)) {
-                        qrContent = qrcodeTextContent.getText().toString();
-                    }
-                    Bitmap bitmap = QRCodeUtil.getQrcodeBM(qrContent, qrSize);
-                    qrcodeImage.setImageBitmap(bitmap);
-                    if ("mp600".equals(Build.MODEL)) {
-                        mPrinter.setPrinterSpeed(speedLevel);
-                        mPrinter.setPrinterDensity(densityLevel);
-                    }
-//                    mPrinter.setPrinterGrey(grayLevel);
-                    mPrinter.setPrintStyle(printLineStyle);
-                    Log.w("qrErrorLevel", "qrErrorLevel==" + qrErrorLevel);
-                    if ("".equals(qrErrorLevel)) {
-                        qrErrorLevel = qrcodeTextErrorLevel.getText().toString();
-                    }
-                    mPrinter.printQRCode(this, qrErrorLevel, qrSize, qrContent, printLineAlign);
-                    btnQrcodePrint.setEnabled(false);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
 
@@ -323,20 +292,11 @@ public class QRCodeActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    class MyPrinterListener implements PrintListener {
-        @Override
-        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
-            btnQrcodePrint.setEnabled(true);
-            Log.w("printResult", "boolean b==" + b);
-            Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "resultType==" + resultType.toString());
-
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPrinter.close();
+        if (mPrinter != null) {
+            mPrinter.close();
+        }
     }
 }

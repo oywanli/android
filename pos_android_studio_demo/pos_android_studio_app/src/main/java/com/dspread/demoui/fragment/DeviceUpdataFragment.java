@@ -3,7 +3,9 @@ package com.dspread.demoui.fragment;
 import static com.dspread.demoui.utils.Utils.getKeyIndex;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +27,7 @@ import com.dspread.demoui.R;
 import com.dspread.demoui.activity.MainActivity;
 import com.dspread.demoui.activity.MyQposClass;
 import com.dspread.demoui.beans.Constants;
+import com.dspread.demoui.http.DownloadFirmwareAPI;
 import com.dspread.demoui.interfaces.PosUpdateCallback;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
@@ -102,13 +105,16 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
                 pos.setMasterKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", 0);
                 break;
             case R.id.update_workkey:
-                pos.updateWorkKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",//PIN KEY
-                        "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",  //TRACK KEY
-                        "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
-                        0, 5);
+//                pos.updateWorkKey("1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",//PIN KEY
+//                        "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",  //TRACK KEY
+//                        "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885", //MAC KEY
+//                        0, 5);
+                pos.updateWorkKey(0,"1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",
+                        "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885",
+                        "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885");
                 break;
             case R.id.update_firmware:
-                updateFirmware();
+                showListDialog();
                 break;
             case R.id.update_emvByXml:
                 tv_pos_result.setText("Emv is updating...");
@@ -118,6 +124,34 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
                 break;
         }
     }
+
+    private void showListDialog() {
+        // 创建一个选项数组
+        final String[] items = {"Update firmware by TMS", "Update firmware locally"};
+
+        // 创建 AlertDialog.Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Please choose one type");
+
+        // 设置列表项
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 处理用户选择的项
+                if (items[which].equalsIgnoreCase("Update firmware by TMS")) {
+                    updateFirmware(1);
+                }
+                if (items[which].equalsIgnoreCase("Update firmware locally")) {
+                    updateFirmware(2);
+                }
+            }
+        });
+
+        // 创建并显示弹窗
+        builder.create().show();
+    }
+
 
     private void goToSetting(){
         ((MainActivity)getActivity()).switchFragment(1);
@@ -138,6 +172,21 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
             }
         }
     };
+
+    public void updateFirmware(int type) {
+        DownloadFirmwareAPI downloadFirmwareAPI = new DownloadFirmwareAPI();
+        if(type == 1){
+           Hashtable<String, Object> posIdtable = pos.syncGetQposId(5);
+           String posid = (String) posIdtable.get("posId");
+           if(posid != null){
+               String kcv = pos.getUpdateCheckValue();
+               downloadFirmwareAPI.checkHeartBeat(posid);
+           }
+
+        }else {
+            updateFirmware();
+        }
+    }
 
     public void updateFirmware() {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

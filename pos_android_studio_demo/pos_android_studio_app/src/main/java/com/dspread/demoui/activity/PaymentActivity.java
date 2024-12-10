@@ -1,8 +1,11 @@
 package com.dspread.demoui.activity;
 
 import static com.dspread.demoui.utils.QPOSUtil.HexStringToByteArray;
+
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -319,23 +322,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     break;
                 case 100:
-                    if(isICC){
-                        dismissDialog();
-                        String onlineApproveCode = "8A023030";//Currently the default value,
-                        // 8A023035 //online decline,This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification.
+                    isNormal = true;
+                    pinpadEditText.setVisibility(View.GONE);
+                    tvTitle.setText(getText(R.string.transaction_result));
+                    mllinfo.setVisibility(View.VISIBLE);
+                    mtvinfo.setText((String) msg.obj);
+                    mllchrccard.setVisibility(View.GONE);
+                    dismissDialog();
 
-                        // should be assigned to the server to return data,
-                        // the data format is TLV
-                        pos.sendOnlineProcessResult(onlineApproveCode);//Script notification/55domain/ICCDATA
-                    }else {
-                        isNormal = true;
-                        pinpadEditText.setVisibility(View.GONE);
-                        tvTitle.setText(getText(R.string.transaction_result));
-                        mllinfo.setVisibility(View.VISIBLE);
-                        mtvinfo.setText((String) msg.obj);
-                        mllchrccard.setVisibility(View.GONE);
-                        dismissDialog();
-                    }
                 default:
                     break;
             }
@@ -379,11 +373,23 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sendRequestToBackend(String tlvData) {
+//
+//        if("D300".equals(Build.MODEL) ||"D70".equals(Build.MODEL)) {
+//            isNormal = true;
+//            pinpadEditText.setVisibility(View.GONE);
+//            tvTitle.setText(getText(R.string.transaction_result));
+//            mllinfo.setVisibility(View.VISIBLE);
+//            mtvinfo.setText(tlvData);
+//            mllchrccard.setVisibility(View.GONE);
+//            dismissDialog();
+//            return;
+//        }
+        pinpadEditText.setVisibility(View.GONE);
+        tvTitle.setText(getText(R.string.transaction_result));
         String requestTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         String data = "{\"createdAt\": "+requestTime + ", \"deviceInfo\": "+DeviceUtils.getPhoneDetail()+", \"countryCode\": "+DeviceUtils.getDevieCountry(PaymentActivity.this)
                 +", \"tlv\": "+tlvData+"}";
-        pinpadEditText.setVisibility(View.GONE);
-        tvTitle.setText(getText(R.string.transaction_result));
+
         Mydialog.loading(PaymentActivity.this, getString(R.string.processing));
         putInfoToDingding(tlvData, data);
     }
@@ -534,39 +540,51 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         @Override
+        public void onRequestSetPin(boolean isOfflinePin, int tryNum) {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    tvTitle.setText(getString(R.string.input_pin));
+                    dismissDialog();
+                    pinpadEditText.setVisibility(View.VISIBLE);
+                    mllchrccard.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        @Override
         public void onRequestSetPin() {
             TRACE.i("onRequestSetPin()");
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    tvTitle.setText(getString(R.string.input_pin));
+                    dismissDialog();
+                    mllchrccard.setVisibility(View.GONE);
+                    pinPadDialog = new PinPadDialog(PaymentActivity.this);
+                    pinPadDialog.getPayViewPass().setRandomNumber(true).setPayClickListener(pos, new PinPadView.OnPayClickListener() {
 
+                        @Override
+                        public void onCencel() {
+                        pos.cancelPin();
+                        pinPadDialog.dismiss();
+                    }
 
-            tvTitle.setText(getString(R.string.input_pin));
-            dismissDialog();
-            mllchrccard.setVisibility(View.GONE);
-            pinPadDialog = new PinPadDialog(PaymentActivity.this);
-            pinPadDialog.getPayViewPass().setRandomNumber(true).setPayClickListener(pos, new PinPadView.OnPayClickListener() {
+                    @Override
+                    public void onPaypass() {
+                        pos.bypassPin();
+    //                    pos.sendPin("".getBytes());
+                        pinPadDialog.dismiss();
+                    }
 
-                @Override
-                public void onCencel() {
-                    pos.cancelPin();
-                    pinPadDialog.dismiss();
-                }
-
-                @Override
-                public void onPaypass() {
-                    pos.bypassPin();
-//                    pos.sendPin("".getBytes());
-                    pinPadDialog.dismiss();
-                }
-
-                @Override
-                public void onConfirm(String password) {
-                    String pinBlock = buildCvmPinBlock(pos.getEncryptData(), password);// build the ISO format4 pin block
-                    pos.sendCvmPin(pinBlock, true);
-                    pinPadDialog.dismiss();
-                }
-            });
+                    @Override
+                    public void onConfirm(String password) {
+                        String pinBlock = buildCvmPinBlock(pos.getEncryptData(), password);// build the ISO format4 pin block
+                        pos.sendCvmPin(pinBlock, true);
+                        pinPadDialog.dismiss();
+                    }
+                    });
                 }
             });
         }
@@ -825,7 +843,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             dismissDialog();
 
             Hashtable<String, String> decodeData = pos.anlysEmvIccData(tlv);
-            TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
+//            TRACE.d("anlysEmvIccData(tlv):" + decodeData.toString());
             if (isPinCanceled) {
                 mllchrccard.setVisibility(View.GONE);
             } else {
@@ -959,13 +977,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void run() {
 
-
             dismissDialog();
             String msg = "";
             if (displayMsg == QPOSService.Display.CLEAR_DISPLAY_MSG) {
                 msg = "";
             } else if (displayMsg == QPOSService.Display.MSR_DATA_READY) {
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PaymentActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
                 builder.setTitle("Audio");
                 builder.setMessage("Success,Contine ready");
                 builder.setPositiveButton("Confirm", null);
@@ -1017,23 +1034,22 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         public void onReturnGetPinInputResult(int num) {
+            TRACE.i("onReturnGetPinInputResult  ==="+num);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-
-            String s = "";
-            if (num == -1) {
-                    if (keyboardUtil != null) {
-                        keyboardUtil.hide();
-                        pinpadEditText.setVisibility(View.GONE);
+                    String s = "";
+                    if (num == -1) {
+                            if (keyboardUtil != null) {
+                                keyboardUtil.hide();
+                                pinpadEditText.setVisibility(View.GONE);
+                            }
+                    } else {
+                        for (int i = 0; i < num; i++) {
+                            s += "*";
+                        }
+                        pinpadEditText.setText(s);
                     }
-            } else {
-                for (int i = 0; i < num; i++) {
-                    s += "*";
-                }
-                pinpadEditText.setText(s);
-            }
                 }
             });
         }

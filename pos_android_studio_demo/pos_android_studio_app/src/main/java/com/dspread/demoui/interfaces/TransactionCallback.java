@@ -19,6 +19,7 @@ public interface TransactionCallback {
 
     void onQposPinMapSyncResult(boolean isSuccess, boolean isNeedPin);
 
+    void onRequestSetPin(boolean isOfflinePin, int tryNum);
     void onRequestSetPin();
 
     void onReturnGetPinResult(Hashtable<String, String> result);

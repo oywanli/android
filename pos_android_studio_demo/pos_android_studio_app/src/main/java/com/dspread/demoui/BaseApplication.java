@@ -130,7 +130,7 @@ public class BaseApplication extends Application {
         }
         pos.setD20Trade(true);
 
-        pos.setConext(this);
+        pos.setContext(this);
 
         handler = new Handler(Looper.myLooper());
 //        pos.initListener(handler, listener);
