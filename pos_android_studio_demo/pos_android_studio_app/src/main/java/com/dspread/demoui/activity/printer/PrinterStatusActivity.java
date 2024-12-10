@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-public class PrinterStatusActivity extends AppCompatActivity implements View.OnClickListener {
+public class PrinterStatusActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView ivBackTitle;
     private TextView tvTitle;
@@ -33,7 +33,6 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
     private Button btnGetTemperature;
     private Button btnGetVoltage;
     private TextView tvPrintStatusInfo;
-    private PrinterDevice mPrinter;
     private PrintLineStyle printLineStyle;
     private TextView tvGetDesity;
     private TextView tvGetSpeed;
@@ -73,19 +72,17 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        setContentView(R.layout.activity_printer_status);
-        initView();
-        PrinterManager instance = PrinterManager.getInstance();
-        mPrinter = instance.getPrinter();
-        mPrinter.initPrinter(this);
-        PrinterListener myPrinterListener = new PrinterListener();
-        mPrinter.setPrintListener(myPrinterListener);
         printLineStyle = new PrintLineStyle();
     }
 
-    private void initView() {
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_printer_status;
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         ivBackTitle = findViewById(R.id.iv_back_title);
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setText(getString(R.string.get_printer_status));
@@ -110,12 +107,24 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
         tvGetTemperature.setText("");
         tvGetVoltage.setText("");
         tvPrintStatusInfo.setText("");
-        if (Build.MODEL.equalsIgnoreCase("D70") || Build.MODEL.equalsIgnoreCase("D30") ) {
+        if (Build.MODEL.equalsIgnoreCase("D70") || Build.MODEL.equalsIgnoreCase("D30")||Build.MODEL.equalsIgnoreCase("D30M")) {
             btnGetDensity.setVisibility(View.GONE);
             btnGetSpeed.setVisibility(View.GONE);
             btnGetTemperature.setVisibility(View.GONE);
             btnGetVoltage.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onReturnPrintResult(boolean isSuccess, String status, PrinterDevice.ResultType resultType) {
+        Log.w("printResult", "boolean b==" + isSuccess);
+        Log.w("printResult", "String s==" + status);
+        Log.w("printResult", "resultType==" + resultType.toString());
+
+        Message msg = new Message();
+        msg.what = resultType.getValue();
+        msg.obj = status;
+        handler.sendMessage(msg);
     }
 
     @Override
@@ -126,14 +135,20 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.btn_getstatus:
                 try {
-                    mPrinter.getPrinterStatus();
+                    if (mPrinter != null) {
+                        mPrinter.getPrinterStatus();
+                    }
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.btn_get_density:
                 try {
-                    mPrinter.getPrinterDensity();
+                    if (mPrinter != null) {
+                        mPrinter.getPrinterDensity();
+                    }
+
 
                 } catch (RemoteException e) {
                     e.printStackTrace();
@@ -141,21 +156,30 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.btn_get_speed:
                 try {
-                    mPrinter.getPrinterSpeed();
+                    if (mPrinter != null) {
+                        mPrinter.getPrinterSpeed();
+                    }
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.btn_get_temperature:
                 try {
-                    mPrinter.getPrinterTemperature();
+                    if (mPrinter != null) {
+                        mPrinter.getPrinterTemperature();
+                    }
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.btn_get_voltage:
                 try {
-                    mPrinter.getPrinterVoltage();
+                    if (mPrinter != null) {
+                        mPrinter.getPrinterVoltage();
+                    }
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -165,23 +189,12 @@ public class PrinterStatusActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    class PrinterListener implements PrintListener {
-        @Override
-        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
-            Log.w("printResult", "boolean b==" + b);
-            Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "resultType==" + resultType.toString());
-
-            Message msg = new Message();
-            msg.what = resultType.getValue();
-            msg.obj = s;
-            handler.sendMessage(msg);
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPrinter.close();
+        if (mPrinter != null) {
+            mPrinter.close();
+        }
     }
 }

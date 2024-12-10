@@ -18,5 +18,13 @@ public class Constants {
     public static final String rapidAPIKey ="0218743bb8mshc996b4090fff88ap131a86jsn5658a560db57";
     public static final String rapidAPIHost ="demo-project67026.p.rapidapi.com";
 
-//    public static TransData transData = new TransData();
+    public static final String connType = "connType";
+    public static final String BLUETOOTH = "bluetooth";
+    public static final String UART = "uart";
+    public static final String USB = "usb";
+    public static final String BluetoothAddress = "bluetoothAddress";
+
+    public static final String TerminalHeartBeatUrl = "http://211.157.135.52:10039/terminal/heartBeat/%s";
+    public static final String GetTaskFileDownloadUrl = "http://211.157.135.52:10039/terminal/getTaskFileDownloadUrl/%s/%s";
+    public static final String UpdateTaskLogUrl = "http://211.157.135.52:10039/terminal/updateTaskLog/%s/%s";
 }

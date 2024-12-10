@@ -1,32 +1,22 @@
 package com.dspread.demoui.activity.printer;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.action.printerservice.PrintStyle;
 import com.action.printerservice.barcode.Barcode1D;
 import com.action.printerservice.barcode.Barcode2D;
 import com.dspread.demoui.R;
-import com.dspread.print.device.PrintListener;
 import com.dspread.print.device.PrinterDevice;
-import com.dspread.print.device.PrinterInitListener;
-import com.dspread.print.device.PrinterManager;
 import com.dspread.print.device.bean.PrintLineStyle;
 import com.dspread.print.widget.PrintLine;
 
-public class PrintTicketActivity extends AppCompatActivity implements View.OnClickListener {
-    private PrinterDevice mPrinter;
+public class PrintTicketActivity extends BaseActivity implements View.OnClickListener {
     private PrintLineStyle printLineStyle;
     private ImageView ivBackTitle;
     private TextView tvTitle;
@@ -39,96 +29,73 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        setContentView(R.layout.activity_print_ticket);
-        PrinterManager instance = PrinterManager.getInstance();
-        mPrinter = instance.getPrinter();
-        if ("D30".equals(Build.MODEL)) {
-            mPrinter.initPrinter(PrintTicketActivity.this, new PrinterInitListener() {
-                @Override
-                public void connected() {
-                    mPrinter.setPrinterTerminatedState(PrinterDevice.PrintTerminationState.PRINT_STOP);
-                /*When no paper, the
-                printer terminates printing and cancels the printing task.*/
-//              PrinterDevice.PrintTerminationState.PRINT_STOP
-               /* When no paper, the
-                printer will prompt that no paper. After loading the paper, the printer
-                will continue to restart printing.*/
-//              PrinterDevice.PrintTerminationState. PRINT_NORMAL
-                }
-
-                @Override
-                public void disconnected() {
-                }
-            });
-
-        } else {
-            mPrinter.initPrinter(this);
-        }
-        MyPrinterListener myPrinterListener = new MyPrinterListener();
-        mPrinter.setPrintListener(myPrinterListener);
-        printLineStyle = new PrintLineStyle();
-        initView();
     }
 
-    private void initView() {
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_print_ticket;
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         ivBackTitle = findViewById(R.id.iv_back_title);
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setText(getString(R.string.print_ticket));
         btnComposite = findViewById(R.id.btn_composite);
         btnMulti = findViewById(R.id.btn_multi);
         btnStopPrint = findViewById(R.id.btn_stopprint);
-        String deviceModel = Build.MODEL;
         btnPrint = findViewById(R.id.btn_Print);
-        if ("mp600".equals(deviceModel)) {
-            btnStopPrint.setVisibility(View.VISIBLE);
-        } else {
-            btnStopPrint.setVisibility(View.GONE);
-        }
         ivBackTitle.setOnClickListener(this);
         btnComposite.setOnClickListener(this);
         btnMulti.setOnClickListener(this);
         btnStopPrint.setOnClickListener(this);
-//        printtext();
+    }
+
+    @Override
+    protected void onReturnPrintResult(boolean isSuccess, String status, PrinterDevice.ResultType resultType) {
+        btnPrint.setEnabled(true);
+        Log.w("printResult", "boolean b==" + isSuccess);
+        Log.w("printResult", "String s==" + status);
+        Log.w("printResult", "resultType==" + resultType.toString());
     }
 
     private void printtext() {
         try {
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 16));
-
-            mPrinter.addText("Testing");
-            mPrinter.addText("POS Signing of purchase orders");
-            mPrinter.addText("MERCHANT COPY");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 14));
-            mPrinter.addText("- - - - - - - - - - - - - -");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
-            mPrinter.addText("ISSUER Agricultural Bank of China");
-            mPrinter.addText("ACQ 48873110");
-            mPrinter.addText("CARD number.");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
-            mPrinter.addText("6228 48******8 116 S");
-            mPrinter.addText("TYPE of transaction(TXN TYPE)");
-            mPrinter.addText("SALE");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 14));
-            mPrinter.addText("- - - - - - - - - - - - - -");
-            mPrinter.addTexts(new String[]{"BATCH NO", "000043"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"VOUCHER NO", "000509"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"AUTH NO", "000786"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"DATE/TIME", "2010/12/07 16:15:17"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"REF NO", "000001595276"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"2014/12/07 16:12:17", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addTexts(new String[]{"AMOUNT:", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
-            mPrinter.addText("RMB:249.00");
-            mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 12));
-            mPrinter.addText("- - - - - - - - - - - - - -");
-            mPrinter.addText("Please scan the QRCode for getting more information: ");
-            mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
-            mPrinter.addText("Please scan the QRCode for getting more information:");
-            mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
-            mPrinter.setPrintStyle(printLineStyle);
-            mPrinter.setFooter(30);
-            mPrinter.print(this);
+            if (mPrinter != null) {
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.BOLD, PrintLine.CENTER, 16));
+                mPrinter.addText("Testing");
+                mPrinter.addText("POS Signing of purchase orders");
+                mPrinter.addText("MERCHANT COPY");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 14));
+                mPrinter.addText("- - - - - - - - - - - - - -");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
+                mPrinter.addText("ISSUER Agricultural Bank of China");
+                mPrinter.addText("ACQ 48873110");
+                mPrinter.addText("CARD number.");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.LEFT, 14));
+                mPrinter.addText("6228 48******8 116 S");
+                mPrinter.addText("TYPE of transaction(TXN TYPE)");
+                mPrinter.addText("SALE");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 14));
+                mPrinter.addText("- - - - - - - - - - - - - -");
+                mPrinter.addTexts(new String[]{"BATCH NO", "000043"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"VOUCHER NO", "000509"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"AUTH NO", "000786"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"DATE/TIME", "2010/12/07 16:15:17"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"REF NO", "000001595276"}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"2014/12/07 16:12:17", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addTexts(new String[]{"AMOUNT:", ""}, new int[]{5, 5}, new int[]{PrintStyle.Alignment.NORMAL, PrintStyle.Alignment.CENTER});
+                mPrinter.addText("RMB:249.00");
+                mPrinter.addPrintLintStyle(new PrintLineStyle(PrintStyle.FontStyle.NORMAL, PrintLine.CENTER, 12));
+                mPrinter.addText("- - - - - - - - - - - - - -");
+                mPrinter.addText("Please scan the QRCode for getting more information: ");
+                mPrinter.addBarCode(this, Barcode1D.CODE_128.name(), 400, 100, "123456", PrintLine.CENTER);
+                mPrinter.addText("Please scan the QRCode for getting more information:");
+                mPrinter.addQRCode(300, Barcode2D.QR_CODE.name(), "123456", PrintLine.CENTER);
+                mPrinter.setFooter(20);
+                mPrinter.print(this);
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -145,6 +112,7 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
                 printtext();
                 break;
             case R.id.btn_Print:
+
                 printtext();
                 btnPrint.setEnabled(false);
                 break;
@@ -173,19 +141,11 @@ public class PrintTicketActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    class MyPrinterListener implements PrintListener {
-        @Override
-        public void printResult(boolean b, String s, PrinterDevice.ResultType resultType) {
-            btnPrint.setEnabled(true);
-            Log.w("printResult", "boolean b==" + b);
-            Log.w("printResult", "String s==" + s);
-            Log.w("printResult", "resultType==" + resultType.toString());
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPrinter.close();
+        if (mPrinter != null) {
+            mPrinter.close();
+        }
     }
 }
