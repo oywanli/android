@@ -31,7 +31,6 @@ android {
         targetSdk 33
         versionCode 38
         versionName "5.0.3"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
@@ -60,7 +59,6 @@ android {
         }
     }
 }
-
 dependencies {
 //    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.6.1'

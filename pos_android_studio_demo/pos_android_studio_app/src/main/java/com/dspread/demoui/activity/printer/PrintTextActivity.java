@@ -82,6 +82,10 @@ public class PrintTextActivity extends BaseActivity implements View.OnClickListe
         if (Build.MODEL.equalsIgnoreCase("D70")) {
             layoutMaxHeight.setVisibility(View.GONE);
         }
+        if (Build.MODEL.equalsIgnoreCase("D30M")) {
+            layoutMaxHeight.setVisibility(View.GONE);
+            layoutSetFontStyle.setVisibility(View.GONE);
+        }
         textContentMaxHeight = findViewById(R.id.text_content_maxHeight);
         textSet = findViewById(R.id.text_set);
         editText = findViewById(R.id.edit_text);
@@ -219,7 +223,6 @@ public class PrintTextActivity extends BaseActivity implements View.OnClickListe
                     public void onCancel() {
 
                     }
-
                     @Override
                     public void onConfirm(String str) {
                         textContentMaxHeight.setText(str);
