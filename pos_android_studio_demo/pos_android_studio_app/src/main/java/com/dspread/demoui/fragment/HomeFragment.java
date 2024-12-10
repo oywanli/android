@@ -2,16 +2,19 @@ package com.dspread.demoui.fragment;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.dspread.demoui.R;
@@ -19,10 +22,15 @@ import com.dspread.demoui.BaseApplication;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.MoneyUtil;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
+import com.dspread.demoui.utils.TRACE;
 import com.dspread.demoui.utils.TitleUpdateListener;
+import com.dspread.demoui.widget.amountKeyboard.KeyboardUtil;
+import com.dspread.demoui.widget.amountKeyboard.KeyboardUtil.OnOkClick;
+
+import cn.hutool.core.collection.EnumerationIter;
 
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment {
     private TextView inputMoneyYuanText, inputMoneyFenText;
     private long inputMoney = 0;
     private Bundle bundle;
@@ -32,107 +40,47 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     SharedPreferencesUtil connectType;
     String conType;
     View view;
+    private ImageView btn_num_clear;
+    private static KeyboardUtil keyboardUtil;
+    private TextView edt_amount;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_input_money, null);
+        view = inflater.inflate(R.layout.fragment_input_money1, null);
         getActivity().setTitle(getString(R.string.menu_payment));
         initView(view);
         return view;
     }
     protected void initView(View view) {
-        inputMoneyYuanText = view.findViewById(R.id.inputMoneyYuanText);
-        inputMoneyFenText = view.findViewById(R.id.inputMoneyFenText);
-        Button btn_num00 = view.findViewById(R.id.btn_num00);
-        btn_num00.setOnClickListener(this);
-        Button btn_num0 = view.findViewById(R.id.btn_num0);
-        btn_num0.setOnClickListener(this);
-        Button btn_num1 = view.findViewById(R.id.btn_num1);
-        btn_num1.setOnClickListener(this);
-        Button btn_num2 = view.findViewById(R.id.btn_num2);
-        btn_num2.setOnClickListener(this);
-        Button btn_num3 = view.findViewById(R.id.btn_num3);
-        btn_num3.setOnClickListener(this);
-        Button btn_num4 = view.findViewById(R.id.btn_num4);
-        btn_num4.setOnClickListener(this);
-        Button btn_num5 = view.findViewById(R.id.btn_num5);
-        btn_num5.setOnClickListener(this);
-        Button btn_num6 = view.findViewById(R.id.btn_num6);
-        btn_num6.setOnClickListener(this);
-        Button btn_num7 = view.findViewById(R.id.btn_num7);
-        btn_num7.setOnClickListener(this);
-        Button btn_num8 = view.findViewById(R.id.btn_num8);
-        btn_num8.setOnClickListener(this);
-        Button btn_num9 = view.findViewById(R.id.btn_num9);
-
-        btn_num9.setOnClickListener(this);
-        ImageView btn_num_clear = view.findViewById(R.id.btn_num_clear);
-        btn_num_clear.setOnClickListener(this);
-        mConfirm = view.findViewById(R.id.btn_confirm);
-        mConfirm.setOnClickListener(this);
-        mAmount = view.findViewById(R.id.tv_amount);
-        connectType = SharedPreferencesUtil.getInstance(getActivity());
-        conType = (String) connectType.get("conType", "");
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.btn_num0:
-            case R.id.btn_num1:
-            case R.id.btn_num2:
-            case R.id.btn_num3:
-            case R.id.btn_num4:
-            case R.id.btn_num5:
-            case R.id.btn_num6:
-            case R.id.btn_num7:
-            case R.id.btn_num8:
-            case R.id.btn_num9:
-
-                if ((inputMoney + "").length() < 12) {
-                    inputMoney = Long.parseLong(inputMoney + ((Button) v).getText().toString());
-
-                    inputMoneySetText();
-                }
-                break;
-
-            case R.id.btn_num00:
-
-                if ((inputMoney + "").length() < 11) {
-                    inputMoney = Long.parseLong(inputMoney + ((Button) v).getText().toString());
-
-                    inputMoneySetText();
-                }
-
-                break;
-
-            case R.id.btn_num_clear:
-                if (inputMoney > 0) {
-                    inputMoney = inputMoney / 10;
-                    inputMoneySetText();
-                }
-                break;
-            case R.id.btn_confirm:
+        edt_amount = view.findViewById(R.id.txt_amount);
+        if(getActivity() != null && !getActivity().isFinishing()){
+            keyboardUtil = new KeyboardUtil(getActivity(),view,false);
+            keyboardUtil.attachTo(edt_amount);
+        }
+        keyboardUtil.setOnOkClick(new OnOkClick() {
+            @Override
+            public void onOkClick() {
                 BaseApplication.getApplicationInstance=getActivity();
-                if (inputMoney > 0) {
+                Double dAmount = Double.parseDouble(edt_amount.getText().toString().substring(1));
+                TRACE.i("dAmount = "+dAmount);
+                if(dAmount > 0){
+                    inputMoney = (long) (dAmount*100);
                     if (!canshow) {
                         return;
                     }
                     canshow = false;
                     showTimer.start();
-                    Mydialog.payTypeDialog(getActivity(), amount, inputMoney, data);
+                    Mydialog.payTypeDialog(getActivity(), "", inputMoney, data);
 
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.set_amount), Toast.LENGTH_SHORT).show();
                 }
-                break;
-            default:
-                break;
-        }
+            }
+        });
+        connectType = SharedPreferencesUtil.getInstance(getActivity());
+        conType = (String) connectType.get("conType", "");
     }
-
 
     private void inputMoneySetText() {
         String inputMoneyString = MoneyUtil.fen2yuan(inputMoney);
@@ -147,7 +95,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         inputMoney = 0;
-        inputMoneySetText();
+        edt_amount.setText("¥0.00");
     }
 
     private String[] data = {"GOODS", "SERVICES", "CASH", "CASHBACK","PURCHASE_REFUND","INQUIRY",
@@ -174,6 +122,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         getActivity().finish();
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        TRACE.i("home on keydown = "+keyCode);
+        if(keyCode == 4){
+
+        }else {
+            keyboardUtil.getmOnKeyboardActionListener().onKey(keyCode, null);
+        }
+        return true;
     }
 }
 

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:id="@+id/home_layout"
-    tools:context=".ui.fragment.HomeFragment">
+    tools:context=".fragment.HomeFragment">
     <LinearLayout
         android:id="@+id/topLayout"
         android:layout_width="0dp"
@@ -270,4 +270,3 @@
         app:layout_constraintTop_toBottomOf="@id/topLayout"
         app:layout_constraintHeight_percent="0.4"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
->>>>>>> new_smartpos_layout
