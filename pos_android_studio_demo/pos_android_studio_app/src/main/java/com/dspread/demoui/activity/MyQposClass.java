@@ -24,15 +24,9 @@ import com.dspread.demoui.interfaces.TransactionCallback;
 import com.dspread.demoui.ui.dialog.Mydialog;
 import com.dspread.demoui.utils.QPOSUtil;
 import com.dspread.demoui.utils.TRACE;
-import com.dspread.demoui.widget.pinpad.keyboard.KeyboardUtil;
 import com.dspread.xpos.CQPOSService;
 import com.dspread.xpos.QPOSService;
-import com.dspread.xpos.Util;
-import com.dspread.xpos.utils.AESUtil;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.AbsCallback;
-import com.lzy.okgo.model.Response;
-import com.lzy.okgo.request.base.Request;
+
 
 import org.greenrobot.eventbus.EventBus;
 
