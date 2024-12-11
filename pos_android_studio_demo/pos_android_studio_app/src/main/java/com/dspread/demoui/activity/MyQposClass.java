@@ -348,9 +348,9 @@ public class MyQposClass extends CQPOSService {
     @Override
     public void onRequestUpdateWorkKeyResult(QPOSService.UpdateInformationResult result) {
         TRACE.d("onRequestUpdateWorkKeyResult(UpdateInformationResult result):" + result);
-//        if(posUpdateCallback != null){
-//            posUpdateCallback.onRequestUpdateWorkKeyResult(result);
-//        }
+        if(posUpdateCallback != null){
+            posUpdateCallback.onRequestUpdateWorkKeyResult(result);
+        }
     }
 
     @Override
@@ -434,10 +434,13 @@ public class MyQposClass extends CQPOSService {
 //            });
     }
 
-//    @Override
-//    public void onReturnSetMasterKeyResult(boolean isSuccess) {
-//        TRACE.d("onReturnSetMasterKeyResult(boolean isSuccess) : " + isSuccess);
-//    }
+    @Override
+    public void onReturnSetMasterKeyResult(boolean isSuccess) {
+        TRACE.d("onReturnSetMasterKeyResult(boolean isSuccess) : " + isSuccess);
+        if(posUpdateCallback != null){
+            posUpdateCallback.onReturnSetMasterKeyResult(isSuccess);
+        }
+    }
 
     @Override
     public void onReturnSetMasterKeyResult(boolean isSuccess, Hashtable<String, String> result) {

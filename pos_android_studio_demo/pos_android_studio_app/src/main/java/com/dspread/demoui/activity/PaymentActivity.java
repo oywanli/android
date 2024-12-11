@@ -322,13 +322,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     break;
                 case 100:
-                    isNormal = true;
-                    pinpadEditText.setVisibility(View.GONE);
-                    tvTitle.setText(getText(R.string.transaction_result));
-                    mllinfo.setVisibility(View.VISIBLE);
-                    mtvinfo.setText((String) msg.obj);
-                    mllchrccard.setVisibility(View.GONE);
-                    dismissDialog();
+                    if(isICC){
+                        pos.sendOnlineProcessResult("8A023030");
+                    }else {
+                        isNormal = true;
+                        pinpadEditText.setVisibility(View.GONE);
+                        tvTitle.setText(getText(R.string.transaction_result));
+                        mllinfo.setVisibility(View.VISIBLE);
+                        mtvinfo.setText((String) msg.obj);
+                        mllchrccard.setVisibility(View.GONE);
+                        dismissDialog();
+                    }
 
                 default:
                     break;
