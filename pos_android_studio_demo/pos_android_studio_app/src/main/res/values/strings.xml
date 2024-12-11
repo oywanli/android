@@ -323,7 +323,8 @@
 
     <string name="app_select_timeout_error">APP select time out</string>
     <string name="operate_update">operation update</string>
-    <string name="updateFirmware">update Firmware</string>
+    <string name="updateFirmware">upgrade Firmware (local)</string>
+    <string name="updateFirmwarebyOTA">upgrade firmware (OTA)</string>
     <string name="print">Print</string>
     <string name="please_connect_printer_first">Please Connect Printer First.</string>
     <string name="str_printtext">str_printtext</string>

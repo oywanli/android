@@ -143,6 +143,36 @@
                     android:src="@drawable/line_arrow" />
 
             </RelativeLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/whitesmoke"/>
+
+            <RelativeLayout
+                android:id="@+id/update_firmware_by_ota"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_item_background"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/updateFirmwarebyOTA"
+                    android:textSize="20sp" />
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/line_arrow" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

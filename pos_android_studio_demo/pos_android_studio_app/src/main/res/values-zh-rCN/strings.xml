@@ -314,7 +314,8 @@
     <string name="battery_percentage">电量百分比: </string>
     <string name="updateInjectKeys">更新注入密钥:</string>
     <string name="operate_update">操作 更新</string>
-    <string name="updateFirmware">更新固件</string>
+    <string name="updateFirmware">更新固件(本地)</string>
+    <string name="updateFirmwarebyOTA">更新固件(OTA)</string>
 
     <string name="print">打印</string>
     <string name="please_connect_printer_first">请先连接打印机.</string>
