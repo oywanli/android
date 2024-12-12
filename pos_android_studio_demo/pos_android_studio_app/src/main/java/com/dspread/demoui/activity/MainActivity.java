@@ -39,6 +39,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 public class MainActivity extends AppCompatActivity implements TitleUpdateListener, NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             public void onDrawerOpened(@NonNull View drawerView) {
                 HideKeyboard(drawerView);
             }
+
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
             }
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else if ("usb".equals(conType)) {
             deviceConnectType.setText(getString(R.string.setting_usb));
-        } else if ("Dspread".equals(deviceManufacturer) || "D20".equals(deviceModel) || "D30".equals(deviceModel) || "mp600".equals(deviceModel) || "D60".equals(deviceModel)|| "D70".equals(deviceModel)) {
+        } else if ("Dspread".equals(deviceManufacturer) || "D20".equals(deviceModel) || "D30".equals(deviceModel) || "mp600".equals(deviceModel) || "D60".equals(deviceModel) || "D70".equals(deviceModel)) {
             connectType.put("conType", "uart");
             deviceConnectType.setText(getString(R.string.setting_uart));
         } else {
@@ -219,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
                     public void onCancel() {
                         Mydialog.manualExitDialog.dismiss();
                     }
+
                     @Override
                     public void onConfirm() {
                         finish();
@@ -347,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ((BaseApplication)getApplication()).setQposService(null);
+        ((BaseApplication) getApplication()).setQposService(null);
         System.exit(0);
 //        finish();
     }
@@ -360,11 +363,10 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
             drawerLayout.close();
             exit();
             return true;
-        }
-        else if (homeFragment != null) {
+        } else if (homeFragment != null) {
             return homeFragment.onKeyDown(keyCode, event);  // 让 Fragment 处理按键事件
         }
-        TRACE.i("main keyode = "+keyCode);
+        TRACE.i("main keyode = " + keyCode);
 
         return super.onKeyDown(keyCode, event);
     }
