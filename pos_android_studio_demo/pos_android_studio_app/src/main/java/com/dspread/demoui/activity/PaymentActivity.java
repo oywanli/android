@@ -617,6 +617,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             String cardNo = "";
             String msg = "";
             isICC = false;
+            if(pos == null){
+                msg = "Pls open device";
+                Mydialog.ErrorDialog(PaymentActivity.this, msg, null);
+                return;
+            }
             if (result == QPOSService.DoTradeResult.NONE) {
 //                statusEditText.setText(getString(R.string.no_card_detected));
                 msg = getString(R.string.no_card_detected);
@@ -1124,6 +1129,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         String pinBlock2 = AESUtil.encrypt(AESKey, pin);
         return pinBlock2;
     }
+
+
 
     @Override
     protected void onDestroy() {
