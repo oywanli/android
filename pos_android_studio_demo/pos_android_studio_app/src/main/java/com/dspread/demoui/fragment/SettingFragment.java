@@ -229,6 +229,8 @@ public class SettingFragment extends Fragment {
 
         if (deviceList == null) {
             Toast.makeText(getContext(), "No Permission", Toast.LENGTH_SHORT).show();
+            rgType.clearCheck();
+            clearConnectStatus();
             return;
         }
         final CharSequence[] items = deviceList.toArray(new CharSequence[deviceList.size()]);
@@ -242,6 +244,7 @@ public class SettingFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Select a Reader");
             if (items.length == 0) {
+                rgType.clearCheck();
                 builder.setMessage(getString(R.string.setting_disusb));
                 builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
                     @Override
