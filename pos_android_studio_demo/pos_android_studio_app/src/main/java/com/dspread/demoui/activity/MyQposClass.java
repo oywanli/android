@@ -161,7 +161,6 @@ public class MyQposClass extends CQPOSService {
     }
 
     /**
-     * @see QPOSService.QPOSServiceListener#onRequestIsServerConnected()
      */
     @Override
     public void onRequestIsServerConnected() {

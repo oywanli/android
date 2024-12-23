@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class ScanBluetoothActivity extends AppCompatActivity implements Bluetoot
     private SharedPreferencesUtil preferencesUtil;
     private TextView tvTitle;
     private ImageView ivBackTitle;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class ScanBluetoothActivity extends AppCompatActivity implements Bluetoot
         tvTitle = findViewById(R.id.tv_title);
         tvTitle.setText(getString(R.string.scan_bt_device));
         ivBackTitle = findViewById(R.id.iv_back_title);
+        progressBar = findViewById(R.id.progressBar);
         BaseApplication application = (BaseApplication) getApplication();
         MyQposClass.setBluetoothConnectCallback(this);
         application.open(QPOSService.CommunicationMode.BLUETOOTH, this);
@@ -110,6 +113,7 @@ public class ScanBluetoothActivity extends AppCompatActivity implements Bluetoot
         m_Adapter.setOnBluetoothItemClickListener(new BluetoothAdapter.OnBluetoothItemClickListener() {
             @Override
             public void onItemClick(int position, Map<String, ?> itemdata) {
+                progressBar.setVisibility(View.VISIBLE);
                 onBTPosSelected(itemdata);
                 BluetoothToolsBean.setConectedState("CONNECTED");
             }
@@ -149,16 +153,18 @@ public class ScanBluetoothActivity extends AppCompatActivity implements Bluetoot
 
     @Override
     public void onRequestQposConnected() {
+        TRACE.d("blu onRequestQposConnected()11");
         preferencesUtil.put(Constants.connType, POS_TYPE.BLUETOOTH.name());
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("isConnected", true);
-        setResult(Activity.RESULT_OK, resultIntent);
+//        Intent resultIntent = new Intent();
+//        resultIntent.putExtra("isConnected", true);
+//        setResult(Activity.RESULT_OK, resultIntent);
+//        TRACE.d("blu onRequestQposConnected()22");
         finish();
     }
 
     @Override
     public void onRequestQposDisconnected() {
-
+        preferencesUtil.put(Constants.BluetoothAddress,"");
     }
 
     @Override
@@ -166,6 +172,7 @@ public class ScanBluetoothActivity extends AppCompatActivity implements Bluetoot
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                preferencesUtil.put(Constants.BluetoothAddress,"");
                 Toast.makeText(ScanBluetoothActivity.this,"The device bluetooth connect failed! Pls try again!", Toast.LENGTH_LONG).show();
             }
         });

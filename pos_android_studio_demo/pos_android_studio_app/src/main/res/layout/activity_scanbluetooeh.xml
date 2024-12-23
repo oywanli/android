@@ -50,6 +50,12 @@
             android:listSelector="#00FFFFFF"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </LinearLayout>

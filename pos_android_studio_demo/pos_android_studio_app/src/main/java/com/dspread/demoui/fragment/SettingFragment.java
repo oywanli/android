@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -60,7 +61,8 @@ import com.dspread.xpos.QPOSService;
  */
 public class SettingFragment extends Fragment {
     TitleUpdateListener titleListener;
-    private RadioButton rBtnBlue, rBtnSerialPort, rBtnUsb;
+    private RadioButton rBtnBlue, rBtnSerialPort, rBtnUsb, tBtnClicked;
+    private boolean isChecked;
     private RadioGroup rgType;
     private TextView tvConnectType;
     private POS_TYPE posType = POS_TYPE.BLUETOOTH;
@@ -73,6 +75,7 @@ public class SettingFragment extends Fragment {
     private String connType;
     private UsbDevice usbDevice;
     public AlertDialog alertDialog;
+    private ProgressBar progressBar;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -111,65 +114,74 @@ public class SettingFragment extends Fragment {
         connectStateCallback = new ConnectStatusCls();
         application = (BaseApplication) getActivity().getApplication();
         MyQposClass.setStateCallback(connectStateCallback);
-        activityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // 获取返回的数据
-                        Intent data = result.getData();
-                        if (data != null) {
-                            boolean isConnected = data.getBooleanExtra("isConnected",false);
-                            posType = POS_TYPE.BLUETOOTH;
-                            if(isConnected){
-                                connectStateCallback.onRequestQposConnected();
-                            }else {
-                                connectStateCallback.onRequestQposDisconnected();
-                            }
-                        }
-                    }
-                }
-        );
     }
 
     private void initView(View view) {
         pos = application.getQposService();
+        progressBar = view.findViewById(R.id.progressBar);
         rBtnBlue = view.findViewById(R.id.rbtn_blue);
         rBtnSerialPort = view.findViewById(R.id.rbtn_serialport);
         rBtnUsb = view.findViewById(R.id.rbtn_usb);
         rgType = view.findViewById(R.id.rg_type);
         tvConnectType = view.findViewById(R.id.tv_connect_type);
-        rgType.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId) {
-                case R.id.rbtn_blue:
-                    if(!rBtnBlue.isChecked()){
-                        return;
-                    }
+        rBtnBlue.setOnClickListener(v -> {
+            if(tBtnClicked != null && tBtnClicked != rBtnBlue){
+                isChecked = false;
+            }
+            rBtnBlue.setChecked(!isChecked);
+            isChecked = rBtnBlue.isChecked();
+            tBtnClicked = rBtnBlue;
+            if(rBtnBlue.isChecked()) {
+                close();
+                bluetoothRelaPer();
+                posType = POS_TYPE.BLUETOOTH;
+            }else {
+                if(tBtnClicked != null && tBtnClicked == rBtnBlue){
                     close();
-                    bluetoothRelaPer();
-                    posType = POS_TYPE.BLUETOOTH;
-                    break;
-                case R.id.rbtn_serialport:
-                    if(!rBtnSerialPort.isChecked()){
-                        return;
-                    }
+                    rgType.clearCheck();
+                }
+            }
+        });
+        rBtnSerialPort.setOnClickListener(v -> {
+            if(tBtnClicked != null && tBtnClicked != rBtnSerialPort){
+                close();
+                isChecked = false;
+            }
+            rBtnSerialPort.setChecked(!isChecked);
+            isChecked = rBtnSerialPort.isChecked();
+            tBtnClicked = rBtnSerialPort;
+            if(rBtnSerialPort.isChecked()) {
+                posType = POS_TYPE.UART;
+                progressBar.setVisibility(View.VISIBLE);
+                application.open(QPOSService.CommunicationMode.UART,getContext());
+                pos = application.getQposService();
+                preferencesUtil.put(Constants.BluetoothAddress,"/dev/ttyS1");
+                pos.setDeviceAddress("/dev/ttyS1");
+                pos.openUart();
+            }else {
+                if(tBtnClicked != null && tBtnClicked == rBtnSerialPort){
                     close();
-                    application.open(QPOSService.CommunicationMode.UART,getContext());
-                    pos = application.getQposService();
-                    preferencesUtil.put(Constants.BluetoothAddress,"/dev/ttyS1");
-                    pos.setDeviceAddress("/dev/ttyS1");
-                    pos.openUart();
-                    posType = POS_TYPE.UART;
-                    break;
-                case R.id.rbtn_usb:
-                    if(!rBtnUsb.isChecked()){
-                        return;
-                    }
+                    rgType.clearCheck();
+                }
+            }
+        });
+
+        rBtnUsb.setOnClickListener(v -> {
+            if(tBtnClicked != null && tBtnClicked != rBtnUsb){
+                isChecked = false;
+            }
+            rBtnUsb.setChecked(!isChecked);
+            isChecked = rBtnUsb.isChecked();
+            tBtnClicked = rBtnUsb;
+            if(rBtnUsb.isChecked()) {
+                close();
+                posType = POS_TYPE.USB;
+                openUSBDevice();
+            }else {
+                if(tBtnClicked != null && tBtnClicked == rBtnUsb){
                     close();
-                    posType = POS_TYPE.USB;
-                    openUSBDevice();
-                    break;
-                default:
-                    break;
+                    rgType.clearCheck();
+                }
             }
         });
     }
@@ -186,6 +198,8 @@ public class SettingFragment extends Fragment {
         if(item.getItemId() == Menu.FIRST){
             close();
             rgType.clearCheck();
+            isChecked = false;
+            tBtnClicked = null;
             tvConnectType.setText(getString(R.string.setting_connectiontype));
             posType = null;
             clearConnectStatus();
@@ -194,9 +208,9 @@ public class SettingFragment extends Fragment {
     }
 
     private void close(){
+       pos = application.getQposService();
         if (pos == null || posType == null) {
             TRACE.d("return close");
-            return;
         } else if (posType == POS_TYPE.BLUETOOTH) {
             pos.disconnectBT();
         } else if (posType == POS_TYPE.BLUETOOTH_BLE) {
@@ -346,21 +360,25 @@ public class SettingFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == BLUETOOTH_CODE) {
+            TRACE.d("permission grant ---!");
             for (int i = 0; i < permissions.length; i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    TRACE.d("permission granted");
-                    navigateToBluActivity();
-                } else {
+                TRACE.d("permission grant ---!"+ i);
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                     clearConnectStatus();
                     TRACE.d("permission deined!");
+                    return;
+                }
+                if(i == permissions.length-1){
+                    navigateToBluActivity();
                 }
             }
+
         }
     }
 
     private void navigateToBluActivity(){
         Intent intent = new Intent(getContext(),ScanBluetoothActivity.class);
-        activityResultLauncher.launch(intent);
+        startActivity(intent);
     }
 
     private class ConnectStatusCls implements ConnectStateCallback{
@@ -370,7 +388,9 @@ public class SettingFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    preferencesUtil.put(Constants.updateFirmwareStatus,false);
                     if(posType != null) {
+                        TRACE.d("setting onRequestQposConnected()");
                         TRACE.d("connected "+posType.name());
                         preferencesUtil.put(Constants.connType, posType.name());
                         if(posType == POS_TYPE.BLUETOOTH){
@@ -383,7 +403,10 @@ public class SettingFragment extends Fragment {
                     }else {
                         tvConnectType.setText(getString(R.string.setting_blu));
                     }
-
+                    if(tBtnClicked != null) {
+                        tBtnClicked.setChecked(true);
+                    }
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getContext(),"Device connected succeed!", Toast.LENGTH_LONG).show();
                 }
             });
@@ -399,6 +422,14 @@ public class SettingFragment extends Fragment {
 //                        posType = null;
 //                        tvConnectType.setText(getString(R.string.setting_connectiontype));
 //                    }
+                    boolean status = (boolean) preferencesUtil.get(Constants.updateFirmwareStatus,false);
+                    TRACE.i("statuas =="+status);
+                    if(status){
+                        isChecked = false;
+                        tBtnClicked = null;
+                    }
+                    TRACE.i("statuas disconnect =="+status+" ischeck = "+isChecked);
+                    rgType.clearCheck();
                     clearConnectStatus();
                     Toast.makeText(getContext(),"Device disconnect!", Toast.LENGTH_LONG).show();
                 }

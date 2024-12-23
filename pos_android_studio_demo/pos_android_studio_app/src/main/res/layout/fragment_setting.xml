@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,7 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_marginLeft="20dp"
-
         android:layout_marginRight="20dp"/>
 
     <RelativeLayout
@@ -36,29 +35,6 @@
             android:gravity="center_vertical"
             android:text="@string/setting_connectiontype"
             android:textSize="20sp" />
-
-        <!--        <Switch-->
-        <!--            android:id="@+id/swtTest"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_centerVertical="true"-->
-        <!--            android:layout_alignParentRight="true"-->
-        <!--            android:showText="true"-->
-        <!--            android:switchMinWidth="50dp"-->
-        <!--            android:textOff="开"-->
-        <!--            android:textOn="关"-->
-        <!--            android:switchTextAppearance="@style/switchStyleDefault"-->
-        <!--            android:thumb="@drawable/thumb"-->
-        <!--            android:track="@drawable/track_background"-->
-
-        <!--            />-->
-        <!--        />-->
-<!--        <ImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:src="@drawable/line_arrow" />-->
         <RadioGroup
             android:id="@+id/rg_type"
             android:layout_width="match_parent"
@@ -86,102 +62,17 @@
         </RadioGroup>
     </RelativeLayout>
 
-
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp" />
     </LinearLayout>
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/btn_setting_uart"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:paddingLeft="20dp"-->
-<!--        android:paddingRight="10dp">-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:text="@string/setting_uart"-->
-<!--            android:textSize="20sp" />-->
-
-<!--        <ImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:src="@drawable/line_arrow" />-->
-
-<!--    </RelativeLayout>-->
-
-<!--    <ImageView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="2dp"-->
-<!--        android:layout_marginLeft="20dp"-->
-<!--        android:layout_marginRight="20dp" />-->
-
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/btn_setting_usb"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:paddingLeft="20dp"-->
-<!--        android:paddingRight="10dp">-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:text="@string/setting_usb"-->
-<!--            android:textSize="20sp" />-->
-
-
-<!--        <ImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:src="@drawable/line_arrow" />-->
-
-<!--    </RelativeLayout>-->
-
-
-<!--    <ImageView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="2dp"-->
-<!--        android:layout_marginLeft="20dp"-->
-<!--        android:layout_marginRight="20dp" />-->
-
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/btn_dis"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:background="@color/graye3"-->
-<!--        android:paddingLeft="20dp"-->
-<!--        android:paddingRight="10dp">-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:text="@string/blue_disconnect"-->
-<!--            android:textSize="20sp" />-->
-
-
-<!--        <ImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:src="@drawable/line_arrow" />-->
-
-<!--    </RelativeLayout>-->
-
-
-
-
-
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
 
