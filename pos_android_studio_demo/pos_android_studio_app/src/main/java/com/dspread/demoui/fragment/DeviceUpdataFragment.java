@@ -28,23 +28,14 @@ import com.dspread.demoui.R;
 import com.dspread.demoui.activity.MainActivity;
 import com.dspread.demoui.activity.MyQposClass;
 import com.dspread.demoui.beans.Constants;
-import com.dspread.demoui.beans.FirmwareUpdateEvent;
-import com.dspread.demoui.beans.GlobalErrorEvent;
-import com.dspread.demoui.beans.UploadStatusBean;
-import com.dspread.demoui.http.DownloadFirmwareAPI;
+
 import com.dspread.demoui.interfaces.PosUpdateCallback;
 import com.dspread.demoui.utils.FileUtils;
 import com.dspread.demoui.utils.SharedPreferencesUtil;
-import com.dspread.demoui.utils.TRACE;
+
 import com.dspread.demoui.utils.TitleUpdateListener;
 import com.dspread.xpos.QPOSService;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Hashtable;
 
 /**
@@ -65,9 +56,6 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
     private UpdateThread updateThread;
     private SharedPreferencesUtil preferencesUtil;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1001;
-    private String posid, kcv, firmwareInfo;
-    private DownloadFirmwareAPI downloadFirmwareAPI;
-    private boolean isUpdateFirmwareRemotely;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -102,7 +90,6 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
         updateFirmware.setOnClickListener(this);
         updateFirmwareByOTA.setOnClickListener(this);
         updateEmvByXml.setOnClickListener(this);
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -131,12 +118,9 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
                         "1A4D672DCA6CB3351FD1B02B237AF9AE", "08D7B4FB629D0885");
                 break;
             case R.id.update_firmware:
-                isUpdateFirmwareRemotely = false;
                 updateFirmware();
                 break;
             case R.id.update_firmware_by_ota:
-                isUpdateFirmwareRemotely = true;
-                updateFirmwareByOTA();
                 break;
             case R.id.update_emvByXml:
                 tv_pos_result.setText("Emv is updating...");
@@ -165,21 +149,6 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
             }
         }
     };
-
-    public void updateFirmwareByOTA() {
-        downloadFirmwareAPI = DownloadFirmwareAPI.getInstance(getActivity());
-       Hashtable<String, Object> posIdtable = pos.syncGetQposId(5);
-       posid = (String) posIdtable.get("posId");
-        Hashtable<String,Object> posInfoTable = pos.syncGetQposInfo(5);
-        Hashtable<String, String> deviceInfoData = (Hashtable<String, String>) posInfoTable.get("content");
-        if(deviceInfoData != null) {
-            firmwareInfo = deviceInfoData.get("firmwareVersion");
-        }
-       if(posid != null){
-           kcv = pos.getUpdateCheckValue();
-           downloadFirmwareAPI.checkHeartBeat(posid);
-       }
-    }
 
     public void updateFirmware() {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -279,38 +248,12 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
             @Override
             public void run() {
                 updateThread.concelSelf();
-                UploadStatusBean uploadStatusBean = new UploadStatusBean();
-                String terminalTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(Calendar.getInstance().getTime());
-                uploadStatusBean.setOperateTime(terminalTime);
-                String coloredText = "";
                 if (arg0 == QPOSService.UpdateInformationResult.UPDATE_SUCCESS) {
-                    coloredText = "update Firmware success<br><font color='#008000'></font>";
-//                    coloredText = String.format(coloredText, firmwareInfo);
-                    uploadStatusBean.setStatus(3);
-//                    uploadStatusBean.setSubStatus(9);
-                    uploadStatusBean.setDescription("Update Firmware success");
+                    tv_pos_result.setText("update Firmware success");
                 } else if (arg0 == QPOSService.UpdateInformationResult.UPDATE_FAIL) {
-//                    tv_pos_result.setText("update Firmware failed");
-                    coloredText = "update Firmware fail<br><font color='#dc143c'>(POSID: %s<br>Firmware version: %s<br>Firmware update key: %s)</font>";
-                    coloredText = String.format(coloredText, posid,firmwareInfo,kcv);
-                    uploadStatusBean.setStatus(4);
-//                    uploadStatusBean.setSubStatus(10);
-                    uploadStatusBean.setDescription("Update Firmware failed!");
-                    uploadStatusBean.setDescription("Update Firmware failed!");
+                    tv_pos_result.setText("update Firmware failed");
                 } else if (arg0 == QPOSService.UpdateInformationResult.UPDATE_PACKET_VEFIRY_ERROR) {
-//                    tv_pos_result.setText("update Firmware packet error");
-                    coloredText = "update Firmware packet error<br><font color='#dc143c'>(POSID: %s<br>Firmware version: %s<br>Firmware update key: %s)</font>";
-                    coloredText = String.format(coloredText, posid,firmwareInfo,kcv);
-                    uploadStatusBean.setStatus(4);
-//                    uploadStatusBean.setSubStatus(10);
-                    uploadStatusBean.setDescription("Update Firmware packet verify error");
-                }
-                tv_pos_result.setText(Html.fromHtml(coloredText, Html.FROM_HTML_MODE_LEGACY));
-                TRACE.i("update firmware ===");
-
-                if(isUpdateFirmwareRemotely) {
-                    downloadFirmwareAPI.uploadStatus(posid, (String) preferencesUtil.get("taskId", ""), uploadStatusBean);
-                    preferencesUtil.put("taskId","");
+                    tv_pos_result.setText("update Firmware packet error");
                 }
             }
         });
@@ -368,21 +311,8 @@ public class DeviceUpdataFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFirmwareUpdateEvent(FirmwareUpdateEvent event) {
-        if(event != null && event.data != null){
-            int a = pos.updatePosFirmware(event.data, (String) preferencesUtil.get(Constants.BluetoothAddress,""));
-            if (a == -1) {
-                tv_pos_result.setText(getString(R.string.charging_warning));
-            }else {
-                updateThread = new UpdateThread();
-                updateThread.start();
-            }
-        }
-    }
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 }

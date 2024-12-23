@@ -149,6 +149,7 @@
                 android:background="@color/whitesmoke"/>
 
             <RelativeLayout
+                android:visibility="gone"
                 android:id="@+id/update_firmware_by_ota"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

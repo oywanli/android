@@ -21,11 +21,4 @@ public class Constants {
     public static final String BluetoothAddress = "bluetoothAddress";
     public static final String updateFirmwareStatus = "updateFirmwareStatus";
 
-
-//    public static final String BASE_URL = "https://www.dspreadser.net:9011";
-    public static final String BASE_URL = "http://211.157.135.52:10039";
-    public static final String TerminalHeartBeatUrl = BASE_URL+"/terminal/heartBeat/%s";
-    public static final String GetTaskFileDownloadUrl = BASE_URL+"/terminal/getTaskFileDownloadUrl/%s/%s";
-    public static final String UpdateTaskLogUrl = BASE_URL+"/terminal/updateTaskLog/%s/%s";
-    public static final String VerifyTaskUrl = BASE_URL+"/terminal/validate/%s/%s";
 }
