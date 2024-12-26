@@ -76,7 +76,7 @@ public class SettingFragment extends Fragment {
     private UsbDevice usbDevice;
     public AlertDialog alertDialog;
     private ProgressBar progressBar;
-    private String closeConnect="";
+    private boolean closeConnection =false;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -138,13 +138,12 @@ public class SettingFragment extends Fragment {
             } else {
                 if (tBtnClicked != null && tBtnClicked == rBtnBlue) {
                     close();
-                    closeConnect = "close";
+                    closeConnection = true;
                     rgType.clearCheck();
                 }
             }
         });
         rBtnSerialPort.setOnClickListener(v -> {
-
             if (tBtnClicked != null && tBtnClicked != rBtnSerialPort) {
                 close();
                 isChecked = false;
@@ -152,7 +151,6 @@ public class SettingFragment extends Fragment {
             rBtnSerialPort.setChecked(!isChecked);
             isChecked = rBtnSerialPort.isChecked();
             tBtnClicked = rBtnSerialPort;
-
             if (rBtnSerialPort.isChecked()) {
                 posType = POS_TYPE.UART;
                 progressBar.setVisibility(View.VISIBLE);
@@ -161,16 +159,13 @@ public class SettingFragment extends Fragment {
                 preferencesUtil.put(Constants.BluetoothAddress, "/dev/ttyS1");
                 pos.setDeviceAddress("/dev/ttyS1");
                 pos.openUart();
-
             } else {
                 if (tBtnClicked != null && tBtnClicked == rBtnSerialPort) {
-                    closeConnect = "close";
+                    closeConnection = true;
                     close();
                     rgType.clearCheck();
                 }
             }
-
-
         });
 
         rBtnUsb.setOnClickListener(v -> {
@@ -186,7 +181,7 @@ public class SettingFragment extends Fragment {
                 openUSBDevice();
             } else {
                 if (tBtnClicked != null && tBtnClicked == rBtnUsb) {
-                    closeConnect = "close";
+                    closeConnection = true;
                     close();
                     rgType.clearCheck();
                 }
@@ -437,10 +432,10 @@ public class SettingFragment extends Fragment {
                         tBtnClicked = null;
                     }
                     TRACE.i("statuas disconnect ==" + status + " ischeck = " + isChecked);
-                    if (closeConnect == "close") {
+                    if (closeConnection) {
                         rgType.clearCheck();
                         clearConnectStatus();
-                        closeConnect = "";
+                        closeConnection = false;
                     }
                     Toast.makeText(getContext(), "Device disconnect!", Toast.LENGTH_LONG).show();
                 }
