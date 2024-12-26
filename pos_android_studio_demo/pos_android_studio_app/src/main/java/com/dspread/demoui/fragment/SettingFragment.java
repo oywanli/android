@@ -432,10 +432,12 @@ public class SettingFragment extends Fragment {
                         tBtnClicked = null;
                     }
                     TRACE.i("statuas disconnect ==" + status + " ischeck = " + isChecked);
-                    if (closeConnection) {
+                    String updateFirmware= (String)preferencesUtil.get("operationType","");
+                    if (closeConnection || "updateFirmware".equals(updateFirmware)) {
                         rgType.clearCheck();
                         clearConnectStatus();
                         closeConnection = false;
+                        preferencesUtil.put("operationType","");
                     }
                     Toast.makeText(getContext(), "Device disconnect!", Toast.LENGTH_LONG).show();
                 }
