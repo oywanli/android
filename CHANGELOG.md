@@ -1,3 +1,60 @@
+# [4.8.0](https://github.com/DspreadOrg/android/compare/v4.7.1...v4.8.0) (2024-12-31)
+
+
+### Bug Fixes
+
+*  fix modify bluetooth permission issues ([eb1b09a](https://github.com/DspreadOrg/android/commit/eb1b09ae3086b51e1914b11f30b95083f95fe22a))
+* add  D30M and D50 scanner code ([47ce7f3](https://github.com/DspreadOrg/android/commit/47ce7f33cdc61bf1f543ca0da451dcaf7dc6d192))
+* add a marker for firmware update disconnection ([d8b6287](https://github.com/DspreadOrg/android/commit/d8b628782c4482bdd721c7e71334adf0d433ee56))
+* add D70 printer logic code ([7ac5932](https://github.com/DspreadOrg/android/commit/7ac5932440553a841a1be1b70ee77204328a8564))
+* add string  Farsi and Spanish ([6e00248](https://github.com/DspreadOrg/android/commit/6e002482dfad977eed93c2aaec7af8bef14538f7))
+* add the firmware update remotely method ([3de2272](https://github.com/DspreadOrg/android/commit/3de2272f976d32298129bce25527e5580749fd11))
+* add the new sart pos jar and keyboard layout ([9904ba9](https://github.com/DspreadOrg/android/commit/9904ba969b79d5263862c5647aa502aaf800f254))
+* android 13 can not  find Bluetooth issue ([d789a23](https://github.com/DspreadOrg/android/commit/d789a231da6b713ca12dec794d8a6025be7865f2))
+* delete decryption code ([95ee8ec](https://github.com/DspreadOrg/android/commit/95ee8ec097fe64c497bd71fc940e86cbfc357889))
+* delete the remote update firmware code ([e8f68eb](https://github.com/DspreadOrg/android/commit/e8f68ebd47a607f3421280de083e43bf2a7c68a4))
+* delete the unused code in ci file ([c07bbb4](https://github.com/DspreadOrg/android/commit/c07bbb4476ce11a151a837fa82e680dce3ae238c))
+* fix some bugs for txns ([d050e9d](https://github.com/DspreadOrg/android/commit/d050e9daa866c7a09868e4098dbfc3645158e3a6))
+* fix some bugs on the main layout ([4126ab3](https://github.com/DspreadOrg/android/commit/4126ab3076dd492cabc89d9658d13e1f6d4fb590))
+* fix the bug for confirm keyboard don't work ([ba516f0](https://github.com/DspreadOrg/android/commit/ba516f0164775466f5b48bed552e9f330781e4c4))
+* fix the remote update firmware issue ([25d6a38](https://github.com/DspreadOrg/android/commit/25d6a385b1dc5a08f94fc07d48cc6644b1b8f228))
+* fix the update firmware ui issue ([e629fc8](https://github.com/DspreadOrg/android/commit/e629fc8303e9a207a1a555ec144e2d907b9da057))
+* fix the USB connection bugs ([d5d3f36](https://github.com/DspreadOrg/android/commit/d5d3f364b68ab7c8130b61d72345b77a4d2cf3c1))
+* merge branch master into develop_oy ([bdc4b52](https://github.com/DspreadOrg/android/commit/bdc4b52398924814ff8319ab3180118ce1437395))
+* merge branch master into develop_oy and  update D30M printer code ([b63decf](https://github.com/DspreadOrg/android/commit/b63decf5fee5af1910e1b713a9b00ff885e4c56a))
+* optimize the switching between different connection methods ([a4d7493](https://github.com/DspreadOrg/android/commit/a4d7493e8e56b5bb4745ba3daffd14a041d12dba))
+* optimize the switching between different device connections ([ce25dbd](https://github.com/DspreadOrg/android/commit/ce25dbd26a5b5eded02b63f1c3fcc633593a4839))
+* optimized cr100pin input to support external keyboard ([07d714f](https://github.com/DspreadOrg/android/commit/07d714fd8b504b0b8f004b41f3c11752e7526526))
+* removed unnecessary spaces and meaningless code ([80de54c](https://github.com/DspreadOrg/android/commit/80de54c8db870048a266955f4b5df430030ef39a))
+* update  D70 print code ([f279f5e](https://github.com/DspreadOrg/android/commit/f279f5e02265717f20e4f341faed4025cd7b1e9e))
+* update app.keystore folder in ci file ([b1afed9](https://github.com/DspreadOrg/android/commit/b1afed9663f2841218bd1447bd89fa637c6d7d2e))
+* update apply for Bluetooth permission and version 4.5.6 ([546645f](https://github.com/DspreadOrg/android/commit/546645fae4f9f2ca88ddb2e54c67aee924b6b38e))
+* update CI CD file for jdk version ([22d65e2](https://github.com/DspreadOrg/android/commit/22d65e2defcc61755cf9665438d89e18d9bafc5d))
+* update D30 and D60 printer issue ([45e99aa](https://github.com/DspreadOrg/android/commit/45e99aa436658131c6af4b602126834da9cfb32f))
+* update D70 printer ([6fec607](https://github.com/DspreadOrg/android/commit/6fec6071fe6ddd1d713b5ac61752f7c637511ce3))
+* update printer sdk version1.3.7 ([8b626c5](https://github.com/DspreadOrg/android/commit/8b626c51413248407ecdd2070c370690f15b0328))
+* update sematic release version ([272def5](https://github.com/DspreadOrg/android/commit/272def52ad0a3b2d4b2bd7a3a4d8716fe5b16652))
+* update the ci cd file jdk to 17 ([bf31e19](https://github.com/DspreadOrg/android/commit/bf31e199b7abf5d4e2cdfd8a2b08143be7eac7e2))
+* update the ci file to build apk ([765920e](https://github.com/DspreadOrg/android/commit/765920eba802968d4122dfeca146635ede45b9c3))
+* update the ci file to build apk ([3abf10a](https://github.com/DspreadOrg/android/commit/3abf10a92e8771b1973a0d85c23332294342a120))
+* update the commitlint ci file ([a769f45](https://github.com/DspreadOrg/android/commit/a769f45e12b880cfb0416d6cbe6eb9832281cc13))
+* update the D70 sdk ([9d4a498](https://github.com/DspreadOrg/android/commit/9d4a498752758771e76923a6a31eb1fb39a98ef9))
+* update the firmware OTA logic ([f67c8d3](https://github.com/DspreadOrg/android/commit/f67c8d332f2dc1c1d8185b6859d08aaf0722ad85))
+* update the github action yaml file ([c4bd737](https://github.com/DspreadOrg/android/commit/c4bd737e24545c51d7c704a419499a97b38df039))
+* update the github actions ci file ([112039d](https://github.com/DspreadOrg/android/commit/112039dbe318e9ea9e65df9cd37f06147cfecda2))
+* update the github token for release ci file ([48bfba3](https://github.com/DspreadOrg/android/commit/48bfba37b35a6f390925ceb6607ba3e7d338c5a5))
+* update the keyboard layout and fix the confirm btn bugs ([6b063ed](https://github.com/DspreadOrg/android/commit/6b063ed29ddb92dd4eaedd57e8216465f2300abc))
+* update the logs upload layout ([20f36d3](https://github.com/DspreadOrg/android/commit/20f36d30697ed4f643cf6343c15259262f92bbfa))
+* update the sdk and fix some kayboard issus ([f6e8548](https://github.com/DspreadOrg/android/commit/f6e8548658fa0145b2bd007035f8d258e3d5eb31))
+* update the semantic release js version ([270d292](https://github.com/DspreadOrg/android/commit/270d2929a01cf2e8ade30f5f75818db1b81d84c3))
+* update the token to default github token ([8ec39c9](https://github.com/DspreadOrg/android/commit/8ec39c97c3d18a4b4f220c73f5834ed56baf7c5c))
+* updateD70 print layout adaptation optimization ([b1adb50](https://github.com/DspreadOrg/android/commit/b1adb50ebfcf5a015743531e38145bce4a8ebc60))
+
+
+### Features
+
+* update the code structure ([c2a129d](https://github.com/DspreadOrg/android/commit/c2a129dc6c9375115ae7aaafc3618acf30b0789e))
+
 ## [4.7.1](https://gitlab.com/[secure]/android/compare/v4.7.0...v4.7.1) (2024-09-04)
 
 
