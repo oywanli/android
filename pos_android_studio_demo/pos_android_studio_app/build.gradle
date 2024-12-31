@@ -7,6 +7,16 @@ android {
     compileSdk 33
 
     signingConfigs {
+         release {
+            storeFile file('app.keystore')
+            storePassword 'dspread'
+            keyPassword 'dspread'
+            keyAlias 'gundam_wing'
+            /*storeFile file('sys.keystore')
+            storePassword 'dspread'
+            keyPassword 'dspread'
+            keyAlias 'system'*/
+        }
         debug {
             storeFile file('app.keystore')
             storePassword 'dspread'
@@ -31,9 +41,9 @@ android {
         minSdk 24
         targetSdk 33
 
-        versionCode 42
+        versionCode 43
 
-        versionName "5.0.7"
+        versionName "5.0.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,6 +54,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
