@@ -46,6 +46,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
+          distribution: 'zulu'  # 指定 Java 发行版
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v2
