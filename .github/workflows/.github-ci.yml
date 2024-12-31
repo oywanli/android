@@ -63,9 +63,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Grant execute permission to gradlew
-        run: chmod +x ./gradlew
-
        #  解码并保存 keystore 文件
       - name: Decode and Save Keystore
         run: |
