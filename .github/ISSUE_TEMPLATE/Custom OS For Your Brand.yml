@@ -1,0 +1,74 @@
+name: "Custom OS For  Your Brand"
+description: "Use this form to configure your custom OS preferences."
+title: "Custom OS For  Your Brand"
+labels:
+  - customization
+  - os-config
+body:
+  - type: markdown
+    attributes:
+      value: "### Please fill out the form below to specify your custom OS preferences."
+
+  - type: dropdown
+    id: boot_logo_device
+    attributes:
+      label: "Select your device for boot logo configuration:"
+      options:
+        - "D20 (BMP, 480x800)"
+        - "D30 (PNG, 720x1280)"
+        - "D60 (BMP, 720x1600)"
+      description: "Choose your device and provide the logo in the specified format."
+
+  - type: textarea
+    id: boot_animation
+    attributes:
+      label: "Boot Animation Configuration"
+      description: "Provide details or files for boot animation. Supported formats: BMP/PNG."
+
+  - type: textarea
+    id: preinstall_apps
+    attributes:
+      label: "Preinstalled Apps"
+      description: "List the apps you want to preinstall."
+
+  - type: input
+    id: wallpaper
+    attributes:
+      label: "Wallpaper File Path or URL"
+      description: "Provide the path or URL to your wallpaper file (480x800 BMP/PNG/JPG)."
+
+  - type: textarea
+    id: language
+    attributes:
+      label: "Preferred Language and Keyboard"
+      description: "Specify your preferred language (e.g., English, Spanish, Chinese) and keyboard type."
+
+  - type: textarea
+    id: apn_list
+    attributes:
+      label: "APN Configuration"
+      description: |
+        Provide your APN configuration in the following format:
+        ```
+        - name: [Name]
+        - APN: [APN]
+        - MCC: [MCC]
+        - MNC: [MNC]
+        - Other parameters: [Values]
+        ```
+
+  - type: textarea
+    id: launcher_app
+    attributes:
+      label: "Launcher App"
+      description: "Provide the app you want to set as the launcher."
+
+  - type: textarea
+    id: signature_restrictions
+    attributes:
+      label: "App Installation Signature Restrictions"
+      description: "Provide the app file to restrict installations. Its signature will be injected into the OS."
+
+  - type: markdown
+    attributes:
+      value: "### Submit the form with the required details. Thank you!"
