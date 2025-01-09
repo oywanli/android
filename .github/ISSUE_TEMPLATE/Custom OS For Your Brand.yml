@@ -19,17 +19,17 @@ body:
         - "D60 (BMP, 720x1600)"
       description: "Choose your device and provide the logo in the specified format."
 
-  - type: textarea
+ - type: file
     id: boot_animation
     attributes:
-      label: "Boot Animation Configuration"
-      description: "Provide details or files for boot animation. Supported formats: BMP/PNG."
-
-  - type: textarea
+      label: "Upload Boot Animation (Multiple Files)"
+      description: "Please upload the images for your boot animation (BMP/PNG formats). You can upload multiple files."
+      
+  - type: file
     id: preinstall_apps
     attributes:
-      label: "Preinstalled Apps"
-      description: "List the apps you want to preinstall."
+      label: "Preinstalled Apps (Multiple Files)"
+      description: "List the apps you want to preinstall. You can upload multiple files."
 
   - type: input
     id: wallpaper
@@ -57,13 +57,13 @@ body:
         - Other parameters: [Values]
         ```
 
-  - type: textarea
+  - type: file
     id: launcher_app
     attributes:
       label: "Launcher App"
       description: "Provide the app you want to set as the launcher."
 
-  - type: textarea
+  - type: file
     id: signature_restrictions
     attributes:
       label: "App Installation Signature Restrictions"
