@@ -1,6 +1,6 @@
-name: "Custom OS For Your Brand"
+name: "Custom OS Configuration Form"
 description: "Use this form to configure your custom OS preferences."
-title: "Custom OS For Your Brand"
+title: "Custom OS Request Form"
 labels:
   - customization
   - os-config
@@ -19,17 +19,25 @@ body:
         - "D60 (BMP, 720x1600)"
       description: "Choose your device and provide the logo in the specified format."
 
-  - type: file
+  - type: textarea
     id: boot_animation
     attributes:
-      label: "Upload Boot Animation (Multiple Files)"
-      description: "Please upload the images for your boot animation (BMP/PNG formats). You can upload multiple files."
+      label: "Boot Animation (Multiple Images)"
+      description: |
+        Please upload your boot animation images (BMP/PNG formats) to an external file hosting service (e.g., Google Drive, Dropbox, etc.).
+        After uploading, provide the sharing link below:
 
-  - type: file
+  - type: input
+    id: boot_animation_link
+    attributes:
+      label: "Boot Animation File Links"
+      description: "Provide the link(s) to your boot animation images."
+
+  - type: textarea
     id: preinstall_apps
     attributes:
-      label: "Preinstalled Apps (Multiple Files)"
-      description: "List the apps you want to preinstall. You can upload multiple files."
+      label: "Preinstalled Apps"
+      description: "List the apps you want to preinstall."
 
   - type: input
     id: wallpaper
@@ -57,13 +65,13 @@ body:
         - Other parameters: [Values]
         ```
 
-  - type: file
+  - type: textarea
     id: launcher_app
     attributes:
       label: "Launcher App"
       description: "Provide the app you want to set as the launcher."
 
-  - type: file
+  - type: textarea
     id: signature_restrictions
     attributes:
       label: "App Installation Signature Restrictions"
