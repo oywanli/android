@@ -1,6 +1,6 @@
-name: "Custom OS For  Your Brand"
+name: "Custom OS For Your Brand"
 description: "Use this form to configure your custom OS preferences."
-title: "Custom OS For  Your Brand"
+title: "Custom OS For Your Brand"
 labels:
   - customization
   - os-config
@@ -19,12 +19,12 @@ body:
         - "D60 (BMP, 720x1600)"
       description: "Choose your device and provide the logo in the specified format."
 
- - type: file
+  - type: file
     id: boot_animation
     attributes:
       label: "Upload Boot Animation (Multiple Files)"
       description: "Please upload the images for your boot animation (BMP/PNG formats). You can upload multiple files."
-      
+
   - type: file
     id: preinstall_apps
     attributes:
