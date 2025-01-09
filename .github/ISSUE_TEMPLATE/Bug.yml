@@ -1,0 +1,70 @@
+name: "Bug"
+description: "Use this template to report bugs."
+title: "Bug"
+labels:
+  - bug
+  - needs-investigation
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: "## Summary"
+      description: "Summarize the bug encountered concisely."
+
+  - type: input
+    id: sdk_version
+    attributes:
+      label: "SDK Version"
+      description: "Please provide the SDK version."
+
+  - type: input
+    id: app_version
+    attributes:
+      label: "APP Version"
+      description: "Please provide the app version."
+
+  - type: input
+    id: device_serial_no
+    attributes:
+      label: "Device Serial No."
+      description: "Please provide the device serial number."
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: "## Steps to reproduce"
+      description: "How one can reproduce the issue - this is very important."
+
+  - type: textarea
+    id: example_project_link
+    attributes:
+      label: "## Example Project"
+      description: "If possible, create an example project here on GitLab.com that exhibits the problematic behavior, and link to it here in the bug report. If you are using an older version of GitLab, this will also determine whether the bug has been fixed in a more recent version."
+
+  - type: textarea
+    id: current_bug_behavior
+    attributes:
+      label: "## What is the current bug behavior?"
+      description: "What actually happens."
+
+  - type: textarea
+    id: expected_correct_behavior
+    attributes:
+      label: "## What is the expected correct behavior?"
+      description: "What you should see instead."
+
+  - type: textarea
+    id: relevant_logs_screenshots
+    attributes:
+      label: "## Relevant logs and/or screenshots"
+      description: "Paste any relevant logs - use code blocks (```) to format console output, logs, and code, as it's very hard to read otherwise."
+
+  - type: textarea
+    id: possible_fixes
+    attributes:
+      label: "## Possible fixes"
+      description: "If you can, link to the line of code that might be responsible for the problem."
+
+  - type: markdown
+    attributes:
+      value: "/label ~bug ~reproduced ~needs-investigation"

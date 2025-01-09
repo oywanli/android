@@ -1,0 +1,35 @@
+name: "Feature Proposal"
+description: "Use this template to request new features."
+title: "Feature Proposal"
+labels:
+  - enhancement
+  - feature-request
+body:
+  - type: textarea
+    id: feature_description
+    attributes:
+      label: "### Proposal"
+      description: "Explain the feature and how it will work."
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: "### Problem to solve"
+      description: "What is the user problem you are trying to solve with this issue?"
+
+  - type: textarea
+    id: intended_users
+    attributes:
+      label: "### Intended users"
+      description: "Who will use this feature, if known?"
+
+  - type: textarea
+    id: design_files_or_references
+    attributes:
+      label: "### Design files or References"
+      description: "Please provide any design files, references, or links that can help us understand the feature request better."
+
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for submitting your feature request! We will review it and get back to you soon.
