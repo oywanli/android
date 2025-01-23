@@ -1,3 +1,10 @@
+## [4.8.1](https://github.com/DspreadOrg/android/compare/v4.8.0...v4.8.1) (2025-01-23)
+
+
+### Bug Fixes
+
+* fix the bugs for NFC crash ([8f13def](https://github.com/DspreadOrg/android/commit/8f13def30debca33952fbc22964c594f798b4f28))
+
 # [4.8.0](https://github.com/DspreadOrg/android/compare/v4.7.1...v4.8.0) (2024-12-31)
 
 
