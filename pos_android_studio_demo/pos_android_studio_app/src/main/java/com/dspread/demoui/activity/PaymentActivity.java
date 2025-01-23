@@ -258,7 +258,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     if (nfcLog == null && pos != null) {
                         Hashtable<String, String> h = pos.getNFCBatchData();
                         String tlv = h.get("tlv");
-                        TRACE.i("nfc batchdata1: " + tlv);
+//                        TRACE.i("nfc batchdata1: " + tlv);
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + h.get("tlv");
                     } else {
                         content = statusEditText.getText().toString() + "\nNFCbatchData: " + nfcLog;

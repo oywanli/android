@@ -206,7 +206,9 @@ public class Mydialog {
                         ((MainActivity)mContext).switchFragment(1);
                     }
                 }
-                payTypeDialog.dismiss();
+                if(payTypeDialog != null) {
+                    payTypeDialog.dismiss();
+                }
                 payTypeDialog = null;
                 myAdapter = null;
 

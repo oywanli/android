@@ -85,7 +85,8 @@ public class MainActivity extends AppCompatActivity implements TitleUpdateListen
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        switchFragment(0);
+
+            switchFragment(0);
         floatingActionButton.setOnClickListener(view -> {
             toolbar.setTitle(getString(R.string.show_log));
             switchFragment(5);

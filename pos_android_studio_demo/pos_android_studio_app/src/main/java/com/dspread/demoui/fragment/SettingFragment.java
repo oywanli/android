@@ -298,7 +298,11 @@ public class SettingFragment extends Fragment {
         android.bluetooth.BluetoothAdapter adapter = android.bluetooth.BluetoothAdapter.getDefaultAdapter();
         if (adapter != null && !adapter.isEnabled()) {//if bluetooth is disabled, add one fix
             Intent enabler = new Intent(android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivity(enabler);
+            try {
+                startActivity(enabler);
+            }catch (SecurityException e){
+                Toast.makeText(getActivity(),"Pls open the bluetooth in device Setting",Toast.LENGTH_LONG).show();
+            }
         }
         LocationManager lm = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
         List<String> listProvider = lm.getAllProviders();
