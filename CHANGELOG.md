@@ -1,3 +1,11 @@
+## [4.8.2](https://github.com/DspreadOrg/android/compare/v4.8.1...v4.8.2) (2025-02-12)
+
+
+### Bug Fixes
+
+* submit the latest android demo ([d8a9efc](https://github.com/DspreadOrg/android/commit/d8a9efcce06289edbf397ef3b0e6fa059e80c3e3))
+* update actions/upload-artifact version to v4 ([b448c4c](https://github.com/DspreadOrg/android/commit/b448c4c1f5741394bd6703e23a2fac40e3cd621c))
+
 ## [4.8.1](https://github.com/DspreadOrg/android/compare/v4.8.0...v4.8.1) (2025-01-23)
 
 
