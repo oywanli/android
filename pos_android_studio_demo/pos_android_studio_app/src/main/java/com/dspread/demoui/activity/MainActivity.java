@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+
 import com.dspread.demoui.BaseApplication;
 import com.dspread.demoui.R;
 import com.dspread.demoui.fragment.AboutFragment;
