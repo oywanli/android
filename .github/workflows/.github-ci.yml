@@ -118,5 +118,5 @@ jobs:
       - name: Deploy to the server or another location
         run: |
           echo "Deploying APK or other artifacts"
-          # 可以根据需要替换为实际的部署步骤，例如上传到服务器或云平台等
+          # 可以根据需要替换为实际的部署步骤，例如上传到服务器或云平台等.
 
